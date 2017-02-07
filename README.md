@@ -1,2 +1,2 @@
 # Major-Project
-A mars mission control game in WebGL
+My final year project, a mars mission control game created with WebGL and JavaScript.
