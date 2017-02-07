@@ -1,0 +1,357 @@
+<!DOCTYPE HTML>
+
+<head>
+	<title>WebGL Project</title>
+	
+	<!-- Removes annoying scrollbars from window -->
+	<style type="text/css">
+		html, body {
+		overflow: hidden;
+	}
+	</style>
+</head>
+
+<body>
+
+<!-- Libraries 
+<script src="libraries/mdn-webgl-master/library/matrices.js"></script> -->
+<script src="libraries/m4.js"></script>
+
+<!-- Not my js files-->
+<script src="code/js/ImprovedNoise.js"></script>
+
+<!-- Needs to be in this weird order -->
+<script src="code/myJs/glSetup.js"></script>
+<script src="code/myJs/vertexShader.js"></script>
+<script src="code/myJs/fragmentShader.js"></script>
+<script src="code/myJs/program.js"></script>
+<script src="code/myJs/projection.js"></script>
+<script src="code/myJs/matrices.js"></script>
+
+
+<script src="code/myJs/player.js"></script>
+<script src="code/myJs/terrain.js"></script>
+<script src="code/myJs/movement.js"></script>
+<script src="code/myJs/mouse.js"></script>
+
+<script>
+
+
+/*
+Vertices
+
+var vertices = [
+   -1, 1, 0, // top left, 
+   -1, -1, 0, // bottom left 
+   1, -1, 0, // bottom right
+   1, 1, 0 // top right
+];
+*/
+/*
+var positions = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positions);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+var positionAttribLocation = gl.getAttribLocation(program, 'position');
+gl.enableVertexAttribArray(positionAttribLocation);
+gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+*/
+/*
+var colors = [
+	1,0,0,
+	0,1,0,
+	0,0,1,
+	1,1,1
+];
+var colorBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+var colorAttribLocation = gl.getAttribLocation(program, 'color');
+gl.enableVertexAttribArray(colorAttribLocation);
+gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, false, 0, 0);
+*/
+/*
+Elements
+*
+var indices = [3,2,1,3,1,0]; 
+var elements = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+	*/
+	
+	
+	
+//matrix code
+
+//player
+
+var tempVerts = [
+0, 0, -2,
+1, 0, -2,
+0, 1, -2,
+1, 1, -2
+];
+
+function getCurrentHeight(){
+	
+	//playerX,Y,Z -> ignore playerY, that gets assigned
+	//heightMap[];
+	
+	//Use playerX and Z to find value in 1d array
+	
+	//player X += 1 value into the 1d array
+	//player Z += 64 values into the 1d array
+	
+	//heightmapLength = 4096
+	
+	//playerX,Y,Z can be negative, turn positive first
+	var tempPlayerX = 0;
+	var tempPlayerZ = 0;
+	if(playerX < 0){
+		tempPlayerX = playerX * -1;
+	}
+	if(playerZ < 0){
+		tempPlayerZ = playerZ * -1;
+	}
+		
+	
+	
+	//Get player position and calcluate what the index should be
+	/*
+	Coordinates MUST get divided because heightMap size doesnt change
+	and is always 64x64, so when z = 65, fails etc
+	
+	Coordinates get floored so they dont screw up the array indexing, must be a integer.
+	*/
+	if(tempPlayerX / terrainScale < 0.5){
+		tempPlayerX = Math.floor(tempPlayerX / terrainScale);
+	}else{
+		tempPlayerX = Math.ceil(tempPlayerX / terrainScale);
+	}
+	
+	if(tempPlayerZ / terrainScale < 0.5){
+		tempPlayerZ = Math.floor(tempPlayerZ / terrainScale);
+	}else{
+		tempPlayerZ = Math.ceil(tempPlayerZ / terrainScale);
+	}
+	
+	//tempPlayerX = Math.floor(tempPlayerX / terrainScale);
+	//tempPlayerZ = Math.floor(tempPlayerZ / terrainScale);
+//	console.log("tempX: " + tempPlayerX);
+//	console.log("tempZ: " + tempPlayerZ);
+	
+	//1 Z increment means skip 64 values into the heightmap, because its 1d
+	//1 X increment means just move along 1 into heightmap
+	var index = (tempPlayerX ) + (tempPlayerZ * 64);
+	
+	var previousHeight; //should probably initlaize this at top for first check
+	
+	var playerHeight = heightMap[index];
+	//console.log("Heightmap length: " + heightMap.length);
+	//console.log("Nearest height: " + heightMap[index]);
+	//console.log(playerHeight);
+	
+	/*
+	Depending on the height of the vertex found, decrease the number more perhaps
+	*/
+	
+	/*
+	if(playerHeight < -0.5){
+		//do nothing
+	}
+	else if(playerHeight > 1){
+		terrainY = playerHeight - 3; //er, duno really
+	}
+	*/
+	if(playerHeight < 0 || playerHeight > 1){
+	}
+	else{
+		//terrainY = playerHeight - (terrainScale * 2);
+		
+		/*
+		See which perlin scale they're in, increase height based on it
+		*/
+		var heightIncrement = 0.01;
+		//Going up or down from last time?
+
+		
+		if(playerZ > -32){
+			
+			/*
+			Increment height slowly, stop when target reached
+			
+			Old code:
+			For > -32 if
+				terrainY = playerHeight - 1
+			Other loop
+				terrainY = playerHeight - 2
+			*/
+			//terrainY = playerHeight - 1;
+			//terrainY += heightIncrement;
+			
+			
+			if(playerY > playerHeight  -1  ){
+			//	console.log("max height reached");
+			}
+			else{
+				playerY += heightIncrement;
+			//	console.log("changing player height");
+			}
+			
+			if(playerY < playerHeight  -1  ){
+			//	console.log("max height reached");
+			}
+			else{
+				playerY -= heightIncrement;
+			//	console.log("changing player height");
+			}
+			
+			
+			
+	
+		}
+		else{
+			//Previous problem if heightMap returns value greater than 1
+			/*
+			Increment height slowly, stop when target reached
+			*/
+						
+			if(playerY > playerHeight  -2  ){
+			//	console.log("max height reached");
+			}
+			else{
+				playerY += heightIncrement;
+			//	console.log("changing player height");
+			}
+			
+			if(playerY < playerHeight  -2 ){
+			//	console.log("max height reached");
+			}
+			else{
+				playerY -= heightIncrement;
+			//	console.log("changing player height");
+			}
+			
+		}
+		
+		previousHeight = playerHeight;
+	}
+	
+
+
+	
+	/*
+	Fails with floats 
+	
+	Fails because need to divide by 100, as terrain scaled to 100?
+	Or try with terrain scaled to 1
+	*/
+	
+}
+
+function render(){
+
+	var now = Date.now(); //For rotating stuff
+	
+	
+	
+	movePlayer();
+	
+	drawTerrain();
+	
+	
+	/*
+	CHANGE GETCURRENTHEIGHT TO MOVE THE PLAYER NOT THE TERRAIN
+	*/
+	getCurrentHeight();
+	
+	//console.log("Player x: " + playerX + ", " + playerY + ", " + playerZ);
+	//console.log("Terrain x: " + terrainX + ", " + terrainY + ", " + terrainZ);
+	
+	//drawNewTerrain();
+	
+	/*
+	computeModelMatrix(1, player.x, player.y, 2);
+	updateAttributesAndUniforms();
+	//Draw player
+	//Pos
+	gl.bindBuffer(gl.ARRAY_BUFFER, paddlePositionBuffer);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	//Color
+	gl.bindBuffer(gl.ARRAY_BUFFER, paddleColorBuffer);
+	gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	//Elements
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, paddleIndiciesBuffer);
+	gl.drawElements(gl.TRIANGLES, paddleIndicies.length, gl.UNSIGNED_SHORT, 0);
+	*/
+	//console.log("Player X,Y,Z: " + playerX +  ", " + playerY + ", " + playerZ);
+	requestAnimationFrame(render);
+}
+
+//defined in matrcies
+//var playerX = 0;
+//var playerY = 0;
+//var playerZ = 0;
+
+
+//Move this into movement file when done
+var movementSpeed = 0.1;
+function movePlayer(){
+
+	if(moveUp === true){
+		//Then move the entire world down etc
+		//console.log("Moving up");
+		//terrainY -= movementSpeed;
+		playerY -= movementSpeed;
+ 
+	}
+	else if(moveDown === true){
+		//console.log("Moving down");
+		//terrainY += movementSpeed;
+		playerY += movementSpeed;
+	
+	}
+	else if(moveLeft === true){
+		//console.log("Moving left");
+		//terrainX += movementSpeed;
+		playerX -= movementSpeed;
+		
+	}
+	else if(moveRight === true){
+		//console.log("Moving right");
+		//terrainX -= movementSpeed;
+		playerX += movementSpeed;
+	
+	}
+	else if(moveForward === true){
+		//console.log("Moving forward");
+		//terrain.setZ(terrain.getZ()+1) 
+		//need a function to get all of the objects in the world's X pos, and shift them
+		//getWorldState.x = getWorldState.x - 1
+		//terrainZ += movementSpeed;
+		playerZ -= movementSpeed;
+	
+	}
+	else if(moveBack === true){
+		//console.log("Moving backward");
+		//terrainZ -= movementSpeed;
+		playerZ += movementSpeed;
+	
+	}
+	else{
+	
+	}
+	
+}
+
+function setup(){
+	setupMovement();
+	
+	render();
+}
+setup();
+
+</script>
+
+
+</body>
+</html>
