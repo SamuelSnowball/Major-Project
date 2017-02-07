@@ -297,11 +297,16 @@ function render(){
 var movementSpeed = 0.1;
 function movePlayer(){
 
+	//move them in the cameras direction?
+	//need to do playerXYZ = cameraXYZ in one call?
+
 	if(moveUp === true){
 		//Then move the entire world down etc
 		//console.log("Moving up");
 		//terrainY -= movementSpeed;
 		playerY -= movementSpeed;
+		
+	
  
 	}
 	else if(moveDown === true){

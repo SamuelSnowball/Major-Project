@@ -1,0 +1,23 @@
+1st - 7th February
+
+	Added:
+		Boilerplate code including:
+		Basic vertex and fragment shaders
+		index.html file
+	
+		Model view projection matrices
+		Rendered a square with some depth to make sure matrices working	
+
+		Grid of vertices with double for loop
+		1D heightmap of vertices
+		Assigned heightmap values to vertex heights
+
+	Found new m4.js matrix library, rather than MDN library
+
+
+
+7th February
+
+	Added:
+		Github project
+		Screenshots folder, bug log, changelog
