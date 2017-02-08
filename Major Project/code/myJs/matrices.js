@@ -49,11 +49,13 @@ function updateAttributesAndUniforms(){
 
 
 var playerYRotation;
+var playerXRotation;
 
 var playerX = 0, 
 	playerY = 0, 
 	playerZ = 0;
 
+var cameraSpeed = 0.003;
 
 //Matrix for camera
 //Move the camera in the world

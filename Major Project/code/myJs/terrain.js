@@ -216,146 +216,28 @@ gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, false, 0, 0);
 Draw the terrain
 */
 function drawTerrain(){
-	//Position the terrain
-	//computeModelMatrix(now/5, -115, -20, -150, 10);//old
+
 	var now = Date.now(); //For rotating stuff
-	
-	//translate to player position, then rotate, and translate back?
-	
-	//computeModelMatrix(globalRotateX, globalRotateY , 0, terrainX, terrainY, terrainZ, terrainScale);
-
-	
-	
-	//move origin matrix//computeTranslateMatrix(0, 10, 0);
-	
-	/*
-	I cant get it to change pivot point.
-	
-	Do you ever change matrix multiplication order?
-		Should be: scale, rotate, translate
-	
-	Is there a way to pass in a vector as well as an angle?
-	*/
-	
-	
-	//Set matrices, it is just replacing them?
-	
-	
-	
-	/*
-	Maybe want to rotate around the terrains CENTER
-	
-	terrainX, terrainY, terrainZ is its bottom corner, so add like terrainSize/2?
-		maybe need to take into account terrain scale as well
-
-	terrainX corresponding to terrainRows might be wrong
-	vice verase with terrainZ corresponding to terrainColumns
-	
-	Keep terrains coordinates the same?
-		-and move the player instead?
-	*/
-	/*
-	var movePivotMatrix = [	   
-		1,    0,    0,   0,
-	    0,    1,    0,   0,
-	    0,    0,    1,   0,
-	   -playerX, -playerY, -playerZ, 1];
-	var removePivotMatrix = [	   
-		1,    0,    0,   0,
-	    0,    1,    0,   0,
-	    0,    0,    1,   0,
-	   playerX, playerY, playerZ, 1];
-	  */
-	  
-	  /*
-	  	var movePivotMatrix = [	   
-		1,    0,    0,   0,
-	    0,    1,    0,   0,
-	    0,    0,    1,   0,
-	   -0, -0, -0, 1];
-	var removePivotMatrix = [	   
-		1,    0,    0,   0,
-	    0,    1,    0,   0,
-	    0,    0,    1,   0,
-	   0, 0, 0, 1];
-	  */
-	  
-	   /*
-	   var movePivotMatrix = [
-			1,    0,    0,   0,
-	    0,    1,    0,   0,
-	    0,    0,    1,   0,
-	   0,    0,    0,   1
-	   ];
-	   
-	   	   var removePivotMatrix = [
-			1,    0,    0,   0,
-	    0,    1,    0,   0,
-	    0,    0,    1,   0,
-	   0,    0,    0,   1
-	   ];
-	*/
-		/*
-		var movePivotMatrix = [	   
-		1,    0,    0,   0,
-	    0,    1,    0,   0,
-	    0,    0,    1,   0,
-	    -terrainX + terrainRows/2,    terrainY,    -terrainZ + terrainColumns/2,   1];
-		*/
-		
-	//computeScaleMatrix(terrainScale, terrainScale, terrainScale);	
-	//computeRotationYMatrix(globalRotateY);
-	//computeTranslateMatrix(terrainX, terrainY, terrainZ);
-	//computeTranslateMatrix(playerX, playerY, playerZ);
-	//updateAttributesAndUniforms();
-	//updateAttributesAndUniformsRotation(movePivotMatrix, removePivotMatrix);
-	
-	/*
-	This is the position the camera looks at
-	So use globalRotateY here? or the renamed version?
-	
-	Make yRotation from -1 to +1?
-	*/
-	
-	//console.log("global rotate y/0.0003 is: " + playerYRotation*0.03);
-	cameraTarget = [
-		playerYRotation*0.03, //rotates left/right, set this to use globalRotateY?
-		0,
-		1,
-	];
 	
 	scale = m4.scaling(terrainScale, terrainScale, terrainScale)
 	xRotation = m4.xRotation(0);
 	yRotation = m4.yRotation(0);
 	zRotation = m4.zRotation(0);
 	//'works' with playerX, Y, Z, but it shouldnt need to
-	position = m4.translation(playerX, playerY, playerZ); //0, -2, -5 to see it
+	position = m4.translation(terrainX, terrainY, terrainZ); //0, -2, -5 to see it
+	//console.log("Terrain X: " + terrainX);
+	//console.log("Terrain Y: " + terrainY);
+	//console.log("Terrain Z: " + terrainZ);
 	//terrainX, terrainY, terrainZ
+	//playerX, playerY, playerZ
 	
-	/*
-	cameraPosition should be changed based on rotation?
-	playerPositions is the origin of the camera?
-	*/
-	cameraMatrix = m4.translate(cameraMatrix, playerX, playerY, playerZ);
-	cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, UP_VECTOR);
-	//console.log("camera TARGET: " + cameraTarget);
-	viewMatrix = m4.inverse(cameraMatrix);
-	viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
-	
+	//console.log("Player X: " + playerX);
+	//console.log("Player Y: " + playerY);
+	//console.log("Player Z: " + playerZ);
 	
 	//Times matrices together
 	updateAttributesAndUniforms();
-	
-	//updateAttributesAndUniformsRotation();
-	
-	
-	/*
-	Matrices are just getting overwritten....
-	*/
-	//computeModelMatrix(0, globalRotateY, 0, -terrainX, -terrainY, -terrainZ, terrainScale);
-	//computeModelMatrix(0, globalRotateY, 0, -terrainX, -terrainY, -terrainZ, terrainScale);
-	//updateAttributesAndUniforms();
-	
+
 	
 	//Vertices
 	gl.bindBuffer(gl.ARRAY_BUFFER, positions);

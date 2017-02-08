@@ -262,7 +262,7 @@ function render(){
 	/*
 	CHANGE GETCURRENTHEIGHT TO MOVE THE PLAYER NOT THE TERRAIN
 	*/
-	getCurrentHeight();
+	//getCurrentHeight();
 	
 	//console.log("Player x: " + playerX + ", " + playerY + ", " + playerZ);
 	//console.log("Terrain x: " + terrainX + ", " + terrainY + ", " + terrainZ);
@@ -292,59 +292,79 @@ function render(){
 //var playerY = 0;
 //var playerZ = 0;
 
-
+/*
+Add cameras rotation onto its position?
+*/
 //Move this into movement file when done
 var movementSpeed = 0.1;
 function movePlayer(){
 
-	//move them in the cameras direction?
-	//need to do playerXYZ = cameraXYZ in one call?
-
 	if(moveUp === true){
-		//Then move the entire world down etc
-		//console.log("Moving up");
-		//terrainY -= movementSpeed;
-		playerY -= movementSpeed;
-		
-	
- 
+		playerY += movementSpeed;
 	}
 	else if(moveDown === true){
-		//console.log("Moving down");
-		//terrainY += movementSpeed;
-		playerY += movementSpeed;
-	
-	}
-	else if(moveLeft === true){
-		//console.log("Moving left");
-		//terrainX += movementSpeed;
-		playerX -= movementSpeed;
-		
-	}
-	else if(moveRight === true){
-		//console.log("Moving right");
-		//terrainX -= movementSpeed;
-		playerX += movementSpeed;
-	
+		playerY -= movementSpeed;
 	}
 	else if(moveForward === true){
-		//console.log("Moving forward");
-		//terrain.setZ(terrain.getZ()+1) 
-		//need a function to get all of the objects in the world's X pos, and shift them
-		//getWorldState.x = getWorldState.x - 1
-		//terrainZ += movementSpeed;
-		playerZ -= movementSpeed;
-	
+		//playerZ += movementSpeed;
+		
+		playerX -= (cameraPosition[0] - cameraTarget[0]) //+ 5;// - movementSpeed;
+		//playerY += (cameraPosition[1] + cameraTarget[1])/10 //+ 5;// - movementSpeed;
+		playerZ -= (cameraPosition[2] - cameraTarget[2]) //+ 5;// - movementSpeed;
+		
 	}
 	else if(moveBack === true){
 		//console.log("Moving backward");
 		//terrainZ -= movementSpeed;
-		playerZ += movementSpeed;
-	
+		playerZ -= movementSpeed;
 	}
 	else{
 	
 	}
+	
+	/*
+	THIS IS THE LINE THATS BREAKING EVERYTHING (m4.translate)
+	*/
+	cameraMatrix = m4.yRotation(0); //stops it wildy spinning at least
+	cameraMatrix = m4.translate(cameraMatrix, playerX, playerY, playerZ);
+	
+	/*
+	xPos = sin(y rotation in radians)
+	yPos = sin(x rotation in radians)
+	zPos = cos(y rotation in radians)
+	
+	playerYRotation is the angle I rotated
+	
+	I think camera target is too small, its a unit vector or something
+	Its always in range 0->1, therefore camera always looks there :/
+	
+	I've added the camera position to it to fix it
+	*/
+	cameraTarget = [
+		cameraMatrix[12] + Math.sin(playerYRotation * cameraSpeed), 
+		cameraMatrix[13] + Math.sin(playerXRotation * cameraSpeed),
+		cameraMatrix[14] + Math.cos(playerYRotation * cameraSpeed),
+	];
+	
+		
+	cameraPosition = [
+		cameraMatrix[12], //playerX?
+		cameraMatrix[13],
+		cameraMatrix[14]
+		//playerX,
+		//playerY,
+		//playerZ
+	];
+	
+	console.log("Camera position z: " + cameraMatrix[14]);
+	console.log("Player z: " + playerZ);
+		
+	cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, UP_VECTOR);
+	console.log("camera TARGET: " + cameraTarget);
+	viewMatrix = m4.inverse(cameraMatrix);
+	viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+	//Times matrices together
+	updateAttributesAndUniforms();
 	
 }
 
