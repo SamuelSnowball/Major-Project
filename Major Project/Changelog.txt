@@ -21,3 +21,16 @@
 	Added:
 		Github project
 		Screenshots folder, bug log, changelog
+		
+8th February
+	
+	Fixed:
+		Camera class wasn't working at all, the terrain now renders at its own
+		position, rather than being based off the players position
+
+		Camera rotation, it goes 360 degrees now
+
+		Removed the rover going left/right as it doesn't make sense. Instead, the
+		user can turn the camera and move forward to have the same effect
+
+		Cleaned up some files
