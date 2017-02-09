@@ -15,22 +15,39 @@
 	Found new m4.js matrix library, rather than MDN library
 
 
-
 7th February
 
 	Added:
 		Github project
 		Screenshots folder, bug log, changelog
-		
+
+
 8th February
-	
+
+	Added:
+		Player can now look up and down as well as left and right	
+
 	Fixed:
-		Camera class wasn't working at all, the terrain now renders at its own
-		position, rather than being based off the players position
+		Terrain now renders at its position, rather than at players position
+		Camera rotation now goes 360 degrees
+		Rover can no longer go left/right, didnt make sense for it to
 
-		Camera rotation, it goes 360 degrees now
 
-		Removed the rover going left/right as it doesn't make sense. Instead, the
-		user can turn the camera and move forward to have the same effect
+9th February
+	
+	Added:
+		Expanded terrain to 256 rows 256 columns
+		Clearing of depth buffer, terrain now renders properly	
+		Seperate code into collision.js and movement.js	
 
-		Cleaned up some files
+	Fixed:		
+		Player now moves backwards properly	
+		Player movement speed can now be changed	
+
+	Researched:
+		OpenGL lighting
+		Geometry buffer, useful for particle effects (perhaps drilling rocks)
+		It's also useful for calculating normals for lighting
+
+	3D Movement mechanics are now working properly.
+

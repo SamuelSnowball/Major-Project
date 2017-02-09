@@ -9,6 +9,7 @@ canvas.height = window.innerHeight; //to stop annoying scrolling
 document.body.appendChild(canvas);
 
 var gl = canvas.getContext('webgl');
+gl.enable(gl.DEPTH_TEST);
 gl.clearColor(0, 0, 0, 0);
 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

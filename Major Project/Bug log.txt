@@ -1,0 +1,5 @@
+BUG - terrain generation fails if using over 512 rows/columns, works with 256
+	possibly happening because Uint16 has max value of 65535
+
+FIXED - Camera wasn't rotating full 360 degrees, fixed by adding in Z pos to camera target
+FIXED - Cleared depth buffer each frame to fix terrain rendering

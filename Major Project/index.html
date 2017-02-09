@@ -28,345 +28,43 @@
 <script src="code/myJs/projection.js"></script>
 <script src="code/myJs/matrices.js"></script>
 
-
 <script src="code/myJs/player.js"></script>
 <script src="code/myJs/terrain.js"></script>
 <script src="code/myJs/movement.js"></script>
 <script src="code/myJs/mouse.js"></script>
+<script src="code/myJs/collision.js"></script>
 
 <script>
+	
+var movementSpeed = 0.5; 
 
-
-/*
-Vertices
-
-var vertices = [
-   -1, 1, 0, // top left, 
-   -1, -1, 0, // bottom left 
-   1, -1, 0, // bottom right
-   1, 1, 0 // top right
-];
-*/
-/*
-var positions = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positions);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-var positionAttribLocation = gl.getAttribLocation(program, 'position');
-gl.enableVertexAttribArray(positionAttribLocation);
-gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-*/
-/*
-var colors = [
-	1,0,0,
-	0,1,0,
-	0,0,1,
-	1,1,1
-];
-var colorBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-var colorAttribLocation = gl.getAttribLocation(program, 'color');
-gl.enableVertexAttribArray(colorAttribLocation);
-gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, false, 0, 0);
-*/
-/*
-Elements
-*
-var indices = [3,2,1,3,1,0]; 
-var elements = gl.createBuffer();
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
-gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-	*/
-	
-	
-	
-//matrix code
-
-//player
-
-var tempVerts = [
-0, 0, -2,
-1, 0, -2,
-0, 1, -2,
-1, 1, -2
-];
-
-function getCurrentHeight(){
-	
-	//playerX,Y,Z -> ignore playerY, that gets assigned
-	//heightMap[];
-	
-	//Use playerX and Z to find value in 1d array
-	
-	//player X += 1 value into the 1d array
-	//player Z += 64 values into the 1d array
-	
-	//heightmapLength = 4096
-	
-	//playerX,Y,Z can be negative, turn positive first
-	var tempPlayerX = 0;
-	var tempPlayerZ = 0;
-	if(playerX < 0){
-		tempPlayerX = playerX * -1;
-	}
-	if(playerZ < 0){
-		tempPlayerZ = playerZ * -1;
-	}
-		
-	
-	
-	//Get player position and calcluate what the index should be
-	/*
-	Coordinates MUST get divided because heightMap size doesnt change
-	and is always 64x64, so when z = 65, fails etc
-	
-	Coordinates get floored so they dont screw up the array indexing, must be a integer.
-	*/
-	if(tempPlayerX / terrainScale < 0.5){
-		tempPlayerX = Math.floor(tempPlayerX / terrainScale);
-	}else{
-		tempPlayerX = Math.ceil(tempPlayerX / terrainScale);
-	}
-	
-	if(tempPlayerZ / terrainScale < 0.5){
-		tempPlayerZ = Math.floor(tempPlayerZ / terrainScale);
-	}else{
-		tempPlayerZ = Math.ceil(tempPlayerZ / terrainScale);
-	}
-	
-	//tempPlayerX = Math.floor(tempPlayerX / terrainScale);
-	//tempPlayerZ = Math.floor(tempPlayerZ / terrainScale);
-//	console.log("tempX: " + tempPlayerX);
-//	console.log("tempZ: " + tempPlayerZ);
-	
-	//1 Z increment means skip 64 values into the heightmap, because its 1d
-	//1 X increment means just move along 1 into heightmap
-	var index = (tempPlayerX ) + (tempPlayerZ * 64);
-	
-	var previousHeight; //should probably initlaize this at top for first check
-	
-	var playerHeight = heightMap[index];
-	//console.log("Heightmap length: " + heightMap.length);
-	//console.log("Nearest height: " + heightMap[index]);
-	//console.log(playerHeight);
-	
-	/*
-	Depending on the height of the vertex found, decrease the number more perhaps
-	*/
-	
-	/*
-	if(playerHeight < -0.5){
-		//do nothing
-	}
-	else if(playerHeight > 1){
-		terrainY = playerHeight - 3; //er, duno really
-	}
-	*/
-	if(playerHeight < 0 || playerHeight > 1){
-	}
-	else{
-		//terrainY = playerHeight - (terrainScale * 2);
-		
-		/*
-		See which perlin scale they're in, increase height based on it
-		*/
-		var heightIncrement = 0.01;
-		//Going up or down from last time?
-
-		
-		if(playerZ > -32){
-			
-			/*
-			Increment height slowly, stop when target reached
-			
-			Old code:
-			For > -32 if
-				terrainY = playerHeight - 1
-			Other loop
-				terrainY = playerHeight - 2
-			*/
-			//terrainY = playerHeight - 1;
-			//terrainY += heightIncrement;
-			
-			
-			if(playerY > playerHeight  -1  ){
-			//	console.log("max height reached");
-			}
-			else{
-				playerY += heightIncrement;
-			//	console.log("changing player height");
-			}
-			
-			if(playerY < playerHeight  -1  ){
-			//	console.log("max height reached");
-			}
-			else{
-				playerY -= heightIncrement;
-			//	console.log("changing player height");
-			}
-			
-			
-			
-	
-		}
-		else{
-			//Previous problem if heightMap returns value greater than 1
-			/*
-			Increment height slowly, stop when target reached
-			*/
-						
-			if(playerY > playerHeight  -2  ){
-			//	console.log("max height reached");
-			}
-			else{
-				playerY += heightIncrement;
-			//	console.log("changing player height");
-			}
-			
-			if(playerY < playerHeight  -2 ){
-			//	console.log("max height reached");
-			}
-			else{
-				playerY -= heightIncrement;
-			//	console.log("changing player height");
-			}
-			
-		}
-		
-		previousHeight = playerHeight;
-	}
-	
-
-
-	
-	/*
-	Fails with floats 
-	
-	Fails because need to divide by 100, as terrain scaled to 100?
-	Or try with terrain scaled to 1
-	*/
-	
-}
+var playerXRotation;
+var playerYRotation;	
 
 function render(){
+	gl.clearColor(0, 0, 0, 0);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	var now = Date.now(); //For rotating stuff
+	//console.log("player X is: " + playerX);
+	//console.log("player Y is: " + playerY);
+	//console.log("player Z is: " + playerZ);
 	
+	movePlayer(); //movement.js
 	
-	
-	movePlayer();
-	
-	drawTerrain();
+	drawTerrain(); //terrain.js
 	
 	
 	/*
 	CHANGE GETCURRENTHEIGHT TO MOVE THE PLAYER NOT THE TERRAIN
 	*/
-	//getCurrentHeight();
+	//getCurrentHeight(); //collision.js
 	
-	//console.log("Player x: " + playerX + ", " + playerY + ", " + playerZ);
-	//console.log("Terrain x: " + terrainX + ", " + terrainY + ", " + terrainZ);
-	
-	//drawNewTerrain();
-	
-	/*
-	computeModelMatrix(1, player.x, player.y, 2);
-	updateAttributesAndUniforms();
-	//Draw player
-	//Pos
-	gl.bindBuffer(gl.ARRAY_BUFFER, paddlePositionBuffer);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	//Color
-	gl.bindBuffer(gl.ARRAY_BUFFER, paddleColorBuffer);
-	gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	//Elements
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, paddleIndiciesBuffer);
-	gl.drawElements(gl.TRIANGLES, paddleIndicies.length, gl.UNSIGNED_SHORT, 0);
-	*/
-	//console.log("Player X,Y,Z: " + playerX +  ", " + playerY + ", " + playerZ);
+
 	requestAnimationFrame(render);
 }
 
-//defined in matrcies
-//var playerX = 0;
-//var playerY = 0;
-//var playerZ = 0;
 
-/*
-Add cameras rotation onto its position?
-*/
-//Move this into movement file when done
-var movementSpeed = 0.1;
-function movePlayer(){
 
-	if(moveUp === true){
-		playerY += movementSpeed;
-	}
-	else if(moveDown === true){
-		playerY -= movementSpeed;
-	}
-	else if(moveForward === true){
-		//playerZ += movementSpeed;
-		
-		playerX -= (cameraPosition[0] - cameraTarget[0]) //+ 5;// - movementSpeed;
-		//playerY += (cameraPosition[1] + cameraTarget[1])/10 //+ 5;// - movementSpeed;
-		playerZ -= (cameraPosition[2] - cameraTarget[2]) //+ 5;// - movementSpeed;
-		
-	}
-	else if(moveBack === true){
-		//console.log("Moving backward");
-		//terrainZ -= movementSpeed;
-		playerZ -= movementSpeed;
-	}
-	else{
-	
-	}
-	
-	/*
-	THIS IS THE LINE THATS BREAKING EVERYTHING (m4.translate)
-	*/
-	cameraMatrix = m4.yRotation(0); //stops it wildy spinning at least
-	cameraMatrix = m4.translate(cameraMatrix, playerX, playerY, playerZ);
-	
-	/*
-	xPos = sin(y rotation in radians)
-	yPos = sin(x rotation in radians)
-	zPos = cos(y rotation in radians)
-	
-	playerYRotation is the angle I rotated
-	
-	I think camera target is too small, its a unit vector or something
-	Its always in range 0->1, therefore camera always looks there :/
-	
-	I've added the camera position to it to fix it
-	*/
-	cameraTarget = [
-		cameraMatrix[12] + Math.sin(playerYRotation * cameraSpeed), 
-		cameraMatrix[13] + Math.sin(playerXRotation * cameraSpeed),
-		cameraMatrix[14] + Math.cos(playerYRotation * cameraSpeed),
-	];
-	
-		
-	cameraPosition = [
-		cameraMatrix[12], //playerX?
-		cameraMatrix[13],
-		cameraMatrix[14]
-		//playerX,
-		//playerY,
-		//playerZ
-	];
-	
-	console.log("Camera position z: " + cameraMatrix[14]);
-	console.log("Player z: " + playerZ);
-		
-	cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, UP_VECTOR);
-	console.log("camera TARGET: " + cameraTarget);
-	viewMatrix = m4.inverse(cameraMatrix);
-	viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
-	//Times matrices together
-	updateAttributesAndUniforms();
-	
-}
 
 function setup(){
 	setupMovement();
