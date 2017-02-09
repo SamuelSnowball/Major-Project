@@ -7,8 +7,8 @@ Maybe try each (i % 8 === 0) {noise += 5}, and see what happens
 See if u can change it both ways rather than just lengthwards?
 */
 
-var terrainRows = 64;
-var terrainColumns = 64;
+var terrainRows = 256;
+var terrainColumns = 256;
 var terrainSize = terrainRows * terrainColumns; //terrainRows * terrainCols * area2Rows * area2Cols
 var heightMap = []; //A 1D Array
 
@@ -24,9 +24,9 @@ function addTerrainVertices(){
 	var offsetX = 0;
 	var offsetY = 0;
 	var offsetZ = 0;
-	var offsetXIncrement = 0.05; //How it moves along the graph?
-	var offsetYIncrement = 0.03; //How it moves along the graph?
-	var offsetZIncrement = 0.08; //How it moves along the graph?
+	var offsetXIncrement = 0.05; //How it moves along the graph? //5
+	var offsetYIncrement = 0.03; //How it moves along the graph? //3
+	var offsetZIncrement = 0.08; //How it moves along the graph? //8
 	var scale = 1;
 	
 	for(var i=0; i<terrainSize; i++){

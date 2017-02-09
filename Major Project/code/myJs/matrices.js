@@ -47,18 +47,13 @@ function updateAttributesAndUniforms(){
 	//gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(viewProjectionMatrix));
 }
 
-
-var playerYRotation;
-var playerXRotation;
-
 var playerX = 0, 
 	playerY = 0, 
 	playerZ = 0;
 
 var cameraSpeed = 0.003;
 
-//Matrix for camera
-//Move the camera in the world
+//Matrix for camera, move the camera in the world
 var cameraMatrix = m4.yRotation(0);
 cameraMatrix = m4.translate(cameraMatrix, playerX, playerY, playerZ);
 
@@ -69,7 +64,7 @@ var cameraPosition = [
 	cameraMatrix[14]
 ];
 
-//Actual initializatiion in terrain file, but definition needed here
+//Actual usage in index file, but definition needed here
 var cameraTarget = [
 	0,
 	0,
@@ -81,8 +76,7 @@ var UP_VECTOR = [0, 1, 0];
 //Compute camera matrix
 var cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, UP_VECTOR);
 
-//View matrix for camera, inverse everything
-//So that the camera is the origin
+//View matrix for camera, inverse everything, so that the camera is the origin
 var viewMatrix = m4.inverse(cameraMatrix);
 
 //Combine view and projection matrices
