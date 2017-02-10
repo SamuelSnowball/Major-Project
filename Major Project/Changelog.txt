@@ -51,3 +51,12 @@
 
 	3D Movement mechanics are now working properly.
 
+
+10th February
+		
+	Added:
+		Hill/Crater terrain generation, not finished yet
+		Some screenshots showing progress
+	
+	Fixed: 
+		Turned 1D heightMap into 2D heightMap for easier indexing
