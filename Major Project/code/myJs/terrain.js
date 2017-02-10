@@ -10,15 +10,20 @@ See if u can change it both ways rather than just lengthwards?
 var terrainRows = 256;
 var terrainColumns = 256;
 var terrainSize = terrainRows * terrainColumns; //terrainRows * terrainCols * area2Rows * area2Cols
-var heightMap = []; //A 1D Array
+var heightMap = new Array(terrainRows); 
+for(var i=0; i<terrainRows; i++){
+	heightMap[i] = new Array(terrainColumns);
+}
+//Now have array heightMap[256][256];
+
 
 var terrainScale = 1;
 
 /*
 The values are the height of the vertex
 */
-addTerrainVertices();
-function addTerrainVertices(){
+fillHeightMap();
+function fillHeightMap(){
 	
 	var perlin = new ImprovedNoise();
 	var offsetX = 0;
@@ -29,39 +34,24 @@ function addTerrainVertices(){
 	var offsetZIncrement = 0.08; //How it moves along the graph? //8
 	var scale = 1;
 	
-	for(var i=0; i<terrainSize; i++){
-		if(i < terrainSize/4 ){
-			var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
-			heightMap.push(height); 
-			offsetX += offsetXIncrement;
-			offsetY += offsetYIncrement;
-			offsetZ += offsetZIncrement;	
-
-			//random stuff to get smoother terrain
-			if(offsetX > 0.3){
-				offsetX = 0;
-			}
-			
-			if(offsetY > 0.5){
-				offsetY = 0;
-			}
-			
-			if(offsetZ > 0.8){
-				offsetZ = 0;
-			}
-		}
-		else if(i < terrainSize/2){
-			//Area 2
-			//offsetX = 0;
-			//offsetY = 0;
-			//offsetZ = 0;
-			scale = 3; //important
+	//For each row, do all the columns
+	for(var x=0; x<terrainRows; x++){
+		for(var y=0; y<terrainColumns; y++){
 			
 			var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
-			heightMap.push(height); 
-			offsetX += offsetXIncrement;
-			offsetY += offsetYIncrement;
-			offsetZ += offsetZIncrement;	
+				heightMap[x][y] = height; 
+				offsetX += offsetXIncrement;
+				offsetY += offsetYIncrement;
+				offsetZ += offsetZIncrement;	
+				
+			
+			/*
+			if(i < terrainSize/8 ){
+				var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
+				heightMap.push(height); 
+				offsetX += offsetXIncrement;
+				offsetY += offsetYIncrement;
+				offsetZ += offsetZIncrement;	
 
 				//random stuff to get smoother terrain
 				if(offsetX > 0.3){
@@ -75,38 +65,81 @@ function addTerrainVertices(){
 				if(offsetZ > 0.8){
 					offsetZ = 0;
 				}
-		}
-		else{
-			scale = 1; //important
-			
-			offsetXIncrement = 0.1;
-			offsetYIncrement = 0.1;
-			offsetZIncrement = 0.1;
-			
-			var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
-			heightMap.push(height + 5); 
-			offsetX += offsetXIncrement;
-			offsetY += offsetYIncrement;
-			offsetZ += offsetZIncrement;	
+			}
+			else if(i < terrainSize/6){
+				//Area 2
+				//offsetX = 0;
+				//offsetY = 0;
+				//offsetZ = 0;
+				scale = 3; //important
+				
+				var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
+				heightMap.push(height); 
+				offsetX += offsetXIncrement;
+				offsetY += offsetYIncrement;
+				offsetZ += offsetZIncrement;	
 
-				//random stuff to get smoother terrain
-				/*
-				if(offsetX > 22.5){
-					offsetX = 0;
-				}
+					//random stuff to get smoother terrain
+					if(offsetX > 0.3){
+						offsetX = 0;
+					}
+					
+					if(offsetY > 0.5){
+						offsetY = 0;
+					}
+					
+					if(offsetZ > 0.8){
+						offsetZ = 0;
+					}
+			}
+			else if(i < terrainSize/4){
+				scale = 1; //important
 				
-				if(offsetY > 17.5){
-					offsetY = 0;
-				}
+				offsetXIncrement = 0.1;
+				offsetYIncrement = 0.1;
+				offsetZIncrement = 0.1;
 				
-				if(offsetZ > 28.8){
-					offsetZ = 0;
-				}
-				*/
+				var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
+				heightMap.push(height + 5); 
+				offsetX += offsetXIncrement;
+				offsetY += offsetYIncrement;
+				offsetZ += offsetZIncrement;	
+
+					//random stuff to get smoother terrain
+					
+					if(offsetX > 22.5){
+						offsetX = 0;
+					}
+					
+					if(offsetY > 17.5){
+						offsetY = 0;
+					}
+					
+					if(offsetZ > 28.8){
+						offsetZ = 0;
+					}
+					
+				
+				
+			}else{
+				scale = 1; //important
+				
+				offsetXIncrement = 0.1;
+				offsetYIncrement = 0.1;
+				offsetZIncrement = 0.1;
+				
+				var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
+				heightMap.push(height - 10); 
+				offsetX += offsetXIncrement;
+				offsetY += offsetYIncrement;
+				offsetZ += offsetZIncrement;
+			}//end if				
+			*/
+				
 			
 			
-		}//end if
-	} //end for
+		} //end for
+	}
 
 //	console.log(heightMap);
 
@@ -114,32 +147,294 @@ function addTerrainVertices(){
 
 
 /*
+Need a function to fill this direction numbers with elements
+So can create small and large hills/craters
+Have a function that takes in how large the hill/crater should be
+This will determine how many element rings it creates.
+
+Perhaps set the height of the original vertex to low/high, for crater/hill
+
+Also have a variable to change size of slope increment +/- in other function
+
+1 Ring = 3x3 grid
+2 Ring = 5x5 grid
+3 Ring = 7x7 grid
+*/
+function createElementRings(numberOfRings){
+	
+	var previousTotalNumberOfElements = 0;
+	
+	if(numberOfRings === 0){
+		console.log("Why would you enter 0 rings?");
+	}
+	
+	/*
+	Each iteration this loop creates element ring
+	3x3 then,
+	5x5 then,
+	7x7 etc
+	
+	Might have to replace all occurrences on numberOfRings with i :/
+	*/
+	for(var currentRingNumber=1; currentRingNumber<=numberOfRings; currentRingNumber++){
+		
+		//Top    row element loop (t)
+		//Side   row element loop (s) 
+		//Bottom row element loop (b)
+		
+		/*
+		Each new element loop has 2 more top row elements than the last
+		
+		1 ring = (1 * 2) + 1 = 3 top row elements
+		2 ring = (2 * 2) + 1 = 5 top row elements
+		3 ring = (3 * 2) + 1 = 7 top row elements
+		*/
+		var topElements = (currentRingNumber * 2) + 1;
+		for(var t=0; t<topElements; t++){
+			directionNumbers.push(t - currentRingNumber); //top row x, should increment
+			directionNumbers.push(-currentRingNumber); //top row y, it shouldn't increment
+		}
+		
+		console.log("Top elements: " + directionNumbers);
+		
+		/*
+		If currentRingNumber is 1, then its a weird case. Just assign sideElements to be 1.
+		
+		Side elements is the number of elements TO EACH SIDE of the centre point.
+		So 1 side element, means 1 element on left, and 1 element on right of centre point.
+		*/
+		var sideElements;
+		if(currentRingNumber === 1){
+			sideElements = 1;
+		}else{
+			//Side elements is actually how many x,y values.
+			//1 side element = 1 x and 1 y?
+			sideElements = (currentRingNumber * 2) - 1;
+		}
+		
+		/*
+		New method
+		
+		Below is getting previous elements and using them
+		
+		*/
+		
+		//previousTotalNumberOfElements = directionNumbers.length - 1; //-1 because array starts at 0 
+		
+		/*
+		Side elements has to do left and right side of centre point.
+		
+		Use existing top left/top right coordinates as a start point,
+		but make sure to decrement them before using them.
+		
+		topLeftElementX and topLeftElementY are always first 2 values in directionNumbers.
+		If we're on 2nd iteration, add the total number of elements,
+		to get the new start topLeftElementX and topLeftElementY
+		*/
+		var topLeftElementX = directionNumbers[previousTotalNumberOfElements]; //top left x position in grid
+		var topLeftElementY = directionNumbers[previousTotalNumberOfElements + 1]; //top left y position in grid
+		
+		/*
+		2nd iteration length = 13
+		*/
+		var topRightElementX = directionNumbers[previousTotalNumberOfElements + (topElements * 2) - 2]; //top right x position in grid
+		var topRightElementY = directionNumbers[previousTotalNumberOfElements + (topElements * 2) - 1]; //top right y position in grid
+		
+		/*
+		Left side, going down
+		topLeftElementY - 1 to shift it onto the element that hasn't been chosen yet
+		*/
+		for(var l=0; l<sideElements; l++){
+			directionNumbers.push(topLeftElementX); //x, shouldn't increment
+			directionNumbers.push(topLeftElementY + 1 + l); //y, should increment to do down row
+			//directionNumbers.push(previousTotalNumberOfElements); //x, shouldn't increment
+			//directionNumbers.push(previousTotalNumberOfElements + 1); //y, should decrement
+		}
+		
+		/*
+		Right side, going down
+		
+		Basically, I invert the values as a quick hack to fix them, otherwise they'd be on left side :/
+		Nope, still screwing up
+		
+		For 7x7 grid, getting: -2,4, -2,5, -2,6, -2,7, -2,8
+		
+		Once fixed, check the 5x5 grid again
+		
+		Fix the 5x5 first, then check 7x7
+		*/
+		for(var r=0; r<sideElements; r++){
+			directionNumbers.push(topRightElementX); //x, shouldn't increment
+			directionNumbers.push(topRightElementY + 1 + r); //y, should increment to do down row
+			//directionNumbers.push(previousTotalNumberOfElements + sideElements); //x, shouldn't increment
+			//directionNumbers.push(previousTotalNumberOfElements + sideElements + 1); //y, should decrement
+		}
+		
+		console.log("Top elements + side elements: " + directionNumbers);
+		
+		//Always same number of top and bottom elements
+		var bottomElements = (currentRingNumber * 2) + 1;
+		for(var b=0; b<bottomElements; b++){
+			directionNumbers.push(b - currentRingNumber); //bottom row x, should increment
+			directionNumbers.push(currentRingNumber); //bottom row y, it shouldn't increment
+		}
+		
+		console.log("Top elements + side elements + bottom elements: " + directionNumbers);
+		
+		previousTotalNumberOfElements = directionNumbers.length;
+		
+		/*
+		Increment height? no, in other function
+		*/
+	}
+	
+	console.log("Just finished creating element rings they are: " + directionNumbers);
+	
+	
+}
+
+//What values should be added onto the original element, to obtain surrounding element rings
+var directionNumbers = [
+	/*
+	
+	// 3X3 GRID BELOW
+	
+	-1, 0, //left
+	+1, 0, //right
+	
+	0, +1, //bottom middle
+	0, -1, //top middle
+	
+	-1, -1, //top left
+	+1, -1, //top right
+	
+	-1, +1, //bottom left
+	+1, +1  //bottom right
+	
+	
+	// Outer 5X5 GRID
+	// Top 5 values
+	// Left 3 values
+	// Right 3 values
+	// Bottom 5 values
+	
+	// Top 5 values
+	-2, -2, 
+	-1, -2,
+	 0, -2, 
+	+1, -2,
+	+2, -2, 
+	
+	// Left 3 values
+	-2, -1, 
+	-2,  0,
+	-2, +1, 
+	
+	// Right 3 values
+	+2, -1,
+	+2,  0,
+	+2, +1,
+	
+	// Bottom 5 values
+	-2, +2,
+	-1, +2,
+	 0, +2,
+	+1, +2,
+	+2, +2
+	
+	*/
+];
+
+/*
+1 = 1 element ring, so 3x3 grid
+2 = 2 element ring, so 5x5 grid
+3 = 3 element ring, so 7x7 grid
+*/
+createElementRings(3); 
+getSurroundingElements(directionNumbers, 30, 30); //max index values 256, 256
+
+/*
+Take the surrounding cells (8) and -1,
+So 5x5 grid = 25 cells = 24 surrounding cells -1 = 23
+*/
+var LOOP_SIZE_ONE_ELEMENTS = 7; 	
+var LOOP_SIZE_TWO_ELEMENTS = 23; 
+var LOOP_SIZE_THREE_ELEMENTS = 47;
+
+/*
+Could pass in whether to make a hill or crater, and the max height values it should have
+
+Adds direction numbers to coordinate (at xIndex, yIndex)
+
+Could be used for hills and craters
+
+Call this function AFTER the original heightMap has been generated,
+otherwise the values would get overwritten.
+*/
+function getSurroundingElements(directions, xIndex, yIndex){
+	
+	console.log("Original middle element value: " + heightMap[xIndex][yIndex]);
+	
+	//Reset the original value, don't want to retain its original value
+	heightMap[xIndex][yIndex] = -15; //or 15 if want to create hill etc
+	
+	//Go through directions array in pairs, +=2
+	for(var i=0; i<directions.length; i+=2){
+		console.log("Directions length: " + directions.length);
+	
+		//Want the +=2 for this bit
+		var newXIndex = xIndex + directions[i]; 
+		var newYIndex = yIndex + directions[i+1];
+		
+		console.log("Output element value: " + heightMap[newXIndex][newYIndex]);
+		
+		//Set the heightMap value outrageously high to see if its working
+		//Set values differently based on what 'ring' its on
+		if(i <= 7 * 2){
+			//Inner loop
+			//console.log("Set height within element ring size 1");
+			heightMap[newXIndex][newYIndex] = -15;
+		}
+		else if(i <= 23 * 2){ // it wants 48, them added together
+			//Outer loop
+			//console.log("Set height within element ring size 2");
+			heightMap[newXIndex][newYIndex] = -10;
+		}
+		else if(i <= 47 * 2){
+			//console.log("Set height within element ring size 3");
+			heightMap[newXIndex][newYIndex] = -5;
+		}
+		else{
+			//heightMap[newXIndex][newYIndex] = 15;
+			//console.log("I was: " + i);
+		}
+		//Out of bounds check here
+	}
+	
+}
+
+
+/*
 U have height values, now assign x and z values to make x,y,z point
+
+Terrain Vertices is a 1D array
 */
 var terrainVertices = [];
 var terrainX = 0;
 var terrainY = 0; //? or heightMap[0]
 var terrainZ = 0;
 
-
-//For each vertex, give x,y,z position
-for(var i=0; i<terrainSize; i++){
+for(var x=0; x<terrainRows; x++){
+	for(var y=0; y<terrainColumns; y++){
+		terrainVertices.push(terrainX); //x
+		terrainVertices.push(heightMap[x][y]); //y for now 0,was heightMap[i]
+		terrainVertices.push(terrainZ); //z
 	
-	//	console.log("x: " + terrainX + ", z: " + terrainZ);
-	terrainVertices.push(terrainX); //x
-	terrainVertices.push(heightMap[i]); //y for now 0,was heightMap[i]
-	terrainVertices.push(terrainZ); //z
-	
-	//console.log("my x: " + terrainX);
-	//console.log("my z: " + terrainZ);
-	
-	if(terrainX === terrainRows-1){
-		terrainX = 0; //reset
-		terrainZ++;
-		
-	}else{
 		terrainX++;
 	}
+	//Reset
+	terrainX = 0;
+	terrainZ++;
 }
 
 terrainX = 0; terrainY = 0; terrainZ = 0; //reset cos above loop changed 
@@ -148,7 +443,8 @@ console.log("Terrain vertices: " + terrainSize);
 console.log("Individual terrain x,y,z values: " + terrainVertices.length);
 
 
-//Terrain vertices contains all sectors/areas
+
+
 
 var positions = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positions);
