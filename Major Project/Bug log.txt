@@ -1,5 +1,16 @@
-BUG - terrain generation fails if using over 512 rows/columns, works with 256
-	possibly happening because Uint16 has max value of 65535
+FIXED - Terrain generation fails if using over 256 rows/columns
+
+	Indice values exceed Uint16 indicies buffer
+		Changed indices from Uint16 to Uint32 array
+	Also changed drawElements call to have, 
+		gl.UNSIGNED_INT instead of gl.UNSIGNED_SHORT
+
+	Required adding: OES_element_index_uint
+	https://developer.mozilla.org/en-US/docs/Web/API/OES_element_index_uint
+
+	Project only runs on chrome, firefox
+	Doesn't work on Internet explorer or EDGE
+	
 
 FIXED - Camera wasn't rotating full 360 degrees, fixed by adding in Z pos to camera target
 FIXED - Cleared depth buffer each frame to fix terrain rendering
