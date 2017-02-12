@@ -33,10 +33,11 @@
 <script src="code/myJs/movement.js"></script>
 <script src="code/myJs/mouse.js"></script>
 <script src="code/myJs/collision.js"></script>
+<script src="code/myJs/sphere.js"></script>
 
 <script>
 	
-var movementSpeed = 0.5; 
+var movementSpeed = 5; 
 
 var playerXRotation;
 var playerYRotation;	
@@ -45,10 +46,8 @@ function render(){
 	gl.clearColor(0, 0, 0, 0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	//console.log("player X is: " + playerX);
-	//console.log("player Y is: " + playerY);
-	//console.log("player Z is: " + playerZ);
-	
+	//console.log("Player X, Y, Z: " + Math.floor(playerX) + ", " + Math.floor(playerY) + ", " + Math.floor(playerZ));
+
 	movePlayer(); //movement.js
 	
 	drawTerrain(); //terrain.js
@@ -57,6 +56,8 @@ function render(){
 	//getCurrentHeight(); //collision.js
 	
 
+	drawSphere();
+	
 	requestAnimationFrame(render);
 }
 
@@ -69,12 +70,18 @@ function setup(){
 	//all in terrain.js
 	createHeightMap();
 	fillHeightMap();
+	
+	//Disabled whilst fix textures
 	createHills();
 	createCraters();
+	
 	createTerrainVertices();
 	setupTerrainBuffers();
 	
-	//makeTerrainTexture();
+	initTextures();
+
+	
+	makeSphere(1, 12, 24);
 	
 	render();
 }

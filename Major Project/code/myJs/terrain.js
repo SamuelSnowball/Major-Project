@@ -5,8 +5,12 @@ var terrainX = 0,
 	terrainY = 0,
 	terrainZ = 0;
 
-var terrainRows = 256;
-var terrainColumns = 256;
+/*
+Works with 2048, probably way more
+Max values are now 2.147BILLION?	
+*/
+var terrainRows = 512; 
+var terrainColumns = 512;
 
 var terrainSize = terrainRows * terrainColumns;
 var terrainScale = 1;
@@ -58,10 +62,7 @@ function fillHeightMap(){
 		for(var y=0; y<terrainColumns; y++){
 		
 			var height = perlin.noise(xOff, yOff, xOff) * scale;
-			heightMap[x][y] = height;
-			
-			xOff+=offsetIncrement;
-			
+
 			/*
 			//Messing about with random cliffs, remove these to get a flat plane
 			if(y > 32 && y < 64){
@@ -74,6 +75,9 @@ function fillHeightMap(){
 				height += 5;
 			}
 			*/
+			
+			heightMap[x][y] = height;
+			xOff+=offsetIncrement;
 			
 			/*
 			Previous code below, useful for really bumpy flat areas
@@ -247,8 +251,6 @@ you want to navigate from the centre point to.
 
 And then I set the height on the elements I navigated to
 
-
-
 Could pass in whether to make a hill or crater, and the max height values it should have
 
 Adds direction numbers to centre coordinate at (xIndex, yIndex)
@@ -385,13 +387,12 @@ var positions;
 var positionAttribLocation;
 var elements;
 var terrainColors = [];
-var colorBuffer;
-var colorAttribLocation;
 
 function setupTerrainBuffers(){
 	setupTerrainVertexBuffer();
 	setupTerrainIndiciesBuffer();
-	setupTerrainColorBuffer();
+	//setupTerrainColorBuffer();
+	setupTerrainTextureBuffer();
 }
 
 function setupTerrainVertexBuffer(){
@@ -424,35 +425,66 @@ function setupTerrainIndiciesBuffer(){
         indices[i++] = (r + 1) * terrainColumns  + (terrainColumns- 1);
     }
 	
+	//console.log(indices);
+	
 	console.log("Length of indices: " + indices.length);
 	
 	elements = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);
 }
 
 
-function setupTerrainColorBuffer(){
-	//Colors
-	terrainColors = [];
-	for(var a=0; a < terrainVertices.length / 3; a++){
-		terrainColors.push(Math.random()); //r
-		terrainColors.push(Math.random()); //g
-		terrainColors.push(Math.random()); //b
-	}
+
+/*
+Every texture goes from 0 -> 1, regardless of dimensions
+
+GL has 32 texture registers, we're using TEXTURE0
+Bind the previously loaded texture to that register
+Set the sampler in the shader to use that texture
+*/
+var terrainTextureCoordinateBuffer;
+function setupTerrainTextureBuffer(){
 	/*
-	A colour is made up of 3 different values
-	So 1 vertex does actually have 1 color (from 3 values)
+	Create the buffer,
+	Bind to it,
+	Buffer the data
 	*/
-	console.log("Color array LENGTH: " + terrainColors.length);
+	terrainTextureCoordinateBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
 
-	colorBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainColors), gl.STATIC_DRAW);
-	colorAttribLocation = gl.getAttribLocation(program, 'color');
-	gl.enableVertexAttribArray(colorAttribLocation);
-	gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	/*
+	Store texture coordinates for each face
+	Texture coordinates range 0 -> 1
+	*/
+	var textureCoordinates = [];
+	
+	/*
+	Need a double for loop to set accurately
+	1/256 for max row increment?
+		=0.00390625 * 265 = 1. so increment by that
+	*/
+	var xUV = 0;
+	var yUV = 0;
+	for(var x=0; x<terrainRows; x++){
+		for(var y=0; y<terrainColumns; y++){
+			textureCoordinates.push(xUV);  
+			textureCoordinates.push(yUV); 
+			xUV += 0.00390625;
+		}
+		xUV = 0;
+		yUV += 0.00390625;
+	}
+	
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+	//gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 }
+
+
+
+
+
+
 
 /*
 Apply matrices, then draw the terrain.
@@ -470,9 +502,14 @@ function drawTerrain(){
 	//Vertices
 	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
 	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	//Color
-	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-	gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
+	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, myTexture);
+	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+	
+	
 	//Elements
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
 	
@@ -485,45 +522,57 @@ function drawTerrain(){
 	gl.drawElements(
 		gl.TRIANGLE_STRIP, 
 		terrainVertices.length / 3 * 2,
-		gl.UNSIGNED_SHORT, 
+		gl.UNSIGNED_INT, //gl.UNSIGNED_SHORT,
 		elements
 	); 
+	
 }
 
 
 
 
+var myTexture;
+function initTextures(){
+	//http://stackoverflow.com/questions/19722247/webgl-wait-for-texture-to-load/19748905#19748905
+	//https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+	//https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js
+	myTexture = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, myTexture);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+				  new Uint8Array([255, 0, 0, 255])); // red
 
+	myImage = new Image();
+	//myImage.src = 'resources/PerlinNoiseFractal.png';
+	myImage.src = 'resources/new1.png';
+	myImage.onload = function (){handleTextureLoaded(myImage, myTexture);}
+	
+}
 
 /*
-Make sure to call this function in index, atm its noted out
+This gets run after image is done loading
 */
-function makeTerrainTexture(){
+function handleTextureLoaded(image, texture){
+
+	gl.bindTexture(gl.TEXTURE_2D, texture);
 	
+	// Writes image data to the texture
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 	
-	var textureBufferID;
-	var textureCoordinateID;
-	var textureID;
-	
-	var image = new Array(); //width, height, r,g,b 3D array
-	
-	var uvs; 
-	
-	glGenTextures(); //returns us a buffer ID
-	glBindTexture(); //bind buffer#
 	/*
-	1st, gltexcture2d
-	what level of mip mapping used for
-	how opengl should store this data
-	width of texture //can determine this based on other info
-	height of texture
-	width of a border if u want one
-	next 2, format of image data
-			then, gl_unsigned_byte
-	lastly, the raw image data
+	Setup filtering, controls how image is filtered when scaling
+	Using linear filtering when scaling up
+	Using mipmap when scaling down
 	*/
-	glTexImage2D()
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
 	
+	gl.generateMipmap(gl.TEXTURE_2D);
+	
+	// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
+	gl.bindTexture(gl.TEXTURE_2D, null);
 }
+
+
+
 
 

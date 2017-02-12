@@ -84,3 +84,23 @@
 
 	Researched:
 		OpenGL texture mapping
+
+
+12th February
+
+	Added:
+		Image resources, so now have to run on local server
+			Symlinked files on my desktop
+
+		Mapped texture over terrain, will eventually make my own in future
+			Load the texture, updated shaders
+
+		Started to build sphere geometry, for boulders
+
+	Fixed:
+		Solved maximum terrain size bug, can now generate more terrain than ever needed
+
+	Researched:
+		Creating sphere geometries
+
+
