@@ -3,6 +3,8 @@ Causes the bumpy effect when moving over terrain.
 
 Uses the players current X and Z position to find what terrain vertex they're nearest to.
 The players height then gets assigned to the nearest terrain vertex.
+
+It isn't working because heightMap is now a 2D array!
 */
 function getCurrentHeight(){
 	

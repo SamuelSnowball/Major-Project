@@ -60,3 +60,27 @@
 	
 	Fixed: 
 		Turned 1D heightMap into 2D heightMap for easier indexing
+
+
+11th February
+
+	Added:
+		Split screenshots folder to have sub folders
+
+		Deeper hill and crater generation	
+		Split up terrain code, creation, buffers, rendering etc
+		Added createHill and createCrater functions, that call the other getSurroundingElements
+		More comments to terrain code
+		Added some random terrain cliffs, temporary, very easy to add
+
+		I thought my perlin noise terrain generation was strange, so decided to have
+		another look at it.
+		Discovered I was being stupid and not using perlin noise correctly
+		Looked at how I did it from a previous scratch pad and fixed it
+		But original method is useful for flat bumpy areas
+		Now gives nice rolling hills
+
+		terrain1 shows rolling hills with a crater, nice	
+
+	Researched:
+		OpenGL texture mapping

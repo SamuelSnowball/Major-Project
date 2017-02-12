@@ -54,9 +54,6 @@ function render(){
 	drawTerrain(); //terrain.js
 	
 	
-	/*
-	CHANGE GETCURRENTHEIGHT TO MOVE THE PLAYER NOT THE TERRAIN
-	*/
 	//getCurrentHeight(); //collision.js
 	
 
@@ -68,6 +65,16 @@ function render(){
 
 function setup(){
 	setupMovement();
+	
+	//all in terrain.js
+	createHeightMap();
+	fillHeightMap();
+	createHills();
+	createCraters();
+	createTerrainVertices();
+	setupTerrainBuffers();
+	
+	//makeTerrainTexture();
 	
 	render();
 }
