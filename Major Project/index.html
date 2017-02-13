@@ -16,6 +16,7 @@
 <!-- Libraries 
 <script src="libraries/mdn-webgl-master/library/matrices.js"></script> -->
 <script src="libraries/m4.js"></script>
+<script src="libraries/perlin.js"></script>
 
 <!-- Not my js files-->
 <script src="code/js/ImprovedNoise.js"></script>
@@ -34,18 +35,32 @@
 <script src="code/myJs/mouse.js"></script>
 <script src="code/myJs/collision.js"></script>
 <script src="code/myJs/sphere.js"></script>
+<script src="code/myJs/loadSave.js"></script>
 
 <script>
 	
-var movementSpeed = 5; 
+var movementSpeed = 0.5; 
 
 var playerXRotation;
 var playerYRotation;	
 
+//For saving the game
+var gameTime = 0;
+var saveTime = 1200;
+
 function render(){
 	gl.clearColor(0, 0, 0, 0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+	
+	/*
+	Auto-save the game every 20 seconds or so
+	*/
+	if(gameTime === saveTime){
+		console.log("World auto saved");
+		saveWorldInfo();
+		gameTime = 0;
+	}
+	
 	//console.log("Player X, Y, Z: " + Math.floor(playerX) + ", " + Math.floor(playerY) + ", " + Math.floor(playerZ));
 
 	movePlayer(); //movement.js
@@ -58,6 +73,7 @@ function render(){
 
 	drawSphere();
 	
+	gameTime++;
 	requestAnimationFrame(render);
 }
 
@@ -65,6 +81,8 @@ function render(){
 
 
 function setup(){
+	loadWorldInfo(); //loadSave.js
+
 	setupMovement();
 	
 	//all in terrain.js
@@ -81,7 +99,8 @@ function setup(){
 	initTextures();
 
 	
-	makeSphere(1, 12, 24);
+	makeSphere(30, 30, 1);
+	setupSphereBuffers();
 	
 	render();
 }

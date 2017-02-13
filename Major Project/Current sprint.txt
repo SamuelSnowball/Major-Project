@@ -1,0 +1,62 @@
+This file contains the current sprint information, 
+it will be moved into the product backlog once the sprint has ended.
+
+Sprint 0 (13th - 20th February)
+
+	Tackling tasks from product backlog:
+		Designing file structure
+
+		Loading and saving functions (ongoing) 		(time: 03h) (priority: 9)
+		Add in rocks (ongoing)				(time: 10h) (priority: 8)
+		Create missions for user 			(time: 10h) (priority: 8)
+		Build terrain (ongoing) 			(time: 10h) (priority: 6)
+		Collision with terrain (ongoing) 		(time: 05h) (priority: 6)			
+
+		Total estimated hours = 39
+
+	Sprint plan:
+		Loading and saving
+			HTML5 local storage
+
+		Add in rocks -low poly rocks for non interaction
+				-then spheres for interacting with?
+			Use exising sphere geometry, use perlin noise to shift vertices
+			Then place them into the world
+			Using scraping technique on the finished rock?
+		
+		Create missions for user
+			Would involve creating very basic GUI first, see-through, blue? futureistic
+			Go and explore this section of the map
+			Go collect this rock
+			Collect X of this rock, to then unlock this rock	
+			Print text on screen character by character (left gui?)
+				-have a initial sound to incate new mission	
+
+		Build terrain
+			Add different levels of perlin noise
+				Try stack 2d simplex noise
+			Add in craters and stuff
+	
+
+	Sprint progress:
+	
+		Sphere geometries, USED CODE FROM: http://learningwebgl.com/blog/?p=1253
+			The used code is in the makeSphere function of the sphere.js file
+			The sphere.js file might get renamed to rockGenerator or something
+		Didn't want to try write sphere geometry code from scratch
+		But also didn't want to import OBJ of sphere, as would be harder to change vertices
+
+		Generate simplex noise values, save to image?
+			-Could edit it
+		Or directly use it in game, duno
+		
+
+	Sprint retrospective:
+
+		Compeleted tasks: (include time and difficulties here)
+			Loading and saving functions intial setup 	(time: 0.5h) (priority: 9)
+				Currently just loads and saves player position
+
+
+
+

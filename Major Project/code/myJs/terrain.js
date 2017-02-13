@@ -54,14 +54,16 @@ function fillHeightMap(){
 	var scale = 3;
 	
 	var slopeHeight = 1;
-	
 	var offsetIncrement = 0.05;
+	
 	
 	//For each row, do all the columns
 	for(var x=0; x<terrainRows; x++){
 		for(var y=0; y<terrainColumns; y++){
 		
 			var height = perlin.noise(xOff, yOff, xOff) * scale;
+			//var height = noise.simplex2(xOff, yOff) * scale;
+			//console.log("v is: " + height);
 
 			/*
 			//Messing about with random cliffs, remove these to get a flat plane

@@ -47,9 +47,12 @@ function updateAttributesAndUniforms(){
 	//gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(viewProjectionMatrix));
 }
 
-var playerX = 0, 
-	playerY = 0, 
-	playerZ = 0;
+/*
+These values are pulled from local storage, or initialized as 0
+*/
+var playerX, 
+	playerY, 
+	playerZ;
 
 var cameraSpeed = 0.003;
 

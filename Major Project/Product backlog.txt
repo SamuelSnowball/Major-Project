@@ -1,3 +1,49 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+####################### MARS MISSON CONTROL GAME - PRODUCT BACKLOG #######################
+//////////////////////////////////////////////////////////////////////////////////////////
+
+Things left to add to the project: (Estimation time in hours, 10 priority is highest)
+
+	Core features:
+		Loading and saving functions (ongoing) 		(time: 03h) (priority: 9)
+		Add in rocks (ongoing)				(time: 10h) (priority: 8)
+		Create missions for user 			(time: 10h) (priority: 8)
+		Build terrain (ongoing) 			(time: 10h) (priority: 6)
+		Collision with terrain (ongoing) 		(time: 05h) (priority: 6)
+		Build GUIs 					(time: 10h) (priority: 6)
+		Texturing terrain 				(time: 05h) (priority: 5)
+		Add audio 					(time: 03h) (priority: 4)
+		
+
+	Extra features:
+		Particle effects 				(time: 08h) (priority: 4)
+		Clouds 						(time: 06h) (priority: 4)
+		Water 						(time: 10h) (priority: 3)
+		Minimap 					(time: 08h) (priority: 3)
+		Lighting, shadows 				(time: 10h) (priority: 2)
+		Initial loading scene 				(time: 03h) (priority: 2)
+
+
+	Current features:
+		3D Mechanics, movement & rotation
+		Initial terrain 
+
+
+For mid project release aiming for all core done - (Possible 13th march, 4 sprints left)
+		
+Before release:
+	Change movement speed
+	Change camera rotation speed
+	Disable use of W and S keys
+	
+Add a release version after each sprint as well
+
+
+
+/////////////////////////////////////////////////////////////////////
+####################### BEFORE STARTING SCRUM #######################
+/////////////////////////////////////////////////////////////////////
+
 1st - 7th February
 
 	Added:
@@ -103,4 +149,9 @@
 	Researched:
 		Creating sphere geometries
 
+
+
+///////////////////////////////////////////////////////////////////////
+####################### SCRUM AND SPRINTS BEGIN #######################
+///////////////////////////////////////////////////////////////////////
 
