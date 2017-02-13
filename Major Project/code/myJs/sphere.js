@@ -47,6 +47,7 @@ function makeSphere(latitudeBands, longitudeBands, radius){
 			z += rand /50;
 			*/
 			
+			/*
 			var value = noise.simplex2(xOff, yOff) * scale;
 			console.log("v is: " + value);
 			xOff += offsetIncrement;
@@ -54,6 +55,7 @@ function makeSphere(latitudeBands, longitudeBands, radius){
 			x += value;
 			y += value;
 			z += value;
+			*/
 			
 			/*
 			if(y > maxY){
