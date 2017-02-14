@@ -483,11 +483,6 @@ function setupTerrainTextureBuffer(){
 }
 
 
-
-
-
-
-
 /*
 Apply matrices, then draw the terrain.
 */
@@ -508,9 +503,8 @@ function drawTerrain(){
 	gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
 	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, myTexture);
+	gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
 	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-	
 	
 	//Elements
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
@@ -532,60 +526,6 @@ function drawTerrain(){
 
 
 
-
-var myTexture;
-var rockTexture;
-function initTextures(){
-	//http://stackoverflow.com/questions/19722247/webgl-wait-for-texture-to-load/19748905#19748905
-	//https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
-	//https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js
-	myTexture = gl.createTexture();
-	gl.bindTexture(gl.TEXTURE_2D, myTexture);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([255, 0, 0, 255])); // red
-
-	myImage = new Image();
-	//myImage.src = 'resources/PerlinNoiseFractal.png';
-	myImage.src = 'resources/new1.png';
-	myImage.onload = function (){handleTextureLoaded(myImage, myTexture);}
-	
-	/*
-	Rock
-	*/
-	var rockImage;
-	rockTexture = gl.createTexture();
-	gl.bindTexture(gl.TEXTURE_2D, rockTexture);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([255, 0, 0, 255])); // red
-
-	rockImage = new Image();
-	rockImage.src = 'resources/rock.png';
-	rockImage.onload = function (){handleTextureLoaded(rockImage, rockTexture);}
-}
-
-/*
-This gets run after image is done loading
-*/
-function handleTextureLoaded(image, texture){
-
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	
-	// Writes image data to the texture
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-	
-	/*
-	Setup filtering, controls how image is filtered when scaling
-	Using linear filtering when scaling up
-	Using mipmap when scaling down
-	*/
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-	
-	gl.generateMipmap(gl.TEXTURE_2D);
-	
-	// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
-	gl.bindTexture(gl.TEXTURE_2D, null);
-}
 
 
 

@@ -18,11 +18,22 @@ Sprint 0 (13th - 20th February)
 		Loading and saving
 			HTML5 local storage
 
-		Add in rocks -low poly rocks for non interaction
-				-then spheres for interacting with?
-			Use exising sphere geometry, use perlin noise to shift vertices
+		Add in rocks 
+			Low poly instanced rendered rocks for non interaction
+			Then spheres for interacting with
+			Use exising sphere geometry, randomly shift vertices
 			Then place them into the world
-			Using scraping technique on the finished rock?
+	
+			To do:
+				Add in different rocks in different sections
+
+			Notes:
+				GLdrawElementsInstaced
+				only needed as performance optimization, not needed for this
+				
+
+			Problems
+				WHY ARE THERE SO MANY VERTICES FOR THREE.JS SPHERE?
 		
 		Create missions for user
 			Would involve creating very basic GUI first, see-through, blue? futureistic
@@ -36,26 +47,29 @@ Sprint 0 (13th - 20th February)
 			Add different levels of perlin noise
 				Try stack 2d simplex noise
 			Add in craters and stuff
+
+		Collision with terrain
+			Add in 2D heightmap rather than 1d in collision file
 	
 
 	Sprint progress:
 	
-		Sphere geometries, USED CODE FROM: http://learningwebgl.com/blog/?p=1253
-			The used code is in the makeSphere function of the sphere.js file
-			The sphere.js file might get renamed to rockGenerator or something
+		Sphere geometries (NOT MINE)
+			USED CODE FROM: https://github.com/mrdoob/three.js/blob/master/src/geometries/SphereGeometry.js
+			The used code is in the createRock function of the rock.js file
 		Didn't want to try write sphere geometry code from scratch
-		But also didn't want to import OBJ of sphere, as would be harder to change vertices
+		But also didn't want to import OBJ of sphere, as would be hard to change vertices
 
-		Generate simplex noise values, save to image?
-			-Could edit it
-		Or directly use it in game, duno
+		Randomly changed sphere vertices, rougher geometry
+		Split texture code into respective files
 		
 
 	Sprint retrospective:
 
 		Compeleted tasks: (include time and difficulties here)
-			Loading and saving functions intial setup 	(time: 0.5h) (priority: 9)
-				Currently just loads and saves player position
+			//Loading and saving functions intial setup 	(time: 0.5h) (priority: 9)
+			//Currently just loads and saves player position
+			
 
 
 

@@ -34,12 +34,13 @@
 <script src="code/myJs/movement.js"></script>
 <script src="code/myJs/mouse.js"></script>
 <script src="code/myJs/collision.js"></script>
-<script src="code/myJs/sphere.js"></script>
 <script src="code/myJs/loadSave.js"></script>
+<script src="code/myJs/rock.js"></script>
+<script src="code/myJs/textureLoader.js"></script>
 
 <script>
 	
-var movementSpeed = 0.1; 
+var movementSpeed = 3; 
 
 var playerXRotation;
 var playerYRotation;	
@@ -71,7 +72,10 @@ function render(){
 	//getCurrentHeight(); //collision.js
 	
 
-	drawSphere();
+	//drawSphere();
+	//drawRock();
+	
+	drawRocks();
 	
 	gameTime++;
 	requestAnimationFrame(render);
@@ -83,7 +87,8 @@ function render(){
 function setup(){
 	loadWorldInfo(); //loadSave.js
 
-	setupMovement();
+	setupMovement(); //movement.js
+	loadAllTextures(); //textureLoader.js
 	
 	//all in terrain.js
 	createHeightMap();
@@ -96,24 +101,12 @@ function setup(){
 	createTerrainVertices();
 	setupTerrainBuffers();
 	
-	initTextures();
 
-	/*
-	Good ones:
-	3, 3, 2
-	5, 9, 0.3
-	15, 19, 0.3
-	*/
-	makeSphere(15, 19, 3);
-	makeSphere(3, 3, 3);
-	makeSphere(5, 9, 3);
-	
-	makeSphere(5, 9, 3);
-	makeSphere(5, 9, 3);
-	makeSphere(5, 9, 3);
-	makeSphere(5, 9, 3);
-	setupSphereBuffers();
-	
+	createRock(20, 30, 30);
+	createRock(20, 30, 30);
+	setupRockBuffers();
+
+		
 	render();
 }
 setup();
