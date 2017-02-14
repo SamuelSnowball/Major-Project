@@ -534,6 +534,7 @@ function drawTerrain(){
 
 
 var myTexture;
+var rockTexture;
 function initTextures(){
 	//http://stackoverflow.com/questions/19722247/webgl-wait-for-texture-to-load/19748905#19748905
 	//https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
@@ -548,6 +549,18 @@ function initTextures(){
 	myImage.src = 'resources/new1.png';
 	myImage.onload = function (){handleTextureLoaded(myImage, myTexture);}
 	
+	/*
+	Rock
+	*/
+	var rockImage;
+	rockTexture = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, rockTexture);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+				  new Uint8Array([255, 0, 0, 255])); // red
+
+	rockImage = new Image();
+	rockImage.src = 'resources/rock.png';
+	rockImage.onload = function (){handleTextureLoaded(rockImage, rockTexture);}
 }
 
 /*

@@ -39,7 +39,7 @@
 
 <script>
 	
-var movementSpeed = 0.5; 
+var movementSpeed = 0.1; 
 
 var playerXRotation;
 var playerYRotation;	
@@ -99,9 +99,19 @@ function setup(){
 	initTextures();
 
 	/*
-	Good ones, 3, 3, 2
+	Good ones:
+	3, 3, 2
+	5, 9, 0.3
+	15, 19, 0.3
 	*/
-	makeSphere(5, 9, 2);
+	makeSphere(15, 19, 3);
+	makeSphere(3, 3, 3);
+	makeSphere(5, 9, 3);
+	
+	makeSphere(5, 9, 3);
+	makeSphere(5, 9, 3);
+	makeSphere(5, 9, 3);
+	makeSphere(5, 9, 3);
 	setupSphereBuffers();
 	
 	render();
