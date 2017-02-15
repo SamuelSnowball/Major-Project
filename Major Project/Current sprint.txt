@@ -62,6 +62,8 @@ Sprint 0 (13th - 20th February)
 
 		Randomly changed sphere vertices, rougher geometry
 		Split texture code into respective files
+
+		What happens if the rocks spawn on the player, they're stuck
 		
 
 	Sprint retrospective:

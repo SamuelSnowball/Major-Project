@@ -3,8 +3,6 @@ Causes the bumpy effect when moving over terrain.
 
 Uses the players current X and Z position to find what terrain vertex they're nearest to.
 The players height then gets assigned to the nearest terrain vertex.
-
-It isn't working because heightMap is now a 2D array!
 */
 function setPlayerHeight(){
 	
@@ -61,15 +59,6 @@ function setPlayerHeight(){
 	var heightIncrement = 0.01;
 
 	if(playerZ > 0 && playerZ < 256 && playerX > 0 && playerX < 256){
-		/*
-		Increment height slowly, stop when target reached
-		
-		Old code:
-		For > -32 if
-			terrainY = nearestHeight - 1
-		Other loop
-			terrainY = nearestHeight - 2
-		*/
 		
 		//Not great if nearestHeight is like -1 or -0.8, so the below if statement
 		if(nearestHeight < -0.5){
@@ -110,48 +99,32 @@ function setPlayerHeight(){
 }
 
 /*
-Loop through all collision boxes, stop playing moving through blocks
+Loop through all collision boxes, stop playing moving through rocks
 
 Eventually just check collision of the rocks in the quadrant that the player is in
 */
 function testPlayerRockCollision(){
 	/*
-
+	Rock hit boxes also contain the scale of the rock
 	
+	rockHitboxes[i] = x
+	rockHitboxes[i] = z
+	rockHitboxes[i] = x + width
+	rockHitboxes[i] = z + width
+	rockHitboxes[i+4] = current rocks scale
 	*/
-	for(var i=0; i<rockHitboxes.length; i+=4){
+	for(var i=0; i<rockHitboxes.length; i+=5){
 		if(	
-			//Between x and x+w
-			(playerX > rockHitboxes[i] - 1) && 
-			(playerX < rockHitboxes[i+2] + 1) && 
-			
-			
-			//Between z and z+w
-			(playerZ > rockHitboxes[i+1] - 1) && 
-			(playerZ < rockHitboxes[i+3] + 1)
+			//Between x and x+width
+			(playerX > rockHitboxes[i] - (rockHitboxes[i+4] * 20) ) && 
+			(playerX < rockHitboxes[i+2] + (rockHitboxes[i+4] * 20) ) && 
+			//AND Between z and z+width
+			(playerZ > rockHitboxes[i+1] - (rockHitboxes[i+4] * 20) ) && 
+			(playerZ < rockHitboxes[i+3] + (rockHitboxes[i+4] * 20) )
 		){
-			
-			console.log("Colliding!");
-			//console.log("Current rock scale: " + rocks[i].scale);
-			console.log("Rock position x: " + rockHitboxes[i]);
-			console.log("Rock position x+w: " + rockHitboxes[i+2]);
-			
-			console.log("Rock position z: " + rockHitboxes[i+1]);
-			console.log("Rock position z+w: " + rockHitboxes[i+3]);
-			
 			playerX += (cameraPosition[0] - cameraTarget[0])*movementSpeed;
-			//playerY += (cameraPosition[1] + cameraTarget[1])*movementSpeed;
 			playerZ += (cameraPosition[2] - cameraTarget[2])*movementSpeed;
 		}
-		else{
-			/*
-			console.log("DIDNT COLLIDE, CHECKING");
-			console.log("if this: " + playerX);
-			console.log("is greater than: " + (rockHitboxes[i] - (rocks[i].scale * 20)));
-			console.log("and less than: " + (rockHitboxes[i+2] + (rocks[i].scale * 20)));
-			*/
-		}
 	}
-	
 	
 }

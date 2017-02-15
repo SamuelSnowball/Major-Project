@@ -52,7 +52,6 @@ Checks what key the player is holding down,
 and moves camera matrix accordingly.
 */
 function movePlayer(){
-
 	/*
 	Don't let the player move in the Y axis, otherwise they would fly.
 	*/
@@ -64,13 +63,10 @@ function movePlayer(){
 	}
 	else if(moveForward === true){
 		playerX -= (cameraPosition[0] - cameraTarget[0])*movementSpeed;
-		//playerY += (cameraPosition[1] + cameraTarget[1])*movementSpeed;
 		playerZ -= (cameraPosition[2] - cameraTarget[2])*movementSpeed;
-		
 	}
 	else if(moveBack === true){
 		playerX += (cameraPosition[0] - cameraTarget[0])*movementSpeed;
-		//playerY += (cameraPosition[1] + cameraTarget[1])*movementSpeed;
 		playerZ += (cameraPosition[2] - cameraTarget[2])*movementSpeed;
 	}
 	else{
@@ -89,7 +85,6 @@ function movePlayer(){
 	
 	I think camera target is too small,
 	Its always in range 0->1, therefore camera always looks there :/
-	
 	I've added the camera position on to fix it
 	*/
 	cameraTarget = [

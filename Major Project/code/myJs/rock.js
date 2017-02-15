@@ -9,14 +9,13 @@ var rockUvs = [];
 var rocks = [];
 
 /*
-Just store x and z, Y not needed
+Stores x and z and scale, the y is not needed
 x
 z
 x + width
 z + width
 */
-var rockHitboxes = []; //needed in collision file
-						//if player within range, print to console
+var rockHitboxes = []; 
 
 var previousNumIndices = 0;
 var startPosition = 0;
@@ -25,18 +24,21 @@ var startPosition = 0;
 Pass in quadrant rock should be in as well?
 */
 function createRocks(){
-	numRocks = 3;
-	for(var i=0; i<numRocks; i++){
-		createRock(20, 30, 30);
+	//numRocks = 3;
+	for(var i=0; i<3; i++){
+		createRock(20, 30, 30, 0.1);
+		createRock(20, 30, 30, 0.5);
+		createRock(20, 30, 30, 1);
+		createRock(20, 30, 30, 2);
 	}
 }
 
 /*
-COPIED createRock code from:
+COPIED the code to make a sphere from:
 https://github.com/mrdoob/three.js/blob/master/src/geometries/SphereGeometry.js
 (three.js is MIT licensed)
 */
-function createRock(radius, widthSegments, heightSegments){ 
+function createRock(radius, widthSegments, heightSegments, scale){ 
 	var phiStart = 0;
 	var phiLength = Math.PI * 2; 
 	var thetaStart = 0; 
@@ -144,12 +146,6 @@ function createRock(radius, widthSegments, heightSegments){
 	var zRotation = Math.random();
 		
 	var texture = rockTexture;
-	var scale = 0;
-	if(rocks.length === 0){
-		scale = 0.1;
-	}else{
-		scale = 0.1;
-	}
 	
 	var numIndices = rockIndices.length - previousNumIndices; 
 
@@ -158,10 +154,6 @@ function createRock(radius, widthSegments, heightSegments){
 	
 	var tempRock = new Rock(x, y, z, xRotation, yRotation, zRotation, scale, texture, numIndices);
 	rocks.push(tempRock);
-	console.log("THREE JS CODE BELOW");
-	console.log("R verts length: " + rockVertices.length);
-	console.log("R indices length: " + rockIndices.length);
-	console.log("R uvs length: " + rockUvs.length);
 	
 	/*
 	Work out and store hitbox of rock	
@@ -173,19 +165,15 @@ function createRock(radius, widthSegments, heightSegments){
 		rockWidth = 1;
 	}
 	else if(scale === 0.3){
-		rockWidth = 8;
+		rockWidth = 3;
 	}
 	
 	//x and z are in middle of rock, make it not, by - half width
 	rockHitboxes.push(x - (rockWidth/2)); 
 	rockHitboxes.push(z - (rockWidth/2));
-	rockHitboxes.push(x + rockWidth);
-	rockHitboxes.push(z + rockWidth);
-	
-	console.log("Rock hitbox x: " + (x - (rockWidth/2)) );
-	console.log("Rock hitbox z: " + (z - (rockWidth/2)) );
-	console.log("Rock hitbox x+w: " + (x + rockWidth) );
-	console.log("Rock hitbox z+w: " + (z + rockWidth) );	
+	rockHitboxes.push(x + (rockWidth/2));
+	rockHitboxes.push(z + (rockWidth/2));
+	rockHitboxes.push(scale);
 }
 
 function Rock(xPos, yPos, zPos, xRotation, yRotation, zRotation, scale, texture, numIndices){
