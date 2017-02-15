@@ -122,8 +122,22 @@ function testPlayerRockCollision(){
 			(playerZ > rockHitboxes[i+1] - (rockHitboxes[i+4] * 20) ) && 
 			(playerZ < rockHitboxes[i+3] + (rockHitboxes[i+4] * 20) )
 		){
-			playerX += (cameraPosition[0] - cameraTarget[0])*movementSpeed;
-			playerZ += (cameraPosition[2] - cameraTarget[2])*movementSpeed;
+			/*
+			Check if they're going forwards or backwards
+			Push them different ways based on movement direction
+			*/
+			if(moveForward === true){	
+				playerX += (cameraPosition[0] - cameraTarget[0])*movementSpeed;
+				playerZ += (cameraPosition[2] - cameraTarget[2])*movementSpeed;
+			}
+			else if(moveBack == true){
+				playerX -= (cameraPosition[0] - cameraTarget[0])*movementSpeed;
+				playerZ -= (cameraPosition[2] - cameraTarget[2])*movementSpeed;
+			}
+			else{
+			
+			}
+
 		}
 	}
 	

@@ -8,15 +8,50 @@
 		html, body {
 		overflow: hidden;
 	}
+
+	.container {
+		position: relative;
+		background-color: rgba(0, 0, 0, 0);
+	}
+	#overlay {
+		position: absolute;
+		left: 10px;
+		top: 65%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 1em;
+		border: 5px solid #0000ff;
+	}
 	</style>
 </head>
 
+<!-- 
+GUI
+https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
+-->
+
+
 <body>
+
+<div class="container">
+  <canvas id="canvas" class="canvasClass"></canvas>
+  <canvas id="guiCanvas" class="canvasClass"></canvas>
+  <div id="overlay" class="canvasClass">
+    <div>Current position: <span id="playerPosition"></span></div>
+    <div>X: <span id="playerX"></span></div>
+	<div>Y: <span id="playerY"></span></div>
+	<div>Z: <span id="playerZ"></span></div>
+  </div>
+</div>
 
 <!-- Libraries 
 <script src="libraries/mdn-webgl-master/library/matrices.js"></script> -->
 <script src="libraries/m4.js"></script>
 <script src="libraries/perlin.js"></script>
+<script src="libraries/jquery-3.1.1.min.js"></script>
+<script src="libraries/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 
 <!-- Not my js files-->
 <script src="code/js/ImprovedNoise.js"></script>
@@ -37,6 +72,7 @@
 <script src="code/myJs/loadSave.js"></script>
 <script src="code/myJs/rock.js"></script>
 <script src="code/myJs/textureLoader.js"></script>
+<script src="code/myJs/GUI.js"></script>
 
 <script>
 	
@@ -52,6 +88,8 @@ var saveTime = 1200;
 function render(){
 	gl.clearColor(0, 0, 0, 0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	
+	var now = Date.now();
 	
 	/*
 	Auto-save the game every 20 seconds or so
@@ -76,15 +114,25 @@ function render(){
 	//drawRock();
 	
 	drawRocks();
+
+
+    // set the nodes
+    guiPlayerPositionNode.nodeValue = "";  // no decimal place
+    guiXNode.nodeValue = Math.floor(playerX);   // 2 decimal places
+	guiYNode.nodeValue = Math.floor(playerY);
+	guiZNode.nodeValue = Math.floor(playerZ);
 	
 	gameTime++;
 	requestAnimationFrame(render);
 }
 
 
-
-
 function setup(){
+	setupGUI(); //gui.js
+	 
+
+	
+	
 	loadWorldInfo(); //loadSave.js
 
 	setupMovement(); //movement.js

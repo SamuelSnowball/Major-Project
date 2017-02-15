@@ -14,6 +14,11 @@ var pointerLocked = false;
 canvas.addEventListener('mousedown', function(){
 	
 	/*
+	Show GUI elements
+	*/
+	document.getElementById("overlay").style.visibility = "visible";
+	
+	/*
 	The boolean pointerLocked might screw up if they exit via escape
 	*/
 	if(pointerLocked === false){

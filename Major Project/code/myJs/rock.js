@@ -27,9 +27,9 @@ function createRocks(){
 	//numRocks = 3;
 	for(var i=0; i<3; i++){
 		createRock(20, 30, 30, 0.1);
-		createRock(20, 30, 30, 0.5);
-		createRock(20, 30, 30, 1);
-		createRock(20, 30, 30, 2);
+		createRock(20, 30, 30, 0.2);
+		createRock(20, 30, 30, 0.3);
+		createRock(20, 30, 30, 0.4);
 	}
 }
 
@@ -75,8 +75,9 @@ function createRock(radius, widthSegments, heightSegments, scale){
 			vertex.z = radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength );
 			
 			//rand
-			var max = 1;
-			var min = -1;
+			var max = (Math.random() * 5) + 1;
+			var min = (Math.random() * -5) + 1;
+		
 			var rand = Math.random() * (max-min+1) + min;
 			//console.log(rand);
 			vertex.x += rand/2;

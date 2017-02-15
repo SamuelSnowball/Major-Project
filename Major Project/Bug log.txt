@@ -3,7 +3,9 @@ BUG - When world loads, and user immediatley goes up Y gets set to NaN
 	Temporary fix, decrement players Y value ever so slightly, fixes it
 
 BUG - When starting game, cannot read property NaN of undefined, setPlayerHeight, collision.js 55
-
+BUG - Cant move forwads through a rock, but turn around, and you can move backwards through it
+	If you hit a rock going forwards, then turn around, you'll get stuck
+BUG - Player can spawn inside rock
 
 FIXED - Terrain generation fails if using over 256 rows/columns
 

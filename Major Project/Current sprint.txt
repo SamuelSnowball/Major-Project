@@ -64,6 +64,12 @@ Sprint 0 (13th - 20th February)
 		Split texture code into respective files
 
 		What happens if the rocks spawn on the player, they're stuck
+
+		Rock collision works up to 0.5 which is big enough
+
+		GUI code, goes bottom left of screen out of the way maybe
+		Blue grid as background
+		Title on top left
 		
 
 	Sprint retrospective:
@@ -72,7 +78,8 @@ Sprint 0 (13th - 20th February)
 			//Loading and saving functions intial setup 	(time: 0.5h) (priority: 9)
 			//Currently just loads and saves player position
 			
-
+		Annoying things:
+			Positioning little elements and css'ing them took hours
 
 
 
