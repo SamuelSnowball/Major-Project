@@ -31,9 +31,9 @@ Sprint 0 (13th - 20th February)
 				GLdrawElementsInstaced
 				only needed as performance optimization, not needed for this
 				
-
 			Problems
 				WHY ARE THERE SO MANY VERTICES FOR THREE.JS SPHERE?
+				Sphere doesn't connect at back, changed rotation
 		
 		Create missions for user
 			Would involve creating very basic GUI first, see-through, blue? futureistic
@@ -49,7 +49,7 @@ Sprint 0 (13th - 20th February)
 			Add in craters and stuff
 
 		Collision with terrain
-			Add in 2D heightmap rather than 1d in collision file
+			Added in 2D heightmap rather than 1d in collision file
 	
 
 	Sprint progress:

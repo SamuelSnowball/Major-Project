@@ -6,7 +6,7 @@ The players height then gets assigned to the nearest terrain vertex.
 
 It isn't working because heightMap is now a 2D array!
 */
-function getCurrentHeight(){
+function setPlayerHeight(){
 	
 	/*
 	Use playerX and Z to find value its height in 1d heightMap array
@@ -34,11 +34,7 @@ function getCurrentHeight(){
 	//console.log("temp x: " + tempPlayerX);
 	//console.log("temp z: " + tempPlayerZ);
 	
-	//Get player position and calculate what the index should be
 	/*
-	Coordinates MUST get divided because heightMap size doesnt change
-	and is always 64x64, so when z = 65, fails etc
-	
 	Coordinates get floored so they dont screw up the array indexing, must be a integer.
 	*/
 	if(tempPlayerX / terrainScale < 0.5){
@@ -55,114 +51,107 @@ function getCurrentHeight(){
 	
 	//console.log("rounded x: " + tempPlayerX);
 	//console.log("rounded z: " + tempPlayerZ);
-	
-	//1 Z increment means skip 64 values into the height map, because its 1d
-	//1 X increment means just move along 1 into height map
-	var index = (tempPlayerX ) + (tempPlayerZ * 64);
-	//console.log("index: " + index);
-	
-	var previousHeight; //should probably initlaize this at top for first check
-	
-	var nearestHeight = heightMap[index];
-	//console.log("Heightmap length: " + heightMap.length);
-	//console.log("Nearest height: " + heightMap[index]);
-	//console.log(playerHeight);
-	
-	/*
-	Depending on the height of the vertex found, decrease the number more perhaps
-	*/
-	
-	/*
-	if(nearestHeight < -0.5){
-		//do nothing
-	}
-	else if(nearestHeight > 1){
-		playerY = nearestHeight - 3; //er, duno really
-	}
-	*/
-	if(nearestHeight < 0 || nearestHeight > 1){
-	
-	}
-	else{
 
+	var nearestHeight = heightMap[tempPlayerX][tempPlayerZ];
+	//console.log("Nearest height: " + heightMap[tempPlayerX][tempPlayerZ]);
+
+	/*
+	See which quadrant they're in, increase height based on it
+	*/
+	var heightIncrement = 0.01;
+
+	if(playerZ > 0 && playerZ < 256 && playerX > 0 && playerX < 256){
 		/*
-		See which perlin scale they're in, increase height based on it
-		*/
-		var heightIncrement = 0.01;
-		//Going up or down from last time?
-
+		Increment height slowly, stop when target reached
 		
-		//Have a proper rectangle quadrant check here, rather than just Z
-		if(playerZ > 0 && playerZ < 32){
-			/*
-			Increment height slowly, stop when target reached
-			
-			Old code:
-			For > -32 if
-				terrainY = nearestHeight - 1
-			Other loop
-				terrainY = nearestHeight - 2
-			*/
-			//playerY = nearestHeight + 0.5;
-			//console.log("NH " + nearestHeight);
-			//terrainY += heightIncrement;
-			
-			
-			if(playerY > nearestHeight   + 0.5 ){
-			//	console.log("max height reached");
-			}
-			else{
-				playerY += heightIncrement;
-				//console.log("changing player height");
-			}
-			
-			if(playerY < nearestHeight   + 0.5){
-			//	console.log("max height reached");
-			}
-			else{
-				playerY -= heightIncrement;
-				//console.log("changing player height");
-			}
-			
-			
-			
-	
+		Old code:
+		For > -32 if
+			terrainY = nearestHeight - 1
+		Other loop
+			terrainY = nearestHeight - 2
+		*/
+		
+		//Not great if nearestHeight is like -1 or -0.8, so the below if statement
+		if(nearestHeight < -0.5){
+			nearestHeight += 0.3;
+		}
+		
+		playerY = nearestHeight + 2;
+		
+		var shouldBePlayerHeight;
+		if(nearestHeight > 0.4){
+			shouldBePlayerHeight = -nearestHeight + 3;
+			//console.log("Decent hill");
+		}
+		if(nearestHeight > 1.4){
+			shouldBePlayerHeight = -nearestHeight + 3.5;
+			//console.log("Decent hill");
+		}
+		if(nearestHeight > 1.8){
+			shouldBePlayerHeight = -nearestHeight + 4;
+			//console.log("Decent hill");
+		}
+		
+		/*
+		Slowly increment height to the nearest terrain vertex,
+		Stop when that height is reached
+		*/
+		if(playerY > shouldBePlayerHeight){
+		
 		}
 		else{
-			//Previous problem if heightMap returns value greater than 1
-			
-			//Increment height slowly, stop when target reached
-			
-						
-			if(playerY > nearestHeight  -1){
-			//	console.log("max height reached");
-			}
-			else{
-				playerY += heightIncrement;
-			//	console.log("changing player height");
-			}
-			
-			if(playerY < nearestHeight  -1 ){
-			//	console.log("max height reached");
-			}
-			else{
-				playerY -= heightIncrement;
-			//	console.log("changing player height");
-			}
-			
+			playerY += heightIncrement;
 		}
-		
-		previousHeight = nearestHeight;
+	}
+	else{
+		//In different section
 	}
 	
+}
+
+/*
+Loop through all collision boxes, stop playing moving through blocks
+
+Eventually just check collision of the rocks in the quadrant that the player is in
+*/
+function testPlayerRockCollision(){
+	/*
 
 	
-	
-	/*
-	Fails with floats 
-	
-	Fails because need to divide by 100, as terrain scaled to 100?
-	Or try with terrain scaled to 1
 	*/
+	for(var i=0; i<rockHitboxes.length; i+=4){
+		if(	
+			//Between x and x+w
+			(playerX > rockHitboxes[i] - 1) && 
+			(playerX < rockHitboxes[i+2] + 1) && 
+			
+			
+			//Between z and z+w
+			(playerZ > rockHitboxes[i+1] - 1) && 
+			(playerZ < rockHitboxes[i+3] + 1)
+		){
+			
+			console.log("Colliding!");
+			//console.log("Current rock scale: " + rocks[i].scale);
+			console.log("Rock position x: " + rockHitboxes[i]);
+			console.log("Rock position x+w: " + rockHitboxes[i+2]);
+			
+			console.log("Rock position z: " + rockHitboxes[i+1]);
+			console.log("Rock position z+w: " + rockHitboxes[i+3]);
+			
+			playerX += (cameraPosition[0] - cameraTarget[0])*movementSpeed;
+			//playerY += (cameraPosition[1] + cameraTarget[1])*movementSpeed;
+			playerZ += (cameraPosition[2] - cameraTarget[2])*movementSpeed;
+		}
+		else{
+			/*
+			console.log("DIDNT COLLIDE, CHECKING");
+			console.log("if this: " + playerX);
+			console.log("is greater than: " + (rockHitboxes[i] - (rocks[i].scale * 20)));
+			console.log("and less than: " + (rockHitboxes[i+2] + (rocks[i].scale * 20)));
+			*/
+		}
+	}
+	
 	
 }

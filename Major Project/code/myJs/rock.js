@@ -8,15 +8,35 @@ var rockNormals = [];
 var rockUvs = [];
 var rocks = [];
 
+/*
+Just store x and z, Y not needed
+x
+z
+x + width
+z + width
+*/
+var rockHitboxes = []; //needed in collision file
+						//if player within range, print to console
+
 var previousNumIndices = 0;
 var startPosition = 0;
+
+/*
+Pass in quadrant rock should be in as well?
+*/
+function createRocks(){
+	numRocks = 3;
+	for(var i=0; i<numRocks; i++){
+		createRock(20, 30, 30);
+	}
+}
 
 /*
 COPIED createRock code from:
 https://github.com/mrdoob/three.js/blob/master/src/geometries/SphereGeometry.js
 (three.js is MIT licensed)
 */
-function createRock(radius, widthSegments, heightSegments){
+function createRock(radius, widthSegments, heightSegments){ 
 	var phiStart = 0;
 	var phiLength = Math.PI * 2; 
 	var thetaStart = 0; 
@@ -31,6 +51,9 @@ function createRock(radius, widthSegments, heightSegments){
 	
 	var vertex = [2];
 	var normal = [2];
+	
+	var largestZCoord = 0;
+	var smallestZCoord = 0;
 	
 	//generate vertices, normals and uvs
 	for ( iy = 0; iy <= heightSegments; iy ++ ) {
@@ -55,10 +78,24 @@ function createRock(radius, widthSegments, heightSegments){
 			var rand = Math.random() * (max-min+1) + min;
 			//console.log(rand);
 			vertex.x += rand/2;
-			vertex.x += rand/2;
-			vertex.x += rand/2;
+			vertex.y += rand/2;
+			vertex.z += rand/2;
 			
 			rockVertices.push( vertex.x, vertex.y, vertex.z );
+			
+			//Find largest z coordinate
+			if(vertex.z > largestZCoord){
+				largestZCoord = vertex.z;
+			}
+			else{
+				//It isnt the biggest coordinate, check if its the smallest
+				if(vertex.z < smallestZCoord){
+					smallestZCoord = vertex.z;
+				}
+				else{
+					//Coordinate isn't smallest or biggest, ignore it
+				}
+			}
 
 			// normal
 
@@ -101,16 +138,17 @@ function createRock(radius, widthSegments, heightSegments){
 	//Find the current terrain vertex height, assign it to the rock
 	var y = heightMap[x][z];
 	
+	//Pretty sure these do nothing
 	var xRotation = Math.random();
 	var yRotation = Math.random();
 	var zRotation = Math.random();
 		
 	var texture = rockTexture;
-	var scale = 1;
+	var scale = 0;
 	if(rocks.length === 0){
-		scale = 1;
+		scale = 0.1;
 	}else{
-		scale = 3;
+		scale = 0.1;
 	}
 	
 	var numIndices = rockIndices.length - previousNumIndices; 
@@ -124,6 +162,30 @@ function createRock(radius, widthSegments, heightSegments){
 	console.log("R verts length: " + rockVertices.length);
 	console.log("R indices length: " + rockIndices.length);
 	console.log("R uvs length: " + rockUvs.length);
+	
+	/*
+	Work out and store hitbox of rock	
+	
+	Width = the highest z point - the lowest z point?
+	*/
+	var rockWidth = 1;
+	if(scale === 0.1){
+		rockWidth = 1;
+	}
+	else if(scale === 0.3){
+		rockWidth = 8;
+	}
+	
+	//x and z are in middle of rock, make it not, by - half width
+	rockHitboxes.push(x - (rockWidth/2)); 
+	rockHitboxes.push(z - (rockWidth/2));
+	rockHitboxes.push(x + rockWidth);
+	rockHitboxes.push(z + rockWidth);
+	
+	console.log("Rock hitbox x: " + (x - (rockWidth/2)) );
+	console.log("Rock hitbox z: " + (z - (rockWidth/2)) );
+	console.log("Rock hitbox x+w: " + (x + rockWidth) );
+	console.log("Rock hitbox z+w: " + (z + rockWidth) );	
 }
 
 function Rock(xPos, yPos, zPos, xRotation, yRotation, zRotation, scale, texture, numIndices){

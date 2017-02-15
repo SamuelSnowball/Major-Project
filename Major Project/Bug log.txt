@@ -2,6 +2,8 @@ BUG - When world loads, and user immediatley goes up Y gets set to NaN
 	If user goes down, then up it works.
 	Temporary fix, decrement players Y value ever so slightly, fixes it
 
+BUG - When starting game, cannot read property NaN of undefined, setPlayerHeight, collision.js 55
+
 
 FIXED - Terrain generation fails if using over 256 rows/columns
 

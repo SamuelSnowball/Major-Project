@@ -40,7 +40,7 @@
 
 <script>
 	
-var movementSpeed = 3; 
+var movementSpeed = 0.3; 
 
 var playerXRotation;
 var playerYRotation;	
@@ -62,15 +62,15 @@ function render(){
 		gameTime = 0;
 	}
 	
-	//console.log("Player X, Y, Z: " + Math.floor(playerX) + ", " + Math.floor(playerY) + ", " + Math.floor(playerZ));
+	console.log("Player X, Y, Z: " + Math.floor(playerX) + ", " + Math.floor(playerY) + ", " + Math.floor(playerZ));
 
 	movePlayer(); //movement.js
 	
 	drawTerrain(); //terrain.js
 	
 	
-	//getCurrentHeight(); //collision.js
-	
+	setPlayerHeight(); //collision.js
+	testPlayerRockCollision();
 
 	//drawSphere();
 	//drawRock();
@@ -102,8 +102,7 @@ function setup(){
 	setupTerrainBuffers();
 	
 
-	createRock(20, 30, 30);
-	createRock(20, 30, 30);
+	createRocks();
 	setupRockBuffers();
 
 		
