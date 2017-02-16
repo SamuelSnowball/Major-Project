@@ -12,8 +12,9 @@ function buildParticles(){
 	Generate points at random position within like -100 -> 100?
 	*/
 	for(var i=0; i<particleCount; i++){
-		particle_vertices.push(Math.random() * 5);
-		particle_vertices.push(Math.random() * 5);
+		particle_vertices.push(Math.random() * 2);
+		particle_vertices.push(Math.random() * 2);
+		particle_vertices.push(Math.random() * 2);
 		particle_vertices.push(Math.random() * 5);
 		
 		//For every particle create a uv as well
@@ -46,18 +47,29 @@ Particles get bigger if u move away
 Shouldn't matter, as particles will be temporary
 */
 function drawParticles(){
-	for(var i=0; i<particle_vertices.length; i+=3){
+	
+	for(var i=0; i<particle_vertices.length; i+=4){
 	
 		scale = m4.scaling(10, 10, 10);
 		xRotation = m4.xRotation(0);
 		yRotation = m4.yRotation(0);
 		zRotation = m4.zRotation(0);
 		
-		particle_vertices[i] += 0.05;
-		particle_vertices[i+1] += 0.04;
-		particle_vertices[i+2] += 0.03;
-		//console.log(particle_vertices[i]);
-		position = m4.translation(particle_vertices[i], particle_vertices[i+1], particle_vertices[i+2]); //change
+
+		
+		var particleVelocity = particle_vertices[i+3];
+		var maxHeight = 1;	//will go -5 to +5
+		//particle_vertices[i] += 1 * particleVelocity; 
+		particle_vertices[i+1] += 4 * particleVelocity;//y
+		if(particle_vertices[i+1] > 300){
+			particle_vertices[i+1] = 0;
+		}
+		//particle_vertices[i+2] += 3 * particleVelocity;
+		//particle_vertices[i+3] is its velocity
+	
+		position = m4.translation(particle_vertices[i],
+								particle_vertices[i+1], 
+								particle_vertices[i+2]); 
 		
 		//Times matrices together
 		updateAttributesAndUniforms();
@@ -78,7 +90,7 @@ function drawParticles(){
 
 		gl.drawArrays(
 			gl.POINTS, 
-			i/3, //first
+			i/4, //first
 			1//1 point per loop, count
 		); 
 		

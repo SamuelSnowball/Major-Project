@@ -46,7 +46,11 @@ Sprint 0 (13th - 20th February)
 			If they're colliding with rock + mouse held down
 				-Show mining progress bar
 				-Show particle effects
-				-When 100% remove rock	
+				-When 100% remove rock
+
+			They can shoot laser, draw in view direction from infront of them
+			If that collides with rock,
+			Cap max laser range	
 
 				Particles
 				Bunch of gl points, move them, if out of bounds reset them
