@@ -23,6 +23,9 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Lighting, shadows 				(time: 10h) (priority: 2)
 		Initial loading scene 				(time: 03h) (priority: 2)
 
+	Documentation to write:
+		User manual?
+		Overall design	
 
 	Current features:
 		3D Mechanics, movement & rotation

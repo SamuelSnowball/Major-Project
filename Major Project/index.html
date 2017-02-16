@@ -8,6 +8,12 @@
 		html, body {
 		overflow: hidden;
 	}
+	
+	#banner{
+		width: 200px;
+		height: 200px;
+		margin: auto;
+	}
 
 	.container {
 		position: relative;
@@ -31,14 +37,15 @@
 GUI
 https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 -->
-
-
 <body>
+
+<div id="banner"><p>Mars Mission Control Game</p></div>
+
 
 <div class="container">
   <canvas id="canvas" class="canvasClass"></canvas>
   <canvas id="guiCanvas" class="canvasClass"></canvas>
-  <div id="overlay" class="canvasClass">
+  <div id="overlay" class="canvasClass" style="visibility: hidden">
     <div>Current position: <span id="playerPosition"></span></div>
     <div>X: <span id="playerX"></span></div>
 	<div>Y: <span id="playerY"></span></div>
@@ -73,10 +80,18 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/rock.js"></script>
 <script src="code/myJs/textureLoader.js"></script>
 <script src="code/myJs/GUI.js"></script>
+<script src="code/myJs/particles.js"></script>
 
 <script>
-	
-var movementSpeed = 0.1; 
+document.body.style.backgroundImage = "url('/major-project/major project/resources/homeImage.png')";
+document.body.style.backgroundRepeat = "no-repeat";
+
+var backgroundXPos = 5;
+var backgroundYPos = 5;
+
+
+
+var movementSpeed = 3; 
 
 var playerXRotation;
 var playerYRotation;	
@@ -115,7 +130,14 @@ function render(){
 	
 	drawRocks();
 
-
+	drawParticles();
+	
+	drawCubeColliders();
+	
+	backgroundXPos+=0.1;
+	backgroundYPos+=0.1;
+	document.body.style.backgroundPosition = backgroundXPos + "%" + ' ' + backgroundYPos + "%";
+	
     // set the nodes
     guiPlayerPositionNode.nodeValue = "";  // no decimal place
     guiXNode.nodeValue = Math.floor(playerX);   // 2 decimal places
@@ -130,8 +152,10 @@ function render(){
 function setup(){
 	setupGUI(); //gui.js
 	 
+	 
+	setupCubeColliders();
 
-	
+	buildParticles();
 	
 	loadWorldInfo(); //loadSave.js
 

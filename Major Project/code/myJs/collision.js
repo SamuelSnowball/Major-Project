@@ -142,3 +142,112 @@ function testPlayerRockCollision(){
 	}
 	
 }
+
+
+
+
+
+var cube_vertices = [];
+var cube_uvs = [];
+var cube_elements = [];
+
+var cube_positions_buffer;
+var cube_elements_buffer;
+var cube_uvs_buffer;
+function setupCubeColliders(){
+	cube_vertices = [
+    // front
+    -1.0, -1.0,  1.0,
+     1.0, -1.0,  1.0,
+     1.0,  1.0,  1.0,
+    -1.0,  1.0,  1.0,
+    // back
+    -1.0, -1.0, -1.0,
+     1.0, -1.0, -1.0,
+     1.0,  1.0, -1.0,
+    -1.0,  1.0, -1.0,
+  ];
+  	cube_positions_buffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, cube_positions_buffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cube_vertices), gl.STATIC_DRAW);
+	positionAttribLocation = gl.getAttribLocation(program, 'position');
+	gl.enableVertexAttribArray(positionAttribLocation);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
+  
+  
+  
+  //For every 3 vertices, create a texture coord
+  for(var i=0; i<cube_vertices.length; i+=3){
+	cube_uvs.push(0.0)
+	cube_uvs.push(1.0);
+  }
+
+	cube_uvs_buffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, cube_uvs_buffer);	
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cube_uvs), gl.STATIC_DRAW);
+
+	
+	
+  cube_elements = [
+  		// front
+		0, 1, 2,
+		2, 3, 0,
+		// top
+		1, 5, 6,
+		6, 2, 1,
+		// back
+		7, 6, 5,
+		5, 4, 7,
+		// bottom
+		4, 0, 3,
+		3, 7, 4,
+		// left
+		4, 5, 1,
+		1, 0, 4,
+		// right
+		3, 2, 6,
+		6, 7, 3,
+	];
+		cube_elements_buffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cube_elements_buffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cube_elements), gl.STATIC_DRAW);
+}
+
+function drawCubeColliders(){
+	scale = m4.scaling(10, 10, 10)
+	xRotation = m4.xRotation(0);
+	yRotation = m4.yRotation(0);
+	zRotation = m4.zRotation(0);
+	
+
+	position = m4.translation(1, 1, 1); //change
+	
+	//Times matrices together
+	updateAttributesAndUniforms();
+
+	//Vertices
+	gl.bindBuffer(gl.ARRAY_BUFFER, cube_positions_buffer);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, cube_uvs_buffer);
+	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
+	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+	
+	//Elements
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cube_elements_buffer);
+	
+	/*
+	Mode
+	Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
+	Type
+	The indices
+	*/
+	gl.drawElements(
+		gl.TRIANGLE_STRIP, 
+		cube_elements.length,
+		gl.UNSIGNED_SHORT,
+		cube_elements_buffer
+	); 
+}

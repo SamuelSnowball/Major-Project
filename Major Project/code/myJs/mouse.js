@@ -12,11 +12,13 @@ var pointerLocked = false;
 
 							
 canvas.addEventListener('mousedown', function(){
-	
-	/*
-	Show GUI elements
-	*/
-	document.getElementById("overlay").style.visibility = "visible";
+
+	//Remove background image and text when game starts
+	var banner = document.getElementById('banner');
+	if(banner !== null){
+		banner.parentNode.removeChild(banner);
+	}
+	document.body.style.backgroundImage = ""; 
 	
 	/*
 	The boolean pointerLocked might screw up if they exit via escape
@@ -32,6 +34,10 @@ canvas.addEventListener('mousedown', function(){
 		console.log("Pointer unlocked!");
 		document.exitPointerLock();
 	}
+	
+	//Show GUI elements
+	document.getElementById("overlay").style.visibility = "visible";
+	
 	
 	
 });

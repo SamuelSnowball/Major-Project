@@ -12,7 +12,6 @@ Knowledge gained from:
 https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 */
 function setupGUI(){
-	document.getElementById("overlay").style.visibility = "hidden";
 
 	var playerPositionElement = document.getElementById("playerPosition");
 	var playerXElement = document.getElementById("playerX");
