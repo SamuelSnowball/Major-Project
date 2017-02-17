@@ -46,16 +46,20 @@ Sprint 0 (13th - 20th February)
 			If they're colliding with rock + mouse held down
 				-Show mining progress bar
 				-Show particle effects
-				-When 100% remove rock
+				-When 100% remove rock, or set its texture to something, depleted
 
 			They can shoot laser, draw in view direction from infront of them
 			If that collides with rock,
 			Cap max laser range	
 
-				Particles
+				Particles - make object with constructor! (could have LAVA in craters!)
 				Bunch of gl points, move them, if out of bounds reset them
 				Define 100 points, put in buffer, 1 draw call?
 				Apply some position to them in v shader?
+
+			Randomly generate them a mission, depending on their lvl? every few minutes
+			-Else, just go explore and mine rocks
+			-IF gameTime over 5000, give first mission
 
 		Build terrain
 			Add different levels of perlin noise
@@ -84,6 +88,8 @@ Sprint 0 (13th - 20th February)
 
 		GUI code, goes bottom left of screen out of the way maybe
 		Blue grid as background
+
+		Redesigned files, made player class, object oriented
 		
 
 	Sprint retrospective:

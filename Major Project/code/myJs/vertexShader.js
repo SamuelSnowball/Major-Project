@@ -1,5 +1,5 @@
 /*
-Vertex
+Vertex shader 
 */
 var vertexShader = gl.createShader(gl.VERTEX_SHADER);
 gl.shaderSource(vertexShader, [

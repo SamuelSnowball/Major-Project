@@ -7,19 +7,12 @@ var particle_positions_buffer;
 var particle_uvs_buffer;
 
 var particleCount = 100;
-function buildParticles(){
+function createParticles(){
 	/*
 	Generate points at random position within like -100 -> 100?
 	*/
 	for(var i=0; i<particleCount; i++){
-		particle_vertices.push(Math.random() * 2);
-		particle_vertices.push(Math.random() * 2);
-		particle_vertices.push(Math.random() * 2);
-		particle_vertices.push(Math.random() * 5);
-		
-		//For every particle create a uv as well
-		particle_uvs.push(0.0);
-		particle_uvs.push(1.0);
+		var p = new Particle();
 	}
 
   	particle_positions_buffer = gl.createBuffer();
@@ -38,6 +31,20 @@ function buildParticles(){
 	
 	
 	//gldrawPoints?
+}
+
+
+function Particle(){
+	this.x = Math.random() * 2;
+	this.y = Math.random() * 2;
+	this.z = Math.random() * 2;
+	this.velocity = Math.random() * 5;
+	
+	this.u = 0.0;
+	this.v = 1.0;
+	
+	particle_vertices.push(this.x, this.y, this.z);
+	particle_uvs.push(this.u, this.v);
 }
 
 /*

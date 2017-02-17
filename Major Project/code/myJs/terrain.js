@@ -1,100 +1,268 @@
 
-var terrainVertices = []; // Contains all of the terrains x,y,z vertices
-
-var terrainX = 0,
-	terrainY = 0,
-	terrainZ = 0;
-
-/*
-Works with 2048, probably way more
-Max values are now 2.147BILLION?	
-*/
-var terrainRows = 512; 
-var terrainColumns = 512;
-
-var terrainSize = terrainRows * terrainColumns;
-var terrainScale = 1;
-
-var heightMap; 
-
-/*
-Create the 2D heightMap array:
-	heightMap[terrainRows][terrainColumns];
-*/
-function createHeightMap(){
-	heightMap = new Array(terrainRows); 
+function Terrain(){
+	this.x = 0;
+	this.y = 0;
+	this.z = 0;
 	
-	for(var i=0; i<terrainRows; i++){
-		heightMap[i] = new Array(terrainColumns);
-	}
-}
-
-/*
-Fills the 2D HeightMap with initial values
-*/
-function fillHeightMap(){
+	this.rows = 512;
+	this.columns = 512;
+	this.size = this.rows * this.columns;
+	this.scale = 1;
+	
+	this.terrainVertices = [];
+	
+	this.positionsBuffer;
+	this.elementsBuffer;
+	this.terrainTextureCoordinateBuffer;
+	
+	this.heightMap;
 	
 	/*
-	Bumpy terrain
-	offsetX = 3.01
-	offsetY = 5.01
-	offsetZ = 7.01
+	Create the 2D heightMap array:
+		heightMap[terrainRows][terrainColumns];
 	*/
-	
-	var xOff = 0;
-	var yOff = 0;
-	
-	var perlin = new ImprovedNoise();
-	var offsetX = 0;
-	var offsetY = 0;
-	var offsetZ = 0;
-	var offsetXIncrement = 0.1; //How it moves along the graph
-	var offsetYIncrement = 0.1; //How it moves along the graph
-	var offsetZIncrement = 0.1; //How it moves along the graph
-	var scale = 3;
-	
-	var slopeHeight = 1;
-	var offsetIncrement = 0.05;
-	
-	
-	//For each row, do all the columns
-	for(var x=0; x<terrainRows; x++){
-		for(var y=0; y<terrainColumns; y++){
-		
-			var height = perlin.noise(xOff, yOff, xOff) * scale;
-			//var height = noise.simplex2(xOff, yOff) * scale;
-			//console.log("v is: " + height);
-
-			/*
-			//Messing about with random cliffs, remove these to get a flat plane
-			if(y > 32 && y < 64){
-				height += 15;
-			}
-			if(y > 128){
-				height += 5;
-			}
-			if(x > 128){
-				height += 5;
-			}
-			*/
-			
-			heightMap[x][y] = height;
-			xOff+=offsetIncrement;
-			
-			/*
-			Previous code below, useful for really bumpy flat areas
-			*/
-			//var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
-			//heightMap[x][y] = height; 
-			//offsetX += offsetXIncrement;
-			//offsetY += offsetYIncrement;
-			//offsetZ += offsetZIncrement;		
-				
+	this.createHeightMap = function(){
+		heightMap = new Array(this.rows); 
+		for(var i=0; i<this.rows; i++){
+			heightMap[i] = new Array(this.columns);
 		}
-		xOff = 0;
-		yOff += offsetIncrement;
 	}
+	
+	/*
+	Fills the 2D HeightMap with initial values
+	*/
+	this.fillHeightMap = function(){
+		/*
+		Bumpy terrain
+		offsetX = 3.01
+		offsetY = 5.01
+		offsetZ = 7.01
+		*/
+		
+		var xOff = 0;
+		var yOff = 0;
+		
+		var perlin = new ImprovedNoise();
+		var offsetX = 0;
+		var offsetY = 0;
+		var offsetZ = 0;
+		var offsetXIncrement = 0.1; //How it moves along the graph
+		var offsetYIncrement = 0.1; //How it moves along the graph
+		var offsetZIncrement = 0.1; //How it moves along the graph
+		var scale = 3;
+		
+		var slopeHeight = 1;
+		var offsetIncrement = 0.05;
+		
+		
+		//For each row, do all the columns
+		for(var x=0; x<this.rows; x++){
+			for(var y=0; y<this.columns; y++){
+			
+				var height = perlin.noise(xOff, yOff, xOff) * scale;
+				//var height = noise.simplex2(xOff, yOff) * scale;
+				//console.log("v is: " + height);
+
+				/*
+				//Messing about with random cliffs, remove these to get a flat plane
+				if(y > 32 && y < 64){
+					height += 15;
+				}
+				if(y > 128){
+					height += 5;
+				}
+				if(x > 128){
+					height += 5;
+				}
+				*/
+				
+				heightMap[x][y] = height;
+				xOff+=offsetIncrement;
+				
+				/*
+				Previous code below, useful for really bumpy flat areas
+				*/
+				//var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
+				//heightMap[x][y] = height; 
+				//offsetX += offsetXIncrement;
+				//offsetY += offsetYIncrement;
+				//offsetZ += offsetZIncrement;		
+					
+			}
+			xOff = 0;
+			yOff += offsetIncrement;
+		}	
+	}
+	
+	/*
+	I have a 2D heightMap
+
+	Now create the terrain vertices using x, y, z values 
+	Where y is the value from the heightMap we made.
+	*/
+	this.createTerrainVertices = function(){
+		for(var x=0; x<this.rows; x++){
+			for(var y=0; y<this.columns; y++){
+				this.terrainVertices.push(this.x); 
+				this.terrainVertices.push(heightMap[x][y]);
+				this.terrainVertices.push(this.z); 
+				
+				//Move along in the row
+				this.x++;
+			}
+			//New row, reset X, and increment Z
+			this.x = 0;
+			this.z++;
+		}
+		
+		//Reset all values as above loop changed them
+		this.x = 0; this.y = 0; this.z = 0; 
+
+		console.log("Terrain vertices: " + this.size);
+		console.log("Individual terrain x,y,z values: " + this.terrainVertices.length);		
+	}
+	
+	
+	this.setupTerrainBuffers = function(){
+		this.setupTerrainVertexBuffer();
+		this.setupTerrainIndiciesBuffer();
+		this.setupTerrainTextureBuffer();
+	}
+	
+	this.setupTerrainVertexBuffer = function(){
+		positionsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.terrainVertices), gl.STATIC_DRAW);
+		positionAttribLocation = gl.getAttribLocation(program, 'position');
+		gl.enableVertexAttribArray(positionAttribLocation);
+		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
+	}
+	
+	/*
+	Code from: http://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips
+	Answer with 11 upvotes
+	*/
+	this.setupTerrainIndiciesBuffer = function(){
+		//make the *2 stuff, overallRows and overallColumsn and remove x2
+		// * 2 orginaly then *4 cos double, make this non bad eventually, base off varaible
+		var indices = new Array(this.size * 2 ); // i think 64 verts = 124 indicies
+
+		// Set up indices
+		var i = 0;
+		for (var r = 0; r < this.rows - 1; ++r) {
+			indices[i++] = r * this.columns ;
+			for (var c = 0; c < this.columns ; ++c) {
+				indices[i++] = r * this.columns + c;
+				indices[i++] = (r + 1) * this.columns  + c;
+			}
+			indices[i++] = (r + 1) * this.columns  + (this.columns- 1);
+		}
+		
+		//console.log(indices);
+		
+		console.log("Length of indices: " + indices.length);
+		
+		elementsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);		
+	}
+	
+	/*
+	Every texture goes from 0 -> 1, regardless of dimensions
+
+	GL has 32 texture registers, we're using TEXTURE0
+	Bind the previously loaded texture to that register
+	Set the sampler in the shader to use that texture
+	*/
+	this.setupTerrainTextureBuffer = function(){
+		/*
+		Create the buffer,
+		Bind to it,
+		Buffer the data
+		*/
+		terrainTextureCoordinateBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
+
+		/*
+		Store texture coordinates for each face
+		Texture coordinates range 0 -> 1
+		*/
+		var textureCoordinates = [];
+		
+		/*
+		Need a double for loop to set accurately
+		1/256 for max row increment?
+			=0.00390625 * 265 = 1. so increment by that
+		*/
+		var xUV = 0;
+		var yUV = 0;
+		for(var x=0; x<this.rows; x++){
+			for(var y=0; y<this.columns; y++){
+				textureCoordinates.push(xUV);  
+				textureCoordinates.push(yUV); 
+				xUV += 0.00390625;
+			}
+			xUV = 0;
+			yUV += 0.00390625;
+		}
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+		//gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+	}
+	
+	
+	/*
+	Apply matrices, then draw the terrain.
+	*/
+	this.drawTerrain = function(){	
+		scale = m4.scaling(this.scale, this.scale, this.scale)
+		xRotation = m4.xRotation(0);
+		yRotation = m4.yRotation(0);
+		zRotation = m4.zRotation(0);
+		position = m4.translation(this.x, this.y, this.z);
+		
+		//Times matrices together
+		updateAttributesAndUniforms();
+
+		//Vertices
+		gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);
+		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
+		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
+		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+		
+		//Elements
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
+		
+		/*
+		Mode
+		Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
+		Type
+		The indices
+		*/
+		gl.drawElements(
+			gl.TRIANGLE_STRIP, 
+			this.terrainVertices.length / 3 * 2,
+			gl.UNSIGNED_INT, 
+			elementsBuffer
+		); 	
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
@@ -351,176 +519,6 @@ function createHills(){
 Read comment above createHills
 */
 function createCraters(){
-	
-}
-
-/*
-I have a 2D heightMap
-
-Now create the terrain vertices using x, y, z values 
-Where y is the value from the heightMap we made.
-*/
-function createTerrainVertices(){
-
-	for(var x=0; x<terrainRows; x++){
-		for(var y=0; y<terrainColumns; y++){
-			terrainVertices.push(terrainX); 
-			terrainVertices.push(heightMap[x][y]);
-			terrainVertices.push(terrainZ); 
-			
-			//Move along in the row
-			terrainX++;
-		}
-		//New row, reset X, and increment Z
-		terrainX = 0;
-		terrainZ++;
-	}
-	
-	//Reset all values as above loop changed them
-	terrainX = 0; terrainY = 0; terrainZ = 0; 
-
-	console.log("Terrain vertices: " + terrainSize);
-	console.log("Individual terrain x,y,z values: " + terrainVertices.length);
-}
-
-
-
-var positions;
-var positionAttribLocation;
-var elements;
-var terrainColors = [];
-
-function setupTerrainBuffers(){
-	setupTerrainVertexBuffer();
-	setupTerrainIndiciesBuffer();
-	//setupTerrainColorBuffer();
-	setupTerrainTextureBuffer();
-}
-
-function setupTerrainVertexBuffer(){
-	positions = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainVertices), gl.STATIC_DRAW);
-	positionAttribLocation = gl.getAttribLocation(program, 'position');
-	gl.enableVertexAttribArray(positionAttribLocation);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
-}
-
-
-/*
-Code from: http://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips
-Answer with 11 upvotes
-*/
-function setupTerrainIndiciesBuffer(){
-	//make the *2 stuff, overallRows and overallColumsn and remove x2
-	// * 2 orginaly then *4 cos double, make this non bad eventually, base off varaible
-    var indices = new Array(terrainSize * 2 ); // i think 64 verts = 124 indicies
-
-    // Set up indices
-    var i = 0;
-    for (var r = 0; r < terrainRows - 1; ++r) {
-        indices[i++] = r * terrainColumns ;
-        for (var c = 0; c < terrainColumns ; ++c) {
-            indices[i++] = r * terrainColumns + c;
-            indices[i++] = (r + 1) * terrainColumns  + c;
-        }
-        indices[i++] = (r + 1) * terrainColumns  + (terrainColumns- 1);
-    }
-	
-	//console.log(indices);
-	
-	console.log("Length of indices: " + indices.length);
-	
-	elements = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);
-}
-
-
-
-/*
-Every texture goes from 0 -> 1, regardless of dimensions
-
-GL has 32 texture registers, we're using TEXTURE0
-Bind the previously loaded texture to that register
-Set the sampler in the shader to use that texture
-*/
-var terrainTextureCoordinateBuffer;
-function setupTerrainTextureBuffer(){
-	/*
-	Create the buffer,
-	Bind to it,
-	Buffer the data
-	*/
-	terrainTextureCoordinateBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
-
-	/*
-	Store texture coordinates for each face
-	Texture coordinates range 0 -> 1
-	*/
-	var textureCoordinates = [];
-	
-	/*
-	Need a double for loop to set accurately
-	1/256 for max row increment?
-		=0.00390625 * 265 = 1. so increment by that
-	*/
-	var xUV = 0;
-	var yUV = 0;
-	for(var x=0; x<terrainRows; x++){
-		for(var y=0; y<terrainColumns; y++){
-			textureCoordinates.push(xUV);  
-			textureCoordinates.push(yUV); 
-			xUV += 0.00390625;
-		}
-		xUV = 0;
-		yUV += 0.00390625;
-	}
-	
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
-	//gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-}
-
-
-/*
-Apply matrices, then draw the terrain.
-*/
-function drawTerrain(){
-	scale = m4.scaling(terrainScale, terrainScale, terrainScale)
-	xRotation = m4.xRotation(0);
-	yRotation = m4.yRotation(0);
-	zRotation = m4.zRotation(0);
-	position = m4.translation(terrainX, terrainY, terrainZ);
-	
-	//Times matrices together
-	updateAttributesAndUniforms();
-
-	//Vertices
-	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
-	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
-	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-	
-	//Elements
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
-	
-	/*
-	Mode
-	Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
-	Type
-	The indices
-	*/
-	gl.drawElements(
-		gl.TRIANGLE_STRIP, 
-		terrainVertices.length / 3 * 2,
-		gl.UNSIGNED_INT, //gl.UNSIGNED_SHORT,
-		elements
-	); 
 	
 }
 
