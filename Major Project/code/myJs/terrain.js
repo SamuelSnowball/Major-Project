@@ -294,55 +294,8 @@ function Terrain(){
 			gl.UNSIGNED_INT, 
 			elementsBuffer
 		); 	
-	
-	
-
-	/*
-			scale = m4.scaling(100, 100, 100);
-		xRotation = m4.xRotation(0);
-		yRotation = m4.yRotation(0);
-		zRotation = m4.zRotation(0);
-		position = m4.translation(5, -5, -5);
-		
-		//Times matrices together
-		updateAttributesAndUniforms();
-		
-		
-	   triangleVertexPositionBuffer = gl.createBuffer();
-	    gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-	    var vertices = [
-         0.0,  1.0,  0.0,
-        -1.0, -1.0,  0.0,
-         1.0, -1.0,  0.0
-    ];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	 triangleVertexPositionBuffer.itemSize = 3;
-    triangleVertexPositionBuffer.numItems = 3;
-	
-		triUvs = [];
-	triUvs.push(0.0);triUvs.push(1.0);triUvs.push(0.0);triUvs.push(1.0);triUvs.push(0.0);triUvs.push(1.0);
-	triUvBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, triUvBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triUvs), gl.STATIC_DRAW);
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, triUvBuffer);
-	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
-	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-	
-
-	
-	  gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-    gl.vertexAttribPointer(positionAttribLocation, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	 gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);
-	
-	
 	}
-	*/
-}
-
-}
+} //END CLASS, change?
 
 
 

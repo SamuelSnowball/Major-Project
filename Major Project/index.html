@@ -138,13 +138,13 @@ function render(){
 	player.movePlayer();
 	gui.update();
 	
-	
+	drawParticles(); //if this isnt called, nothing renders....?
 	terrain.drawTerrain(); //terrain.js,
+	
 	
 	//collisionTester.setPlayerHeight(); //collision.js
 	//collisionTester.testPlayerRockCollision();
 	//drawRocks();
-	drawParticles();
 	//checkOrAssignPlayerMissions();
 	
 	
