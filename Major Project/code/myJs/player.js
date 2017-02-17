@@ -20,24 +20,24 @@ function Player(x, y, z){
 		Don't let the player move in the Y axis, otherwise they would fly.
 		*/
 		if(moveUp === true){
-			player.y += player.movementSpeed;
+			this.y += this.movementSpeed;
 		}
 		else if(moveDown === true){
-			player.y -= player.movementSpeed;
+			this.y -= this.movementSpeed;
 		}
 		else if(moveForward === true){
-			player.x -= (cameraPosition[0] - cameraTarget[0]) * player.movementSpeed;
-			player.z -= (cameraPosition[2] - cameraTarget[2]) * player.movementSpeed;
+			this.x -= (cameraPosition[0] - cameraTarget[0]) * this.movementSpeed;
+			this.z -= (cameraPosition[2] - cameraTarget[2]) * this.movementSpeed;
 		}
 		else if(moveBack === true){
-			player.x += (cameraPosition[0] - cameraTarget[0]) * player.movementSpeed;
-			player.z += (cameraPosition[2] - cameraTarget[2]) * player.movementSpeed;
+			this.x += (cameraPosition[0] - cameraTarget[0]) * this.movementSpeed;
+			this.z += (cameraPosition[2] - cameraTarget[2]) * this.movementSpeed;
 		}
 		else{
 		
 		}
 		
-		player.updatePlayerCamera();
+		this.updatePlayerCamera();
 	}
 	
 	/*
@@ -45,7 +45,7 @@ function Player(x, y, z){
 	*/
 	this.updatePlayerCamera = function(){	
 		cameraMatrix = m4.yRotation(0);
-		cameraMatrix = m4.translate(cameraMatrix, player.x, player.y, player.z);
+		cameraMatrix = m4.translate(cameraMatrix, this.x, this.y, this.z);
 		
 		/*
 		xPos = sin(y rotation in radians)
@@ -59,9 +59,9 @@ function Player(x, y, z){
 		I've added the camera position on to fix it
 		*/
 		cameraTarget = [
-			cameraMatrix[12] + Math.sin(player.yRotation * cameraSpeed), 
-			cameraMatrix[13] + Math.sin(player.xRotation * cameraSpeed),
-			cameraMatrix[14] + Math.cos(player.yRotation * cameraSpeed),
+			cameraMatrix[12] + Math.sin(this.yRotation * cameraSpeed), 
+			cameraMatrix[13] + Math.sin(this.xRotation * cameraSpeed),
+			cameraMatrix[14] + Math.cos(this.yRotation * cameraSpeed),
 		];
 		
 		//Retrieve position from camera matrix

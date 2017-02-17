@@ -115,13 +115,14 @@ var player = new Player(0, 0, 0);
 var terrain = new Terrain();
 var worldState = new WorldState(); //Loads and saves the world
 var gui = new GUI();
+var collisionTester = new Collision();
 
 //For saving the game
 var gameTime = 0;
 var saveTime = 1200;
 
 function render(){
-	gl.clearColor(0, 0, 0, 0);
+	gl.clearColor(0.5, 0.5, 0.5, 3);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 	/*
@@ -133,19 +134,21 @@ function render(){
 		gameTime = 0;
 	}
 	
-	//console.log("Player X, Y, Z: " + Math.floor(player.x) + ", " + Math.floor(player.y) + ", " + Math.floor(player.z));
+	console.log("Player X, Y, Z: " + Math.floor(player.x) + ", " + Math.floor(player.y) + ", " + Math.floor(player.z));
 	player.movePlayer();
 	gui.update();
 	
 	
 	terrain.drawTerrain(); //terrain.js,
 	
-	
-	setPlayerHeight(); //collision.js
-	testPlayerRockCollision();
-	drawRocks();
+	//collisionTester.setPlayerHeight(); //collision.js
+	//collisionTester.testPlayerRockCollision();
+	//drawRocks();
 	drawParticles();
-	checkOrAssignPlayerMissions();
+	//checkOrAssignPlayerMissions();
+	
+	
+	
 	gameTime++;
 	requestAnimationFrame(render);
 }
@@ -157,20 +160,20 @@ function setup(){
 	gameRunning = true;
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
 	
+	//worldState.loadWorld(); //loadSave.js
 	gui.setup();
 	
-	terrain.createHeightMap();
-	terrain.fillHeightMap();
-	terrain.createTerrainVertices();
-	terrain.setupTerrainBuffers();
+	setupMovement(); //movement.js
+	
+
 	
 
 	createParticles();
 	 
 	
-	worldState.loadWorld(); //loadSave.js
+	
 
-	setupMovement(); //movement.js
+	
 	loadAllTextures(); //textureLoader.js
 	
 
@@ -181,8 +184,8 @@ function setup(){
 
 	
 
-	createRocks();
-	setupRockBuffers();
+	//createRocks();
+	//setupRockBuffers();
 
 		
 	render();

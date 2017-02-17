@@ -90,6 +90,10 @@ Sprint 0 (13th - 20th February)
 		Blue grid as background
 
 		Redesigned files, made player class, object oriented
+
+
+
+		If drawParticles isn't called, nothing draws? wttt
 		
 
 	Sprint retrospective:

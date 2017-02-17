@@ -61,19 +61,13 @@ function drawParticles(){
 		xRotation = m4.xRotation(0);
 		yRotation = m4.yRotation(0);
 		zRotation = m4.zRotation(0);
-		
 
-		
 		var particleVelocity = particle_vertices[i+3];
 		var maxHeight = 1;	//will go -5 to +5
-		//particle_vertices[i] += 1 * particleVelocity; 
 		particle_vertices[i+1] += 4 * particleVelocity;//y
 		if(particle_vertices[i+1] > 300){
 			particle_vertices[i+1] = 0;
 		}
-		//particle_vertices[i+2] += 3 * particleVelocity;
-		//particle_vertices[i+3] is its velocity
-	
 		position = m4.translation(particle_vertices[i],
 								particle_vertices[i+1], 
 								particle_vertices[i+2]); 
@@ -90,10 +84,6 @@ function drawParticles(){
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-		
-		//Elements
-		//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cube_elements_buffer);
-		
 
 		gl.drawArrays(
 			gl.POINTS, 

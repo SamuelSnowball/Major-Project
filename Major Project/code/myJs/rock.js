@@ -139,7 +139,14 @@ function createRock(radius, widthSegments, heightSegments, scale){
 	var x = Math.floor(Math.random() * 256) + 0;
 	var z = Math.floor(Math.random() * 256) + 0;  
 	//Find the current terrain vertex height, assign it to the rock
-	var y = heightMap[x][z];
+
+	terrain.thing.current = x;
+	terrain.thing.current1 = z;
+	var thing = terrain.thing.getCurrent;
+	console.log("thing is: " + thing)
+	//terrain.height.x = x; //, z;
+	//terrain.height.z = z;
+	//var y = terrain.heightMap[x][z]; //pass in x and z
 	
 	//Pretty sure these do nothing
 	var xRotation = Math.random();

@@ -11,10 +11,15 @@ function WorldState(){
 		*/
 		if(typeof(Storage) !== "undefined"){
 			
-			if(localStorage.getItem("playerXPos") !== "undefined"){
+			if(localStorage.getItem("playerXPos") !== "undefined" && 
+				localStorage.getItem("playerYPos") !== "undefined" && 
+				localStorage.getItem("playerZPos") !== "undefined"){
+				
 				player.x = localStorage.getItem("playerXPos");
 				player.y = localStorage.getItem("playerYPos");
 				player.z = localStorage.getItem("playerZPos");
+				
+				player.y += 0.0001;
 			}
 			else{
 				//Then this is first time user is playing, set their position
