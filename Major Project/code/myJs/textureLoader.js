@@ -2,6 +2,7 @@
 var marsTerrainTexture;
 var rockTexture;
 var sandstoneTexture;
+var waterTexture;
 
 function TextureLoader(){
 
@@ -32,6 +33,7 @@ function TextureLoader(){
 	function loadAllTextures(){
 		loadTerrainTextures();
 		loadRockTextures();
+		loadWaterTextures();
 	}
 
 	function loadTerrainTextures(){
@@ -66,6 +68,17 @@ function TextureLoader(){
 		sandstoneImage.onload = function (){handleTextureLoaded(sandstoneImage, sandstoneTexture);}
 	}
 
+	function loadWaterTextures(){
+		waterTexture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, waterTexture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+					  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing
+
+		waterImage = new Image();
+		waterImage.src = 'resources/water.png';
+		waterImage.onload = function (){handleTextureLoaded(waterImage, waterTexture);}		
+	}
+	
 	/*
 	This gets run after image is done loading
 	*/

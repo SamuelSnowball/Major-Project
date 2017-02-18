@@ -102,6 +102,7 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/GUI.js"></script>
 <script src="code/myJs/LoadingScreen.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
+<script src="code/myJs/WaterSystem.js"></script>
 
 <!-- Broken -->
 <script src="code/myJs/WorldState.js"></script>
@@ -124,8 +125,8 @@ var worldState = new WorldState(); //Loads and saves the world
 var gui = new GUI();
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
-
 var rockGenerator = new RockGenerator();
+var waterSystem = new WaterSystem();
 
 //For saving the game
 var gameTime = 0;
@@ -156,7 +157,10 @@ function render(){
 	
 	rockGenerator.drawRocks();
 	
-	
+	if(gameTime % 15 === 0){
+		waterSystem.updateWaterVertices();
+	}
+	waterSystem.render();
 	
 	//checkOrAssignPlayerMissions();
 	
