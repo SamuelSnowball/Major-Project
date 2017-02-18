@@ -1,14 +1,12 @@
 
 function Terrain(){
-	var x = 0;
-	var y = 0;
-	var z = 0;
-	
+	/*
+	Private variables
+	*/
 	var rows = 512;
 	var columns = 512;
 	var size = rows * columns;
-	var scale = 1;
-	
+
 	var terrainVertices = [];
 	
 	var positionAttribLocation;
@@ -16,22 +14,25 @@ function Terrain(){
 	var elementsBuffer;
 	var terrainTextureCoordinateBuffer;
 	
-	var paramX;
-	var paramZ;
-	this.thing = {
+	/*
+	The collision class needs to find a heightMap value, given a X and Z,
+	so it can move the player to the nearest vertex height.
 	
-		set current(name){
-			console.log("calleeeed" + name);
-			paramX = name;
+	But heightMap is private, so create a getter and setter method to do this.
+	This will not actually change any heightMap values, just finds the value at a index.
+	*/
+	var temporaryHeightMapX;
+	var temporaryHeightMapZ;
+	this.heightMapValueAtIndex = {
+		set setTemporaryHeightMapX(name){
+			temporaryHeightMapX = name;
 		},
-		set current1(name){
-			console.log("calleeeed" + name);
-			paramZ = name;
+		set setTemporaryHeightMapZ(name){
+			temporaryHeightMapZ = name;
 		},
-		get getCurrent(){
-			return heightMap[paramX][paramZ];
+		get getTemporaryHeightMapValue(){
+			return heightMap[temporaryHeightMapX][temporaryHeightMapZ];
 		}
-		
 	}
 	
 
@@ -62,6 +63,9 @@ function Terrain(){
 	function fillHeightMap(){
 		/*
 		Bumpy terrain
+		var offsetX = 0;
+		var offsetY = 0;
+		var offsetZ = 0;
 		offsetX = 3.01
 		offsetY = 5.01
 		offsetZ = 7.01
@@ -71,9 +75,6 @@ function Terrain(){
 		var yOff = 0;
 		
 		var perlin = new ImprovedNoise();
-		var offsetX = 0;
-		var offsetY = 0;
-		var offsetZ = 0;
 		var offsetXIncrement = 0.1; //How it moves along the graph
 		var offsetYIncrement = 0.1; //How it moves along the graph
 		var offsetZIncrement = 0.1; //How it moves along the graph
@@ -258,8 +259,7 @@ function Terrain(){
 	
 	Apply matrices, then draw the terrain.
 	*/
-	this.drawTerrain = function(){	
-		console.log("drawinnng");
+	this.render = function(){	
 		scale = m4.scaling(1, 1, 1);
 		xRotation = m4.xRotation(0);
 		yRotation = m4.yRotation(0);

@@ -98,10 +98,10 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/terrain.js"></script>
 <script src="code/myJs/movement.js"></script>
 <script src="code/myJs/mouse.js"></script>
-<script src="code/myJs/collision.js"></script>
+<script src="code/myJs/CollisionTester.js"></script>
 <script src="code/myJs/WorldState.js"></script>
 <script src="code/myJs/rock.js"></script>
-<script src="code/myJs/textureLoader.js"></script>
+<script src="code/myJs/TextureLoader.js"></script>
 <script src="code/myJs/GUI.js"></script>
 <script src="code/myJs/missions.js"></script>
 <script src="code/myJs/particles.js"></script>
@@ -111,18 +111,22 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 var gameRunning = false;
 
 var loadingScreen = new LoadingScreen();
+var textureLoader = new TextureLoader();
 var player = new Player(0, 0, 0); 
 var terrain = new Terrain();
 var worldState = new WorldState(); //Loads and saves the world
 var gui = new GUI();
-var collisionTester = new Collision();
+var collisionTester = new CollisionTester();
+var particleSystem = new ParticleSystem();
+
+var rockGenerator = new RockGenerator();
 
 //For saving the game
 var gameTime = 0;
 var saveTime = 1200;
 
 function render(){
-	gl.clearColor(0.5, 0.5, 0.5, 3);
+	gl.clearColor(0, 0, 0, 0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 	/*
@@ -134,20 +138,21 @@ function render(){
 		gameTime = 0;
 	}
 	
-	console.log("Player X, Y, Z: " + Math.floor(player.x) + ", " + Math.floor(player.y) + ", " + Math.floor(player.z));
+	//console.log("Player X, Y, Z: " + Math.floor(player.x) + ", " + Math.floor(player.y) + ", " + Math.floor(player.z));
 	player.movePlayer();
 	gui.update();
 	
-	drawParticles(); //if this isnt called, nothing renders....?
-	terrain.drawTerrain(); //terrain.js,
+	particleSystem.render(); //if this isnt called, nothing renders....?
+	terrain.render(); //terrain.js,
+	
+	collisionTester.setPlayerHeight(); //collision.js
+	collisionTester.testPlayerRockCollision();
+	
+	rockGenerator.drawRocks();
 	
 	
-	//collisionTester.setPlayerHeight(); //collision.js
-	//collisionTester.testPlayerRockCollision();
-	//drawRocks();
+	
 	//checkOrAssignPlayerMissions();
-	
-	
 	
 	gameTime++;
 	requestAnimationFrame(render);
@@ -166,26 +171,9 @@ function setup(){
 	setupMovement(); //movement.js
 	
 
-	
-
-	createParticles();
-	 
-	
-	
-
-	
-	loadAllTextures(); //textureLoader.js
-	
-
-	
 	//Disabled whilst fix textures
 	//createHills();
 	//createCraters();
-
-	
-
-	//createRocks();
-	//setupRockBuffers();
 
 		
 	render();

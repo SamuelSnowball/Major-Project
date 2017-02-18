@@ -1,25 +1,11 @@
 
-var marsTerrainTexture;
-var rockTexture;
-var sandstoneTexture;
+
 
 function TextureLoader(){
-
-	//Need getters for these private textures
-	/*
-	this.getTexture = {
-		get getMarsTerrainTexture(){
-			return marsTerrainTexture;
-		},
-		get getRockTexture(){
-			return rockTexture;
-		},
-		get getSandstoneTexture(){
-			return sandstoneTexture;
-		}
-	}
-	*/
-	
+	var marsTerrainTexture;
+	var rockTexture;
+	var sandstoneTexture;
+	//Need getters for these
 	
 	loadAllTextures();
 	
@@ -90,3 +76,6 @@ function TextureLoader(){
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	}
 }
+
+
+

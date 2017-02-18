@@ -1,5 +1,5 @@
 
-function Collision(){
+function CollisionTester(){
 	
 	/*
 	Causes the bumpy effect when moving over terrain.
@@ -35,36 +35,42 @@ function Collision(){
 		//console.log("temp z: " + tempPlayerZ);
 		
 		/*
-		Coordinates get floored so they dont screw up the array indexing, must be a integer.
+		Player coordinates get floored so they don't screw up the array indexing, must be a integer.
 		*/
 		if(tempPlayerX / terrain.scale < 0.5){
-			tempPlayerX = Math.floor(tempPlayerX / terrain.scale);
+			tempPlayerX = Math.floor(tempPlayerX);
 		}else{
-			tempPlayerX = Math.ceil(tempPlayerX / terrain.scale);
+			tempPlayerX = Math.ceil(tempPlayerX);
 		}
 		
 		if(tempPlayerZ / terrain.scale < 0.5){
-			tempPlayerZ = Math.floor(tempPlayerZ / terrain.scale);
+			tempPlayerZ = Math.floor(tempPlayerZ);
 		}else{
-			tempPlayerZ = Math.ceil(tempPlayerZ / terrain.scale);
+			tempPlayerZ = Math.ceil(tempPlayerZ);
 		}
 		
-		console.log("rounded x: " + tempPlayerX);
-		console.log("rounded z: " + tempPlayerZ);
+		//console.log("rounded x: " + tempPlayerX);
+		//console.log("rounded z: " + tempPlayerZ);
 		
 		
+		/*
+		Need to find what height to position the player at.
+		So need to find what terrain vertex they're nearest to.
 		
+		Do this by passing in the player X and Z coordinates into the heightMap,
+		to return the nearest terrain Y value.
+		
+		Get the nearest height from the heightMap, which is private,
+		So call the getter method
+		*/
 		var nearestHeight;
 		if(tempPlayerX > 0){ //if tempPlayerX isn't NaN
-			terrain.thing.current = tempPlayerX;
-			terrain.thing.current1 = tempPlayerZ;
-			nearestHeight = terrain.thing.getCurrent;
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = tempPlayerX;
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = tempPlayerZ;
+			nearestHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
 		}else{
 			nearestHeight = 0;
 		}
-		
-		//var nearestHeight = terrain.heightMap[tempPlayerX][tempPlayerZ];
-		
 		//console.log("Nearest height: " + heightMap[tempPlayerX][tempPlayerZ]);
 
 		/*
@@ -81,34 +87,39 @@ function Collision(){
 			
 			player.y = nearestHeight + 2;
 			
-			var shouldBePlayerHeight;
+			var correctPlayerHeight;
 			if(nearestHeight > 0.4){
-				shouldBePlayerHeight = -nearestHeight + 3;
+				correctPlayerHeight = -nearestHeight + 3;
 				//console.log("Decent hill");
 			}
 			if(nearestHeight > 1.4){
-				shouldBePlayerHeight = -nearestHeight + 3.5;
+				correctPlayerHeight = -nearestHeight + 3.5;
 				//console.log("Decent hill");
 			}
 			if(nearestHeight > 1.8){
-				shouldBePlayerHeight = -nearestHeight + 4;
+				correctPlayerHeight = -nearestHeight + 4;
 				//console.log("Decent hill");
 			}
 			
-			/*
-			Slowly increment height to the nearest terrain vertex,
-			Stop when that height is reached
-			*/
-			if(player.y > shouldBePlayerHeight){
-			
-			}
-			else{
-				player.y += heightIncrement;
-			}
+			slowlyIncrementPlayerHeight(correctPlayerHeight, heightIncrement);
+
 		}
 		else{
 			//In different section
 		}	
+	}
+	
+	/*
+	Slowly increment height to the nearest terrain vertex,
+	stop when that height is reached
+	*/
+	function slowlyIncrementPlayerHeight(correctPlayerHeight, heightIncrement){
+		if(player.y > correctPlayerHeight){
+		
+		}
+		else{
+			player.y += heightIncrement;
+		}
 	}
 	
 	/*
@@ -117,24 +128,19 @@ function Collision(){
 	Eventually just check collision of the rocks in the quadrant that the player is in
 	*/
 	this.testPlayerRockCollision = function(){
-		/*
-		Rock hit boxes also contain the scale of the rock
-		
-		rockHitboxes[i] = x
-		rockHitboxes[i] = z
-		rockHitboxes[i] = x + width
-		rockHitboxes[i] = z + width
-		rockHitboxes[i+4] = current rocks scale
-		*/
-		for(var i=0; i<rockHitboxes.length; i+=5){
+
+		//Retrieve rocks array from the rockGenerator class
+		var rocks = rockGenerator.getRocksArray.getRocks;
+		for(var i=0; i<rocks.length; i++){
 			if(	
-				//Between x and x+width
-				(player.x > rockHitboxes[i] - (rockHitboxes[i+4] * 20) ) && 
-				(player.x < rockHitboxes[i+2] + (rockHitboxes[i+4] * 20) ) && 
-				//AND Between z and z+width
-				(player.z > rockHitboxes[i+1] - (rockHitboxes[i+4] * 20) ) && 
-				(player.z < rockHitboxes[i+3] + (rockHitboxes[i+4] * 20) )
+				(player.x > rocks[i].x)  &&
+				(player.x < rocks[i].x)  + (rocks[i].width) &&
+				
+				(player.z > rocks[i].z)  && 
+				(player.z < rocks[i].z)  + (rocks[i].width) 
+			
 			){
+				console.log("colliding");
 				/*
 				Check if they're going forwards or backwards
 				Push them different ways based on movement direction
@@ -155,14 +161,5 @@ function Collision(){
 	}
 	
 }
-
-
-
-
-function testPlayerRockCollision(){
-
-}
-
-
 
 
