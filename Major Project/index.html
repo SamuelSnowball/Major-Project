@@ -95,17 +95,23 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/projection.js"></script>
 <script src="code/myJs/matrices.js"></script>
 
+<!-- Named properly -->
+<script src="code/myJs/CollisionTester.js"></script>
+<script src="code/myJs/RockGenerator.js"></script>
+<script src="code/myJs/TextureLoader.js"></script>
+<script src="code/myJs/GUI.js"></script>
+<script src="code/myJs/LoadingScreen.js"></script>
+<script src="code/myJs/ParticleSystem.js"></script>
+
+<!-- Broken -->
+<script src="code/myJs/WorldState.js"></script>
+
+<!-- Needs naming -->
 <script src="code/myJs/terrain.js"></script>
 <script src="code/myJs/movement.js"></script>
 <script src="code/myJs/mouse.js"></script>
-<script src="code/myJs/CollisionTester.js"></script>
-<script src="code/myJs/WorldState.js"></script>
-<script src="code/myJs/rock.js"></script>
-<script src="code/myJs/TextureLoader.js"></script>
-<script src="code/myJs/GUI.js"></script>
+
 <script src="code/myJs/missions.js"></script>
-<script src="code/myJs/particles.js"></script>
-<script src="code/myJs/LoadingScreen.js"></script>
 
 <script>
 var gameRunning = false;
@@ -165,7 +171,7 @@ function setup(){
 	gameRunning = true;
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
 	
-	//worldState.loadWorld(); //loadSave.js
+	//worldState.loadWorld(); //WorldState.js
 	gui.setup();
 	
 	setupMovement(); //movement.js

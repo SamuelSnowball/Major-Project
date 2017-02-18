@@ -122,6 +122,33 @@ function CollisionTester(){
 		}
 	}
 	
+	
+	
+	
+	/*
+	DEFINE
+	*/
+	    triangleVertexPositionBuffer = gl.createBuffer();
+ gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
+	/*
+	END DEIFNE
+	*/
+	    var vertices = [
+         0.0,  1.0,  0.0,
+        -1.0, -1.0,  0.0,
+         1.0, -1.0,  0.0
+    ];
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	   triangleVertexPositionBuffer.itemSize = 3;
+    triangleVertexPositionBuffer.numItems = 3;
+	
+	terrainTextureCoordinateBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
+		var textureCoordinates = [];
+		textureCoordinates.push(0.0, 1.0);
+	textureCoordinates.push(0.0, 1.0);
+	textureCoordinates.push(0.0, 1.0);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
 	/*
 	Loop through all collision boxes, stop playing moving through rocks
 
@@ -132,12 +159,60 @@ function CollisionTester(){
 		//Retrieve rocks array from the rockGenerator class
 		var rocks = rockGenerator.getRocksArray.getRocks;
 		for(var i=0; i<rocks.length; i++){
+		
+			/*
+			Draw 2d square at rocks[i].x etc
+			*/
+					scale = m4.scaling(5, 5, 5);
+		xRotation = m4.xRotation(0);
+		yRotation = m4.yRotation(0);
+		zRotation = m4.zRotation(0);
+		
+		var hitboxFactor;
+		if(rocks[i].scale <= 0.2){
+			hitboxFactor = 45;
+		}else{
+			hitboxFactor = 30;
+		}
+		/*
+		Between:
+		rocks[i].x - (rocks[i].scale*hitboxFactor)
+		rocks[i].x + (rocks[i].scale*hitboxFactor)
+		
+		rocks[i].z - (rocks[i].scale*25)
+		rocks[i].z + (rocks[i].scale*25)
+		*/
+		position = m4.translation(rocks[i].x + (rocks[i].scale*hitboxFactor) , 0, rocks[i].z);
+		
+		//Times matrices together
+		updateAttributesAndUniforms();
+			
+			 gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
+    gl.vertexAttribPointer(positionAttribLocation, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
+		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
+		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+		
+
+gl.drawArrays(gl.TRIANGLES, 0,  triangleVertexPositionBuffer.numItems);
+			
+			
+			
+			
+			/*
+			
+			End code
+			*/
+			
 			if(	
-				(player.x > rocks[i].x)  &&
-				(player.x < rocks[i].x)  + (rocks[i].width) &&
+				player.x > rocks[i].x - (rocks[i].scale*25) &&
+				player.x < rocks[i].x + (rocks[i].scale*25) &&
 				
-				(player.z > rocks[i].z)  && 
-				(player.z < rocks[i].z)  + (rocks[i].width) 
+				player.z > rocks[i].z - (rocks[i].scale*25)  && 
+				player.z <	rocks[i].z + (rocks[i].scale*25) 
 			
 			){
 				console.log("colliding");

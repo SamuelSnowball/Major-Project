@@ -115,20 +115,6 @@ function RockGenerator(){
 				vertex.z += rand/2;
 				
 				rockVertices.push( vertex.x, vertex.y, vertex.z );
-				
-				//Find largest z coordinate
-				if(vertex.z > largestZCoord){
-					largestZCoord = vertex.z;
-				}
-				else{
-					//It isnt the biggest coordinate, check if its the smallest
-					if(vertex.z < smallestZCoord){
-						smallestZCoord = vertex.z;
-					}
-					else{
-						//Coordinate isn't smallest or biggest, ignore it
-					}
-				}
 
 				// normal
 
@@ -185,7 +171,18 @@ function RockGenerator(){
 		var numIndices = rockIndices.length - previousNumIndices; 
 		previousNumIndices = rockIndices.length;
 		
-		var width = scale;
+		var width = scale * 30;
+		console.log("scale is: " + width);
+		/*
+		x,y,z is in the middle of the rock,
+		So minus the width/2 to get correct coordinates
+		*/
+		
+		console.log("X,Y,Z,WIDTH: " + x + ", " + y + ", " + z + ", " + width);
+		/*
+		Draw 4 lines at these points? rather than a cube
+		Or 2d square
+		*/
 		
 		var tempRock = new Rock(x, y, z, width, xRotation, yRotation, zRotation, scale, texture, numIndices);
 		rocks.push(tempRock);
