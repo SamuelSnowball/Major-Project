@@ -23,6 +23,10 @@ Sprint 0 (13th - 20th February)
 			Then spheres for interacting with
 			Use exising sphere geometry, randomly shift vertices
 			Then place them into the world
+		
+			Added in triangle rocks
+			-Could spawn them random distance away from the bigger pyramid
+			-Also have different textures
 	
 			To do:
 				Add in different rocks in different sections
@@ -43,10 +47,11 @@ Sprint 0 (13th - 20th February)
 			Print text on screen character by character (left gui?)
 				-have a initial sound to incate new mission
 
-			If they're colliding with rock + mouse held down
+			If they're colliding with rock + key held down
 				-Show mining progress bar
 				-Show particle effects
 				-When 100% remove rock, or set its texture to something, depleted
+				-Add something to their top left level bar
 
 			They can shoot laser, draw in view direction from infront of them
 			If that collides with rock,

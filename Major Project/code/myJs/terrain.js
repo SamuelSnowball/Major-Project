@@ -3,8 +3,8 @@ function Terrain(){
 	/*
 	Private variables
 	*/
-	var rows = 512;
-	var columns = 512;
+	var rows = 1024;
+	var columns = 1024;
 	var size = rows * columns;
 
 	var terrainVertices = [];
@@ -63,14 +63,14 @@ function Terrain(){
 	function fillHeightMap(){
 		/*
 		Bumpy terrain
+		*/
 		var offsetX = 0;
 		var offsetY = 0;
 		var offsetZ = 0;
-		offsetX = 3.01
-		offsetY = 5.01
-		offsetZ = 7.01
-		*/
-		
+		var bumpyOffsetXIncrement = 0.05; //How it moves along the graph?
+		var bumpyOffsetYIncrement = 0.03; //How it moves along the graph?
+		var bumpyOffsetZIncrement = 0.08; //How it moves along the graph?
+			
 		var xOff = 0;
 		var yOff = 0;
 		
@@ -88,34 +88,33 @@ function Terrain(){
 		for(var x=0; x<rows; x++){
 			for(var y=0; y<columns; y++){
 			
-				var height = perlin.noise(xOff, yOff, xOff) * scale;
-				//var height = noise.simplex2(xOff, yOff) * scale;
-				//console.log("v is: " + height);
-
-				/*
-				//Messing about with random cliffs, remove these to get a flat plane
-				if(y > 32 && y < 64){
+				//4 Quadrants different noise scales, 1 random?
+				
+				//1st quad
+				var height = 0;
+				if(x < 512 && y < 512){
+					scale = 3;
+					var height = perlin.noise(xOff, yOff, xOff) * scale;
+				}
+				//Other 1 quad
+				else if(x < 512 && y < 1024){
+					var max = 0.5;
+					var min = -0.5;
+					var height = (Math.random() * (max-min+1)+min); //perlin.noise(xOff, yOff, xOff) * scale;
+				}else{
+					//Other 2, on cliff
+				}
+				
+				//Cliff
+				if(x > 512){
+					var height = perlin.noise(xOff, yOff, xOff) * 2;
 					height += 15;
 				}
-				if(y > 128){
-					height += 5;
-				}
-				if(x > 128){
-					height += 5;
-				}
-				*/
+				
 				
 				heightMap[x][y] = height;
 				xOff+=offsetIncrement;
 				
-				/*
-				Previous code below, useful for really bumpy flat areas
-				*/
-				//var height = perlin.noise(offsetX, offsetY, offsetZ) * scale;
-				//heightMap[x][y] = height; 
-				//offsetX += offsetXIncrement;
-				//offsetY += offsetYIncrement;
-				//offsetZ += offsetZIncrement;		
 					
 			}
 			xOff = 0;
@@ -236,6 +235,7 @@ function Terrain(){
 		Need a double for loop to set accurately
 		1/256 for max row increment?
 			=0.00390625 * 265 = 1. so increment by that
+		1/512 = 0.001953125
 		*/
 		var xUV = 0;
 		var yUV = 0;
@@ -243,10 +243,10 @@ function Terrain(){
 			for(var y=0; y<columns; y++){
 				textureCoordinates.push(xUV);  
 				textureCoordinates.push(yUV); 
-				xUV += 0.00390625;
+				xUV += 0.001953125;
 			}
 			xUV = 0;
-			yUV += 0.00390625;
+			yUV += 0.001953125;
 		}
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);

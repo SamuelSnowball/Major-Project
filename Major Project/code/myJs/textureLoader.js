@@ -3,6 +3,7 @@ var marsTerrainTexture;
 var rockTexture;
 var sandstoneTexture;
 var waterTexture;
+var depletedTexture;
 
 function TextureLoader(){
 
@@ -55,7 +56,7 @@ function TextureLoader(){
 					  new Uint8Array([255, 0, 0, 255])); 
 
 		rockImage = new Image();
-		rockImage.src = 'resources/rocks/perlin.png';
+		rockImage.src = 'resources/rocks/rock.png';
 		rockImage.onload = function (){handleTextureLoaded(rockImage, rockTexture);}
 		
 		sandstoneTexture = gl.createTexture();
@@ -66,6 +67,19 @@ function TextureLoader(){
 		sandstoneImage = new Image();
 		sandstoneImage.src = 'resources/rocks/sandstone.png';
 		sandstoneImage.onload = function (){handleTextureLoaded(sandstoneImage, sandstoneTexture);}
+		
+		
+		depletedTexture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, depletedTexture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+					  new Uint8Array([0, 255, 0, 255])); 
+					  
+		depletedImage = new Image();
+		depletedImage.src = 'resources/rocks/depleted.png';
+		depletedImage.onload = function (){handleTextureLoaded(depletedImage, depletedTexture);}
+		
+					  
+					  
 	}
 
 	function loadWaterTextures(){

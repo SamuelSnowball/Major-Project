@@ -103,12 +103,12 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/LoadingScreen.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
 <script src="code/myJs/WaterSystem.js"></script>
+<script src="code/myJs/Terrain.js"></script>
 
 <!-- Broken -->
 <script src="code/myJs/WorldState.js"></script>
 
 <!-- Needs naming -->
-<script src="code/myJs/terrain.js"></script>
 <script src="code/myJs/movement.js"></script>
 <script src="code/myJs/mouse.js"></script>
 
@@ -155,12 +155,15 @@ function render(){
 	collisionTester.setPlayerHeight(); //collision.js
 	collisionTester.testPlayerRockCollision();
 	
-	rockGenerator.drawRocks();
+	rockGenerator.renderRocks();
+	rockGenerator.renderTriangleRocks();
 	
-	if(gameTime % 15 === 0){
+	
+	//if(gameTime % 20 === 0){
 		waterSystem.updateWaterVertices();
-	}
+	//}
 	waterSystem.render();
+	
 	
 	//checkOrAssignPlayerMissions();
 	

@@ -78,7 +78,7 @@ function CollisionTester(){
 		*/
 		var heightIncrement = 0.01;
 
-		if(player.z > 0 && player.z < 256 && player.x > 0 && player.x < 256){
+		if(player.z > 0 && player.z < 512 && player.x > 0 && player.x < 512){
 			
 			//Not great if nearestHeight is like -1 or -0.8, so the below if statement
 			if(nearestHeight < -0.5){
@@ -104,8 +104,9 @@ function CollisionTester(){
 			slowlyIncrementPlayerHeight(correctPlayerHeight, heightIncrement);
 
 		}
-		else{
+		else if(player.x > 256 && player.x < 512 && player.z > 0 && player.z < 512){
 			//In different section
+			
 		}	
 	}
 	
@@ -123,34 +124,15 @@ function CollisionTester(){
 	}
 	
 	
-	
-	
 	/*
-	DEFINE
-	*/
-	    triangleVertexPositionBuffer = gl.createBuffer();
- gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-	/*
-	END DEIFNE
-	*/
-	    var vertices = [
-         0.0,  1.0,  0.0,
-        -1.0, -1.0,  0.0,
-         1.0, -1.0,  0.0
-    ];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	   triangleVertexPositionBuffer.itemSize = 3;
-    triangleVertexPositionBuffer.numItems = 3;
+	If they're in prospecting range, allow them to prospect
+	If they're too close to the rock, move them back
 	
-	terrainTextureCoordinateBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
-		var textureCoordinates = [];
-		textureCoordinates.push(0.0, 1.0);
-	textureCoordinates.push(0.0, 1.0);
-	textureCoordinates.push(0.0, 1.0);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
-	/*
-	Loop through all collision boxes, stop playing moving through rocks
+	Have to have 2 different ranges here, otherwise as soon as they're colliding,
+	and they try to prospect,
+	They get moved back, out of prospect range
+	
+	Loop through all rock collision boxes, stop playing moving through rocks
 
 	Eventually just check collision of the rocks in the quadrant that the player is in
 	*/
@@ -159,80 +141,91 @@ function CollisionTester(){
 		//Retrieve rocks array from the rockGenerator class
 		var rocks = rockGenerator.getRocksArray.getRocks;
 		for(var i=0; i<rocks.length; i++){
-		
-			/*
-			Draw 2d square at rocks[i].x etc
-			*/
-					scale = m4.scaling(5, 5, 5);
-		xRotation = m4.xRotation(0);
-		yRotation = m4.yRotation(0);
-		zRotation = m4.zRotation(0);
-		
-		var hitboxFactor;
-		if(rocks[i].scale <= 0.2){
-			hitboxFactor = 45;
-		}else{
-			hitboxFactor = 30;
-		}
-		/*
-		Between:
-		rocks[i].x - (rocks[i].scale*hitboxFactor)
-		rocks[i].x + (rocks[i].scale*hitboxFactor)
-		
-		rocks[i].z - (rocks[i].scale*25)
-		rocks[i].z + (rocks[i].scale*25)
-		*/
-		position = m4.translation(rocks[i].x + (rocks[i].scale*hitboxFactor) , 0, rocks[i].z);
-		
-		//Times matrices together
-		updateAttributesAndUniforms();
-			
-			 gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-    gl.vertexAttribPointer(positionAttribLocation, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
-		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
-		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-		
-
-gl.drawArrays(gl.TRIANGLES, 0,  triangleVertexPositionBuffer.numItems);
-			
-			
-			
 			
 			/*
-			
-			End code
+			Check if user is in prospecting range
 			*/
-			
 			if(	
-				player.x > rocks[i].x - (rocks[i].scale*25) &&
-				player.x < rocks[i].x + (rocks[i].scale*25) &&
+				player.x > rocks[i].x - (rocks[i].scale*35) &&
+				player.x < rocks[i].x + (rocks[i].scale*35) &&
 				
-				player.z > rocks[i].z - (rocks[i].scale*25)  && 
-				player.z <	rocks[i].z + (rocks[i].scale*25) 
+				player.z > rocks[i].z - (rocks[i].scale*35)  && 
+				player.z <	rocks[i].z + (rocks[i].scale*35) 
 			
 			){
-				console.log("colliding");
+				isProspecting(rocks[i]);
+
 				/*
-				Check if they're going forwards or backwards
-				Push them different ways based on movement direction
+				Regular sphere rock collision testing
+				Check if they're too close, move them back
 				*/
-				if(moveForward === true){	
-					player.x += (cameraPosition[0] - cameraTarget[0]) * player.movementSpeed;
-					player.z += (cameraPosition[2] - cameraTarget[2]) * player.movementSpeed;
-				}
-				else if(moveBack == true){
-					player.x -= (cameraPosition[0] - cameraTarget[0]) * player.movementSpeed;
-					player.z -= (cameraPosition[2] - cameraTarget[2]) * player.movementSpeed;
-				}
-				else{
-				
+				if(	player.x > rocks[i].x - (rocks[i].scale*25) &&
+					player.x < rocks[i].x + (rocks[i].scale*25) &&
+					
+					player.z > rocks[i].z - (rocks[i].scale*25)  && 
+					player.z <	rocks[i].z + (rocks[i].scale*25) 
+				){
+					moveForwardOrBackward();
 				}
 			}
 		}	
+		
+		var triRocks = rockGenerator.getTriRocksArray.getRocks;
+		for(var i=0; i<triRocks.length; i++){
+			//If in prospect range
+			if(	player.x > triRocks[i].x  - (triRocks[i].width*3) &&
+				player.x < triRocks[i].x + (triRocks[i].width*3) &&
+				
+				player.z > triRocks[i].z - (triRocks[i].width*3) && 
+				player.z < triRocks[i].z + (triRocks[i].width*3) 
+			){	
+				isProspecting(triRocks[i]);
+				/*
+				Triangle rocks collision testing
+				*/
+				if(	player.x > triRocks[i].x  - (triRocks[i].width*2) &&
+					player.x < triRocks[i].x + (triRocks[i].width*2) &&
+					
+					player.z > triRocks[i].z - (triRocks[i].width*2) && 
+					player.z < triRocks[i].z + (triRocks[i].width*2) 
+				){	
+					moveForwardOrBackward();
+				}
+			}
+		}
+	}
+					
+	/*
+	Check if they're going forwards or backwards
+	Push them different ways based on movement direction
+	*/	
+	function moveForwardOrBackward(){
+		if(moveForward === true){	
+			player.x += (cameraPosition[0] - cameraTarget[0]) * 0.1;
+			player.z += (cameraPosition[2] - cameraTarget[2]) * 0.1;
+		}
+		else if(moveBack == true){
+			player.x -= (cameraPosition[0] - cameraTarget[0]) * 0.1;
+			player.z -= (cameraPosition[2] - cameraTarget[2]) * 0.1;
+		}
+		else{
+		
+		}	
+	}
+	
+	/*
+	If the user is colliding with a rock, and they're holding down P,
+	Then they're prospecting the rock
+	*/
+	function isProspecting(rock){
+		if(prospecting === true){
+			console.log("range textured");
+			rock.texture = depletedTexture;
+			
+			//Display progress bar, when hits 100%, change rocks texture
+			//So pass in current rock to this function, 
+			
+		}
 	}
 	
 }

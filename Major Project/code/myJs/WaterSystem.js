@@ -3,7 +3,7 @@
 
 function WaterSystem(){
 	
-	var waterVertexBuffer;
+	var waterVertexBuffer = gl.createBuffer(); 
 	var waterTextureCoordinateBuffer;
 	var waterElementsBuffer;
 	var waterVertices = [];
@@ -13,20 +13,26 @@ function WaterSystem(){
 	var waterColumns = 64;
 	var waterSize = waterRows * waterColumns;
 	
+	var waterHeightMap = [];
+	var waterDirections = []; //1d array, top row of water, for all columns
+	
 	setupWater();
 	
 	function setupWater(){
+		createWaterHeightMap();
+		fillWaterHeightMap();
 		createWaterVertices();
+		
 		setupWaterIndiciesBuffer();
 		setupWaterTextureCoordinates();
 	}
 	
 	function createWaterVertices(){
 			//For each row, do all the columns
-					waterVertexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexBuffer);
 		
-		
+			waterVertices = []; //reset all vertices, ready for new ones
+								//hm idk if this is good
 		
 			var waterX = 0,
 			waterY = 0,
@@ -35,7 +41,7 @@ function WaterSystem(){
 			for(var y=0; y<waterColumns; y++){
 				
 				waterVertices.push(waterX); 
-				waterVertices.push(waterY);
+				waterVertices.push(waterHeightMap[x][y]);
 				waterVertices.push(waterZ); 
 				
 				//Move along in the row
@@ -49,7 +55,6 @@ function WaterSystem(){
 		//Reset all values as above loop changed them
 		x = 0; y = 0; z = 0; 
 
-		console.log("Water vertices: " + waterVertices.size);
 		console.log("Individual water x,y,z values: " + waterVertices.length);	
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.STATIC_DRAW);
@@ -108,45 +113,128 @@ function WaterSystem(){
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);		
 	}
 	
-	
+	function createWaterHeightMap(){
+		waterHeightMap = new Array(waterRows); 
+		for(var i=0; i<waterRows; i++){
+			waterHeightMap[i] = new Array(waterColumns);
+		}
+	}
+
 	/*
-	Currently the waterVertices are being completely reset every frame,
-	But they should just slightly increment
+	Fills waterHeightMap with initial values and row/column directions
 	*/
-	this.updateWaterVertices = function(){
-		/*
-		Loop through all water vertices, apply Sin to their height?
-		
-		WaterVertices is 1D array
-		
-		Might need waterVertices.length * 3?
-		*/
-		var now = Date.now();
-		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexBuffer);
-		for(var i=0; i<waterVertices.length; i+=3){
-			//waterVertices[i]; //x, dont change
-			waterVertices[i+1] += Math.sin(i * now) ; //y, change this
-			
-			//Once hit max height, make go down again
-			if(waterVertices[i+1 > 2]){
-				waterVertices[i+1] -= Math.sin(i * now);
+	function fillWaterHeightMap(){
+		var count = 0;
+		for(var x=0; x<waterRows; x++){
+			for(var y=0; y<waterColumns; y++){
+				waterHeightMap[x][y] = count; //Works well
+			}
+			/*
+			For the direction, its like every 4 rows it changes
+				So like row 0->3 going up,
+				Then 4-8 going down
+				Use count variable to count to 8 then reset
+			*/
+			if(count < 4){
+				//rows 0 -> 3
+				waterDirections.push(-1); //-1 for down, 1 for up
+			}
+			else if(count < 8){
+				//rows 4 -> 7
+				waterDirections.push(1);
 			}
 			
-			
-			//console.log("set height to: " + Math.sin(i) * 10);
-			//waterVertices[i+2]; //z dont change
-		}
-		//console.log("lewping");
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.DYNAMIC_DRAW);
+			//Increment/Reset count
+			count++;
+			if(count === 8){
+				count = 0;
+			}
+		}	
+	}
+	
+	/*
+	Improvements:
+		Too many loops... looping 2d heightmap, then looping again re assigning vertices
+			-or resetting them or something
+		Update vertices on GPU
+		Add specular lighting
+		Have more vertices in smaller space?
+		Assign individual vertices directions, instead of entire rows?
+	
+	The current row, needs to be near the previous row height, using count variable for it
+	
+	2D array so its easier
+			Assign all heights in a row to 1 value at once,
+	You could also assign a direction to the whole row
+	
+
+		Need current row direction
 		
+		if waterVertices[x][y`] < 0
+			direction = up
+		else if waterVertices[x][y] > 1
+			direction = down
+		
+		if row direction === down
+			waterVertices[x][y] -= speed
+		else
+			waterVertices[x][y] += speed
+			
+	After loop, now have 2D heightmap, re assign to a 1d array with x,z coordinates and draw it	
+	Call: createWaterVertices() after changed heightMap values
+	*/	
+	this.updateWaterVertices = function(){
+	//this actually justt updates the waterHeightMap, not the vertices
+	
+		/*
+		Check/change direction
+		*/
+		var currentDirection;
+		for(var x=0; x<waterRows; x++){
+			//Get the current direction
+			currentDirection = waterDirections[x];
+		
+			for(var y=0; y<waterColumns; y++){
+
+				/*
+				Its checking every single vertex in the row,
+				Only needs to check the start
+				*/
+				if(waterHeightMap[x][y] < 0){ 
+					//If height less than 0
+					//Reverse its direction
+					waterDirections[x] = 1;
+				}
+				else if(waterHeightMap[x][y] > 2){ 
+					//If height over 3
+					//Reverse its direction
+					waterDirections[x] = -1;
+				}
+				else{
+					//Its in the middle, leave it
+				}
+				
+				/*
+				Now change height based on direction
+				*/
+				waterHeightMap[x][y] += (0.01 * currentDirection);
+			}
+		}
+
+		//Re-create waterVertices with the new waterHeightMap
+		createWaterVertices();
 	}
 	
 	this.render = function(){
 		scale = m4.scaling(1, 1, 1);
 		xRotation = m4.xRotation(0);
 		yRotation = m4.yRotation(0);
-		zRotation = m4.zRotation(0);
-		position = m4.translation(0, 5, 0);
+		/*
+		If you change this position, 
+		also need to change max/min height values in updateWaterVertices, 
+		also spawn points in fillWaterHeightMap
+		*/
+		position = m4.translation(0, 1, 0); 
 		
 		//Times matrices together
 		updateAttributesAndUniforms();

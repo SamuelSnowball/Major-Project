@@ -4,7 +4,7 @@ function Player(x, y, z){
 	this.y = y;
 	this.z = z;
 	
-	this.movementSpeed = 5;
+	this.movementSpeed = 1;
 	
 	this.xRotation = 0;
 	this.yRotation = 0;

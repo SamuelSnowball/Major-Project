@@ -15,6 +15,9 @@ var moveUp = false,
 	moveDown = false, 
 	moveForward = false, 
 	moveBack = false;
+
+// P key
+var prospecting = false; //Are they prospecting a rock?		
 		
 function setupMovement(){
 	document.addEventListener('keydown', function(event){
@@ -30,6 +33,9 @@ function setupMovement(){
 		if(event.keyCode == 83){
 			moveDown = true;
 		}
+		if(event.keyCode === 80){
+			prospecting = true;
+		}
 	});
 	
 	document.addEventListener('keyup', function(event){
@@ -44,6 +50,9 @@ function setupMovement(){
 		}
 		if(event.keyCode == 83){
 			moveDown = false;
+		}
+		if(event.keyCode === 80){
+			prospecting = false;
 		}
 	});
 }
