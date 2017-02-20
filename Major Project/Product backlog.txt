@@ -9,30 +9,30 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Add in rocks (ongoing)				(time: 10h) (priority: 8)
 		Create missions for user 			(time: 10h) (priority: 8)
 		Build terrain (ongoing) 			(time: 10h) (priority: 6)
-		Collision with terrain (ongoing) 		(time: 05h) (priority: 6)
+		Collision with terrain (ongoing) 		(time: 03h) (priority: 6)
 		Build GUIs 					(time: 10h) (priority: 6)
 		Texturing terrain 				(time: 05h) (priority: 5)
 		Add audio 					(time: 03h) (priority: 4)
-		
 
 	Extra features:
 		Particle effects 				(time: 08h) (priority: 4)
+		Water 						(time: 10h) (priority: 4)
 		Clouds 						(time: 06h) (priority: 4)
-		Water 						(time: 10h) (priority: 3)
 		Minimap 					(time: 08h) (priority: 3)
 		Lighting, shadows 				(time: 10h) (priority: 2)
 		Initial loading scene 				(time: 03h) (priority: 2)
 
 	Documentation to write:
-		User manual?
+		User manual, features, how to play
 		Overall design	
+		Technical stuff
 
 	Current features:
 		3D Mechanics, movement & rotation
 		Initial terrain 
 
 
-For mid project release aiming for all core done - (Possible 13th march, 4 sprints left)
+For mid project release aiming for all core done - (Possible 13th march, 3 sprints left)
 		
 Before release:
 	Change movement speed
@@ -40,7 +40,6 @@ Before release:
 	Disable use of W and S keys
 	
 Add a release version after each sprint as well
-
 
 
 /////////////////////////////////////////////////////////////////////
@@ -157,4 +156,116 @@ Add a release version after each sprint as well
 ///////////////////////////////////////////////////////////////////////
 ####################### SCRUM AND SPRINTS BEGIN #######################
 ///////////////////////////////////////////////////////////////////////
+
+
+Sprint 0 (13th - 20th February)
+
+	Tackling tasks from product backlog:
+		Loading and saving functions (ongoing) 		(time: 03h) (priority: 9)
+		Add in rocks (ongoing)				(time: 10h) (priority: 8)
+		Create missions for user 			(time: 10h) (priority: 8)
+		Build terrain (ongoing) 			(time: 10h) (priority: 6)
+		Collision with terrain (ongoing) 		(time: 05h) (priority: 6)			
+		Redesign file structures		
+
+		Total estimated hours = 39
+
+	Sprint plan:
+		Loading and saving
+			HTML5 local storage
+			Saving player position, eventually level, XP
+
+		Add in rocks 
+			Low poly instanced rendered rocks for non interaction
+			Then spheres for interacting with
+			Use exising sphere geometry, randomly shift vertices
+			Then place them into the world
+		
+			Added in triangle rocks
+			Could spawn them random distance away from the bigger pyramid
+			Also have different textures
+		
+		Create missions for user
+			Would involve creating very basic GUI first, see-through,
+			Go and explore this section of the map
+			Go collect this rock
+			Collect X of this rock, to then unlock this rock	
+			Print text on screen character by character (left gui?)
+				-have a initial sound to incate new mission
+
+			Randomly generate them a mission, depending on their lvl? every few minutes
+			-Else, just go explore and mine rocks
+			-IF gameTime over 5000, give first mission
+
+		Collision with rocks
+			If they're colliding with rock + key held down
+				-Show mining progress bar
+				-Show particle effects
+				-When 100% remove rock, or set its texture to something, depleted
+				-Add something to their top left level bar
+
+			They can shoot laser, draw in view direction from infront of them
+			If that collides with rock,
+			Cap max laser range	
+
+				Particles - make object with constructor! (could have LAVA in craters!)
+				Bunch of gl points, move them, if out of bounds reset them
+				Define 100 points, put in buffer, 1 draw call?
+				Apply some position to them in v shader?
+
+		Build terrain
+			Add different levels of perlin noise
+			Add in craters
+
+		Collision with terrain
+			Add in 2D heightmap rather than 1D array in collision file
+			Pop up on GUI, too close to rock etc
+
+	Sprint retrospective:
+
+		Tasks worked on:
+
+			(Broken) Loading and saving functions intial setup (2 hours)
+				When loading the players position, when they move, it breaks
+				Right now I don't have much information to store, but the code is there
+
+			Added rocks (8 hours)
+				Added triangle rocks
+				Sphere geometries (NOT MINE)
+					USED CODE FROM: https://github.com/mrdoob/three.js/blob/master/src/geometries/SphereGeometry.js
+					The used code is in the createRock function of the rock.js file
+					Didn't want to try write sphere geometry code from scratch
+					But also didn't want to import OBJ of sphere, as would be hard to change vertices
+					Most sphere geometeries where completely not connected the back,
+					So took ages to find a good sphere
+
+			Added collision with rocks (6 hours)
+				
+			Added prospecting rocks (30 mins)
+				Currently just changes rocks texture to depleted, eventually will gain XP or something
+
+			Redesiging files, now much more object orientated, less globals, private functions (10 hours)
+			Added particles (2 hours)
+			Added water (2 hours)
+			Added inital background screen and GUIs (4 hours)
+
+		Problems:
+			Positioning little elements and css'ing them took hours
+			Rock collision, annoying to test, had to show triangles at collision boundaries to check
+			WHY ARE THERE SO MANY VERTICES FOR THREE.JS SPHERE?
+			What happens if the rocks spawn on the player, they're stuck
+
+		Improvements:
+			GLdrawElementsInstaced, only needed as performance optimization, not needed right now
+			Perhaps save rock positions, or keep them random
+			Change water vertices on GPU
+			Cut down sphere vertices some how
+
+		Total hours: 46
+			30 hours coding
+			10 hours more on design how I'm going to do things etc, comments, debugging, updating this logs
+			6 hours researching on stackoverflow & youtube 
+			
+
+Sprint 1 (20th - 27th February)
 

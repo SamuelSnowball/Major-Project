@@ -9,8 +9,8 @@ function WaterSystem(){
 	var waterVertices = [];
 	var textureCoordinates = [];
 	
-	var waterRows = 64;
-	var waterColumns = 64;
+	var waterRows = 32;
+	var waterColumns = 32;
 	var waterSize = waterRows * waterColumns;
 	
 	var waterHeightMap = [];
@@ -55,7 +55,7 @@ function WaterSystem(){
 		//Reset all values as above loop changed them
 		x = 0; y = 0; z = 0; 
 
-		console.log("Individual water x,y,z values: " + waterVertices.length);	
+		//console.log("Individual water x,y,z values: " + waterVertices.length);	
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.STATIC_DRAW);
 	}
@@ -127,7 +127,7 @@ function WaterSystem(){
 		var count = 0;
 		for(var x=0; x<waterRows; x++){
 			for(var y=0; y<waterColumns; y++){
-				waterHeightMap[x][y] = count; //Works well
+				waterHeightMap[x][y] = -count; //Works well
 			}
 			/*
 			For the direction, its like every 4 rows it changes
@@ -160,6 +160,8 @@ function WaterSystem(){
 		Add specular lighting
 		Have more vertices in smaller space?
 		Assign individual vertices directions, instead of entire rows?
+		
+		## Try assign a random height and direction to every vertex, should be good ##
 	
 	The current row, needs to be near the previous row height, using count variable for it
 	
@@ -200,12 +202,12 @@ function WaterSystem(){
 				Its checking every single vertex in the row,
 				Only needs to check the start
 				*/
-				if(waterHeightMap[x][y] < 0){ 
+				if(waterHeightMap[x][y] < -4){ //min height
 					//If height less than 0
 					//Reverse its direction
 					waterDirections[x] = 1;
 				}
-				else if(waterHeightMap[x][y] > 2){ 
+				else if(waterHeightMap[x][y] > -2){ //max height
 					//If height over 3
 					//Reverse its direction
 					waterDirections[x] = -1;
@@ -234,7 +236,7 @@ function WaterSystem(){
 		also need to change max/min height values in updateWaterVertices, 
 		also spawn points in fillWaterHeightMap
 		*/
-		position = m4.translation(0, 1, 0); 
+		position = m4.translation(47-16, -3, 47-16); 
 		
 		//Times matrices together
 		updateAttributesAndUniforms();
