@@ -14,28 +14,16 @@ var fullTransforms = m4.multiply(position, rotateZ);
 
 var modelLocation = gl.getUniformLocation(program, 'model');
 gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
-	
-//proj code
+
 
 function computeModelMatrix(paramRotateX, paramRotateY, rotateZ, xPos, yPos, zPos, scaleAll ){
-  //Scale up
   scale = MDN.scaleMatrix(scaleAll, scaleAll, scaleAll);
-  
-  // Rotate a slight tilt
   rotateX = m4.xRotation( paramRotateX * 0.003 );
   rotateY = m4.yRotation( paramRotateY * 0.003 );
- // console.log("final rotateY: " + rotateY);
- // rotateZ = MDN.rotateYMatrix( rotateZ * 0.003 );
-
-  // Move slightly down
   position = m4.translation(xPos, yPos, zPos);
 }
 
 
-
-/*
-Could make this movePivotMatrix version a separate function
-*/
 function updateAttributesAndUniforms(){
 	fullTransforms = m4.multiply(position, rotateZ);
 	fullTransforms = m4.multiply(fullTransforms, rotateY);
@@ -44,18 +32,13 @@ function updateAttributesAndUniforms(){
 
 	gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 	gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(viewProjectionMatrix));
-	//gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(viewProjectionMatrix));
 }
-
-var playerX = 0, 
-	playerY = 0, 
-	playerZ = 0;
 
 var cameraSpeed = 0.003;
 
 //Matrix for camera, move the camera in the world
 var cameraMatrix = m4.yRotation(0);
-cameraMatrix = m4.translate(cameraMatrix, playerX, playerY, playerZ);
+//cameraMatrix = m4.translate(cameraMatrix, playerX, playerY, playerZ);
 
 //Cameras position from matrix
 var cameraPosition = [

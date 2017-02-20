@@ -13,6 +13,20 @@ var pointerLocked = false;
 							
 canvas.addEventListener('mousedown', function(){
 	
+	if(gameRunning === false){
+		setup();
+	}
+	else{
+		//Game already running, dont run setup again
+	}
+
+	//Remove background image and text when game starts
+	var banner = document.getElementById('banner');
+	if(banner !== null){
+		banner.parentNode.removeChild(banner);
+	}
+	document.body.style.backgroundImage = ""; 
+	
 	/*
 	The boolean pointerLocked might screw up if they exit via escape
 	*/
@@ -28,10 +42,12 @@ canvas.addEventListener('mousedown', function(){
 		document.exitPointerLock();
 	}
 	
+	//Show GUI elements
+	document.getElementById("overlay").style.visibility = "visible";
+	document.getElementById("missionOverlay").style.visibility = "visible";
+	
 	
 });
-
-
 
 
 var currentRotateY = 0;
@@ -50,13 +66,13 @@ canvas.addEventListener('mousemove', function(e){
 		var currentXMovement = e.movementX;
 		currentRotateY += currentXMovement + prevX;//e.movementX;
 		prevX = currentXMovement;
-		playerYRotation = currentRotateY * rotateSpeed;
+		player.yRotation = currentRotateY * rotateSpeed;
 		
 		//Vertical
 		var currentYMovement = e.movementY;
 		currentRotateX += currentYMovement + prevY;
 		prevY = currentYMovement;
-		playerXRotation = currentRotateX * rotateSpeed;
+		player.xRotation = currentRotateX * rotateSpeed;
 	}
 });
 							
