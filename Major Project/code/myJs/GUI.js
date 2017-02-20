@@ -40,6 +40,10 @@ function GUI(){
 		var currentMissionElement = document.getElementById("currentMission");
 		currentMissionNode = document.createTextNode("");
 		currentMissionElement.appendChild(currentMissionNode);
+		
+		var topLeftElement = document.getElementById("topLeftOverlay");
+		topLeftNode = document.createTextNode("");
+		topLeftElement.appendChild(topLeftNode);
 	}
 	
 	this.update = function(){

@@ -125,9 +125,10 @@ function WaterSystem(){
 	*/
 	function fillWaterHeightMap(){
 		var count = 0;
+		var waterSpawnHeight = 0.1;
 		for(var x=0; x<waterRows; x++){
 			for(var y=0; y<waterColumns; y++){
-				waterHeightMap[x][y] = -count; //Works well
+				waterHeightMap[x][y] = -waterSpawnHeight; //Works well
 			}
 			/*
 			For the direction, its like every 4 rows it changes
@@ -149,6 +150,7 @@ function WaterSystem(){
 			if(count === 8){
 				count = 0;
 			}
+			waterSpawnHeight += 0.1;
 		}	
 	}
 	
@@ -202,12 +204,12 @@ function WaterSystem(){
 				Its checking every single vertex in the row,
 				Only needs to check the start
 				*/
-				if(waterHeightMap[x][y] < -4){ //min height
+				if(waterHeightMap[x][y] < -3.5){ //min height
 					//If height less than 0
 					//Reverse its direction
 					waterDirections[x] = 1;
 				}
-				else if(waterHeightMap[x][y] > -2){ //max height
+				else if(waterHeightMap[x][y] > -2.5){ //max height
 					//If height over 3
 					//Reverse its direction
 					waterDirections[x] = -1;

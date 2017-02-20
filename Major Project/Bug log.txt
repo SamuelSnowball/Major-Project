@@ -8,6 +8,8 @@ BUG - Cant move forwads through a rock, but turn around, and you can move backwa
 BUG - Player can spawn inside rock
 BUG - Particles appear bigger when FURTHER AWAY...
 
+Can the rocks spawn in the craters?
+
 FIXED - Terrain generation fails if using over 256 rows/columns
 
 	Indice values exceed Uint16 indicies buffer

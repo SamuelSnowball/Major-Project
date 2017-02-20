@@ -1,6 +1,34 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
+Sprint 1 (20th - 27th February)
 
+	Tackling tasks from product backlog:
+		Build GUIs
+		Adding in leveling mechanics/Creating user missions
+		Add in lighting
+		Add in danger zones and death mechanics
+		Add in new rocks
+		Add in audio		
+		Add in water/lava
+		Add Different sections of terrain, different textures, bumpness etc
+		Add clouds, feels so empty...		
 
-	
+	Minor things to do:
+		Move buglog into github issues
+		Add screenshots
+		Remove unused jQuery libraries
+		Add a references file
+		Split myJs files
+		Redesign some files
+		Put CSS in another file		
+
+	Sprint plan:
+		Work from existing GUI screenshot
+		Dont let user access certain rocks unless high enough level
+		Geometry shader for lighting, calculating normals
+		Death mechanics, reset all XP and restart, fade out everything, you died
+		Add new textures for new rocks
+		Water/lava causing death on collision
+		Perhaps 3 more sections of terrain, 4 big big quadrants
+

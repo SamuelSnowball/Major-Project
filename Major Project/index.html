@@ -21,8 +21,10 @@
 	}
 	#overlay {
 		position: absolute;
-		left: 3%;
-		top: 65%;
+		left: 0%;
+		top: 62%;
+		width: 22%;
+		height: 12%;
 		background-color: rgba(0, 0, 0, 0.7);
 		color: white;
 		font-family: monospace;
@@ -32,15 +34,42 @@
 	}
 	#missionOverlay {
 		position: absolute;
-		left: 30%;
-		top: 65%;
-		width: 50%;
+		left: 25%;
+		top: 62%;
+		width: 22%;
+		height: 12%;
 		background-color: rgba(0, 0, 0, 0.7);
 		color: white;
 		font-family: monospace;
 		padding: 1em;
 		border-radius: 1em;
 		border: 5px solid #0000ff;
+	}
+	#topLeftOverlay{
+		position: absolute;
+		left: 50%;
+		top: 62%;
+		width: 22%;
+		height: 12%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 1em;
+		border: 5px solid #0000ff;	
+	}
+	#topMiddleOverlay{
+		position: absolute;
+		left: 75%;
+		top: 62%;
+		width: 22%;
+		height: 12%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 1em;
+		border: 5px solid #0000ff;		
 	}
 	</style>
 </head>
@@ -57,17 +86,32 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <div class="container">
   <canvas id="canvas" class="canvasClass"></canvas>
   <canvas id="guiCanvas" class="canvasClass"></canvas>
+  
   <div id="overlay" class="canvasClass" style="visibility: hidden">
     <div>Current position: <span id="playerPosition"></span></div>
     <div>X: <span id="playerX"></span></div>
 	<div>Y: <span id="playerY"></span></div>
 	<div>Z: <span id="playerZ"></span></div>
   </div>
+  
+  <!-- Displays current mission -->
   <div id="missionOverlay" class="canvasClass" style="visibility: hidden">
     <div>Current mission: <span id="playerPosition"></span></div>
     <div><span id="currentMission"></span></div>
   </div>
+
+  <!-- Top 3 stats -->
+  <div id="topLeftOverlay" class="canvasClass" style="visibility: hidden">
+    <div>Left: <span id="topLeft"></span></div>
+    <div><span id="topLeftText"></span></div>
+  </div>
   
+  <div id="topMiddleOverlay" class="canvasClass" style="visibility: hidden">
+    <div>Middle: <span id="topMiddle"></span></div>
+    <div><span id="topMiddleText"></span></div>
+  </div>
+  
+
 </div>
 
 
@@ -119,7 +163,7 @@ var gameRunning = false;
 
 var loadingScreen = new LoadingScreen();
 var textureLoader = new TextureLoader();
-var player = new Player(0, 0, 0); 
+var player = new Player(5, 1, 5); 
 var terrain = new Terrain();
 var worldState = new WorldState(); //Loads and saves the world
 var gui = new GUI();
