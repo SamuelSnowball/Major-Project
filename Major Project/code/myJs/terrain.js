@@ -102,6 +102,13 @@ function Terrain(){
 	Private
 	
 	Fills the 2D HeightMap with initial values
+	
+	Very wide
+		var offsetIncrement = 0.001;
+		scale = 300;
+	Regular
+		var offsetIncrement = 0.05;
+		scale = 3;
 	*/
 	function fillHeightMap(){
 		/*
@@ -118,14 +125,22 @@ function Terrain(){
 		var yOff = 0;
 		
 		var perlin = new ImprovedNoise();
-		var offsetXIncrement = 0.1; //How it moves along the graph
-		var offsetYIncrement = 0.1; //How it moves along the graph
-		var offsetZIncrement = 0.1; //How it moves along the graph
-		var scale = 3;
+		//var offsetXIncrement = 0.1; //How it moves along the graph
+		//var offsetYIncrement = 0.1; //How it moves along the graph
+		//var offsetZIncrement = 0.1; //How it moves along the graph
+		var offsetXIncrement = 0.001; //How it moves along the graph
+		var offsetYIncrement = 0.001; //How it moves along the graph
+		var offsetZIncrement = 0.001; //How it moves along the graph
+		
 		
 		var slopeHeight = 1;
-		var offsetIncrement = 0.05;
 		
+		//var offsetIncrement = 0.001;
+		//var scale = 100;
+		var offsetIncrement = 0.05;
+		var scale = 2;
+
+		noise.seed(Math.random());
 		
 		//For each row, do all the columns
 		for(var x=0; x<rows; x++){
@@ -135,24 +150,26 @@ function Terrain(){
 				
 				//1st quad
 				var height = 0;
+				
 				if(x < 512 && y < 512){
-					scale = 3;
-					var height = perlin.noise(xOff, yOff, xOff) * scale;
-				}
-				//Other 1 quad
-				else if(x < 512 && y < 1024){
-					var max = 0.5;
-					var min = -0.5;
-					var height = (Math.random() * (max-min+1)+min); //perlin.noise(xOff, yOff, xOff) * scale;
-				}else{
-					//Other 2, on cliff
+					height = perlin.noise(xOff, yOff, xOff) * scale;
 				}
 				
-				//Cliff
-				if(x > 512){
-					var height = perlin.noise(xOff, yOff, xOff) * 2;
-					height += 15;
+				if(x > 512 && y < 512){
+					offsetIncrement = 0.005;
+					scale = 50;
+					height = perlin.noise(xOff, yOff, xOff) * scale;
 				}
+				
+				
+				
+				
+				/*
+				if(x > 64 && x < 90){
+					var height = perlin.noise(xOff, yOff, xOff) * 2;
+					height -= 15;
+				}
+				*/
 				
 				
 				heightMap[x][y] = height;
@@ -279,6 +296,7 @@ function Terrain(){
 		1/256 for max row increment?
 			=0.00390625 * 265 = 1. so increment by that
 		1/512 = 0.001953125
+		1/1024 = 0.0009765625
 		*/
 		var xUV = 0;
 		var yUV = 0;
@@ -286,10 +304,10 @@ function Terrain(){
 			for(var y=0; y<columns; y++){
 				textureCoordinates.push(xUV);  
 				textureCoordinates.push(yUV); 
-				xUV += 0.001953125;
+				xUV += 0.0009765625;
 			}
 			xUV = 0;
-			yUV += 0.001953125;
+			yUV += 0.0009765625;
 		}
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
@@ -315,12 +333,13 @@ function Terrain(){
 		//Vertices
 		gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-		
+
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
 		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+
 		
 		//Elements
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
@@ -551,10 +570,9 @@ function Terrain(){
 		*/
 		createElementRings(7); 
 		getSurroundingElements(directionNumbers, 47, 47); //max index values 256, 256
+		getSurroundingElements(directionNumbers, 57, 47); //max index values 256, 256
 	}
 
-	
-	
 	
 	
 	

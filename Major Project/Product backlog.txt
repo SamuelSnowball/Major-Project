@@ -30,6 +30,7 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 	Current features:
 		3D Mechanics, movement & rotation
 		Initial terrain 
+		Some rocks, with collision
 
 
 For mid project release aiming for all core done - (Possible 13th march, 3 sprints left)

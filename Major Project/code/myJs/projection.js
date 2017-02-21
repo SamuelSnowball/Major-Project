@@ -4,7 +4,7 @@ Projection matrix turns world coordinates to clipspace
 var fovInRadians = Math.PI * 0.5;	
 var aspectRatio = window.innerWidth / window.innerHeight;
 var zNear = 0.1;
-var zFar = 2000;
+var zFar = 1024;
 
 var projectionMatrix = 	m4.perspective(
 	fovInRadians,
