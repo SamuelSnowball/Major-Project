@@ -28,6 +28,7 @@ Sprint 1 (20th - 27th February)
 		Dont let user access certain rocks unless high enough level
 		Prospecting progress bar
 		Geometry shader for lighting, calculating normals
+		Add dangerous areas
 		Death mechanics, reset all XP and restart, fade out everything, you died
 		Add new textures for new rocks
 		Water/lava causing death on collision
