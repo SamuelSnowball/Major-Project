@@ -204,12 +204,12 @@ function WaterSystem(){
 				Its checking every single vertex in the row,
 				Only needs to check the start
 				*/
-				if(waterHeightMap[x][y] < -3.5){ //min height
+				if(waterHeightMap[x][y] < -2.6){ //min height
 					//If height less than 0
 					//Reverse its direction
 					waterDirections[x] = 1;
 				}
-				else if(waterHeightMap[x][y] > -2.5){ //max height
+				else if(waterHeightMap[x][y] > -1.6){ //max height
 					//If height over 3
 					//Reverse its direction
 					waterDirections[x] = -1;
@@ -238,7 +238,7 @@ function WaterSystem(){
 		also need to change max/min height values in updateWaterVertices, 
 		also spawn points in fillWaterHeightMap
 		*/
-		position = m4.translation(47-16, -3, 47-16); 
+		position = m4.translation(47-16, -2.1, 47-16); 
 		
 		//Times matrices together
 		updateAttributesAndUniforms();

@@ -1,4 +1,9 @@
 
+var masterTerrainTexture;
+
+//Put this on cliff, lava etc
+var marsRedTerrainTexture;
+
 var marsTerrainTexture;
 var rockTexture;
 var sandstoneTexture;
@@ -46,6 +51,26 @@ function TextureLoader(){
 		marsTerrainImage = new Image();
 		marsTerrainImage.src = 'resources/terrain/marsTerrainTexture.png';
 		marsTerrainImage.onload = function (){handleTextureLoaded(marsTerrainImage, marsTerrainTexture);}
+		
+		marsRedTerrainTexture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, marsRedTerrainTexture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+					  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing
+
+		marsRedTerrainImage = new Image();
+		marsRedTerrainImage.src = 'resources/terrain/marsRedTerrainTexture.png';
+		marsRedTerrainImage.onload = function (){handleTextureLoaded(marsRedTerrainImage, marsRedTerrainTexture);}	
+
+		
+		
+		masterTerrainTexture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, masterTerrainTexture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+					  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing
+
+		masterTerrainImage = new Image();
+		masterTerrainImage.src = 'resources/terrain/master.png';
+		masterTerrainImage.onload = function (){handleTextureLoaded(masterTerrainImage, masterTerrainTexture);}			
 	}
 
 
