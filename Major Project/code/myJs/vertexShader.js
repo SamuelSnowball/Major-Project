@@ -13,7 +13,6 @@ gl.shaderSource(vertexShader, [
 		'',
 		'gl_PointSize = 5.0;',
 		'',
-		//'gl_Position = vec4(position, 1);',
 		'vTextureCoord = aTextureCoord;',
 	'}'
 ].join('\n'));

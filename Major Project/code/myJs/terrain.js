@@ -9,33 +9,10 @@ function Terrain(){
 
 	var terrainVertices = [];
 	
-	var positionAttribLocation;
-	var positionsBuffer;
-	var elementsBuffer;
+	var terrainVertexBuffer;
+	var terrainElementsBuffer;
 	var terrainTextureCoordinateBuffer;
 	
-	/*
-	The collision class needs to find a heightMap value, given a X and Z,
-	so it can move the player to the nearest vertex height.
-	
-	But heightMap is private, so create a getter and setter method to do this.
-	This will not actually change any heightMap values, just finds the value at a index.
-	*/
-	var temporaryHeightMapX;
-	var temporaryHeightMapZ;
-	this.heightMapValueAtIndex = {
-		set setTemporaryHeightMapX(name){
-			temporaryHeightMapX = name;
-		},
-		set setTemporaryHeightMapZ(name){
-			temporaryHeightMapZ = name;
-		},
-		get getTemporaryHeightMapValue(){
-			return heightMap[temporaryHeightMapX][temporaryHeightMapZ];
-		}
-	}
-	
-
 	/*
 	This stores what values should be added onto the original centre element, 
 	to obtain surrounding element rings.
@@ -83,6 +60,26 @@ function Terrain(){
 	createTerrainVertices();
 	setupTerrainBuffers();
 	
+	/*
+	The collision class needs to find a heightMap value, given a X and Z,
+	so it can move the player to the nearest vertex height.
+	
+	But heightMap is private, so create a getter and setter method to do this.
+	This will not actually change any heightMap values, just finds the value at a index.
+	*/
+	var temporaryHeightMapX;
+	var temporaryHeightMapZ;
+	this.heightMapValueAtIndex = {
+		set setTemporaryHeightMapX(name){
+			temporaryHeightMapX = name;
+		},
+		set setTemporaryHeightMapZ(name){
+			temporaryHeightMapZ = name;
+		},
+		get getTemporaryHeightMapValue(){
+			return heightMap[temporaryHeightMapX][temporaryHeightMapZ];
+		}
+	}
 	
 	
 	/*
@@ -124,7 +121,6 @@ function Terrain(){
 		var xOff = 0;
 		var yOff = 0;
 		
-		var perlin = new ImprovedNoise();
 		//var offsetXIncrement = 0.1; //How it moves along the graph
 		//var offsetYIncrement = 0.1; //How it moves along the graph
 		//var offsetZIncrement = 0.1; //How it moves along the graph
@@ -139,7 +135,6 @@ function Terrain(){
 		//var scale = 100;
 		var offsetIncrement = 0.05;
 		var scale = 2;
-
 		noise.seed(Math.random());
 		
 		//For each row, do all the columns
@@ -162,8 +157,6 @@ function Terrain(){
 				}
 				
 				
-				
-				
 				/*
 				if(x > 64 && x < 90){
 					var height = perlin.noise(xOff, yOff, xOff) * 2;
@@ -180,6 +173,7 @@ function Terrain(){
 			xOff = 0;
 			yOff += offsetIncrement;
 		}	
+	
 	}
 	
 	/*
@@ -230,8 +224,8 @@ function Terrain(){
 	Private
 	*/
 	function setupTerrainVertexBuffer(){
-		positionsBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);
+		terrainVertexBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainVertexBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainVertices), gl.STATIC_DRAW);
 		positionAttribLocation = gl.getAttribLocation(program, 'position');
 		gl.enableVertexAttribArray(positionAttribLocation);
@@ -331,13 +325,13 @@ function Terrain(){
 		updateAttributesAndUniforms();
 
 		//Vertices
-		gl.bindBuffer(gl.ARRAY_BUFFER, positionsBuffer);
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainVertexBuffer);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
 		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
+		gl.bindTexture(gl.TEXTURE_2D, myPerlinTexture);
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
 
 		
@@ -584,7 +578,7 @@ function Terrain(){
 	
 	
 	
-} //END CLASS, change?
+}
 
 
 

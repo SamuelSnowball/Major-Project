@@ -9,6 +9,94 @@ function Player(x, y, z){
 	this.xRotation = 0;
 	this.yRotation = 0;
 	
+	/*
+	P key, are they prospecting a rock?
+	
+	Prospecting getter needed in CollisonTester class
+	*/
+	var prospecting = false; 
+	this.isProspecting = {
+		get prospecting(){
+			return prospecting;
+		}
+	}	
+	
+	setupPlayerMovement();
+	
+	/*
+	Handles user input and changes the 4 movement variables
+	The movement variables are used in the player class
+
+	2 Arrow keys:
+		Forward (up key)
+		Back (down key)
+	W Key:
+		Moves camera up
+	S Key:
+		Moves camera down
+	*/
+
+	var moveUp = false, 
+		moveDown = false, 
+		moveForward = false, 
+		moveBack = false;	
+		
+	function setupPlayerMovement(){
+		document.addEventListener('keydown', function(event){
+			if(event.keyCode == 38){
+				moveForward = true;
+			}
+			if(event.keyCode == 40){
+				moveBack = true;
+			}
+			if(event.keyCode == 87){
+				moveUp = true;
+			}
+			if(event.keyCode == 83){
+				moveDown = true;
+			}
+			if(event.keyCode === 80){
+				prospecting = true;
+				console.log("prospecting");
+			}
+		});
+		
+		document.addEventListener('keyup', function(event){
+			if(event.keyCode == 38){
+				moveForward = false;
+			}
+			if(event.keyCode == 40){
+				moveBack = false;
+			}
+			if(event.keyCode == 87){
+				moveUp = false;
+			}
+			if(event.keyCode == 83){
+				moveDown = false;
+			}
+			if(event.keyCode === 80){
+				prospecting = false;
+			}
+		});
+	}
+	
+	/*
+	Check if they're going forwards or backwards
+	Push them different ways based on movement direction
+	*/	
+	this.moveForwardOrBackward = function(){
+		if(moveForward === true){	
+			this.x += (cameraPosition[0] - cameraTarget[0]) * 0.1;
+			this.z += (cameraPosition[2] - cameraTarget[2]) * 0.1;
+		}
+		else if(moveBack == true){
+			this.x -= (cameraPosition[0] - cameraTarget[0]) * 0.1;
+			this.z -= (cameraPosition[2] - cameraTarget[2]) * 0.1;
+		}
+		else{
+		
+		}	
+	}
 	
 	/*
 	Checks what key the player is holding down,

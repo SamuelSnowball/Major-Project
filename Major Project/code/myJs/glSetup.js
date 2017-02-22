@@ -20,6 +20,6 @@ gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 var ext = gl.getExtension('OES_element_index_uint');
 
-
+var positionAttribLocation;
 
 

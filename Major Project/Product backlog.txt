@@ -34,7 +34,7 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 
 
 For mid project release aiming for all core done - (Possible 13th march, 3 sprints left)
-		
+
 Before release:
 	Change movement speed
 	Change camera rotation speed
@@ -42,6 +42,8 @@ Before release:
 	
 Add a release version after each sprint as well
 
+Random notes:
+	Water/Lava generate at a certain height
 
 /////////////////////////////////////////////////////////////////////
 ####################### BEFORE STARTING SCRUM #######################

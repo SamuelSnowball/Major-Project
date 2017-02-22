@@ -10,6 +10,8 @@ var sandstoneTexture;
 var waterTexture;
 var depletedTexture;
 
+var myPerlinTexture;
+
 function TextureLoader(){
 
 	//Need getters for these private textures
@@ -40,6 +42,7 @@ function TextureLoader(){
 		loadTerrainTextures();
 		loadRockTextures();
 		loadWaterTextures();
+		loadProceduralTextures();
 	}
 
 	function loadTerrainTextures(){
@@ -117,6 +120,83 @@ function TextureLoader(){
 		waterImage.src = 'resources/water.png';
 		waterImage.onload = function (){handleTextureLoaded(waterImage, waterTexture);}		
 	}
+	
+	/*
+	Stacking noise, and multiplying to get a colour value
+	*/
+	function loadProceduralTextures(){
+	
+		myPerlinTexture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, myPerlinTexture);
+		
+		var mapSize = 512;
+		var textureSize = mapSize * mapSize; //512 rows and columns
+		var pixels = new Uint8Array(4 * textureSize);
+		var perlin = new ImprovedNoise();
+		
+		for(var y=0; y<mapSize; y++){ 
+			for(var x=0; x<mapSize; x++){
+				var index = (x + y * mapSize) * 4;
+				var r = stackNoise(x, y, 8);
+				//Value returned between 0 and 1 or something
+				//Times it to get color, 255 is ok, 512 more intense
+				r *= 512; 
+
+				//sometimes r is negative here, make it positive
+				if(r < 0){
+					r *= -1;
+				}
+		
+				pixels[index+0] = r;
+				pixels[index+1] = 0;
+				pixels[index+2] = 0;
+				pixels[index+3] = 255;			
+			}
+		}
+
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, mapSize, mapSize, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels); 
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.generateMipmap(gl.TEXTURE_2D);
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+	
+	/*
+	Max value (amplitude) decreases every iteration
+	Also the numbers get chosen more frequently (frequency)
+	
+	1st iteration (octave)
+		Max value = 100,
+		Pick values every 10.
+	
+	2nd iteration
+		Max value = 50
+		Pick values every 5
+		
+	Half the time that passes before picking a value (frequency)
+	And half the amplitude, max value
+	
+	Then add values together (Add graphs together)
+	
+	Returns noise value between 0 and 1, for a single pixel
+	*/
+	function stackNoise(x, y, numOctaves){
+		var v = 0;
+		var amplitude = 1;
+		var frequency = 1;
+		var noiseTotal = 0;
+		
+		for(var i=0; i<numOctaves; i++){
+			v += perlin.noise(x * amplitude, y * amplitude, x * amplitude) * frequency;
+			noiseTotal += frequency;
+			amplitude *= 0.5;
+			frequency *= 2.0;
+		}
+		
+		return v / noiseTotal;
+	}
+	
+	
 	
 	/*
 	This gets run after image is done loading

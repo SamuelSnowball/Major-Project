@@ -127,9 +127,6 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/js/ImprovedNoise.js"></script>
 
 
-<script src="code/myJs/player.js"></script>
-
-
 
 <!-- Needs to be in this weird order -->
 <script src="code/myJs/glSetup.js"></script>
@@ -148,6 +145,7 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/ParticleSystem.js"></script>
 <script src="code/myJs/WaterSystem.js"></script>
 <script src="code/myJs/Terrain.js"></script>
+<script src="code/myJs/Player.js"></script>
 
 <!-- Broken -->
 <script src="code/myJs/WorldState.js"></script>
@@ -155,11 +153,15 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <!-- Needs naming -->
 <script src="code/myJs/movement.js"></script>
 <script src="code/myJs/mouse.js"></script>
-
 <script src="code/myJs/missions.js"></script>
 
 <script>
 var gameRunning = false;
+var perlin = new ImprovedNoise();
+
+//For saving the game
+var gameTime = 0;
+var saveTime = 1200;
 
 var loadingScreen = new LoadingScreen();
 var textureLoader = new TextureLoader();
@@ -172,9 +174,6 @@ var particleSystem = new ParticleSystem();
 var rockGenerator = new RockGenerator();
 var waterSystem = new WaterSystem();
 
-//For saving the game
-var gameTime = 0;
-var saveTime = 1200;
 
 function render(){
 	gl.clearColor(0, 0, 0, 0);
@@ -224,8 +223,6 @@ function setup(){
 	
 	//worldState.loadWorld(); //WorldState.js
 	gui.setup();
-	
-	setupMovement(); //movement.js
 	
 
 

@@ -22,6 +22,7 @@ Sprint 1 (20th - 27th February)
 		Put CSS in another file		
 
 	Sprint plan:
+		Create own textures from heightMaps
 		Go and find this rock around these coordinates,
 			Show image of rock
 		Work from existing GUI screenshot
@@ -34,7 +35,19 @@ Sprint 1 (20th - 27th February)
 		Water/lava causing death on collision
 		Particle effects over lava
 		Perhaps 3 more sections of terrain, 4 big big quadrants
+		Leveling mechanics, XP bar
+			-prospect rock = XP
+			-Access new areas based on XP
 
 	Have currently done:
 		Moved buglog into github issues
 		Added references file
+		Improved water, each vertex now has its own direciton
+			Rather than every row having a direction
+			Weird spawn makes it look nice when reaches correct height
+		Added own perlin noise texture
+		Distoriton when rotation a bit better, lowered field of view to 0.3
+
+		Paper UI designs
+		Added little txt file as well
+		

@@ -1,0 +1,17 @@
+idea1.jpg
+	Gives more room to look around, less clutter
+	Quick to build
+	Its good for small screen
+
+idea2.jpg
+	Feels more interactive, perhaps too cluttered
+		or its better because you're immersed
+	Will take longer to implement
+	Might look better on a bigger screen
+
+menu.jpg
+	Would also have a background image
+	Perhaps just the current scene as the background
+	Could also have options: credits
+
+Start with basic UI, if have time, build full screen one

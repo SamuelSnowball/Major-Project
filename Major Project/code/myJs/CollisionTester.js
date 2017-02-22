@@ -165,7 +165,7 @@ function CollisionTester(){
 					player.z > rocks[i].z - (rocks[i].scale*25)  && 
 					player.z <	rocks[i].z + (rocks[i].scale*25) 
 				){
-					moveForwardOrBackward();
+					player.moveForwardOrBackward();
 				}
 			}
 		}	
@@ -189,42 +189,24 @@ function CollisionTester(){
 					player.z > triRocks[i].z - (triRocks[i].width*2) && 
 					player.z < triRocks[i].z + (triRocks[i].width*2) 
 				){	
-					moveForwardOrBackward();
+					player.moveForwardOrBackward();
 				}
 			}
 		}
 	}
 					
-	/*
-	Check if they're going forwards or backwards
-	Push them different ways based on movement direction
-	*/	
-	function moveForwardOrBackward(){
-		if(moveForward === true){	
-			player.x += (cameraPosition[0] - cameraTarget[0]) * 0.1;
-			player.z += (cameraPosition[2] - cameraTarget[2]) * 0.1;
-		}
-		else if(moveBack == true){
-			player.x -= (cameraPosition[0] - cameraTarget[0]) * 0.1;
-			player.z -= (cameraPosition[2] - cameraTarget[2]) * 0.1;
-		}
-		else{
-		
-		}	
-	}
+
 	
 	/*
 	If the user is colliding with a rock, and they're holding down P,
 	Then they're prospecting the rock
 	*/
 	function isProspecting(rock){
-		if(prospecting === true){
+		if(player.isProspecting.prospecting === true){
 			console.log("range textured");
 			rock.texture = depletedTexture;
-			
 			//Display progress bar, when hits 100%, change rocks texture
 			//So pass in current rock to this function, 
-			
 		}
 	}
 	
