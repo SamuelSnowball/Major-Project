@@ -9,6 +9,7 @@ var rockTexture;
 var sandstoneTexture;
 var waterTexture;
 var depletedTexture;
+var emeraldTexture;
 
 var myPerlinTexture;
 
@@ -106,7 +107,17 @@ function TextureLoader(){
 		depletedImage.src = 'resources/rocks/depleted.png';
 		depletedImage.onload = function (){handleTextureLoaded(depletedImage, depletedTexture);}
 		
+			
+		emeraldTexture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, emeraldTexture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+					  new Uint8Array([0, 255, 0, 255])); 
 					  
+		emeraldImage = new Image();
+		emeraldImage.src = 'resources/rocks/emerald.png';
+		emeraldImage.onload = function (){handleTextureLoaded(emeraldImage, emeraldTexture);}
+		
+			
 					  
 	}
 

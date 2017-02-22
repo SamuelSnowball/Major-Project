@@ -32,6 +32,9 @@ function updateAttributesAndUniforms(){
 
 	gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 	gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(viewProjectionMatrix));
+	
+	gl.uniform3fv(lightPositionAttribLocation, [10, 1, 10]);
+	gl.uniform3fv(lightColourAttribLocation, [1, 0.6, 0.6]); //red light
 }
 
 var cameraSpeed = 0.003;

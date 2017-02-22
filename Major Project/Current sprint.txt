@@ -20,6 +20,7 @@ Sprint 1 (20th - 27th February)
 		Split myJs files into folders
 		Redesign some files,  rename
 		Put CSS in another file		
+		Remove positionAttribLocation = calls, its now all done in glSetup
 
 	Sprint plan:
 		Create own textures from heightMaps
@@ -38,6 +39,9 @@ Sprint 1 (20th - 27th February)
 		Leveling mechanics, XP bar
 			-prospect rock = XP
 			-Access new areas based on XP
+		Add types of rock
+			-types of triangle rock
+			-types of regular rock
 
 	Have currently done:
 		Moved buglog into github issues
@@ -51,3 +55,4 @@ Sprint 1 (20th - 27th February)
 		Paper UI designs
 		Added little txt file as well
 		
+		Added diffuse lighting, commented out half code temporarily

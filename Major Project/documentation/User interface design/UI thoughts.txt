@@ -9,7 +9,7 @@ idea2.jpg
 	Will take longer to implement
 	Might look better on a bigger screen
 
-menu.jpg
+in-game menu.jpg
 	Would also have a background image
 	Perhaps just the current scene as the background
 	Could also have options: credits

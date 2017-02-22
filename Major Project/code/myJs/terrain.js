@@ -8,10 +8,12 @@ function Terrain(){
 	var size = rows * columns;
 
 	var terrainVertices = [];
+	var terrainNormals = [];
 	
 	var terrainVertexBuffer;
 	var terrainElementsBuffer;
 	var terrainTextureCoordinateBuffer;
+	var terrainNormalBuffer;
 	
 	/*
 	This stores what values should be added onto the original centre element, 
@@ -188,6 +190,8 @@ function Terrain(){
 		var terrainX = 0,
 			terrainY = 0,
 			terrainZ = 0;
+			
+	
 		for(var x=0; x<rows; x++){
 			for(var y=0; y<columns; y++){
 				
@@ -197,6 +201,12 @@ function Terrain(){
 				
 				//Move along in the row
 				terrainX++;
+				
+				//Set all to 1... bad but should work temporaryHeightMapX
+				terrainNormals.push(0);//x
+				terrainNormals.push(1);//y
+				terrainNormals.push(0);//z
+				
 			}
 			//New row, reset X, and increment Z
 			terrainX = 0;
@@ -205,7 +215,7 @@ function Terrain(){
 		
 		//Reset all values as above loop changed them
 		x = 0; y = 0; z = 0; 
-
+		
 		console.log("Terrain vertices: " + size);
 		console.log("Individual terrain x,y,z values: " + terrainVertices.length);		
 	}
@@ -217,6 +227,7 @@ function Terrain(){
 		setupTerrainVertexBuffer();
 		setupTerrainIndiciesBuffer();
 		setupTerrainTextureBuffer();
+		setupTerrainNormalBuffer();
 		console.log("Setup terrain buffers");
 	}
 	
@@ -227,7 +238,6 @@ function Terrain(){
 		terrainVertexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainVertexBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainVertices), gl.STATIC_DRAW);
-		positionAttribLocation = gl.getAttribLocation(program, 'position');
 		gl.enableVertexAttribArray(positionAttribLocation);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
 	}
@@ -308,6 +318,13 @@ function Terrain(){
 		//gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
 	}
 	
+	function setupTerrainNormalBuffer(){
+		terrainNormalBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainNormalBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainNormals), gl.STATIC_DRAW);
+		gl.enableVertexAttribArray(normalAttribLocation);
+		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);			
+	}
 	
 	/*
 	Public

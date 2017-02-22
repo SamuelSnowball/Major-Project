@@ -15,11 +15,24 @@ function Player(x, y, z){
 	Prospecting getter needed in CollisonTester class
 	*/
 	var prospecting = false; 
-	this.isProspecting = {
+	var xp = 0;
+	this.get = {
 		get prospecting(){
 			return prospecting;
+		},
+		get xp(){
+			return xp;
 		}
 	}	
+	
+	this.add = {
+		set xp(xpParam){
+			xp += xpParam;
+		}
+	}
+	
+	
+	
 	
 	setupPlayerMovement();
 	

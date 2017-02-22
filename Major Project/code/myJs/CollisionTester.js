@@ -202,7 +202,7 @@ function CollisionTester(){
 	Then they're prospecting the rock
 	*/
 	function isProspecting(rock){
-		if(player.isProspecting.prospecting === true){
+		if(player.get.prospecting === true){
 			console.log("range textured");
 			rock.texture = depletedTexture;
 			//Display progress bar, when hits 100%, change rocks texture

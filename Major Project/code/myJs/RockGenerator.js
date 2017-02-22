@@ -12,6 +12,7 @@ function RockGenerator(){
 	var rockTextureCoordinateBuffer;
 	var rockElementBuffer;
 	var rockPositionBuffer;
+	var rockNormalsBuffer;
 	
 	var rocks = [];
 	//Rocks array needs to be visible in collisonTester, needs to have getter
@@ -67,8 +68,7 @@ function RockGenerator(){
 	
 	createRocks();
 	setupRockBuffers();
-	
-	createTriangleRock();
+
 	setupTriangleRockBuffers();
 	
 	function Rock(xPos, yPos, zPos, width, xRotation, yRotation, zRotation, scale, texture, numIndices){
@@ -100,65 +100,68 @@ function RockGenerator(){
 			createRock(20, 30, 30, 0.2, sandstoneTexture);
 			createRock(20, 30, 30, 0.1, sandstoneTexture);
 			createRock(20, 30, 30, 0.2, sandstoneTexture);
+			
+			createTriangleRock(emeraldTexture);
+			createTriangleRock(emeraldTexture);
+			createTriangleRock(emeraldTexture);
+			createTriangleRock(emeraldTexture);
+			createTriangleRock(emeraldTexture);
+			createTriangleRock(emeraldTexture);
 		}
 	}
 
 	/*
 	Pyramid vertices from: http://learningwebgl.com/blog/?p=370
 	*/
-	function createTriangleRock(){
-		
-		var numberTriangleRocks = 10;
-		for(var i=0; i<numberTriangleRocks; i++){
-			triangleRockVertices.push(0.0,  1.0 ,  0.0);
-			triangleRockVertices.push(-1.0 , -1.0 ,  1.0 );
-			triangleRockVertices.push( 1.0 , -1.0 ,  1.0 );
-			triangleRockVertices.push(0.0,  1.0 ,  0.0);
-			triangleRockVertices.push(1.0 , -1.0 ,  1.0 );
-			triangleRockVertices.push(1.0 , -1.0 , -1.0 );
-			triangleRockVertices.push(0.0,  1.0 ,  0.0);
-			triangleRockVertices.push(1.0 , -1.0 , -1.0 );
-			triangleRockVertices.push(-1.0, -1.0, -1.0);
-			triangleRockVertices.push( 0.0,  1.0 ,  0.0);
-			triangleRockVertices.push(-1.0 , -1.0 , -1.0 );
-			triangleRockVertices.push(-1.0 , -1.0 ,  1.0 );
-		
+	function createTriangleRock(textureParam){
+		triangleRockVertices.push(0.0,  1.0 ,  0.0);
+		triangleRockVertices.push(-1.0 , -1.0 ,  1.0 );
+		triangleRockVertices.push( 1.0 , -1.0 ,  1.0 );
+		triangleRockVertices.push(0.0,  1.0 ,  0.0);
+		triangleRockVertices.push(1.0 , -1.0 ,  1.0 );
+		triangleRockVertices.push(1.0 , -1.0 , -1.0 );
+		triangleRockVertices.push(0.0,  1.0 ,  0.0);
+		triangleRockVertices.push(1.0 , -1.0 , -1.0 );
+		triangleRockVertices.push(-1.0, -1.0, -1.0);
+		triangleRockVertices.push( 0.0,  1.0 ,  0.0);
+		triangleRockVertices.push(-1.0 , -1.0 , -1.0 );
+		triangleRockVertices.push(-1.0 , -1.0 ,  1.0 );
+	
 
-			triangleRockUvs.push(0, 0.08);
-			triangleRockUvs.push(0.08, 0.16);
-			triangleRockUvs.push(0.16, 0.24);
-			
-			triangleRockUvs.push(0.24, 0.32);
-			triangleRockUvs.push(0.32, 0.40);
-			triangleRockUvs.push(0.40, 0.48);
-			
-			triangleRockUvs.push(0.48, 0.56);
-			triangleRockUvs.push(0.56, 0.64);
-			triangleRockUvs.push(0.64, 0.72);
-			
-			triangleRockUvs.push(0.72, 0.8);
-			triangleRockUvs.push(0.8, 0.88);
-			triangleRockUvs.push(0.88, 1);
-			
-			/*
-			Set x and z coordinate of the rock
-			Then find out what the terrain vertex height is, at that point.
-			Set that height to the rock, so it doesn't appear below floor
-			*/
-			var x = Math.floor(Math.random() * 512);
-			var z = Math.floor(Math.random() * 512);
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = x;
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = z;
-			var rockHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
-			var y = rockHeight + 1;
-			
-			var width = 4;
-			var scale = 5;
-			var texture = marsTerrainTexture;
-			
-			var triRock = new TriangleRock(x, y, z, width, scale, texture, 12);
-			triangleRocks.push(triRock);	
-		}		
+		triangleRockUvs.push(0, 0.08);
+		triangleRockUvs.push(0.08, 0.16);
+		triangleRockUvs.push(0.16, 0.24);
+		
+		triangleRockUvs.push(0.24, 0.32);
+		triangleRockUvs.push(0.32, 0.40);
+		triangleRockUvs.push(0.40, 0.48);
+		
+		triangleRockUvs.push(0.48, 0.56);
+		triangleRockUvs.push(0.56, 0.64);
+		triangleRockUvs.push(0.64, 0.72);
+		
+		triangleRockUvs.push(0.72, 0.8);
+		triangleRockUvs.push(0.8, 0.88);
+		triangleRockUvs.push(0.88, 1);
+		
+		/*
+		Set x and z coordinate of the rock
+		Then find out what the terrain vertex height is, at that point.
+		Set that height to the rock, so it doesn't appear below floor
+		*/
+		var x = Math.floor(Math.random() * 512);
+		var z = Math.floor(Math.random() * 512);
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = x;
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = z;
+		var rockHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
+		var y = rockHeight + 1;
+		
+		var width = 4;
+		var scale = 5;
+		var texture = textureParam;
+		
+		var triRock = new TriangleRock(x, y, z, width, scale, texture, 12);
+		triangleRocks.push(triRock);	
 	}
 
 	/*
@@ -215,7 +218,7 @@ function RockGenerator(){
 				rockVertices.push( vertex.x, vertex.y, vertex.z );
 
 				// normal
-
+				//how is this working... normals is empty array?
 				rockNormals.push( normal.x, normal.y, normal.z );
 
 				// uv
@@ -314,6 +317,10 @@ function RockGenerator(){
 		rockTextureCoordinateBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockTextureCoordinateBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockUvs), gl.STATIC_DRAW);
+		
+		rockNormalsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockNormals), gl.STATIC_DRAW);
 	}
 
 	/*
@@ -340,6 +347,14 @@ function RockGenerator(){
 			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, rocks[i].texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+			
+			//Normals
+			gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
+			
+			//Lights, they're set as uniform.. are they being set anywhere?
+			
+			
 			
 			//Elements
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, rockElementBuffer);
