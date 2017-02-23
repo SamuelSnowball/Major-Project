@@ -75,7 +75,7 @@ function updateAttributesAndUniforms(){
 	gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
 	
 	//Load these values from globals which u change!
-	gl.uniform3fv(lightPositionAttribLocation, [10, 1, 10]);
+	gl.uniform3fv(lightPositionAttribLocation, [20, 2, 20]);
 	gl.uniform3fv(lightColourAttribLocation, [1, 0.6, 0.6]); //red light
 	
 	//Load up shine variables into shader

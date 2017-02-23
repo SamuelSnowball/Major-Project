@@ -3,7 +3,7 @@ function Terrain(){
 	/*
 	Private variables
 	*/
-	var rows = 1024;
+	var rows = 1024; //1024
 	var columns = 1024;
 	var size = rows * columns;
 
@@ -60,6 +60,7 @@ function Terrain(){
 	fillHeightMap();
 	createCraters();
 	createTerrainVertices();
+	createTerrainNormals();//could use existing loop
 	setupTerrainBuffers();
 	
 	/*
@@ -191,7 +192,7 @@ function Terrain(){
 			terrainY = 0,
 			terrainZ = 0;
 			
-	
+		var previousX, previousY, previousZ; //
 		for(var x=0; x<rows; x++){
 			for(var y=0; y<columns; y++){
 				
@@ -203,9 +204,18 @@ function Terrain(){
 				terrainX++;
 				
 				//Set all to 1... bad but should work temporaryHeightMapX
-				terrainNormals.push(0);//x
-				terrainNormals.push(1);//y
-				terrainNormals.push(0);//z
+				//terrainNormals.push(0);//x
+				//terrainNormals.push(1);//y
+			//	terrainNormals.push(0);//z
+				
+				
+				
+				//if y>1 or something
+				//var vector0 = [terrainX, heightMap[x][y], terrainZ];
+				//var vector1 = [];
+				
+				
+				
 				
 			}
 			//New row, reset X, and increment Z
@@ -218,7 +228,78 @@ function Terrain(){
 		
 		console.log("Terrain vertices: " + size);
 		console.log("Individual terrain x,y,z values: " + terrainVertices.length);		
+		console.log("Length of temporary terrain normals: " + terrainNormals.length);
 	}
+	
+	/*
+	Could have this in another loop for efficiency, but only worked out once, so its ok
+	Not sure about what order the normals are supposed to go in
+	*/
+	function createTerrainNormals(){
+		for(var i=0; i<terrainVertices.length; i+=3){
+			//Get 1st point (3 vertices), 2nd point(3 vertices), 3rd (3 vertices)(under) point
+			
+			//Top left vertex
+			var vertex0x = terrainVertices[i];
+			var vertex0y = terrainVertices[i+1];
+			var vertex0z = terrainVertices[i+2];
+			
+			//Top right vertex
+			var vertex1x = terrainVertices[i+3];
+			var vertex1y = terrainVertices[i+4];
+			var vertex1z = terrainVertices[i+5];
+			
+			//Under top left vertex
+			//Its the current row times the current column!
+			//They both dont exist, just add a single value
+			//i + value 
+			//i + 1 + value
+			//try value as 1024, would push current value exactly 1 row down
+			// times 3, because 3 vertices, rows isnt 100% correct, as its a 1d array, with an x,y,z each
+			var vertex2x = terrainVertices[i + (rows*3)];
+			var vertex2y = terrainVertices[(i + 1) + (rows*3)];
+			var vertex2z = terrainVertices[(i + 2) + (rows*3)];
+			
+			//Now work out vector0, might be wrong direction
+			var vector0x = vertex1x - vertex0x;
+			var vector0y = vertex1y - vertex0y;
+			var vector0z = vertex1z - vertex0z;
+			var vector0 = [vector0x, vector0y, vector0z];
+			
+			//Now work out vector1, might be wrong direction
+			var vector1x = vertex2x - vertex0x;
+			var vector1y = vertex2y - vertex0y;
+			var vector1z = vertex2z - vertex0z;
+			var vector1 = [vector1x, vector1y, vector1z];
+
+			//Need to normalize vectors
+			vector0 = m4.normalize(vector0);
+			vector1 = m4.normalize(vector1);
+			//console.log("vector 0: " + vector0);
+			//console.log("vector 1: " + vector1);
+			
+			
+			//Now cross product between vector0 and vector1
+				//vector0 * vector1, might be wrong way around,
+				//Also the vectors could've been calculated wrong way around
+			var normal = m4.cross(vector0, vector1);
+			
+			terrainNormals.push(normal[0]); //x
+			terrainNormals.push(normal[1]); //y
+			terrainNormals.push(normal[2]); //z
+			
+			
+		}
+		
+		/*
+		Should have same number of normals to individual x,y,z points
+		Because each x,y,z has a normal x,y,z
+		
+		TerrainVertices length / 3 = 104k vertices, each with a normal vector, of 3 components
+		*/
+		console.log("Normals length: " + terrainNormals.length);
+	}
+	
 	
 	/*
 	Private

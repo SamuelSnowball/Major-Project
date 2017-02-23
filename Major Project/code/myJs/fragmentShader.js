@@ -33,8 +33,8 @@ gl.shaderSource(fragmentShader, [
 		
 		//ensure .product result is between 0 and 1, sometimes returns negative, dont care
 		//adding 0.1 as minimum makes ambient light
-		'float brightness = max(uncheckedBrightness, 0.1);', //should be 0.0, will take whatever is higher
-		'vec3 diffuse = brightness * lightColour * vec3(10,10,10);', //10,10,10 for extra intensity
+		'float brightness = max(uncheckedBrightness, 0.5);', //should be 0.0, will take whatever is higher
+		'vec3 diffuse = brightness * lightColour * vec3(1,1,1);', //10,10,10 for extra intensity
 		
 		'vec3 unitVectorToCamera = normalize(toCameraVector);', //need to normalie italics
 		'vec3 lightDirection = -unitLightVector;', //opposite of unitLightVector

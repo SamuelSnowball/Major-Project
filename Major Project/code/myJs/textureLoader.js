@@ -4,6 +4,7 @@
 //no shineDamper or reflectivity
 var currentTexture;
 var masterTerrainTexture = new Texture('resources/terrain/master.png');
+var 
 
 //Put this on cliff, lava etc
 var marsRedTerrainTexture;
@@ -19,10 +20,11 @@ var myPerlinTexture;
 
 
 //add reflectivity and shineDamper in constructor
+//also, only works for non procedural textures, could make a comepletely new proceduralTexture object maybe...
 function Texture(path){
 	console.log("A texture was created!");
-	var shineDamper = 1.00; 
-	var reflectivity = 0.5; 
+	var shineDamper = 1; 
+	var reflectivity = 1; 
 	
 	//Needs getTexture method, using this.texture doesn't work :(
 	var texture = gl.createTexture();

@@ -58,10 +58,23 @@ Sprint 1 (20th - 27th February)
 		
 		Added diffuse lighting, commented out half code temporarily
 		Added specular lighting, avaliable on textures
-			-Need to calculate normals :(
-			-First, lookup normals of triangle strip
-			-But calcuate normal for each vertex
+			Calculated terrain normals
+
+		-Why does the specular hightlight run accross the entire map?
+			-Having 100 shineDamper does something
+			-BECAUASE THE SPECULAR IS APPLIED TO THE ENTIRE TEXTURE!!!!!!!!!!!
+		Have given 0.5 ambient in shader, because, why not
 
 		Added proper texture class
 			-Fix random leftover code at bottom
 			-Also replace terrain with perlinTexture
+
+		To do:
+			Possibly add procedural texture object
+			So dont have to have a weird if statement, in the regular texture obj
+	
+		Future to do:
+			Calculate normals for water, each frame
+			Give water reflectivity texture etc,
+			Make sure it looks nice!
+			Set reflectivity on current terrain as low, ?so no specular?
