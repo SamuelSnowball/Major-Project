@@ -44,6 +44,14 @@ function GUI(){
 		var topLeftElement = document.getElementById("topLeftOverlay");
 		topLeftNode = document.createTextNode("");
 		topLeftElement.appendChild(topLeftNode);
+		
+		/*
+		XP GUI
+		xpOverlayValue
+		*/
+		var xpElement = document.getElementById("xpOverlay");
+		xpNode = document.createTextNode("");
+		xpElement.appendChild(xpNode);
 	}
 	
 	this.update = function(){
@@ -52,6 +60,8 @@ function GUI(){
 		guiXNode.nodeValue = Math.floor(player.x);   // 2 decimal places
 		guiYNode.nodeValue = Math.floor(player.y);
 		guiZNode.nodeValue = Math.floor(player.z);	
+		
+		xpNode.nodeValue = Math.floor(player.get.xp);
 	}
 	
 }

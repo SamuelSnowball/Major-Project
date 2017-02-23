@@ -22,4 +22,3 @@ var ext = gl.getExtension('OES_element_index_uint');
 
 
 
-

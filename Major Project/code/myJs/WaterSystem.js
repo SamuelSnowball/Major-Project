@@ -14,11 +14,13 @@ function WaterSystem(){
 	var waterSize = waterRows * waterColumns;
 	
 	var waterHeightMap = [];
-	var waterDirections = []; //1d array, top row of water, for all columns
 	
+	var waterDirections = []; 
+
 	setupWater();
 	
 	function setupWater(){
+	
 		createWaterHeightMap();
 		fillWaterHeightMap();
 		createWaterVertices();
@@ -118,6 +120,12 @@ function WaterSystem(){
 		for(var i=0; i<waterRows; i++){
 			waterHeightMap[i] = new Array(waterColumns);
 		}
+		
+		//2D array of water directions, new direction for every vertex
+		waterDirections = new Array(waterRows); 
+		for(var i=0; i<waterRows; i++){
+			waterDirections[i] = new Array(waterColumns);
+		}
 	}
 
 	/*
@@ -125,33 +133,31 @@ function WaterSystem(){
 	*/
 	function fillWaterHeightMap(){
 		var count = 0;
-		var waterSpawnHeight = 0.1;
+		var waterSpawnHeight = -2.6;
 		for(var x=0; x<waterRows; x++){
 			for(var y=0; y<waterColumns; y++){
-				waterHeightMap[x][y] = -waterSpawnHeight; //Works well
-			}
-			/*
-			For the direction, its like every 4 rows it changes
-				So like row 0->3 going up,
-				Then 4-8 going down
-				Use count variable to count to 8 then reset
-			*/
-			if(count < 4){
-				//rows 0 -> 3
-				waterDirections.push(-1); //-1 for down, 1 for up
-			}
-			else if(count < 8){
-				//rows 4 -> 7
-				waterDirections.push(1);
-			}
+				waterHeightMap[x][y] = waterSpawnHeight; //Works well
+				
+				//For every cell, have a direction
+				if(count < 4){
+					//rows 0 -> 3
+					waterDirections[x][y] = -1; //-1 for down, 1 for up
+				}
+				else if(count < 8){
+					//rows 4 -> 7
+					waterDirections[x][y] = 1;
+				}
 			
-			//Increment/Reset count
-			count++;
-			if(count === 8){
-				count = 0;
-			}
-			waterSpawnHeight += 0.1;
-		}	
+				//Increment/Reset count
+				count++;
+				if(count === 8){
+					count = 0;
+				}
+
+				//0.01 is ok, a bit too same height on rows tho
+				waterSpawnHeight += 0.05;
+			}	
+		}
 	}
 	
 	/*
@@ -196,9 +202,11 @@ function WaterSystem(){
 		var currentDirection;
 		for(var x=0; x<waterRows; x++){
 			//Get the current direction
-			currentDirection = waterDirections[x];
+			
 		
 			for(var y=0; y<waterColumns; y++){
+			
+				currentDirection = waterDirections[x][y];
 
 				/*
 				Its checking every single vertex in the row,
@@ -207,12 +215,12 @@ function WaterSystem(){
 				if(waterHeightMap[x][y] < -2.6){ //min height
 					//If height less than 0
 					//Reverse its direction
-					waterDirections[x] = 1;
+					waterDirections[x][y] = 1;
 				}
 				else if(waterHeightMap[x][y] > -1.6){ //max height
 					//If height over 3
 					//Reverse its direction
-					waterDirections[x] = -1;
+					waterDirections[x][y] = -1;
 				}
 				else{
 					//Its in the middle, leave it
@@ -268,4 +276,6 @@ function WaterSystem(){
 			waterElementsBuffer
 		); 	
 	}
+	
+	
 }

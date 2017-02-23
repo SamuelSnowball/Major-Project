@@ -48,6 +48,8 @@ canvas.addEventListener('mousedown', function(){
 	
 	document.getElementById("topLeftOverlay").style.visibility = "visible";
 	document.getElementById("topMiddleOverlay").style.visibility = "visible";
+	
+	document.getElementById("xpOverlay").style.visibility = "visible";
 });
 
 
