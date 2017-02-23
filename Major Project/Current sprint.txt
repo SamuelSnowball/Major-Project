@@ -21,6 +21,7 @@ Sprint 1 (20th - 27th February)
 		Redesign some files,  rename
 		Put CSS in another file		
 		Remove positionAttribLocation = calls, its now all done in glSetup
+		Enable and disable attributes when rendering, dont enable all global at start
 
 	Sprint plan:
 		Create own textures from heightMaps
@@ -56,3 +57,11 @@ Sprint 1 (20th - 27th February)
 		Added little txt file as well
 		
 		Added diffuse lighting, commented out half code temporarily
+		Added specular lighting, avaliable on textures
+			-Need to calculate normals :(
+			-First, lookup normals of triangle strip
+			-But calcuate normal for each vertex
+
+		Added proper texture class
+			-Fix random leftover code at bottom
+			-Also replace terrain with perlinTexture

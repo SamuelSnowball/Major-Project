@@ -176,6 +176,10 @@ function Player(x, y, z){
 		viewMatrix = m4.inverse(cameraMatrix);
 		viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 		
+		//Stops it breaking....
+		currentTexture = masterTerrainTexture;
+		
+		//Do I even needs this here? probably...
 		//Times matrices together
 		updateAttributesAndUniforms();
 	}	

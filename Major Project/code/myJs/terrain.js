@@ -332,6 +332,10 @@ function Terrain(){
 	Apply matrices, then draw the terrain.
 	*/
 	this.render = function(){	
+		//Set the current texture, so updateAttributesAndUniforms gets updated
+		//For specular light
+		currentTexture = masterTerrainTexture;
+	
 		scale = m4.scaling(1, 1, 1);
 		xRotation = m4.xRotation(0);
 		yRotation = m4.yRotation(0);
@@ -348,7 +352,7 @@ function Terrain(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
 		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, myPerlinTexture);
+		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture); //myPerlinTexture
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
 
 		

@@ -12,30 +12,11 @@ var fullTransforms = m4.multiply(position, rotateZ);
 	fullTransforms = m4.multiply(fullTransforms, rotateX);
 	fullTransforms = m4.multiply(fullTransforms, scale);
 
+	//projection should be here..
 var modelLocation = gl.getUniformLocation(program, 'model');
 gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 
-
-function computeModelMatrix(paramRotateX, paramRotateY, rotateZ, xPos, yPos, zPos, scaleAll ){
-  scale = MDN.scaleMatrix(scaleAll, scaleAll, scaleAll);
-  rotateX = m4.xRotation( paramRotateX * 0.003 );
-  rotateY = m4.yRotation( paramRotateY * 0.003 );
-  position = m4.translation(xPos, yPos, zPos);
-}
-
-
-function updateAttributesAndUniforms(){
-	fullTransforms = m4.multiply(position, rotateZ);
-	fullTransforms = m4.multiply(fullTransforms, rotateY);
-	fullTransforms = m4.multiply(fullTransforms, rotateX);
-	fullTransforms = m4.multiply(fullTransforms, scale);
-
-	gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
-	gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(viewProjectionMatrix));
-	
-	gl.uniform3fv(lightPositionAttribLocation, [10, 1, 10]);
-	gl.uniform3fv(lightColourAttribLocation, [1, 0.6, 0.6]); //red light
-}
+//camera stuff
 
 var cameraSpeed = 0.003;
 
@@ -65,5 +46,44 @@ var cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, UP_VECTOR);
 //View matrix for camera, inverse everything, so that the camera is the origin
 var viewMatrix = m4.inverse(cameraMatrix);
 
+
+var viewMatrixLocation = gl.getUniformLocation(program, 'viewMatrix');
+gl.uniformMatrix4fv(viewMatrixLocation, false, new Float32Array(viewMatrix));
+
+//Inverse view matrix
+var inverseViewMatrixLocation = gl.getUniformLocation(program, 'inverseViewMatrix');
+gl.uniformMatrix4fv(inverseViewMatrixLocation, false, new Float32Array(m4.inverse(viewMatrix)));
+
+function computeModelMatrix(paramRotateX, paramRotateY, rotateZ, xPos, yPos, zPos, scaleAll ){
+  scale = MDN.scaleMatrix(scaleAll, scaleAll, scaleAll);
+  rotateX = m4.xRotation( paramRotateX * 0.003 );
+  rotateY = m4.yRotation( paramRotateY * 0.003 );
+  position = m4.translation(xPos, yPos, zPos);
+}
+
+
+
+function updateAttributesAndUniforms(){
+	fullTransforms = m4.multiply(position, rotateZ);
+	fullTransforms = m4.multiply(fullTransforms, rotateY);
+	fullTransforms = m4.multiply(fullTransforms, rotateX);
+	fullTransforms = m4.multiply(fullTransforms, scale);
+
+	gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
+	gl.uniformMatrix4fv(viewMatrixLocation, false, new Float32Array(viewMatrix));
+	gl.uniformMatrix4fv(inverseViewMatrixLocation, false, new Float32Array(m4.inverse(viewMatrix)));
+	gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
+	
+	//Load these values from globals which u change!
+	gl.uniform3fv(lightPositionAttribLocation, [10, 1, 10]);
+	gl.uniform3fv(lightColourAttribLocation, [1, 0.6, 0.6]); //red light
+	
+	//Load up shine variables into shader
+	//Float so uniform1f
+	gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
+	gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
+
+	
+}
 //Combine view and projection matrices
-var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+//var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);

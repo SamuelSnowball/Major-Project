@@ -145,9 +145,11 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/js/ImprovedNoise.js"></script>
 
 
-
 <!-- Needs to be in this weird order -->
 <script src="code/myJs/glSetup.js"></script>
+<!-- This needs to be above matrices.js and below glSetup, and a texture object is created in matrices.js -->
+<script src="code/myJs/TextureLoader.js"></script>
+
 <script src="code/myJs/vertexShader.js"></script>
 <script src="code/myJs/fragmentShader.js"></script>
 <script src="code/myJs/program.js"></script>
@@ -157,7 +159,6 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <!-- Named properly -->
 <script src="code/myJs/CollisionTester.js"></script>
 <script src="code/myJs/RockGenerator.js"></script>
-<script src="code/myJs/TextureLoader.js"></script>
 <script src="code/myJs/GUI.js"></script>
 <script src="code/myJs/LoadingScreen.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
@@ -182,7 +183,8 @@ var gameTime = 0;
 var saveTime = 1200;
 
 var loadingScreen = new LoadingScreen();
-var textureLoader = new TextureLoader();
+
+//var textureLoader = new TextureLoader();
 var player = new Player(5, 1, 5); 
 var terrain = new Terrain();
 
@@ -206,18 +208,14 @@ function render(){
 		worldState.saveWorld();
 		gameTime = 0;
 	}
-	
 	//console.log("Player X, Y, Z: " + Math.floor(player.x) + ", " + Math.floor(player.y) + ", " + Math.floor(player.z));
 	player.movePlayer();
 	gui.update();
 	
 	
 	
-	
-	
 	//particleSystem.render();
 	terrain.render(); //terrain.js,
-	
 	//collisionTester.setPlayerHeight(); //collision.js
 	//collisionTester.testPlayerRockCollision();
 	

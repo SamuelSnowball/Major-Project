@@ -22,3 +22,11 @@ var lightColourAttribLocation = gl.getUniformLocation(program, 'lightColour');
 
 gl.enableVertexAttribArray(lightPositionAttribLocation);
 gl.enableVertexAttribArray(lightColourAttribLocation);
+
+//Specular lighting
+var shineDamperAttribLocation = gl.getUniformLocation(program, 'shineDamper');
+gl.enableVertexAttribArray(shineDamperAttribLocation);
+
+var reflectivityAttribLocation = gl.getUniformLocation(program, 'reflectivity');
+gl.enableVertexAttribArray(reflectivityAttribLocation);
+

@@ -1,5 +1,9 @@
 
-var masterTerrainTexture;
+//I set these values here to ensure texture doesn't have to be loaded first,
+//Otherwise updateAttributesAndUniforms uses currentTexture when its null, and has
+//no shineDamper or reflectivity
+var currentTexture;
+var masterTerrainTexture = new Texture('resources/terrain/master.png');
 
 //Put this on cliff, lava etc
 var marsRedTerrainTexture;
@@ -12,6 +16,74 @@ var depletedTexture;
 var emeraldTexture;
 
 var myPerlinTexture;
+
+
+//add reflectivity and shineDamper in constructor
+function Texture(path){
+	console.log("A texture was created!");
+	var shineDamper = 1.00; 
+	var reflectivity = 0.5; 
+	
+	//Needs getTexture method, using this.texture doesn't work :(
+	var texture = gl.createTexture();
+	
+	this.getTextureAttribute = {
+		get texture(){
+			return texture; //this works..
+		},
+		get shineDamper(){
+			return shineDamper; //and this doesn't??
+		},
+		get reflectivity(){
+			return reflectivity;
+		}
+	}
+	
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+				  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing
+
+	var image = new Image();
+	image.src = path;
+	image.onload = function (){handleTextureLoaded(image, texture);}	
+	
+	
+	/*
+	This gets run after image is done loading
+	*/
+	function handleTextureLoaded(image, texture){
+
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		
+		// Writes image data to the texture
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+		
+		/*
+		Setup filtering, controls how image is filtered when scaling
+		Using linear filtering when scaling up
+		Using mipmap when scaling down
+		*/
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+		
+		gl.generateMipmap(gl.TEXTURE_2D);
+		
+		// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+//var myTexture = new Texture(marsRedTerrainTexture);
 
 function TextureLoader(){
 
@@ -30,6 +102,9 @@ function TextureLoader(){
 	}
 	*/
 	
+	/*
+	Create texture objects here
+	*/
 	
 	loadAllTextures();
 	
@@ -209,27 +284,5 @@ function TextureLoader(){
 	
 	
 	
-	/*
-	This gets run after image is done loading
-	*/
-	function handleTextureLoaded(image, texture){
 
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		
-		// Writes image data to the texture
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-		
-		/*
-		Setup filtering, controls how image is filtered when scaling
-		Using linear filtering when scaling up
-		Using mipmap when scaling down
-		*/
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-		
-		gl.generateMipmap(gl.TEXTURE_2D);
-		
-		// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
-		gl.bindTexture(gl.TEXTURE_2D, null);
-	}
 }
