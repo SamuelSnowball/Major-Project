@@ -30,3 +30,10 @@ gl.enableVertexAttribArray(shineDamperAttribLocation);
 var reflectivityAttribLocation = gl.getUniformLocation(program, 'reflectivity');
 gl.enableVertexAttribArray(reflectivityAttribLocation);
 
+//Directional
+var reverseLightDirectionLocation = gl.getUniformLocation(program, 'reverseLightDirection');
+gl.enableVertexAttribArray(reverseLightDirectionLocation);
+
+//Specular
+var lightDirectionLocation = gl.getUniformLocation(program, 'lightDirection');
+gl.enableVertexAttribArray(lightDirectionLocation);

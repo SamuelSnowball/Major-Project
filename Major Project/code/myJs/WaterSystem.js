@@ -6,8 +6,11 @@ function WaterSystem(){
 	var waterVertexBuffer = gl.createBuffer(); 
 	var waterTextureCoordinateBuffer;
 	var waterElementsBuffer;
+	var waterNormalsBuffer = gl.createBuffer();
+	
 	var waterVertices = [];
 	var textureCoordinates = [];
+	var waterNormals = [];
 	
 	var waterRows = 32;
 	var waterColumns = 32;
@@ -22,11 +25,13 @@ function WaterSystem(){
 	function setupWater(){
 	
 		createWaterHeightMap();
+		
 		fillWaterHeightMap();
 		createWaterVertices();
 		
 		setupWaterIndiciesBuffer();
 		setupWaterTextureCoordinates();
+		setupWaterNormalsBuffer();
 	}
 	
 	function createWaterVertices(){
@@ -35,7 +40,10 @@ function WaterSystem(){
 		
 			waterVertices = []; //reset all vertices, ready for new ones
 								//hm idk if this is good
-		
+								
+								//reset normals
+			waterNormals = [];
+			
 			var waterX = 0,
 			waterY = 0,
 			waterZ = 0;
@@ -46,6 +54,8 @@ function WaterSystem(){
 				waterVertices.push(waterHeightMap[x][y]);
 				waterVertices.push(waterZ); 
 				
+				waterNormals.push(0, 1, 0); //temporary
+				
 				//Move along in the row
 				waterX++;
 			}
@@ -54,12 +64,26 @@ function WaterSystem(){
 			waterZ++;
 		}
 		
+		//console.log("Normals length: " + waterNormals.length);
+		//console.log("Vertices length: " + waterVertices.length);	
+		
 		//Reset all values as above loop changed them
 		x = 0; y = 0; z = 0; 
 
 		//console.log("Individual water x,y,z values: " + waterVertices.length);	
-		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.STATIC_DRAW);
+		
+		//do water buffer
+		gl.bindBuffer(gl.ARRAY_BUFFER, waterNormalsBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterNormals), gl.STATIC_DRAW);
+	}
+	
+	function setupWaterNormalsBuffer(){
+		//waterNormalsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, waterNormalsBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterNormals), gl.STATIC_DRAW);
+		//gl.enableVertexAttribArray(normalAttribLocation);
+		//gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);				
 	}
 	
 	function setupWaterTextureCoordinates(){
@@ -195,7 +219,6 @@ function WaterSystem(){
 	*/	
 	this.updateWaterVertices = function(){
 	//this actually justt updates the waterHeightMap, not the vertices
-	
 		/*
 		Check/change direction
 		*/
@@ -238,6 +261,8 @@ function WaterSystem(){
 	}
 	
 	this.render = function(){
+		currentTexture = waterTexture;
+		
 		scale = m4.scaling(1, 1, 1);
 		xRotation = m4.xRotation(0);
 		yRotation = m4.yRotation(0);
@@ -257,7 +282,7 @@ function WaterSystem(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterTextureCoordinateBuffer);
 		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, waterTexture);
+		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
 		
 
@@ -275,6 +300,8 @@ function WaterSystem(){
 			gl.UNSIGNED_INT, 
 			waterElementsBuffer
 		); 	
+		
+		
 	}
 	
 	

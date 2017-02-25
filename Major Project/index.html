@@ -184,21 +184,24 @@ var saveTime = 1200;
 
 var loadingScreen = new LoadingScreen();
 
-//var textureLoader = new TextureLoader();
+var textureLoader = new TextureLoader();
 var player = new Player(5, 1, 5); 
 var terrain = new Terrain();
 
 var worldState = new WorldState(); //Loads and saves the world
 var gui = new GUI();
-//var collisionTester = new CollisionTester();
-//var particleSystem = new ParticleSystem();
-//var rockGenerator = new RockGenerator();
-//var waterSystem = new WaterSystem();
+var collisionTester = new CollisionTester();
+var particleSystem = new ParticleSystem();
+var rockGenerator = new RockGenerator();
+var waterSystem = new WaterSystem();
 
 
 function render(){
 	gl.clearColor(0, 0, 0, 0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	//Why render something if we cant see it?
+	//gl.cullFace(gl.BACK);
+	
 	
 	/*
 	Auto-save the game every 20 seconds or so
@@ -214,18 +217,16 @@ function render(){
 	
 	
 	
+	
+	
+	
 	//particleSystem.render();
 	terrain.render(); //terrain.js,
 	//collisionTester.setPlayerHeight(); //collision.js
 	//collisionTester.testPlayerRockCollision();
-	
 	//rockGenerator.renderRocks();
 	//rockGenerator.renderTriangleRocks();
-	
-	
-	//if(gameTime % 20 === 0){
-		//waterSystem.updateWaterVertices();
-	//}
+	//waterSystem.updateWaterVertices();
 	//waterSystem.render();
 	
 	

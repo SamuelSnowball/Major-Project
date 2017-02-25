@@ -64,26 +64,35 @@ function computeModelMatrix(paramRotateX, paramRotateY, rotateZ, xPos, yPos, zPo
 
 
 function updateAttributesAndUniforms(){
+
+	//why is rotate z has position?
+	//old code, broken rotation, but at least renders
 	fullTransforms = m4.multiply(position, rotateZ);
 	fullTransforms = m4.multiply(fullTransforms, rotateY);
 	fullTransforms = m4.multiply(fullTransforms, rotateX);
 	fullTransforms = m4.multiply(fullTransforms, scale);
-
+	
 	gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 	gl.uniformMatrix4fv(viewMatrixLocation, false, new Float32Array(viewMatrix));
 	gl.uniformMatrix4fv(inverseViewMatrixLocation, false, new Float32Array(m4.inverse(viewMatrix)));
 	gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
 	
 	//Load these values from globals which u change!
-	gl.uniform3fv(lightPositionAttribLocation, [20, 2, 20]);
-	gl.uniform3fv(lightColourAttribLocation, [1, 0.6, 0.6]); //red light
+	//gl.uniform3fv(lightPositionAttribLocation, [20, 2, 20]);
+	gl.uniform3fv(lightColourAttribLocation, [1, 1, 1]);
 	
 	//Load up shine variables into shader
 	//Float so uniform1f
+	//console.log("in updateAttributesAndUniforms, DAMPER: " + currentTexture.getTextureAttribute.shineDamper);
+	//console.log("in updateAttributesAndUniforms, reflect: " + currentTexture.getTextureAttribute.reflectivity);
+
 	gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
 	gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
 
-	
+	//Directional lighting, coming straight down?
+	gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0, -1, 0]));
+	//For specular lighting
+	gl.uniform3fv(lightDirectionLocation, m4.normalize([0, -1, 0]));
 }
 //Combine view and projection matrices
 //var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);

@@ -228,7 +228,6 @@ function Terrain(){
 		
 		console.log("Terrain vertices: " + size);
 		console.log("Individual terrain x,y,z values: " + terrainVertices.length);		
-		console.log("Length of temporary terrain normals: " + terrainNormals.length);
 	}
 	
 	/*
@@ -413,14 +412,22 @@ function Terrain(){
 	Apply matrices, then draw the terrain.
 	*/
 	this.render = function(){	
-		//Set the current texture, so updateAttributesAndUniforms gets updated
-		//For specular light
-		currentTexture = masterTerrainTexture;
-	
+		/*
+		Set the current texture, so updateAttributesAndUniforms gets updated
+		For specular light
+		*/
+		currentTexture = myPerlinTexture;
+		console.log("Terrain texture reflectivity: " + currentTexture.getTextureAttribute.reflectivity);
+		console.log("Terrain texture damper: " + currentTexture.getTextureAttribute.shineDamper);
+		
+		/*
+		Weird names, in matrcies u have global matrixs as rotatX, rotateY,
+		but here u have xRotation..... ??????
+		*/
 		scale = m4.scaling(1, 1, 1);
-		xRotation = m4.xRotation(0);
-		yRotation = m4.yRotation(0);
-		zRotation = m4.zRotation(0);
+		rotateX = m4.xRotation(0);
+		rotateY = m4.yRotation(0);
+		rotateZ = m4.zRotation(0);
 		position = m4.translation(0, 0, 0);
 		
 		//Times matrices together
@@ -436,6 +443,11 @@ function Terrain(){
 		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture); //myPerlinTexture
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
 
+		//Normals
+		gl.enableVertexAttribArray(normalAttribLocation);
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainNormalBuffer);
+		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
+		
 		
 		//Elements
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);

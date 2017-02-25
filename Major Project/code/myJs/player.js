@@ -177,7 +177,7 @@ function Player(x, y, z){
 		viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 		
 		//Stops it breaking....
-		currentTexture = masterTerrainTexture;
+		currentTexture = myPerlinTexture;
 		
 		//Do I even needs this here? probably...
 		//Times matrices together

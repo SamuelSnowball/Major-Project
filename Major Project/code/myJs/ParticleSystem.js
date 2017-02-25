@@ -50,7 +50,7 @@ function ParticleSystem(){
 	Shouldn't matter, as particles will be temporary
 	*/
 	this.render = function(){
-		
+		currentTexture = myParticleTexture;
 		for(var i=0; i<particle_vertices.length; i+=4){
 		
 			scale = m4.scaling(10, 10, 10);
@@ -79,7 +79,7 @@ function ParticleSystem(){
 			gl.bindBuffer(gl.ARRAY_BUFFER, particle_uvs_buffer);
 			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, marsTerrainTexture);
+			gl.bindTexture(gl.TEXTURE_2D, myParticleTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
 			
 			gl.drawArrays(
