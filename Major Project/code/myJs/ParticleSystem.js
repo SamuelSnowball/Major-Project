@@ -3,8 +3,11 @@ function ParticleSystem(){
 	
 	var particle_vertices = [];
 	var particle_uvs = [];
+	var particle_normals = [];
+	
 	var particle_positions_buffer;
 	var particle_uvs_buffer;
+	var particle_normals_buffer;
 	var particleCount = 100;
 	
 	createParticles();
@@ -20,6 +23,7 @@ function ParticleSystem(){
 		
 		particle_vertices.push(this.x, this.y, this.z);
 		particle_uvs.push(this.u, this.v);
+		particle_normals.push(0, 1, 0);
 	}
 
 	function createParticles(){
@@ -40,6 +44,10 @@ function ParticleSystem(){
 		particle_uvs_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, particle_uvs_buffer);	
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_uvs), gl.STATIC_DRAW);
+		
+		particle_normals_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, particle_normals_buffer);	
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_normals), gl.STATIC_DRAW);		
 	}
 	
 	
@@ -81,6 +89,10 @@ function ParticleSystem(){
 			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, myParticleTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+			
+			gl.enableVertexAttribArray(normalAttribLocation);
+			gl.bindBuffer(gl.ARRAY_BUFFER, particle_normals_buffer);
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
 			
 			gl.drawArrays(
 				gl.POINTS, 

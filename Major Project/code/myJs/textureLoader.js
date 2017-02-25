@@ -12,12 +12,12 @@ var myParticleTexture;
 var marsRedTerrainTexture;
 var marsTerrainTexture;
 
-var rockTexture = new Texture('resources/rocks/rock.png', 1000, 1);
-var rockTexture2 = new Texture('resources/rocks/rock2.png', 1000, 1);
-var sandstoneTexture = new Texture('resources/rocks/sandstone.png', 1000, 1);
-var depletedTexture = new Texture('resources/rocks/depleted.png', 1000, 1);
+var rockTexture = new Texture('resources/rocks/rock.png', 1000, 0);
+var rockTexture2 = new Texture('resources/rocks/rock2.png', 1000, 0);
+var sandstoneTexture = new Texture('resources/rocks/sandstone.png', 1000, 0);
+var depletedTexture = new Texture('resources/rocks/depleted.png', 1000, 0);
 
-var waterTexture = new Texture('resources/water/water.png', 10, 1);
+var waterTexture = new Texture('resources/water/water.png', 0.01, 1);
 
 
 /*

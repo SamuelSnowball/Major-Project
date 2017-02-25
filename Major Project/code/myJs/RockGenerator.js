@@ -233,9 +233,9 @@ function RockGenerator(){
 				rockVertices.push( vertex.x, vertex.y, vertex.z );
 
 				// normal
-				//how is this working... normals is empty array?
-				rockNormals.push( normal.x, normal.y, normal.z );
-
+				//rockNormals.push( normal.x, normal.y, normal.z );
+				rockNormals.push(0, 1, 0);
+				
 				// uv
 
 				rockUvs.push( u, 1 - v );
@@ -352,6 +352,7 @@ function RockGenerator(){
 	Loop through rocks array, separate draw call for each
 	*/
 	this.renderRocks = function(){
+		lightColour = [1, 1, 1];
 		for(var i=0; i<rocks.length; i++){
 			currentTexture = rocks[i].texture;
 
@@ -375,9 +376,9 @@ function RockGenerator(){
 			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
 			
-			//Lights, they're set as uniform.. are they being set anywhere?
-			
-			
+			//Normals
+			gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);				
 			
 			//Elements
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, rockElementBuffer);
@@ -411,6 +412,7 @@ function RockGenerator(){
 	
 	var triStartPosition = 0;
 	this.renderTriangleRocks = function (){
+		lightColour = [1, 1, 1];
 		for(var i=0; i<triangleRocks.length; i++){
 			currentTexture = triangleRocks[i].texture;
 			//debugger;
@@ -430,6 +432,10 @@ function RockGenerator(){
 			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+		
+			//Normals
+			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockNormalsBuffer);
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
 			
 			gl.drawArrays(gl.TRIANGLES, triStartPosition, 12);
 			
@@ -451,6 +457,10 @@ function RockGenerator(){
 			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+
+			//Normals
+			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockNormalsBuffer);
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
 			
 			gl.drawArrays(gl.TRIANGLES, triStartPosition, 12);			
 			
@@ -472,6 +482,10 @@ function RockGenerator(){
 			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+
+			//Normals
+			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockNormalsBuffer);
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
 			
 			gl.drawArrays(gl.TRIANGLES, triStartPosition, 12);
 			

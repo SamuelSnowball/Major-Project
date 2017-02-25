@@ -283,11 +283,11 @@ function Terrain(){
 				//Also the vectors could've been calculated wrong way around
 			var normal = m4.cross(vector0, vector1);
 			
-			terrainNormals.push(normal[0]); //x
-			terrainNormals.push(normal[1]); //y
-			terrainNormals.push(normal[2]); //z
+			terrainNormals.push(-normal[0]); //x
+			terrainNormals.push(-normal[1]); //y
+			terrainNormals.push(-normal[2]); //z
 			
-			
+			//console.log("A terrain normal is, x: " + -normal[0] + ", y: " + -normal[1] + ", z:" + -normal[2]);
 		}
 		
 		/*
@@ -416,6 +416,7 @@ function Terrain(){
 		Set the current texture, so updateAttributesAndUniforms gets updated
 		For specular light
 		*/
+		lightColour = [1, 1, 1];
 		currentTexture = myPerlinTexture;
 		console.log("Terrain texture reflectivity: " + currentTexture.getTextureAttribute.reflectivity);
 		console.log("Terrain texture damper: " + currentTexture.getTextureAttribute.shineDamper);

@@ -220,14 +220,16 @@ function render(){
 	
 	
 	
-	//particleSystem.render();
+	particleSystem.render();
 	terrain.render(); //terrain.js,
-	//collisionTester.setPlayerHeight(); //collision.js
-	//collisionTester.testPlayerRockCollision();
-	//rockGenerator.renderRocks();
-	//rockGenerator.renderTriangleRocks();
-	//waterSystem.updateWaterVertices();
-	//waterSystem.render();
+	
+	collisionTester.setPlayerHeight(); //collision.js
+	collisionTester.testPlayerRockCollision();
+	rockGenerator.renderRocks();
+	rockGenerator.renderTriangleRocks();
+	
+	waterSystem.updateWaterVertices();
+	waterSystem.render();
 	
 	
 	

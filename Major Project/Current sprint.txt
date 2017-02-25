@@ -71,14 +71,16 @@ Sprint 1 (20th - 27th February)
 		Added proper texture class
 			-Fix random leftover code at bottom
 			-Also replace terrain with perlinTexture
+		
+		Inversed my terrain and water normals, they now point right direction
+		My light direction, is going the same way as the normals.... ??
+		Yes, because its surfaceToLightVector, so it makes sense that they go same way!
 
 		To do:
 			FIX ROTATION NAMES IN RENDER, THEY'RE DIFFERENT FROM
 			THOSE GLOBAL NAMES IN MATRICES, xRotation VS rotateX!
 
 			MAKE SURE NORMALS GET BOUND WHEN RENDERING
-
-			Clean up shaders
 
 			Take initial screenshots of lighting when fixed
 			How to enable and disable specular? follow tutorial till end
@@ -88,6 +90,9 @@ Sprint 1 (20th - 27th February)
 			of the terrain, there are no highlights whatsoever, because the normals
 			are pointing straight up
 
+			If shineDamper 1000, it has no specular, nice
 
 		Future to do:
-			Calculate normals for water, each frame, specular it up
+			Set different colours for ambient, specular etc?
+			Why cant i see specular highlights on water?
+				-Its shimmering, because light coming from 1 direction

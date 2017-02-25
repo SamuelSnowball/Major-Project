@@ -28,6 +28,7 @@ function WaterSystem(){
 		
 		fillWaterHeightMap();
 		createWaterVertices();
+		createWaterNormals();
 		
 		setupWaterIndiciesBuffer();
 		setupWaterTextureCoordinates();
@@ -41,7 +42,6 @@ function WaterSystem(){
 			waterVertices = []; //reset all vertices, ready for new ones
 								//hm idk if this is good
 								
-								//reset normals
 			waterNormals = [];
 			
 			var waterX = 0,
@@ -54,7 +54,7 @@ function WaterSystem(){
 				waterVertices.push(waterHeightMap[x][y]);
 				waterVertices.push(waterZ); 
 				
-				waterNormals.push(0, 1, 0); //temporary
+				//waterNormals.push(0, 1, 0); //temporary
 				
 				//Move along in the row
 				waterX++;
@@ -73,9 +73,77 @@ function WaterSystem(){
 		//console.log("Individual water x,y,z values: " + waterVertices.length);	
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.STATIC_DRAW);
 		
-		//do water buffer
-		gl.bindBuffer(gl.ARRAY_BUFFER, waterNormalsBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterNormals), gl.STATIC_DRAW);
+		//Dont have to reset, normals, becauase theyre updated in shader?
+		createWaterNormals();
+		setupWaterNormalsBuffer();
+	}
+	
+	/*
+	Copied from terrain normals
+	*/
+	function createWaterNormals(){
+		for(var i=0; i<waterVertices.length; i+=3){
+			//Get 1st point (3 vertices), 2nd point(3 vertices), 3rd (3 vertices)(under) point
+			
+			//Top left vertex
+			var vertex0x = waterVertices[i];
+			var vertex0y = waterVertices[i+1];
+			var vertex0z = waterVertices[i+2];
+			
+			//Top right vertex
+			var vertex1x = waterVertices[i+3];
+			var vertex1y = waterVertices[i+4];
+			var vertex1z = waterVertices[i+5];
+			
+			//Under top left vertex
+			//Its the current row times the current column!
+			//They both dont exist, just add a single value
+			//i + value 
+			//i + 1 + value
+			//try value as 1024, would push current value exactly 1 row down
+			// times 3, because 3 vertices, rows isnt 100% correct, as its a 1d array, with an x,y,z each
+			var vertex2x = waterVertices[i + (waterRows*3)];
+			var vertex2y = waterVertices[(i + 1) + (waterRows*3)];
+			var vertex2z = waterVertices[(i + 2) + (waterRows*3)];
+			
+			//Now work out vector0, might be wrong direction
+			var vector0x = vertex1x - vertex0x;
+			var vector0y = vertex1y - vertex0y;
+			var vector0z = vertex1z - vertex0z;
+			var vector0 = [vector0x, vector0y, vector0z];
+			
+			//Now work out vector1, might be wrong direction
+			var vector1x = vertex2x - vertex0x;
+			var vector1y = vertex2y - vertex0y;
+			var vector1z = vertex2z - vertex0z;
+			var vector1 = [vector1x, vector1y, vector1z];
+
+			//Need to normalize vectors
+			vector0 = m4.normalize(vector0);
+			vector1 = m4.normalize(vector1);
+			//console.log("vector 0: " + vector0);
+			//console.log("vector 1: " + vector1);
+			
+			
+			//Now cross product between vector0 and vector1
+				//vector0 * vector1, might be wrong way around,
+				//Also the vectors could've been calculated wrong way around
+			var normal = m4.cross(vector0, vector1);
+			
+			waterNormals.push(-normal[0]); //x
+			waterNormals.push(-normal[1]); //y
+			waterNormals.push(-normal[2]); //z
+			
+			
+		}
+		
+		/*
+		Should have same number of normals to individual x,y,z points
+		Because each x,y,z has a normal x,y,z
+		
+		TerrainVertices length / 3 = 104k vertices, each with a normal vector, of 3 components
+		*/
+		console.log("Water Normals length: " + waterNormals.length);	
 	}
 	
 	function setupWaterNormalsBuffer(){
@@ -262,6 +330,7 @@ function WaterSystem(){
 	
 	this.render = function(){
 		currentTexture = waterTexture;
+		lightColour = [0.2, 0.2, 0.8];
 		
 		scale = m4.scaling(1, 1, 1);
 		xRotation = m4.xRotation(0);
@@ -285,6 +354,9 @@ function WaterSystem(){
 		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
 		
+		gl.enableVertexAttribArray(normalAttribLocation);
+		gl.bindBuffer(gl.ARRAY_BUFFER, waterNormalsBuffer);
+		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
 
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, waterElementsBuffer);
 		

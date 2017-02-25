@@ -20,7 +20,6 @@ gl.shaderSource(fragmentShader, [
 	
 	
 	'varying vec3 surfaceNormal;', //varying is in for frag shader
-	'varying vec3 toLightVector;', //in
 	
 	//For directional
 	'uniform vec3 reverseLightDirection;',
@@ -31,61 +30,34 @@ gl.shaderSource(fragmentShader, [
 	
 	'void main(){',
 		//Normalize vectors to ensure size 1, so vector size doesnt affect .product
-		//'vec3 unitNormal = normalize(surfaceNormal);',
-		//'vec3 unitLightVector = normalize(toLightVector);',
-		//'float uncheckedBrightness = dot(unitNormal, unitLightVector);',
-		
 		//Directional
 		'vec3 unitNormal = normalize(surfaceNormal);',
-		//'vec3 unitLightVector = normalize(reverseLightDirection);', //this aint being used!
 		'float uncheckedBrightness = dot(unitNormal, reverseLightDirection);',
-		'vec3 diffuse = uncheckedBrightness * lightColour ;',
-		
-		
+		'float brightness = max(uncheckedBrightness, 0.5);', //gives ambient light and not below 0.2
+		'vec3 diffuse = brightness * lightColour ;',
 		
 		//New specular, reverseLightDirection/unitLightVector might have to be re-reversed here
-		//unitLightVector is reverseLightDirection normalized!
+		//so passed in lightDirection
 		'vec3 surfaceToLightDirection = normalize(lightDirection);', //don't need to normalize, its the direction not position
 		'vec3 surfaceToCameraDirection = toCameraVector;',
 		'vec3 halfVector = normalize(surfaceToLightDirection + surfaceToCameraDirection);',
 		'float light = dot(surfaceNormal, surfaceToLightDirection);', //how close are they?
 		'float specular = dot(surfaceNormal, halfVector);',
 		
-		
-		
-		
-		
-		
-		
-		//ensure .product result is between 0 and 1, sometimes returns negative, dont care
-		//adding 0.1 as minimum makes ambient light
-		//'float brightness = max(uncheckedBrightness, 0.0);', //should be 0.0, will take whatever is higher
-		//'vec3 diffuse = brightness * lightColour ;', //10,10,10 for extra intensity
-		
-		//'vec3 unitVectorToCamera = normalize(toCameraVector);', //need to normalie italics
-		//'vec3 lightDirection = -unitLightVector;', //opposite of unitLightVector
-		
-		//now need to work out reflection vector
-		//glsl has reflect function for us :)
-		//takes in incoming vector and normal, outputs reflected light direction
-		//'vec3 reflectedLightDirection = reflect(lightDirection, unitNormal);',
-		
+		//New code, from the old specular code, might break
+		//Adds ability to change specular parameters
 		//Now have the 2 vectors needed for dot product, to see how much of the reflected light is going into camera
 		//also make sure its greater than 0
-		//'float specularFactor = dot(reflectedLightDirection, unitVectorToCamera);',
-		//'specularFactor = max(specularFactor, 0.0);',
-		//Apply damping factor
-		//'float dampedFactor = pow(specularFactor, shineDamper);',
-		
+		'specular = max(specular, 0.0);',
+		'float dampedFactor = pow(specular, shineDamper);',
 		//Now to get final specular light value, multiply by specular light by the light colour
-		//'vec3 finalSpecular = dampedFactor *  reflectivity * lightColour;',
-		//make specular into 4d vector, so rgba rather than rgb
+		'vec3 finalSpecular = dampedFactor *  reflectivity * lightColour;',
 		
 		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',// + vec4(finalSpecular, 1.0);',
 		
-		//New specular light
+		//Now add the specular light
 		'gl_FragColor.rgb *= light;',
-		'gl_FragColor.rgb += specular;',
+		'gl_FragColor.rgb += finalSpecular;', //was just specular
 		
 	'}'
 ].join('\n'));
