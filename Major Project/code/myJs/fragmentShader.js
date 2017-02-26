@@ -11,13 +11,11 @@ var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 gl.shaderSource(fragmentShader, [
 	'precision highp float;',
 	'varying highp vec2 vTextureCoord;',
-	
-	
 	'uniform sampler2D uSampler;',
+	
 	'uniform vec3 lightColour;',
 	'uniform float shineDamper;',
 	'uniform float reflectivity;',
-	
 	
 	'varying vec3 surfaceNormal;', //varying is in for frag shader
 	
@@ -28,12 +26,16 @@ gl.shaderSource(fragmentShader, [
 	//Specular, take in toCameraVector
 	'varying vec3 toCameraVector;',
 	
+	//Fog
+	'varying float visibility;',
+	'uniform vec4 skyColour;',
+	
 	'void main(){',
 		//Normalize vectors to ensure size 1, so vector size doesnt affect .product
 		//Directional
 		'vec3 unitNormal = normalize(surfaceNormal);',
 		'float uncheckedBrightness = dot(unitNormal, reverseLightDirection);',
-		'float brightness = max(uncheckedBrightness, 0.5);', //gives ambient light and not below 0.2
+		'float brightness = max(uncheckedBrightness, 1.0);', //gives ambient light and not below 0.2
 		'vec3 diffuse = brightness * lightColour ;',
 		
 		//New specular, reverseLightDirection/unitLightVector might have to be re-reversed here
@@ -59,6 +61,11 @@ gl.shaderSource(fragmentShader, [
 		'gl_FragColor.rgb *= light;',
 		'gl_FragColor.rgb += finalSpecular;', //was just specular
 		
+		//Fog, mix the skyColour and colour of the object
+		//min takes in 2 colours, 
+		//make skyColour 4d first
+		//2nd is the gl_FragColor (current fragment)
+		'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
 	'}'
 ].join('\n'));
 gl.compileShader(fragmentShader);

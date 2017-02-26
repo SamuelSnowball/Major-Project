@@ -45,8 +45,8 @@ canvas.addEventListener('mousedown', function(){
 	//Show GUI elements
 	document.getElementById("overlay").style.visibility = "visible";
 	document.getElementById("missionOverlay").style.visibility = "visible";
+	document.getElementById("nearestRockOverlay").style.visibility = "visible";
 	
-	document.getElementById("topLeftOverlay").style.visibility = "visible";
 	document.getElementById("topMiddleOverlay").style.visibility = "visible";
 	
 	document.getElementById("xpOverlay").style.visibility = "visible";

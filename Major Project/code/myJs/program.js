@@ -37,3 +37,6 @@ gl.enableVertexAttribArray(reverseLightDirectionLocation);
 //Specular
 var lightDirectionLocation = gl.getUniformLocation(program, 'lightDirection');
 gl.enableVertexAttribArray(lightDirectionLocation);
+
+var skyColourLocation = gl.getUniformLocation(program, 'skyColour');
+gl.enableVertexAttribArray(skyColourLocation);

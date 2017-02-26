@@ -143,7 +143,7 @@ function WaterSystem(){
 		
 		TerrainVertices length / 3 = 104k vertices, each with a normal vector, of 3 components
 		*/
-		console.log("Water Normals length: " + waterNormals.length);	
+		//console.log("Water Normals length: " + waterNormals.length);	
 	}
 	
 	function setupWaterNormalsBuffer(){
@@ -247,7 +247,7 @@ function WaterSystem(){
 				}
 
 				//0.01 is ok, a bit too same height on rows tho
-				waterSpawnHeight += 0.05;
+				waterSpawnHeight += 0.01;
 			}	
 		}
 	}
@@ -374,6 +374,56 @@ function WaterSystem(){
 		); 	
 		
 		
+		/*
+		
+		
+		Render lava, hacky
+		
+		
+		*/
+		currentTexture = lavaTexture;
+		lightColour = [1, 0.6, 0.6]; //red
+		
+		scale = m4.scaling(1, 1, 1);
+		xRotation = m4.xRotation(0);
+		yRotation = m4.yRotation(0);
+		/*
+		If you change this position, 
+		also need to change max/min height values in updateWaterVertices, 
+		also spawn points in fillWaterHeightMap
+		*/
+		position = m4.translation(-10, -2.1, -10); 
+		
+		//Times matrices together
+		updateAttributesAndUniforms();
+			
+		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexBuffer);
+		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, waterTextureCoordinateBuffer);
+		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
+		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+		
+		gl.enableVertexAttribArray(normalAttribLocation);
+		gl.bindBuffer(gl.ARRAY_BUFFER, waterNormalsBuffer);
+		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
+
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, waterElementsBuffer);
+		
+		/*
+		Mode
+		Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
+		Type
+		The indices
+		*/
+		gl.drawElements(
+			gl.TRIANGLE_STRIP, 
+			waterVertices.length / 3 * 2,
+			gl.UNSIGNED_INT, 
+			waterElementsBuffer
+		); 			
 	}
 	
 	

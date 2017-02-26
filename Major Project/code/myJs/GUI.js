@@ -4,6 +4,10 @@ var guiYNode;
 var guiZNode;
 
 var currentMissionNode;
+var currentMissionElement;
+
+var nearestRockNode;
+var nearestRockElement;
 
 function GUI(){
 	
@@ -37,13 +41,10 @@ function GUI(){
 		/*
 		Mission GUI
 		*/
-		var currentMissionElement = document.getElementById("currentMission");
+		currentMissionElement = document.getElementById("currentMission");
 		currentMissionNode = document.createTextNode("");
 		currentMissionElement.appendChild(currentMissionNode);
 		
-		var topLeftElement = document.getElementById("topLeftOverlay");
-		topLeftNode = document.createTextNode("");
-		topLeftElement.appendChild(topLeftNode);
 		
 		/*
 		XP GUI
@@ -52,6 +53,19 @@ function GUI(){
 		var xpElement = document.getElementById("xpOverlay");
 		xpNode = document.createTextNode("");
 		xpElement.appendChild(xpNode);
+		
+		/*
+		current rock 
+		*/
+		nearestRockElement = document.getElementById("nearestRockOverlay");
+		nearestRockNode = document.createTextNode("");
+		nearestRockElement.appendChild(currentMissionNode);		
+		
+	}
+	
+	this.updateMission = function(mission){
+		currentMissionNode = document.createTextNode(mission);
+		currentMissionElement.appendChild(currentMissionNode);	
 	}
 	
 	this.update = function(){
@@ -62,6 +76,21 @@ function GUI(){
 		guiZNode.nodeValue = Math.floor(player.z);	
 		
 		xpNode.nodeValue = Math.floor(player.get.xp);
+	}
+	
+	this.displayCurrentRock = function(){
+		//Check if player is near a rock,
+		//eventually get its texture and find its 2d version
+		if(player.get.inProspectingRange === true){
+			nearestRockElement.style.backgroundImage = "url('resources/rocks/guiRock.png')";
+		}
+		else{
+			nearestRockElement.style.backgroundImage = "none";
+		}
+		
+		//Could just display image of the rock
+		//How to rotate it, need to define vertices again?
+		//or somehow copy existing vertices, rotate those, so dont alter original?
 	}
 	
 }

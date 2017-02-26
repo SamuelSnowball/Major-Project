@@ -9,18 +9,21 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Add in rocks (ongoing)				(time: 10h) (priority: 8)
 		Create missions for user 			(time: 10h) (priority: 8)
 		Build terrain (ongoing) 			(time: 10h) (priority: 6)
-		Collision with terrain (ongoing) 		(time: 03h) (priority: 6)
+		Collision with rocks (ongoing) 			(time: 03h) (priority: 6)
 		Build GUIs 					(time: 10h) (priority: 6)
 		Texturing terrain 				(time: 05h) (priority: 5)
 		Add audio 					(time: 03h) (priority: 4)
 
 	Extra features:
-		Particle effects 				(time: 08h) (priority: 4)
-		Water 						(time: 10h) (priority: 4)
 		Clouds 						(time: 06h) (priority: 4)
-		Minimap 					(time: 08h) (priority: 3)
-		Lighting, shadows 				(time: 10h) (priority: 2)
+		Fog						(time: 06h) (priority: 4)
+		Particle effects 				(time: 08h) (priority: 3)
+		Minimap 					(time: 02h) (priority: 3)
+		Shadows 					(time: 10h) (priority: 2)
 		Initial loading scene 				(time: 03h) (priority: 2)
+		Day/night cycles				(time: 05h) (priority: 1)
+		Extra texture effects, bump mapping etc		(time: 10h) (priority: 1)
+		Rotating rock appears in GUI			(time: 05h) (priority: 1)
 
 	Documentation to write:
 		User manual, features, how to play
@@ -28,9 +31,11 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Technical stuff
 
 	Current features:
-		3D Mechanics, movement & rotation
+		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
 		Initial terrain 
 		Some rocks, with collision
+		Collision with terrain (ongoing) 		(time: 08h) (priority: 6)
+		Water 						(time: 10h) (priority: 4)
 
 
 For mid project release aiming for all core done - (Possible 13th march, 3 sprints left)

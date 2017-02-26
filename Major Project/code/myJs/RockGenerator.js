@@ -97,17 +97,25 @@ function RockGenerator(){
 			createRock(20, 30, 30, 0.3, rockTexture);
 			createRock(20, 30, 30, 0.4, rockTexture);
 			
-			createRock(20, 30, 30, 0.1, sandstoneTexture);
-			createRock(20, 30, 30, 0.2, sandstoneTexture);
-			createRock(20, 30, 30, 0.1, sandstoneTexture);
-			createRock(20, 30, 30, 0.2, sandstoneTexture);
+			createRock(20, 30, 30, 0.1, rockTexture);
+			createRock(20, 30, 30, 0.2, rockTexture);
+			createRock(20, 30, 30, 0.1, rockTexture);
+			createRock(20, 30, 30, 0.2, rockTexture);
 			
-			createTriangleRock(sandstoneTexture);
-			createTriangleRock(sandstoneTexture);
-			createTriangleRock(sandstoneTexture);
-			createTriangleRock(sandstoneTexture);
-			createTriangleRock(sandstoneTexture);
-			createTriangleRock(sandstoneTexture);
+			createTriangleRock(rockTexture);
+			createTriangleRock(rockTexture);
+			createTriangleRock(rockTexture);
+			
+			createTriangleRock(blueOreTexture);
+			createTriangleRock(blueOreTexture);
+			createTriangleRock(blueOreTexture);
+			
+			createTriangleRock(lavaRockTexture);
+			createTriangleRock(lavaRockTexture);
+			
+			createTriangleRock(emeraldTexture);
+			createTriangleRock(emeraldTexture);
+			
 		}
 	}
 
@@ -232,8 +240,7 @@ function RockGenerator(){
 				
 				rockVertices.push( vertex.x, vertex.y, vertex.z );
 
-				// normal
-				//rockNormals.push( normal.x, normal.y, normal.z );
+				// broken normals
 				rockNormals.push(0, 1, 0);
 				
 				// uv

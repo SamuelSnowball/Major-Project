@@ -3,9 +3,10 @@ function Terrain(){
 	/*
 	Private variables
 	*/
-	var rows = 1024; //1024
-	var columns = 1024;
+	var rows = 2048; //1024
+	var columns = 2048;
 	var size = rows * columns;
+	var heightMap = [];
 
 	var terrainVertices = [];
 	var terrainNormals = [];
@@ -80,7 +81,7 @@ function Terrain(){
 			temporaryHeightMapZ = name;
 		},
 		get getTemporaryHeightMapValue(){
-			return heightMap[temporaryHeightMapX][temporaryHeightMapZ];
+			return heightMap[temporaryHeightMapZ][temporaryHeightMapX];
 		}
 	}
 	
@@ -111,28 +112,13 @@ function Terrain(){
 		scale = 3;
 	*/
 	function fillHeightMap(){
-		/*
-		Bumpy terrain
-		*/
-		var offsetX = 0;
-		var offsetY = 0;
-		var offsetZ = 0;
-		var bumpyOffsetXIncrement = 0.05; //How it moves along the graph?
-		var bumpyOffsetYIncrement = 0.03; //How it moves along the graph?
-		var bumpyOffsetZIncrement = 0.08; //How it moves along the graph?
-			
+
 		var xOff = 0;
 		var yOff = 0;
-		
-		//var offsetXIncrement = 0.1; //How it moves along the graph
-		//var offsetYIncrement = 0.1; //How it moves along the graph
-		//var offsetZIncrement = 0.1; //How it moves along the graph
 		var offsetXIncrement = 0.001; //How it moves along the graph
 		var offsetYIncrement = 0.001; //How it moves along the graph
 		var offsetZIncrement = 0.001; //How it moves along the graph
 		
-		
-		var slopeHeight = 1;
 		
 		//var offsetIncrement = 0.001;
 		//var scale = 100;
@@ -144,23 +130,56 @@ function Terrain(){
 		for(var x=0; x<rows; x++){
 			for(var y=0; y<columns; y++){
 			
-				//4 Quadrants different noise scales, 1 random?
+				/*
+				16 Quadrants with 2048x2048:
 				
-				//1st quad
+					0->512x, 0->512y
+					512->1024x, 0->512y
+					1024->1536x, 0->512y
+					1536->2048x, 0->512y
+					
+					0->512x, 512->1024y
+					512->1024x, 512->1024y
+					1024->1536x, 512->1024y
+					1536->2048x, 512->1024y
+					
+					0->512x, 1024->1536y
+					512->1024x, 1024->1536y
+					1024->1536x, 1024->1536y
+					1536->2048x, 1024->1536y	
+					
+					0->512x, 1536->2048y
+					512->1024x, 1536->2048y
+					1024->1536x, 1536->2048y
+					1536->2048x, 1536->2048y	
+					
+				*/
 				var height = 0;
 				
-				if(x < 512 && y < 512){
+				if(x > 0 && x < 512 && y > 0 && y < 512){
+					scale = 2;
 					height = perlin.noise(xOff, yOff, xOff) * scale;
 				}
+				else if(x > 0 && x < 512 && y > 512 && y < 1024){
+					scale = 3;
+					height = perlin.noise(xOff, yOff, xOff) * scale;
+				}
+				else if(x > 0 && x < 512 && y > 1024 && y < 1536){
+					scale = 4;
+					height = perlin.noise(xOff, yOff, xOff) * scale;
+				}
+				else if(x > 0 && x < 512 && y > 1536 && y < 2048){
+					scale = 5;
+					height = perlin.noise(xOff, yOff, xOff) * scale;
+				}				
 				
-				if(x > 512 && y < 512){
+				/*
+				if(x > 512 && y < 1024){
 					offsetIncrement = 0.005;
 					scale = 50;
 					height = perlin.noise(xOff, yOff, xOff) * scale;
 				}
 				
-				
-				/*
 				if(x > 64 && x < 90){
 					var height = perlin.noise(xOff, yOff, xOff) * 2;
 					height -= 15;
@@ -418,8 +437,7 @@ function Terrain(){
 		*/
 		lightColour = [1, 1, 1];
 		currentTexture = myPerlinTexture;
-		console.log("Terrain texture reflectivity: " + currentTexture.getTextureAttribute.reflectivity);
-		console.log("Terrain texture damper: " + currentTexture.getTextureAttribute.shineDamper);
+		//currentTexture = depletedTexture;
 		
 		/*
 		Weird names, in matrcies u have global matrixs as rotatX, rotateY,

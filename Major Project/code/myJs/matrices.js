@@ -62,7 +62,7 @@ function computeModelMatrix(paramRotateX, paramRotateY, rotateZ, xPos, yPos, zPo
 }
 
 
-
+var skyColour = [1, 0.5, 0.3, 0.7];
 var lightColour = [1, 1, 1];
 function updateAttributesAndUniforms(){
 
@@ -94,4 +94,7 @@ function updateAttributesAndUniforms(){
 	//For specular lighting, its the same as above...
 	//This is the surfaceToLightVector, so yeah, it goes up!
 	gl.uniform3fv(lightDirectionLocation, m4.normalize([0, 1, 0]));
+	
+	//Fog
+	gl.uniform4fv(skyColourLocation, skyColour);
 }

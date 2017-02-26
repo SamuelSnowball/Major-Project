@@ -1,0 +1,19 @@
+Map design, birds eye view
+
+4x4 grid, 16 quadrants (2048x2048)
+Will use various textures for different quadrants so map isnt boring
+Different perlin noise for different sections
+Ores for different sections
+
+User spawns near center of the map
+
+Lava and water spawn in random places
+-will be difficult to find 
+
+Unlock quadrants when completed certain missions
+
+Minimap 
+	very easy to make, just a 4x4 grid with their
+	current cell coloured in
+	Could have 'avaliable areas' and 'locked areas'
+	And 'current area' highlighted

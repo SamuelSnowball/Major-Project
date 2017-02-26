@@ -2,17 +2,14 @@
 function CollisionTester(){
 	
 	/*
-	Causes the bumpy effect when moving over terrain.
+	Moves the player when traversing over terrain.
 
 	Uses the players current X and Z position to find what terrain vertex they're nearest to.
 	The players height then gets assigned to the nearest terrain vertex.
 	*/
 	this.setPlayerHeight = function(){
 		/*
-		Use playerX and Z to find value its height in 1d heightMap array
-		
-		player X += 1 value into the 1d array
-		player Z += 64 values into the 1d array
+		Use playerX and Z to find value its height in heightMap array
 		
 		playerX,Y,Z can be negative, so turn positive first
 		
@@ -30,10 +27,7 @@ function CollisionTester(){
 		}else{
 			tempPlayerZ = player.z;
 		}
-		
-		//console.log("temp x: " + tempPlayerX);
-		//console.log("temp z: " + tempPlayerZ);
-		
+
 		/*
 		Player coordinates get floored so they don't screw up the array indexing, must be a integer.
 		*/
@@ -49,10 +43,6 @@ function CollisionTester(){
 			tempPlayerZ = Math.ceil(tempPlayerZ);
 		}
 		
-		//console.log("rounded x: " + tempPlayerX);
-		//console.log("rounded z: " + tempPlayerZ);
-		
-		
 		/*
 		Need to find what height to position the player at.
 		So need to find what terrain vertex they're nearest to.
@@ -67,61 +57,16 @@ function CollisionTester(){
 		if(tempPlayerX > 0){ //if tempPlayerX isn't NaN
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = tempPlayerX;
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = tempPlayerZ;
+			
 			nearestHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
 		}else{
 			nearestHeight = 0;
 		}
-		//console.log("Nearest height: " + heightMap[tempPlayerX][tempPlayerZ]);
 
-		/*
-		See which quadrant they're in, increase height based on it
-		*/
-		var heightIncrement = 0.01;
-
-		if(player.z > 0 && player.z < 512 && player.x > 0 && player.x < 512){
-			
-			//Not great if nearestHeight is like -1 or -0.8, so the below if statement
-			if(nearestHeight < -0.5){
-				nearestHeight += 0.3;
-			}
-			
-			player.y = nearestHeight + 2;
-			
-			var correctPlayerHeight;
-			if(nearestHeight > 0.4){
-				correctPlayerHeight = -nearestHeight + 3;
-				//console.log("Decent hill");
-			}
-			if(nearestHeight > 1.4){
-				correctPlayerHeight = -nearestHeight + 3.5;
-				//console.log("Decent hill");
-			}
-			if(nearestHeight > 1.8){
-				correctPlayerHeight = -nearestHeight + 4;
-				//console.log("Decent hill");
-			}
-			
-			slowlyIncrementPlayerHeight(correctPlayerHeight, heightIncrement);
-
-		}
-		else if(player.x > 256 && player.x < 512 && player.z > 0 && player.z < 512){
-			//In different section
-			
-		}	
+		//Assign the nearest terrain height to the player height
+		player.y = nearestHeight + 1;
 	}
 	
-	/*
-	Slowly increment height to the nearest terrain vertex,
-	stop when that height is reached
-	*/
-	function slowlyIncrementPlayerHeight(correctPlayerHeight, heightIncrement){
-		if(player.y > correctPlayerHeight){
-		
-		}
-		else{
-			player.y += heightIncrement;
-		}
-	}
 	
 	
 	/*
@@ -137,7 +82,17 @@ function CollisionTester(){
 	Eventually just check collision of the rocks in the quadrant that the player is in
 	*/
 	this.testPlayerRockCollision = function(){
-
+		
+		/*
+		Say they're not in any prospecting range, then when we check if they are, edit this variable
+		
+		If you put it in an else, block, 
+			It breaks because they're in range of one rock
+			And it gets set to true
+			Then it tests for the next rock, and it goes false!
+		*/
+		player.set.inProspectingRange = false;
+		
 		//Retrieve rocks array from the rockGenerator class
 		var rocks = rockGenerator.getRocksArray.getRocks;
 		for(var i=0; i<rocks.length; i++){
@@ -153,6 +108,8 @@ function CollisionTester(){
 				player.z <	rocks[i].z + (rocks[i].scale*35) 
 			
 			){
+				//They're in range, update GUI with current rock
+				player.set.inProspectingRange = true; 
 				isProspecting(rocks[i]);
 
 				/*
@@ -167,6 +124,7 @@ function CollisionTester(){
 				){
 					player.moveForwardOrBackward();
 				}
+				
 			}
 		}	
 		
@@ -202,14 +160,22 @@ function CollisionTester(){
 	Then they're prospecting the rock
 	*/
 	function isProspecting(rock){
-		if(player.get.prospecting === true){
-			console.log("range textured");
-			rock.texture = depletedTexture;
-			//Display progress bar, when hits 100%, change rocks texture
-			//So pass in current rock to this function, 
+		/*
+		Check if rock is already depleted, if so, they cant prospect it again!
+		*/
+		if(rock.texture === depletedTexture){
+			//Already depleted!
 		}
-	}
-	
+		else{
+			if(player.get.prospecting === true){
+				rock.texture = depletedTexture;
+				player.add.xp = 1;
+				//Display progress bar, when hits 100%, change rocks texture
+				//So pass in current rock to this function, 
+			}
+		}
+	}	
+
 }
 
 

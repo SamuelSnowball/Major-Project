@@ -45,7 +45,7 @@
 		border-radius: 1em;
 		border: 5px solid #0000ff;
 	}
-	#topLeftOverlay{
+	#nearestRockOverlay{
 		position: absolute;
 		left: 50%;
 		top: 62%;
@@ -115,12 +115,12 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
   
   <!-- Displays current mission -->
   <div id="missionOverlay" class="canvasClass" style="visibility: hidden">
-    <div>Current mission: <span id="playerPosition"></span></div>
+    <div>Current mission: <span id="current"></span></div>
     <div><span id="currentMission"></span></div>
   </div>
 
-  <div id="topLeftOverlay" class="canvasClass" style="visibility: hidden">
-    <div>Left: <span id="topLeft"></span></div>
+  <div id="nearestRockOverlay" class="canvasClass" style="visibility: hidden">
+    <div>Rock info: <span id="topLeft"></span></div>
     <div><span id="topLeftText"></span></div>
   </div>
   
@@ -165,6 +165,8 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/WaterSystem.js"></script>
 <script src="code/myJs/Terrain.js"></script>
 <script src="code/myJs/Player.js"></script>
+<script src="code/myJs/MissionAssigner.js"></script>
+<script src="code/myJs/Sound.js"></script>
 
 <!-- Broken -->
 <script src="code/myJs/WorldState.js"></script>
@@ -194,13 +196,16 @@ var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 var rockGenerator = new RockGenerator();
 var waterSystem = new WaterSystem();
+var missionAssigner = new MissionAssigner();
+var sound = new Sound();
+
 
 
 function render(){
-	gl.clearColor(0, 0, 0, 0);
+	//What is with the alpha component, and I'll probably need it in shader as well as vec4
+	gl.clearColor(1, 0.5, 0.3, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	//Why render something if we cant see it?
-	//gl.cullFace(gl.BACK);
 	
 	
 	/*
@@ -214,7 +219,7 @@ function render(){
 	//console.log("Player X, Y, Z: " + Math.floor(player.x) + ", " + Math.floor(player.y) + ", " + Math.floor(player.z));
 	player.movePlayer();
 	gui.update();
-	
+	gui.displayCurrentRock();
 	
 	
 	
@@ -228,16 +233,10 @@ function render(){
 	rockGenerator.renderRocks();
 	rockGenerator.renderTriangleRocks();
 	
-	waterSystem.updateWaterVertices();
-	waterSystem.render();
-	
-	
-	
-	
-	
-	
-	player.add.xp = 1;
-	//checkOrAssignPlayerMissions();
+	//waterSystem.updateWaterVertices();
+	//waterSystem.render();
+
+	missionAssigner.checkOrAssignPlayerMissions();
 	
 	gameTime++;
 	requestAnimationFrame(render);
@@ -252,6 +251,8 @@ function setup(){
 	
 	//worldState.loadWorld(); //WorldState.js
 	gui.setup();
+	missionAssigner.setup();
+	
 	
 
 
