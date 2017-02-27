@@ -9,21 +9,40 @@ function Player(x, y, z){
 	this.xRotation = 0;
 	this.yRotation = 0;
 	
+	
+	
 	/*
 	P key, are they prospecting a rock?
 	
 	Prospecting getter needed in CollisonTester class
 	*/
 	var prospecting = false; 
+	var inProspectingRange = false; //To know whether to update GUI or not
 	var xp = 0;
+	var hasMission = false;
 	this.get = {
 		get prospecting(){
 			return prospecting;
 		},
 		get xp(){
 			return xp;
+		},
+		get hasMission(){
+			return hasMission;
+		},
+		get inProspectingRange(){
+			return inProspectingRange;
 		}
 	}	
+	
+	this.set = {
+		set mission(missionParam){
+			hasMission = missionParam;
+		},
+		set inProspectingRange(inRange){
+			inProspectingRange = inRange;
+		}
+	}
 	
 	this.add = {
 		set xp(xpParam){
@@ -70,7 +89,6 @@ function Player(x, y, z){
 			}
 			if(event.keyCode === 80){
 				prospecting = true;
-				console.log("prospecting");
 			}
 		});
 		
@@ -177,7 +195,7 @@ function Player(x, y, z){
 		viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 		
 		//Stops it breaking....
-		currentTexture = masterTerrainTexture;
+		currentTexture = myPerlinTexture;
 		
 		//Do I even needs this here? probably...
 		//Times matrices together

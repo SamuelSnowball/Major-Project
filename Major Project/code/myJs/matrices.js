@@ -62,28 +62,37 @@ function computeModelMatrix(paramRotateX, paramRotateY, rotateZ, xPos, yPos, zPo
 }
 
 
-
+var skyColour = [1, 0.5, 0.3, 0.7];
+var lightColour = [1, 1, 1];
 function updateAttributesAndUniforms(){
+
+	//why is rotate z has position?
 	fullTransforms = m4.multiply(position, rotateZ);
 	fullTransforms = m4.multiply(fullTransforms, rotateY);
 	fullTransforms = m4.multiply(fullTransforms, rotateX);
 	fullTransforms = m4.multiply(fullTransforms, scale);
-
+	
 	gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 	gl.uniformMatrix4fv(viewMatrixLocation, false, new Float32Array(viewMatrix));
 	gl.uniformMatrix4fv(inverseViewMatrixLocation, false, new Float32Array(m4.inverse(viewMatrix)));
 	gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
 	
 	//Load these values from globals which u change!
-	gl.uniform3fv(lightPositionAttribLocation, [20, 2, 20]);
-	gl.uniform3fv(lightColourAttribLocation, [1, 0.6, 0.6]); //red light
+	//gl.uniform3fv(lightPositionAttribLocation, [20, 2, 20]);
+	gl.uniform3fv(lightColourAttribLocation, lightColour);
 	
 	//Load up shine variables into shader
 	//Float so uniform1f
 	gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
 	gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
 
+	//Directional lighting, coming straight down?
+	gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0, -1, 0]));
 	
+	//For specular lighting, its the same as above...
+	//This is the surfaceToLightVector, so yeah, it goes up!
+	gl.uniform3fv(lightDirectionLocation, m4.normalize([0, 1, 0]));
+	
+	//Fog
+	gl.uniform4fv(skyColourLocation, skyColour);
 }
-//Combine view and projection matrices
-//var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);

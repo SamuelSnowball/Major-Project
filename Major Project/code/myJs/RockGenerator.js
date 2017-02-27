@@ -44,6 +44,7 @@ function RockGenerator(){
 	var triangleRockTextureCoordinateBuffer;
 	var triangleRockElementBuffer;
 	var triangleRockPositionBuffer;
+	var triangleRockNormalsBuffer;
 	
 	var triangleRocks = [];
 	
@@ -96,17 +97,25 @@ function RockGenerator(){
 			createRock(20, 30, 30, 0.3, rockTexture);
 			createRock(20, 30, 30, 0.4, rockTexture);
 			
-			createRock(20, 30, 30, 0.1, sandstoneTexture);
-			createRock(20, 30, 30, 0.2, sandstoneTexture);
-			createRock(20, 30, 30, 0.1, sandstoneTexture);
-			createRock(20, 30, 30, 0.2, sandstoneTexture);
+			createRock(20, 30, 30, 0.1, rockTexture);
+			createRock(20, 30, 30, 0.2, rockTexture);
+			createRock(20, 30, 30, 0.1, rockTexture);
+			createRock(20, 30, 30, 0.2, rockTexture);
+			
+			createTriangleRock(rockTexture);
+			createTriangleRock(rockTexture);
+			createTriangleRock(rockTexture);
+			
+			createTriangleRock(blueOreTexture);
+			createTriangleRock(blueOreTexture);
+			createTriangleRock(blueOreTexture);
+			
+			createTriangleRock(lavaRockTexture);
+			createTriangleRock(lavaRockTexture);
 			
 			createTriangleRock(emeraldTexture);
 			createTriangleRock(emeraldTexture);
-			createTriangleRock(emeraldTexture);
-			createTriangleRock(emeraldTexture);
-			createTriangleRock(emeraldTexture);
-			createTriangleRock(emeraldTexture);
+			
 		}
 	}
 
@@ -127,7 +136,7 @@ function RockGenerator(){
 		triangleRockVertices.push(-1.0 , -1.0 , -1.0 );
 		triangleRockVertices.push(-1.0 , -1.0 ,  1.0 );
 	
-
+		//Texture coordinates Random!
 		triangleRockUvs.push(0, 0.08);
 		triangleRockUvs.push(0.08, 0.16);
 		triangleRockUvs.push(0.16, 0.24);
@@ -143,6 +152,20 @@ function RockGenerator(){
 		triangleRockUvs.push(0.72, 0.8);
 		triangleRockUvs.push(0.8, 0.88);
 		triangleRockUvs.push(0.88, 1);
+		
+		//Temporary!
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
+		triangleRockNormals.push(0, 1 ,0);
 		
 		/*
 		Set x and z coordinate of the rock
@@ -217,10 +240,9 @@ function RockGenerator(){
 				
 				rockVertices.push( vertex.x, vertex.y, vertex.z );
 
-				// normal
-				//how is this working... normals is empty array?
-				rockNormals.push( normal.x, normal.y, normal.z );
-
+				// broken normals
+				rockNormals.push(0, 1, 0);
+				
 				// uv
 
 				rockUvs.push( u, 1 - v );
@@ -299,7 +321,14 @@ function RockGenerator(){
 		
 		triangleRockTextureCoordinateBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockTextureCoordinateBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleRockUvs), gl.STATIC_DRAW);		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleRockUvs), gl.STATIC_DRAW);	
+
+		//TriangleRock normals havent been calculated properly
+		triangleRockNormalsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockNormalsBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleRockNormals), gl.STATIC_DRAW);		
+			console.log("TRI ROCK NORMALS LENGTH: " + triangleRockNormals.length);
+			console.log("TRI ROCK VERTICES LENGTH: " + triangleRockVertices.length);
 	}
 
 	function setupRockBuffers(){
@@ -321,13 +350,19 @@ function RockGenerator(){
 		rockNormalsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockNormals), gl.STATIC_DRAW);
+		
+			console.log("ROCK NORMALS LENGTH: " + rockNormals.length);
+			console.log("ROCK VERTICES LENGTH: " + rockVertices.length);
 	}
 
 	/*
 	Loop through rocks array, separate draw call for each
 	*/
 	this.renderRocks = function(){
+		lightColour = [1, 1, 1];
 		for(var i=0; i<rocks.length; i++){
+			currentTexture = rocks[i].texture;
+
 			//debugger;
 			scale = m4.scaling(rocks[i].scale, rocks[i].scale, rocks[i].scale);
 			xRotation = m4.xRotation(rocks[i].xRotation);
@@ -345,16 +380,12 @@ function RockGenerator(){
 			gl.bindBuffer(gl.ARRAY_BUFFER, rockTextureCoordinateBuffer);
 			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, rocks[i].texture);
+			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
 			
 			//Normals
 			gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
-			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
-			
-			//Lights, they're set as uniform.. are they being set anywhere?
-			
-			
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);				
 			
 			//Elements
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, rockElementBuffer);
@@ -388,7 +419,10 @@ function RockGenerator(){
 	
 	var triStartPosition = 0;
 	this.renderTriangleRocks = function (){
+		lightColour = [1, 1, 1];
 		for(var i=0; i<triangleRocks.length; i++){
+			currentTexture = triangleRocks[i].texture;
+			
 			//debugger;
 			scale = m4.scaling(triangleRocks[i].scale, triangleRocks[i].scale, triangleRocks[i].scale);
 			position = m4.translation(triangleRocks[i].x, triangleRocks[i].y, triangleRocks[i].z);
@@ -400,11 +434,16 @@ function RockGenerator(){
 			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockPositionBuffer);
 			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 			
+			//Uvs
 			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockTextureCoordinateBuffer);
 			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, triangleRocks[i].texture);
+			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+		
+			//Normals
+			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockNormalsBuffer);
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
 			
 			gl.drawArrays(gl.TRIANGLES, triStartPosition, 12);
 			
@@ -424,8 +463,12 @@ function RockGenerator(){
 			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockTextureCoordinateBuffer);
 			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, triangleRocks[i].texture);
+			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+
+			//Normals
+			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockNormalsBuffer);
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
 			
 			gl.drawArrays(gl.TRIANGLES, triStartPosition, 12);			
 			
@@ -445,8 +488,12 @@ function RockGenerator(){
 			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockTextureCoordinateBuffer);
 			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, triangleRocks[i].texture);
+			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+
+			//Normals
+			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockNormalsBuffer);
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
 			
 			gl.drawArrays(gl.TRIANGLES, triStartPosition, 12);
 			
