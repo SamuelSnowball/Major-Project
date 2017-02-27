@@ -83,14 +83,12 @@ function updateAttributesAndUniforms(){
 	
 	//Load up shine variables into shader
 	//Float so uniform1f
-	//console.log("in updateAttributesAndUniforms, DAMPER: " + currentTexture.getTextureAttribute.shineDamper);
-	//console.log("in updateAttributesAndUniforms, reflect: " + currentTexture.getTextureAttribute.reflectivity);
-
 	gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
 	gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
 
 	//Directional lighting, coming straight down?
 	gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0, -1, 0]));
+	
 	//For specular lighting, its the same as above...
 	//This is the surfaceToLightVector, so yeah, it goes up!
 	gl.uniform3fv(lightDirectionLocation, m4.normalize([0, 1, 0]));

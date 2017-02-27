@@ -11,14 +11,15 @@ var myParticleTexture;
 //Textures to do
 var marsRedTerrainTexture;
 
-var rockTexture = new Texture('resources/rocks/rock.png', 1000, 0);
-var rockTexture2 = new Texture('resources/rocks/rock2.png', 1000, 0);
-var depletedTexture = new Texture('resources/rocks/depleted.png', 1000, 0);
+var rockTexture = new Texture('resources/rocks/rock.png', 1, 1);
+var rockTexture2 = new Texture('resources/rocks/rock2.png', 1, 1);
+var depletedTexture = new Texture('resources/rocks/depleted.png', 1, 1);
 var blueOreTexture = new Texture('resources/rocks/blueOre.png', 1, 1);
 var lavaRockTexture =  new Texture('resources/lava.png', 1, 1);
 var emeraldTexture =  new Texture('resources/rocks/emerald.png', 1, 1);
 
-var waterTexture = new Texture('resources/water/water.png', 1, 1);
+//1st parameter lower number = less shine damper, so more bright
+var waterTexture = new Texture('resources/water/water.png', 10, 5);
 var lavaTexture = new Texture('resources/lava.png', 1, 1);
 
 /*

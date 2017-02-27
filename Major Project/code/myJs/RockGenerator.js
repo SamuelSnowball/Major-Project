@@ -422,6 +422,7 @@ function RockGenerator(){
 		lightColour = [1, 1, 1];
 		for(var i=0; i<triangleRocks.length; i++){
 			currentTexture = triangleRocks[i].texture;
+			
 			//debugger;
 			scale = m4.scaling(triangleRocks[i].scale, triangleRocks[i].scale, triangleRocks[i].scale);
 			position = m4.translation(triangleRocks[i].x, triangleRocks[i].y, triangleRocks[i].z);

@@ -24,6 +24,7 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Day/night cycles				(time: 05h) (priority: 1)
 		Extra texture effects, bump mapping etc		(time: 10h) (priority: 1)
 		Rotating rock appears in GUI			(time: 05h) (priority: 1)
+		Set different colours for ambient, specular     (time: 02h) (priority: 1)
 
 	Documentation to write:
 		User manual, features, how to play
@@ -33,9 +34,10 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 	Current features:
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
 		Initial terrain 
-		Some rocks, with collision
+		Some rocks, with collision			(time: 08h) (priority: 8)
 		Collision with terrain (ongoing) 		(time: 08h) (priority: 6)
-		Water 						(time: 10h) (priority: 4)
+		Water, with specular lighting			(time: 12h) (priority: 4)
+		
 
 
 For mid project release aiming for all core done - (Possible 13th march, 3 sprints left)
@@ -276,4 +278,122 @@ Sprint 0 (13th - 20th February)
 			
 
 Sprint 1 (20th - 27th February)
+	Tackling tasks from product backlog:
+		Add in rocks (ongoing)				(time: 05h) (priority: 8) (actual time: 04h)
+		Create missions for user 			(time: 05h) (priority: 8) (actual time: 04h)
+		Build terrain (ongoing) 			(time: 05h) (priority: 6) (actual time: 05h)
+		Build GUIs 					(time: 04h) (priority: 6) (actual time: 05h)
+		Texturing terrain 				(time: 05h) (priority: 5) (actual time: 08h)
+		Add audio 					(time: 03h) (priority: 4) (actual time: 01h)
+		Add in lighting 				(time: 10h) (priority: 4) (actual time: 10h)
+
+	Extra features:
+		Fog						(time: 06h) (priority: 4) (actual time: 0.5h)
+
+	Other features:
+		Paper UI designs
+		Lighting notes
+		Started class diagram
+
+		Add fog		
+
+	Sprint plan:
+		Create own textures from heightMaps
+		Go and find this rock around these coordinates,
+			Show image of rock
+		Work from existing GUI screenshot
+		Dont let user access certain rocks unless high enough level
+		Prospecting progress bar
+		Geometry shader for lighting, calculating normals
+		Add dangerous areas
+		Death mechanics, reset all XP and restart, fade out everything, you died
+		Add new textures for new rocks
+		Water/lava causing death on collision
+		Particle effects over lava
+		Perhaps 3 more sections of terrain, 4 big big quadrants
+		Leveling mechanics, XP bar
+			-prospect rock = XP
+			-Access new areas based on XP
+		Add types of rock
+			-types of triangle rock
+			-types of regular rock
+	
+		Add screenshots
+		Split myJs files into folders
+		Redesign some files,  rename
+		Put CSS in another file		
+		Remove enableVertexAttribute = calls, its now all done in glSetup
+		Enable and disable attributes when rendering, dont enable all global at start
+
+	Sprint retrospective:
+		Remove unused jQuery libraries
+		Moved buglog into github issues
+		Added references file
+
+		Improved water, each vertex now has its own direciton
+			Rather than every row having a direction
+			Weird spawn makes it look nice when reaches correct height
+
+		Added own perlin noise texture
+		Then exported it to image + changed colours, then imported as texture
+
+		Distoriton when rotation a bit better, lowered field of view to 0.3
+
+		Paper UI designs
+		Added little txt file as well
+		
+		Added directional lighting
+		Fixed bug with rotating objects
+		Added diffuse lighting
+		Added specular lighting, avaliable on textures
+
+		Have given 0.5 ambient in shader
+
+		Added proper texture class
+		
+		Calculated terrain normals + water normals
+		Inversed my terrain and water normals, they now point right direction
+		My light direction, is going the same way as the normals.... ??
+		Yes, because its surfaceToLightVector, so it makes sense that they go same way!
+		I think I substracted the vectors the wrong way around
+
+		Inversed X and Z values in get terrain heightMap getters, it now works
+		Terrain collision code is now perfect
+
+		Added gaining xp when prospecting a rock	
+		
+		Added some map design pic + notes	
+
+		Built simple audio class
+
+		Added fog
+
+		Made bunch of perlin textures
+
+		Notes:
+			FIX ROTATION NAMES IN RENDER, THEY'RE DIFFERENT FROM
+			THOSE GLOBAL NAMES IN MATRICES, xRotation VS rotateX!
+
+			MAKE SURE NORMALS GET BOUND WHEN RENDERING
+
+			Take screenshots of lighting when fixed
+
+			Lighting diagrams + find good references
+	
+			Whats with the light direction, being the same as the reversedDirection?
+			Ok, I think specular is working, because when on the flat section
+			of the terrain, there are no highlights whatsoever, because the normals
+			are pointing straight up
+
+			Player spawn in middle of 4x4 grid, dangerous areas towards outside
+			Different quadrants have different rocks, etc
+
+			4x4 grid minimap!!! shows current quadrant, should be relativley easy
+				locked sections, avaliable sections
+
+			Why cant i see specular highlights on water?
+				-Its shimmering, because light coming from 1 direction
+
+		
+
 

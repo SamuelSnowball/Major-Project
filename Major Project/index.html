@@ -138,8 +138,6 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="libraries/mdn-webgl-master/library/matrices.js"></script> -->
 <script src="libraries/m4.js"></script>
 <script src="libraries/perlin.js"></script>
-<script src="libraries/jquery-3.1.1.min.js"></script>
-<script src="libraries/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 
 <!-- Not my js files-->
 <script src="code/js/ImprovedNoise.js"></script>
@@ -233,8 +231,8 @@ function render(){
 	rockGenerator.renderRocks();
 	rockGenerator.renderTriangleRocks();
 	
-	//waterSystem.updateWaterVertices();
-	//waterSystem.render();
+	waterSystem.updateWaterVertices();
+	waterSystem.render();
 
 	missionAssigner.checkOrAssignPlayerMissions();
 	
