@@ -15,15 +15,16 @@ function WorldState(){
 				localStorage.getItem("playerYPos") !== "undefined" && 
 				localStorage.getItem("playerZPos") !== "undefined"){
 				
-				player.x = localStorage.getItem("playerXPos");
-				player.y = localStorage.getItem("playerYPos");
-				player.z = localStorage.getItem("playerZPos");
+				console.log("Retrieved these values from local storage: " + localStorage.getItem("playerXPos") + ", " + localStorage.getItem("playerYPos") + ", " + localStorage.getItem("playerZPos"));
 				
-				player.y += 0.0001;
+				player.set.x = localStorage.getItem("playerXPos");
+				player.set.y = localStorage.getItem("playerYPos");
+				player.set.z = localStorage.getItem("playerZPos");
+				
 			}
 			else{
 				//Then this is first time user is playing, set their position
-				player.x = 0, player.y = 0, player.z = 0;
+				player.set.x = 0, player.set.y = 0, player.set.z = 0;
 			}
 			
 		}
@@ -33,9 +34,9 @@ function WorldState(){
 	}
 	
 	this.saveWorld = function(){		
-		localStorage.setItem("playerXPos", player.x);
-		localStorage.setItem("playerYPos", player.y);
-		localStorage.setItem("playerZPos", player.z);
+		localStorage.setItem("playerXPos", player.get.x);
+		localStorage.setItem("playerYPos", player.get.y);
+		localStorage.setItem("playerZPos", player.get.z);
 	}
 }
 

@@ -40,3 +40,6 @@ gl.enableVertexAttribArray(lightDirectionLocation);
 
 var skyColourLocation = gl.getUniformLocation(program, 'skyColour');
 gl.enableVertexAttribArray(skyColourLocation);
+
+var useFogLocation = gl.getUniformLocation(program, 'useFog');
+gl.enableVertexAttribArray(useFogLocation);

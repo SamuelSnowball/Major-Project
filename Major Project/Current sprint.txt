@@ -2,3 +2,76 @@ This file contains the current sprint information,
 it will be moved into the product backlog once the sprint has ended.
 
 Sprint 2 (27th Feb - 6th March)
+
+	Tackling tasks from product backlog:
+		Loading and saving functions (ongoing) 		(time: 03h) (priority: 9) (actual time:)
+		FINISH building terrain (ongoing) 		(time: 05h) (priority: 6) (actual time:)
+		Build GUIs (Minimap + nearest rock)		(time: 02h) (priority: 6) (actual time:)
+		Minimap 					(time: 02h) (priority: 5) (actual time:)
+
+	Other tasks:
+		Start test table
+		More work on class diagram
+		Fix rocks spawning on player
+		
+
+	Sprint plan:
+		Bad minimap 
+			4x4 grid minimap, shows current quadrant, 
+			should be relativley easy
+			locked sections in red, avaliable sections in blue, current in green
+
+		Proper minimap/map
+			render the scene from above, in a small portion to the side of window
+			Could have really bad efficieny though
+			Drawing everything again :/
+
+			Possible solution, only render the minimap/map when the user
+			holds down a key, pops up in another interface!
+			Users current position gets upped by like +20y
+			Then player view gets rotated straight down?
+			Set gl.lookAt perhaps
+			
+		Load and saving
+			Player position
+			Current XP/Level
+
+		Spawn user in the correct grid square
+
+		Set noise values of 16 quadrants
+
+		Texture all 16 quadrants
+			Work on inner 4 squares first
+
+		Add audio
+			ambient soundtrack
+			when colliding with rocks
+			when prospect a rock
+
+		Possibily work on water on GPU and spawning it randomly
+
+		Need to add some player position to minimap
+
+	Notes:
+		Weird bug with player accessing its own this.y or player.y position
+		Problably why load/save doesnt work
+
+		Disable fog when minimap enabled, otherwise because view is so far away,
+		fog covers everything and you cant see anything
+
+		In minimap mode need to widen the zFar plane so player can see alot of the map
+		But then decrease back to normal, for rendering efficiney
+		The user cant see past 64z anyway due to fog, why render 512z?
+		Remade projectionMatrix every frame to set the zFar value
+		
+
+	Added:
+		Minimap/birds eye view
+		Changed players x,y,z to private fixed scoping issues
+	
+	Problems:
+		What if player in minimap, and there position saves, then they load?
+		WorldState still broken
+
+
+

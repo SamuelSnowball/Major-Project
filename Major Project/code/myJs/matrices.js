@@ -62,9 +62,18 @@ function computeModelMatrix(paramRotateX, paramRotateY, rotateZ, xPos, yPos, zPo
 }
 
 
-var skyColour = [1, 0.5, 0.3, 0.7];
+var skyColour = [0.8, 0.8, 0.8, 0.7];
 var lightColour = [1, 1, 1];
+var useFog = true;
 function updateAttributesAndUniforms(){
+
+	//Have to remake this every frame? shouldn't be awful
+	projectionMatrix = 	m4.perspective(
+		fovInRadians,
+		aspectRatio,
+		zNear,
+		zFar
+	);
 
 	//why is rotate z has position?
 	fullTransforms = m4.multiply(position, rotateZ);
@@ -95,4 +104,7 @@ function updateAttributesAndUniforms(){
 	
 	//Fog
 	gl.uniform4fv(skyColourLocation, skyColour);
+	
+	//Enable/disable fog
+	gl.uniform1i(useFogLocation, useFog);
 }

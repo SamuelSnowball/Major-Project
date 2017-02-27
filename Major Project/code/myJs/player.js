@@ -1,16 +1,13 @@
 
 function Player(x, y, z){
-	this.x = x; 
-	this.y = y;
-	this.z = z;
-	
-	this.movementSpeed = 1;
-	
+	var x = x; 
+	var y = y;
+	var z = z;
+	var movementSpeed = 1;
 	this.xRotation = 0;
 	this.yRotation = 0;
-	
-	
-	
+	var previousY = 0; //To remember Y pos when moving for fog
+		
 	/*
 	P key, are they prospecting a rock?
 	
@@ -32,6 +29,18 @@ function Player(x, y, z){
 		},
 		get inProspectingRange(){
 			return inProspectingRange;
+		},
+		get x(){
+			return x;
+		},
+		get y(){
+			return y;
+		},
+		get z(){
+			return z;
+		},
+		get speed(){
+			return movementSpeed;
 		}
 	}	
 	
@@ -41,6 +50,15 @@ function Player(x, y, z){
 		},
 		set inProspectingRange(inRange){
 			inProspectingRange = inRange;
+		},
+		set x(xParam){
+			x = xParam; //careful
+		},
+		set y(yParam){
+			y = yParam; //careful
+		},
+		set z(zParam){
+			z = zParam; //careful
 		}
 	}
 	
@@ -90,6 +108,23 @@ function Player(x, y, z){
 			if(event.keyCode === 80){
 				prospecting = true;
 			}
+			//Holding down M key for map, disable fog so we can see properly
+			if(event.keyCode === 77){
+				useFog = false;
+				zFar = 512;
+				/*
+				Save their y position, so we can restore it when they stop pressing M
+				
+				If the M key gets held down, then previousY will get set to 64!, and all breaks
+				This hacky if statement fixes it.
+				Could eventually break if player goes above 50 y legit :/
+				*/
+				if(y > 490){
+					
+				}else{
+					previousY = y;
+				}
+			}
 		});
 		
 		document.addEventListener('keyup', function(event){
@@ -108,6 +143,12 @@ function Player(x, y, z){
 			if(event.keyCode === 80){
 				prospecting = false;
 			}
+			//Released M key for map, enable fog, set the players position to what it was
+			if(event.keyCode === 77){
+				useFog = true;
+				zFar = 128;
+				y = previousY; //Set their position back to normal
+			}
 		});
 	}
 	
@@ -117,12 +158,12 @@ function Player(x, y, z){
 	*/	
 	this.moveForwardOrBackward = function(){
 		if(moveForward === true){	
-			this.x += (cameraPosition[0] - cameraTarget[0]) * 0.1;
-			this.z += (cameraPosition[2] - cameraTarget[2]) * 0.1;
+			x += (cameraPosition[0] - cameraTarget[0]) * 0.1;
+			z += (cameraPosition[2] - cameraTarget[2]) * 0.1;
 		}
 		else if(moveBack == true){
-			this.x -= (cameraPosition[0] - cameraTarget[0]) * 0.1;
-			this.z -= (cameraPosition[2] - cameraTarget[2]) * 0.1;
+			x -= (cameraPosition[0] - cameraTarget[0]) * 0.1;
+			z -= (cameraPosition[2] - cameraTarget[2]) * 0.1;
 		}
 		else{
 		
@@ -139,18 +180,18 @@ function Player(x, y, z){
 		Don't let the player move in the Y axis, otherwise they would fly.
 		*/
 		if(moveUp === true){
-			this.y += this.movementSpeed;
+			y += movementSpeed;
 		}
 		else if(moveDown === true){
-			this.y -= this.movementSpeed;
+			y -= movementSpeed;
 		}
 		else if(moveForward === true){
-			this.x -= (cameraPosition[0] - cameraTarget[0]) * this.movementSpeed;
-			this.z -= (cameraPosition[2] - cameraTarget[2]) * this.movementSpeed;
+			x -= (cameraPosition[0] - cameraTarget[0]) * movementSpeed;
+			z -= (cameraPosition[2] - cameraTarget[2]) * movementSpeed;
 		}
 		else if(moveBack === true){
-			this.x += (cameraPosition[0] - cameraTarget[0]) * this.movementSpeed;
-			this.z += (cameraPosition[2] - cameraTarget[2]) * this.movementSpeed;
+			x += (cameraPosition[0] - cameraTarget[0]) * movementSpeed;
+			z += (cameraPosition[2] - cameraTarget[2]) * movementSpeed;
 		}
 		else{
 		
@@ -164,7 +205,7 @@ function Player(x, y, z){
 	*/
 	this.updatePlayerCamera = function(){	
 		cameraMatrix = m4.yRotation(0);
-		cameraMatrix = m4.translate(cameraMatrix, this.x, this.y, this.z);
+		cameraMatrix = m4.translate(cameraMatrix, x, y, z);
 		
 		/*
 		xPos = sin(y rotation in radians)
@@ -182,6 +223,17 @@ function Player(x, y, z){
 			cameraMatrix[13] + Math.sin(this.xRotation * cameraSpeed),
 			cameraMatrix[14] + Math.cos(this.yRotation * cameraSpeed),
 		];
+		
+		//For minimap eventually
+		if(useFog === false){
+			y = 500;
+			cameraTarget = [
+				cameraMatrix[12] , 
+				cameraMatrix[13] -1,
+				cameraMatrix[14] -0.0001
+			];		
+		}
+		
 		
 		//Retrieve position from camera matrix
 		cameraPosition = [

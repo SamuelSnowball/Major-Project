@@ -29,6 +29,7 @@ gl.shaderSource(fragmentShader, [
 	//Fog
 	'varying float visibility;',
 	'uniform vec4 skyColour;',
+	'uniform bool useFog;',
 	
 	'void main(){',
 		//Normalize vectors to ensure size 1, so vector size doesnt affect .product
@@ -65,7 +66,13 @@ gl.shaderSource(fragmentShader, [
 		//min takes in 2 colours, 
 		//make skyColour 4d first
 		//2nd is the gl_FragColor (current fragment)
-		'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
+		
+		'if(useFog){', //Check to see if we should use fog or not
+			'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
+		'}',
+		'else{',
+			'',
+		'}',
 	'}'
 ].join('\n'));
 gl.compileShader(fragmentShader);

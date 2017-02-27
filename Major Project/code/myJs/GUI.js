@@ -69,11 +69,33 @@ function GUI(){
 	}
 	
 	this.update = function(){
+		
+		//If player is viewing minimap, hide game GUIs
+		if(useFog === false){
+			document.getElementById("xpOverlay").style.visibility = "hidden";
+			
+			document.getElementById("minimapOverlay").style.visibility = "hidden";
+			document.getElementById("missionOverlay").style.visibility = "hidden";
+			document.getElementById("nearestRockOverlay").style.visibility = "hidden";
+			
+			document.getElementById("topMiddleOverlay").style.visibility = "hidden";
+		}else{
+			//Show GUI elements
+			document.getElementById("xpOverlay").style.visibility = "visible";
+			
+			document.getElementById("minimapOverlay").style.visibility = "visible";
+			document.getElementById("missionOverlay").style.visibility = "visible";
+			document.getElementById("nearestRockOverlay").style.visibility = "visible";
+			
+			document.getElementById("topMiddleOverlay").style.visibility = "visible";
+		}
+	
+	
 		// set the nodes
 		//guiPlayerPositionNode.nodeValue = "";  // no decimal place
-		guiXNode.nodeValue = Math.floor(player.x);   // 2 decimal places
-		guiYNode.nodeValue = Math.floor(player.y);
-		guiZNode.nodeValue = Math.floor(player.z);	
+		guiXNode.nodeValue = Math.floor(player.get.x);   // 2 decimal places
+		guiYNode.nodeValue = Math.floor(player.get.y);
+		guiZNode.nodeValue = Math.floor(player.get.z);	
 		
 		xpNode.nodeValue = Math.floor(player.get.xp);
 	}

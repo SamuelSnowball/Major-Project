@@ -8,6 +8,11 @@ function CollisionTester(){
 	The players height then gets assigned to the nearest terrain vertex.
 	*/
 	this.setPlayerHeight = function(){
+		if(useFog === false){
+			//Player is viewing minimap, dont set their height
+			return;
+		}
+	
 		/*
 		Use playerX and Z to find value its height in heightMap array
 		
@@ -18,14 +23,14 @@ function CollisionTester(){
 		var tempPlayerX = 0;
 		var tempPlayerZ = 0;
 		if(player.x < 0){
-			tempPlayerX = player.x * -1;
+			tempPlayerX = player.get.x * -1;
 		}else{
-			tempPlayerX = player.x;
+			tempPlayerX = player.get.x;
 		}
 		if(player.z < 0){
-			tempPlayerZ = player.z * -1;
+			tempPlayerZ = player.get.z * -1;
 		}else{
-			tempPlayerZ = player.z;
+			tempPlayerZ = player.get.z;
 		}
 
 		/*
@@ -64,7 +69,7 @@ function CollisionTester(){
 		}
 
 		//Assign the nearest terrain height to the player height
-		player.y = nearestHeight + 1;
+		player.set.y = nearestHeight + 1;
 	}
 	
 	
@@ -101,11 +106,11 @@ function CollisionTester(){
 			Check if user is in prospecting range
 			*/
 			if(	
-				player.x > rocks[i].x - (rocks[i].scale*35) &&
-				player.x < rocks[i].x + (rocks[i].scale*35) &&
+				player.get.x > rocks[i].x - (rocks[i].scale*35) &&
+				player.get.x < rocks[i].x + (rocks[i].scale*35) &&
 				
-				player.z > rocks[i].z - (rocks[i].scale*35)  && 
-				player.z <	rocks[i].z + (rocks[i].scale*35) 
+				player.get.z > rocks[i].z - (rocks[i].scale*35)  && 
+				player.get.z <	rocks[i].z + (rocks[i].scale*35) 
 			
 			){
 				//They're in range, update GUI with current rock
@@ -116,11 +121,11 @@ function CollisionTester(){
 				Regular sphere rock collision testing
 				Check if they're too close, move them back
 				*/
-				if(	player.x > rocks[i].x - (rocks[i].scale*25) &&
-					player.x < rocks[i].x + (rocks[i].scale*25) &&
+				if(	player.get.x > rocks[i].x - (rocks[i].scale*25) &&
+					player.get.x < rocks[i].x + (rocks[i].scale*25) &&
 					
-					player.z > rocks[i].z - (rocks[i].scale*25)  && 
-					player.z <	rocks[i].z + (rocks[i].scale*25) 
+					player.get.z > rocks[i].z - (rocks[i].scale*25)  && 
+					player.get.z <	rocks[i].z + (rocks[i].scale*25) 
 				){
 					player.moveForwardOrBackward();
 				}
@@ -131,21 +136,21 @@ function CollisionTester(){
 		var triRocks = rockGenerator.getTriRocksArray.getRocks;
 		for(var i=0; i<triRocks.length; i++){
 			//If in prospect range
-			if(	player.x > triRocks[i].x  - (triRocks[i].width*3) &&
-				player.x < triRocks[i].x + (triRocks[i].width*3) &&
+			if(	player.get.x > triRocks[i].x  - (triRocks[i].width*3) &&
+				player.get.x < triRocks[i].x + (triRocks[i].width*3) &&
 				
-				player.z > triRocks[i].z - (triRocks[i].width*3) && 
-				player.z < triRocks[i].z + (triRocks[i].width*3) 
+				player.get.z > triRocks[i].z - (triRocks[i].width*3) && 
+				player.get.z < triRocks[i].z + (triRocks[i].width*3) 
 			){	
 				isProspecting(triRocks[i]);
 				/*
 				Triangle rocks collision testing
 				*/
-				if(	player.x > triRocks[i].x  - (triRocks[i].width*2) &&
-					player.x < triRocks[i].x + (triRocks[i].width*2) &&
+				if(	player.get.x > triRocks[i].x  - (triRocks[i].width*2) &&
+					player.get.x < triRocks[i].x + (triRocks[i].width*2) &&
 					
-					player.z > triRocks[i].z - (triRocks[i].width*2) && 
-					player.z < triRocks[i].z + (triRocks[i].width*2) 
+					player.get.z > triRocks[i].z - (triRocks[i].width*2) && 
+					player.get.z < triRocks[i].z + (triRocks[i].width*2) 
 				){	
 					player.moveForwardOrBackward();
 				}

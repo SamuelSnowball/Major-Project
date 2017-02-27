@@ -19,12 +19,12 @@
 		position: relative;
 		background-color: rgba(0, 0, 0, 0);
 	}
-	#overlay {
+	#minimapOverlay {
 		position: absolute;
 		left: 0%;
-		top: 62%;
+		top: 59%;
 		width: 22%;
-		height: 12%;
+		height: 15%;
 		background-color: rgba(0, 0, 0, 0.7);
 		color: white;
 		font-family: monospace;
@@ -106,13 +106,14 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
     <div><span id="xpOverlayValue"></span></div>
   </div>
   
-  <div id="overlay" class="canvasClass" style="visibility: hidden">
-    <div>Current position: <span id="playerPosition"></span></div>
-    <div>X: <span id="playerX"></span></div>
-	<div>Y: <span id="playerY"></span></div>
-	<div>Z: <span id="playerZ"></span></div>
+  <div id="minimapOverlay" class="canvasClass" style="visibility: hidden">
+    <div>Current position: <span id="playerPosition"></span>
+		X: <span id="playerX"> </span>
+		Y: <span id="playerY"> </span>
+		Z: <span id="playerZ"> </span>
+	</div>
   </div>
-  
+
   <!-- Displays current mission -->
   <div id="missionOverlay" class="canvasClass" style="visibility: hidden">
     <div>Current mission: <span id="current"></span></div>
@@ -129,7 +130,6 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
     <div><span id="topMiddleText"></span></div>
   </div>
   
-
 </div>
 
 
@@ -201,7 +201,7 @@ var sound = new Sound();
 
 function render(){
 	//What is with the alpha component, and I'll probably need it in shader as well as vec4
-	gl.clearColor(1, 0.5, 0.3, 0.7);
+	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	//Why render something if we cant see it?
 	
@@ -216,14 +216,8 @@ function render(){
 	}
 	//console.log("Player X, Y, Z: " + Math.floor(player.x) + ", " + Math.floor(player.y) + ", " + Math.floor(player.z));
 	player.movePlayer();
-	gui.update();
-	gui.displayCurrentRock();
 	
-	
-	
-	
-	
-	particleSystem.render();
+	//particleSystem.render();
 	terrain.render(); //terrain.js,
 	
 	collisionTester.setPlayerHeight(); //collision.js
@@ -236,6 +230,11 @@ function render(){
 
 	missionAssigner.checkOrAssignPlayerMissions();
 	
+	gui.update();
+	gui.displayCurrentRock();
+
+	
+	
 	gameTime++;
 	requestAnimationFrame(render);
 }
@@ -247,9 +246,10 @@ function setup(){
 	gameRunning = true;
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
 	
-	//worldState.loadWorld(); //WorldState.js
+	worldState.loadWorld(); //WorldState.js
 	gui.setup();
 	missionAssigner.setup();
+	
 	
 	
 

@@ -154,19 +154,20 @@ function RockGenerator(){
 		triangleRockUvs.push(0.88, 1);
 		
 		//Temporary!
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		triangleRockNormals.push(0, 1 ,0);
-		
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+		triangleRockNormals.push(0, 0.2 ,0);
+
+									
 		/*
 		Set x and z coordinate of the rock
 		Then find out what the terrain vertex height is, at that point.
