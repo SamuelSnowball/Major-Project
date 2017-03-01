@@ -197,9 +197,12 @@ var waterSystem = new WaterSystem();
 var missionAssigner = new MissionAssigner();
 var sound = new Sound();
 
-
+var start;
+var duration;
 
 function render(){
+	start = performance.now();
+
 	//What is with the alpha component, and I'll probably need it in shader as well as vec4
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -214,26 +217,60 @@ function render(){
 		worldState.saveWorld();
 		gameTime = 0;
 	}
-	//console.log("Player X, Y, Z: " + Math.floor(player.x) + ", " + Math.floor(player.y) + ", " + Math.floor(player.z));
-	player.movePlayer();
+	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
 	
-	//particleSystem.render();
-	terrain.render(); //terrain.js,
+	//start = performance.now();
+		player.movePlayer();
+	//duration = (performance.now() - start);
+	//console.log("player.movePlayer took: " + duration);
 	
-	collisionTester.setPlayerHeight(); //collision.js
-	collisionTester.testPlayerRockCollision();
-	rockGenerator.renderRocks();
-	rockGenerator.renderTriangleRocks();
+	//start = performance.now();
+		//particleSystem.render();
+		terrain.render(); //terrain.js,
+	//duration = (performance.now() - start);
+	//console.log("terrain.render took: " + duration);
+		
+		
+		
+	//start = performance.now();	
+		collisionTester.testPlayerMapBoundaries();
+		collisionTester.setPlayerHeight(); //collision.js
+		collisionTester.testPlayerRockCollision();
+	//duration = (performance.now() - start);	
+	//console.log("collisionTester took: " + duration);
+		
+		
+		
+	//start = performance.now();
+		rockGenerator.renderRocks();
+	//duration = (performance.now() - start);	
+	//console.log("regular rocks took: " + duration);
 	
-	waterSystem.updateWaterVertices();
-	waterSystem.render();
+	//start = performance.now();
+		rockGenerator.renderTriangleRocks();
+	//duration = (performance.now() - start);	
+	//console.log("triangle rocks took: " + duration);
 
-	missionAssigner.checkOrAssignPlayerMissions();
 	
-	gui.update();
-	gui.displayCurrentRock();
+	
+	//start = performance.now();
+		waterSystem.updateWaterVertices();
+		waterSystem.render();
+	//duration = (performance.now() - start);	
+	//console.log("water took: " + duration);
 
 	
+	
+	//start = performance.now();
+		missionAssigner.checkOrAssignPlayerMissions();
+		gui.update();
+		gui.displayCurrentRock();
+	//duration = (performance.now() - start);	
+	//console.log("mission and gui took: " + duration);
+	
+	
+	duration = (performance.now() - start);
+	console.log("Render loop took: " + duration);
 	
 	gameTime++;
 	requestAnimationFrame(render);
@@ -246,7 +283,7 @@ function setup(){
 	gameRunning = true;
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
 	
-	worldState.loadWorld(); //WorldState.js
+	//worldState.loadWorld(); //WorldState.js
 	gui.setup();
 	missionAssigner.setup();
 	

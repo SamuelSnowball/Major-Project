@@ -158,7 +158,23 @@ function CollisionTester(){
 		}
 	}
 					
-
+	this.testPlayerMapBoundaries = function(){
+		
+		/*
+		First stop them going off the map
+		*/
+		if(player.get.x <= 0 || player.get.x >= 2048 || player.get.z <= 0 || player.get.z >= 2048){
+			player.moveForwardOrBackward();
+		}
+		
+		/*
+		Level boundaries based on player level
+		*/
+		
+		
+		
+		
+	}
 	
 	/*
 	If the user is colliding with a rock, and they're holding down P,

@@ -3,7 +3,7 @@ function Player(x, y, z){
 	var x = x; 
 	var y = y;
 	var z = z;
-	var movementSpeed = 1;
+	var movementSpeed = 0.5;
 	this.xRotation = 0;
 	this.yRotation = 0;
 	var previousY = 0; //To remember Y pos when moving for fog
@@ -111,7 +111,7 @@ function Player(x, y, z){
 			//Holding down M key for map, disable fog so we can see properly
 			if(event.keyCode === 77){
 				useFog = false;
-				zFar = 512;
+				zFar = 2048;
 				/*
 				Save their y position, so we can restore it when they stop pressing M
 				
@@ -158,12 +158,12 @@ function Player(x, y, z){
 	*/	
 	this.moveForwardOrBackward = function(){
 		if(moveForward === true){	
-			x += (cameraPosition[0] - cameraTarget[0]) * 0.1;
-			z += (cameraPosition[2] - cameraTarget[2]) * 0.1;
+			x += (cameraPosition[0] - cameraTarget[0]);
+			z += (cameraPosition[2] - cameraTarget[2]);
 		}
 		else if(moveBack == true){
-			x -= (cameraPosition[0] - cameraTarget[0]) * 0.1;
-			z -= (cameraPosition[2] - cameraTarget[2]) * 0.1;
+			x -= (cameraPosition[0] - cameraTarget[0]);
+			z -= (cameraPosition[2] - cameraTarget[2]);
 		}
 		else{
 		
@@ -226,7 +226,7 @@ function Player(x, y, z){
 		
 		//For minimap eventually
 		if(useFog === false){
-			y = 500;
+			y = 2000;
 			cameraTarget = [
 				cameraMatrix[12] , 
 				cameraMatrix[13] -1,

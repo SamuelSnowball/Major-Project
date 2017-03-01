@@ -41,7 +41,7 @@ function TextureLoader(){
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
 				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing	
 
-		myPerlinTexture = new Texture("resources/nice2.png", 0, 0);
+		myPerlinTexture = new Texture("resources/terrain/atlas.png", 0, 0);
 		gl.bindTexture(gl.TEXTURE_2D, myPerlinTexture.getTextureAttribute.texture);		
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
 				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing	

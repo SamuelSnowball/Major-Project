@@ -112,90 +112,56 @@ function Terrain(){
 		scale = 3;
 	*/
 	function fillHeightMap(){
-
 		var xOff = 0;
 		var yOff = 0;
-		var offsetXIncrement = 0.001; //How it moves along the graph
-		var offsetYIncrement = 0.001; //How it moves along the graph
-		var offsetZIncrement = 0.001; //How it moves along the graph
+		var offsetIncrement;
+		var scale;
 		
-		
-		//var offsetIncrement = 0.001;
-		//var scale = 100;
-		var offsetIncrement = 0.05;
-		var scale = 2;
-		noise.seed(Math.random());
-		
-		//For each row, do all the columns
-		for(var x=0; x<rows; x++){
-			for(var y=0; y<columns; y++){
-			
-				/*
-				16 Quadrants with 2048x2048:
-				
-					0->512x, 0->512y
-					512->1024x, 0->512y
-					1024->1536x, 0->512y
-					1536->2048x, 0->512y
-					
-					0->512x, 512->1024y
-					512->1024x, 512->1024y
-					1024->1536x, 512->1024y
-					1536->2048x, 512->1024y
-					
-					0->512x, 1024->1536y
-					512->1024x, 1024->1536y
-					1024->1536x, 1024->1536y
-					1536->2048x, 1024->1536y	
-					
-					0->512x, 1536->2048y
-					512->1024x, 1536->2048y
-					1024->1536x, 1536->2048y
-					1536->2048x, 1536->2048y	
-					
-				*/
-				var height = 0;
-				
-				if(x > 0 && x < 512 && y > 0 && y < 512){
-					scale = 2;
-					height = perlin.noise(xOff, yOff, xOff) * scale;
-				}
-				else if(x > 0 && x < 512 && y > 512 && y < 1024){
-					scale = 3;
-					height = perlin.noise(xOff, yOff, xOff) * scale;
-				}
-				else if(x > 0 && x < 512 && y > 1024 && y < 1536){
-					scale = 4;
-					height = perlin.noise(xOff, yOff, xOff) * scale;
-				}
-				else if(x > 0 && x < 512 && y > 1536 && y < 2048){
-					scale = 5;
-					height = perlin.noise(xOff, yOff, xOff) * scale;
-				}				
-				
-				/*
-				if(x > 512 && y < 1024){
-					offsetIncrement = 0.005;
-					scale = 50;
-					height = perlin.noise(xOff, yOff, xOff) * scale;
-				}
-				
-				if(x > 64 && x < 90){
-					var height = perlin.noise(xOff, yOff, xOff) * 2;
-					height -= 15;
-				}
-				*/
-				
-				
+		//Brown section
+		for(var x=0; x<1024; x++){
+			for(var y=0; y<1024; y++){
+				offsetIncrement = 0.005;
+				scale = 15;
+				height = perlin.noise(xOff, yOff, xOff) * scale;
 				heightMap[x][y] = height;
 				xOff+=offsetIncrement;
-				
-					
 			}
 			xOff = 0;
 			yOff += offsetIncrement;
-		}	
-	
+		}
+		xOff = 0;
+		yOff = 0;
+		
+		//Sand section
+		for(var x=0; x<1024; x++){
+			for(var y=1024; y<2048; y++){
+				offsetIncrement = 0.05;
+				scale = 2;
+				height = perlin.noise(xOff, yOff, xOff) * scale;
+				heightMap[x][y] = height;
+				xOff+=offsetIncrement;
+			}
+			xOff = 0;
+			yOff += offsetIncrement;
+		}
+		xOff = 0;
+		yOff = 0;		
+		
+		//Red section
+		for(var x=1024; x<2048; x++){
+			for(var y=0; y<2048; y++){
+				offsetIncrement = 0.005;
+				scale = 50;
+				height = perlin.noise(xOff, yOff, xOff) * scale;
+				heightMap[x][y] = height;
+				xOff+=offsetIncrement;
+			}
+			xOff = 0;
+			yOff += offsetIncrement;
+		}
+		xOff = 0;
+		yOff = 0;		
+		
 	}
 	
 	/*
@@ -400,6 +366,7 @@ function Terrain(){
 			=0.00390625 * 265 = 1. so increment by that
 		1/512 = 0.001953125
 		1/1024 = 0.0009765625
+		1/2048 = 0.00048828125
 		*/
 		var xUV = 0;
 		var yUV = 0;
@@ -407,10 +374,10 @@ function Terrain(){
 			for(var y=0; y<columns; y++){
 				textureCoordinates.push(xUV);  
 				textureCoordinates.push(yUV); 
-				xUV += 0.0009765625;
+				xUV += 0.00048828125;
 			}
 			xUV = 0;
-			yUV += 0.0009765625;
+			yUV += 0.00048828125;
 		}
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);

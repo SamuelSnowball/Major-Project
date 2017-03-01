@@ -1,0 +1,32 @@
+Intro
+Mars mission control game in WebGL
+
+Basically, the user plays as a rover, roaming around mars
+exploring and completeing various challenges.
+
+WebGL, standing for Web Graphics libary is a JavaScript
+API for rendering 3D graphics in a browser. 
+	Full demo webgl vs opengl vs directx
+
+Perhaps go over similar games
+
+
+
+Technical
+Model, view, projection
+
+CPU vs GPU processing
+
+
+
+Pipeline, with screenshots of ur vertices etc
+Processes data sent to it
+Converts into points
+
+
+Rasteriziation, connects the points
+and then fills the triangle in
+
+Fragment shader
+Runs on every fragment in the triangle
+Generates colours

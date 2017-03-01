@@ -448,56 +448,6 @@ function RockGenerator(){
 			
 			gl.drawArrays(gl.TRIANGLES, triStartPosition, 12);
 			
-			/*
-			Rock 2
-			*/
-			scale = m4.scaling(triangleRocks[i].scale /3, triangleRocks[i].scale/3, triangleRocks[i].scale/3);
-			position = m4.translation(triangleRocks[i].x + 5, triangleRocks[i].y, triangleRocks[i].z);
-			
-			//Times matrices together
-			updateAttributesAndUniforms();
-
-			//Vertices
-			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockPositionBuffer);
-			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-			
-			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockTextureCoordinateBuffer);
-			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
-			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-
-			//Normals
-			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockNormalsBuffer);
-			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
-			
-			gl.drawArrays(gl.TRIANGLES, triStartPosition, 12);			
-			
-			/*
-			Rock 3
-			*/
-			scale = m4.scaling(triangleRocks[i].scale/2, triangleRocks[i].scale/2, triangleRocks[i].scale/2);
-			position = m4.translation(triangleRocks[i].x, triangleRocks[i].y - 0.2, triangleRocks[i].z + 4);
-			
-			//Times matrices together
-			updateAttributesAndUniforms();
-
-			//Vertices
-			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockPositionBuffer);
-			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-			
-			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockTextureCoordinateBuffer);
-			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
-			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-
-			//Normals
-			gl.bindBuffer(gl.ARRAY_BUFFER, triangleRockNormalsBuffer);
-			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
-			
-			gl.drawArrays(gl.TRIANGLES, triStartPosition, 12);
-			
 			if(i === triangleRocks.length-1){
 				//Reset the start position
 				triStartPosition = 0;

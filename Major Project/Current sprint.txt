@@ -13,8 +13,8 @@ Sprint 2 (27th Feb - 6th March)
 		Start test table
 		More work on class diagram
 		Fix rocks spawning on player
+		Add screenshots of stuff, water, minimap
 		
-
 	Sprint plan:
 		Bad minimap 
 			4x4 grid minimap, shows current quadrant, 
@@ -42,6 +42,10 @@ Sprint 2 (27th Feb - 6th March)
 
 		Texture all 16 quadrants
 			Work on inner 4 squares first
+			Have all 16 texturs on 1 atlas, so easy to use!
+			Start with mid 4 images
+			Move perlin scales in
+			Set player spawn
 
 		Add audio
 			ambient soundtrack
@@ -55,23 +59,33 @@ Sprint 2 (27th Feb - 6th March)
 	Notes:
 		Weird bug with player accessing its own this.y or player.y position
 		Problably why load/save doesnt work
+		Maybe set player position to Math.floor(localStorageX)
 
-		Disable fog when minimap enabled, otherwise because view is so far away,
-		fog covers everything and you cant see anything
-
-		In minimap mode need to widen the zFar plane so player can see alot of the map
-		But then decrease back to normal, for rendering efficiney
-		The user cant see past 64z anyway due to fog, why render 512z?
-		Remade projectionMatrix every frame to set the zFar value
-		
 
 	Added:
-		Minimap/birds eye view
+		Added Minimap/birds eye view
+			Disables fog, widens zFar when in miniMap mode
+			Otherwise, because so far away, everything would be in fog!
+
+			In minimap mode need to widen the zFar plane so player can see alot of the map
+			But then decrease back to normal, for rendering efficiney
+			The user cant see past 64z anyway due to fog, why render 512z?
+			Remade projectionMatrix every frame to set the zFar value
 		Changed players x,y,z to private fixed scoping issues
+		Removed some triangle rocks
+		Added flow diagram
 	
 	Problems:
 		What if player in minimap, and there position saves, then they load?
 		WorldState still broken
 
+		Rock rendering functions are horrible
+		How is it so bad.. It's rendering 5 rocks max
+		How else to do it? 
+		I need the rocks to update, so cant draw instaced
+		-OR you could just not change the rock, and draw it instanced...
+
+		Very juttery when low movement speed
+		High movement speed just not realisitc
 
 
