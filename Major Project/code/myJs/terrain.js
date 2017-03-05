@@ -3,8 +3,8 @@ function Terrain(){
 	/*
 	Private variables
 	*/
-	var rows = 2048; //1024
-	var columns = 2048;
+	var rows = 1024; //1024
+	var columns = 1024;
 	var size = rows * columns;
 	var heightMap = [];
 
@@ -84,7 +84,12 @@ function Terrain(){
 			return heightMap[temporaryHeightMapZ][temporaryHeightMapX];
 		}
 	}
-	
+	//Needed in rockGenerator
+	this.get = {
+		get getTerrainRows(){
+			return rows;
+		}
+	};
 	
 	/*
 	Private
@@ -133,8 +138,8 @@ function Terrain(){
 		yOff = 0;
 		
 		//Sand section
-		for(var x=0; x<1024; x++){
-			for(var y=1024; y<2048; y++){
+		for(var x=0; x<512; x++){
+			for(var y=512; y<1024; y++){
 				offsetIncrement = 0.05;
 				scale = 2;
 				height = perlin.noise(xOff, yOff, xOff) * scale;
@@ -148,8 +153,8 @@ function Terrain(){
 		yOff = 0;		
 		
 		//Red section
-		for(var x=1024; x<2048; x++){
-			for(var y=0; y<2048; y++){
+		for(var x=512; x<1024; x++){
+			for(var y=0; y<1024; y++){
 				offsetIncrement = 0.005;
 				scale = 50;
 				height = perlin.noise(xOff, yOff, xOff) * scale;
@@ -186,7 +191,7 @@ function Terrain(){
 				terrainVertices.push(terrainZ); 
 				
 				//Move along in the row
-				terrainX++;
+				terrainX+=1;
 				
 				//Set all to 1... bad but should work temporaryHeightMapX
 				//terrainNormals.push(0);//x
@@ -205,7 +210,7 @@ function Terrain(){
 			}
 			//New row, reset X, and increment Z
 			terrainX = 0;
-			terrainZ++;
+			terrainZ+=1;
 		}
 		
 		//Reset all values as above loop changed them
@@ -302,7 +307,7 @@ function Terrain(){
 	function setupTerrainVertexBuffer(){
 		terrainVertexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainVertexBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainVertices), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainVertices), gl.DYNAMIC_DRAW);
 		gl.enableVertexAttribArray(positionAttribLocation);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
 	}
@@ -335,7 +340,7 @@ function Terrain(){
 		
 		elementsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.DYNAMIC_DRAW);		
 	}
 	
 	/*
@@ -380,14 +385,14 @@ function Terrain(){
 			yUV += 0.00048828125;
 		}
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.DYNAMIC_DRAW);
 		//gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
 	}
 	
 	function setupTerrainNormalBuffer(){
 		terrainNormalBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainNormalBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainNormals), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainNormals), gl.DYNAMIC_DRAW);
 		gl.enableVertexAttribArray(normalAttribLocation);
 		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);			
 	}
@@ -438,6 +443,7 @@ function Terrain(){
 		//Elements
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
 		
+		//Cant draw from 0, as it makes shader process everything
 		/*
 		Mode
 		Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
@@ -446,9 +452,12 @@ function Terrain(){
 		*/
 		gl.drawElements(
 			gl.TRIANGLE_STRIP, 
-			terrainVertices.length / 3 * 2,
+			terrainVertices.length / 3 * 2, //draw only like 100 see how far u get
+			
 			gl.UNSIGNED_INT, 
-			elementsBuffer
+			0 //start from like player position
+			
+			
 		); 	
 	}
 	

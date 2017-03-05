@@ -3,10 +3,20 @@ function Player(x, y, z){
 	var x = x; 
 	var y = y;
 	var z = z;
-	var movementSpeed = 0.5;
+	var movementSpeed = 0.2;
 	this.xRotation = 0;
 	this.yRotation = 0;
 	var previousY = 0; //To remember Y pos when moving for fog
+	
+	var playerVertices = [];
+	var playerUvs = [];
+	var playerNormals = [];
+	var playerIndices = [];
+	
+	var playerVertexBuffer;
+	var playerUvsBuffer;
+	var playerIndicesBuffer;
+	var playerNormalsBuffer;	
 		
 	/*
 	P key, are they prospecting a rock?
@@ -72,6 +82,7 @@ function Player(x, y, z){
 	
 	
 	setupPlayerMovement();
+	setupPlayerBuffers();
 	
 	/*
 	Handles user input and changes the 4 movement variables
@@ -111,13 +122,9 @@ function Player(x, y, z){
 			//Holding down M key for map, disable fog so we can see properly
 			if(event.keyCode === 77){
 				useFog = false;
-				zFar = 2048;
+				zFar = 768;
 				/*
 				Save their y position, so we can restore it when they stop pressing M
-				
-				If the M key gets held down, then previousY will get set to 64!, and all breaks
-				This hacky if statement fixes it.
-				Could eventually break if player goes above 50 y legit :/
 				*/
 				if(y > 490){
 					
@@ -160,6 +167,9 @@ function Player(x, y, z){
 		if(moveForward === true){	
 			x += (cameraPosition[0] - cameraTarget[0]);
 			z += (cameraPosition[2] - cameraTarget[2]);
+			
+			//Stop incrementing = true,
+			//Then in move plauyer class, if stopIncrement === true, dont increment, else move the x,y,z
 		}
 		else if(moveBack == true){
 			x -= (cameraPosition[0] - cameraTarget[0]);
@@ -226,7 +236,8 @@ function Player(x, y, z){
 		
 		//For minimap eventually
 		if(useFog === false){
-			y = 2000;
+			renderPlayerOnMinimap();
+			y = 500;
 			cameraTarget = [
 				cameraMatrix[12] , 
 				cameraMatrix[13] -1,
@@ -253,6 +264,139 @@ function Player(x, y, z){
 		//Times matrices together
 		updateAttributesAndUniforms();
 	}	
+	
+
+	
+	function setupPlayerBuffers(){
+		setupPlayerVertexBuffer();
+		setupPlayerIndicesBuffer();
+		seutpPlayerTextureBuffer();
+		setupPlayerNormalsBuffer();
+	}
+	
+	function setupPlayerVertexBuffer(){
+		playerVertexBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, playerVertexBuffer);
+		playerVertices = [
+			// Front face
+			-1.0, -1.0,  1.0,
+			1.0, -1.0,  1.0,
+			1.0,  1.0,  1.0,
+			-1.0,  1.0,  1.0,
+			
+			// Back face
+			-1.0, -1.0, -1.0,
+			-1.0,  1.0, -1.0,
+			1.0,  1.0, -1.0,
+			1.0, -1.0, -1.0,
+			
+			// Top face
+			-1.0,  1.0, -1.0,
+			-1.0,  1.0,  1.0,
+			1.0,  1.0,  1.0,
+			1.0,  1.0, -1.0,
+			
+			// Bottom face
+			-1.0, -1.0, -1.0,
+			1.0, -1.0, -1.0,
+			1.0, -1.0,  1.0,
+			-1.0, -1.0,  1.0,
+			
+			// Right face
+			1.0, -1.0, -1.0,
+			1.0,  1.0, -1.0,
+			1.0,  1.0,  1.0,
+			1.0, -1.0,  1.0,
+			
+			// Left face
+			-1.0, -1.0, -1.0,
+			-1.0, -1.0,  1.0,
+			-1.0,  1.0,  1.0,
+			-1.0,  1.0, -1.0
+		];	
+	    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(playerVertices), gl.DYNAMIC_DRAW);			
+	}
+	
+	function setupPlayerIndicesBuffer(){
+		playerIndicesBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, playerIndicesBuffer);
+
+		playerIndices = [
+		  0,  1,  2,      0,  2,  3,    // front
+		  4,  5,  6,      4,  6,  7,    // back
+		  8,  9,  10,     8,  10, 11,   // top
+		  12, 13, 14,     12, 14, 15,   // bottom
+		  16, 17, 18,     16, 18, 19,   // right
+		  20, 21, 22,     20, 22, 23    // left
+		];
+
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(playerIndices), gl.DYNAMIC_DRAW);		
+	}
+	
+	function seutpPlayerTextureBuffer(){
+		playerUvsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, playerUvsBuffer);
+		for(var x=0; x<playerVertices.length; x+=3){
+			playerUvs.push(0, 1);
+		}
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(playerUvs), gl.DYNAMIC_DRAW);		
+	}
+	
+	function setupPlayerNormalsBuffer(){
+		playerNormalsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, playerNormalsBuffer);
+		for(var x=0; x<playerVertices.length; x+=3){
+			playerNormals.push(0, 1, 0);
+		}
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(playerNormals), gl.DYNAMIC_DRAW);
+	}
+	
+	function renderPlayerOnMinimap(){
+
+		lightColour = [1, 1, 1];
+		currentTexture = playerTexture;
+
+		scale = m4.scaling(5, 5, 5);
+		rotateX = m4.xRotation(0);
+		rotateY = m4.yRotation(0);
+		rotateZ = m4.zRotation(0);
+		position = m4.translation(x, 50, z);
+		
+		//Times matrices together
+		updateAttributesAndUniforms();
+
+		//Vertices
+		gl.bindBuffer(gl.ARRAY_BUFFER, playerVertexBuffer);
+		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, playerUvsBuffer);
+		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture); //myPerlinTexture
+		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+
+		//Normals
+		gl.enableVertexAttribArray(normalAttribLocation);
+		gl.bindBuffer(gl.ARRAY_BUFFER, playerNormalsBuffer);
+		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
+		
+		
+		//Elements
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, playerIndicesBuffer);
+		
+		/*
+		Mode
+		Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
+		Type
+		The indices
+		*/
+		gl.drawElements(
+			gl.TRIANGLES, 
+			36,
+			gl.UNSIGNED_SHORT, 
+			0
+		); 				
+	}
 	
 };
 

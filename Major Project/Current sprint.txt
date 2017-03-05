@@ -14,6 +14,7 @@ Sprint 2 (27th Feb - 6th March)
 		More work on class diagram
 		Fix rocks spawning on player
 		Add screenshots of stuff, water, minimap
+		Change renders to dynamic draw
 		
 	Sprint plan:
 		Bad minimap 
@@ -54,13 +55,15 @@ Sprint 2 (27th Feb - 6th March)
 
 		Possibily work on water on GPU and spawning it randomly
 
-		Need to add some player position to minimap
+		Need a bunch of rocks
+		-With names
+		-Then have missions telling user to explore the rocks
+
+		If user in range of water vertices, then start updating them, else dont
+		
+		Fixed saving player position
 
 	Notes:
-		Weird bug with player accessing its own this.y or player.y position
-		Problably why load/save doesnt work
-		Maybe set player position to Math.floor(localStorageX)
-
 
 	Added:
 		Added Minimap/birds eye view
@@ -71,21 +74,18 @@ Sprint 2 (27th Feb - 6th March)
 			But then decrease back to normal, for rendering efficiney
 			The user cant see past 64z anyway due to fog, why render 512z?
 			Remade projectionMatrix every frame to set the zFar value
+
+			Added player position onto minimap
+
+			Once finished minimap, implement into game, but need to fix rendering issues first
+			because will be rendering scene twice
+
 		Changed players x,y,z to private fixed scoping issues
 		Removed some triangle rocks
-		Added flow diagram
+		Added flow diagram		
+
 	
 	Problems:
 		What if player in minimap, and there position saves, then they load?
-		WorldState still broken
-
-		Rock rendering functions are horrible
-		How is it so bad.. It's rendering 5 rocks max
-		How else to do it? 
-		I need the rocks to update, so cant draw instaced
-		-OR you could just not change the rock, and draw it instanced...
-
-		Very juttery when low movement speed
-		High movement speed just not realisitc
 
 

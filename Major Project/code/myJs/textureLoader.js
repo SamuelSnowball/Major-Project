@@ -7,6 +7,7 @@ Texture knowledge gained from:
 var currentTexture;
 var myPerlinTexture;
 var myParticleTexture;
+var playerTexture;
 
 //Textures to do
 var marsRedTerrainTexture;
@@ -17,7 +18,6 @@ var depletedTexture = new Texture('resources/rocks/depleted.png', 1, 1);
 var blueOreTexture = new Texture('resources/rocks/blueOre.png', 1, 1);
 var lavaRockTexture =  new Texture('resources/lava.png', 1, 1);
 var emeraldTexture =  new Texture('resources/rocks/emerald.png', 1, 1);
-
 //1st parameter lower number = less shine damper, so more bright
 var waterTexture = new Texture('resources/water/water.png', 10, 5);
 var lavaTexture = new Texture('resources/lava.png', 1, 1);
@@ -45,7 +45,12 @@ function TextureLoader(){
 		gl.bindTexture(gl.TEXTURE_2D, myPerlinTexture.getTextureAttribute.texture);		
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
 				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing	
-
+		
+		playerTexture = new Texture("", 0, 0);
+		gl.bindTexture(gl.TEXTURE_2D, playerTexture.getTextureAttribute.texture);		
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+				  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing	
+		
 	}
 	
 }
@@ -73,7 +78,7 @@ function Texture(path, shineDamperParam, reflectivityParam){
 	
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing
+				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing
 
 	var image = new Image();
 	image.src = path;

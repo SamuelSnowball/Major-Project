@@ -8,7 +8,6 @@
 		html, body {
 		overflow: hidden;
 	}
-	
 	#banner{
 		width: 200px;
 		height: 200px;
@@ -95,6 +94,7 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 
 <div id="banner"><p>Mars Mission Control Game</p></div>
 
+<div>fps: <span id="fps"></span></div>
 
 <div class="container">
   <canvas id="canvas" class="canvasClass"></canvas>
@@ -165,12 +165,12 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/Player.js"></script>
 <script src="code/myJs/MissionAssigner.js"></script>
 <script src="code/myJs/Sound.js"></script>
+<script src="code/myJs/ObjLoader.js"></script>
 
 <!-- Broken -->
 <script src="code/myJs/WorldState.js"></script>
 
 <!-- Needs naming -->
-<script src="code/myJs/movement.js"></script>
 <script src="code/myJs/mouse.js"></script>
 <script src="code/myJs/missions.js"></script>
 
@@ -196,18 +196,20 @@ var rockGenerator = new RockGenerator();
 var waterSystem = new WaterSystem();
 var missionAssigner = new MissionAssigner();
 var sound = new Sound();
+var objLoader = new ObjLoader();
 
-var start;
-var duration;
-
+//Taken
+var fpsElement = document.getElementById("fps");
+var then = Date.now() / 1000;  // get time in seconds
 function render(){
-	start = performance.now();
+	var now = Date.now() / 1000;  // get time in seconds
+    var elapsedTime = now - then;
+    then = now;
+	var fps = 1 / elapsedTime;
+    fpsElement.innerText = fps.toFixed(0); 
 
-	//What is with the alpha component, and I'll probably need it in shader as well as vec4
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	//Why render something if we cant see it?
-	
 	
 	/*
 	Auto-save the game every 20 seconds or so
@@ -219,58 +221,24 @@ function render(){
 	}
 	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
 	
-	//start = performance.now();
-		player.movePlayer();
-	//duration = (performance.now() - start);
-	//console.log("player.movePlayer took: " + duration);
-	
-	//start = performance.now();
-		//particleSystem.render();
-		terrain.render(); //terrain.js,
-	//duration = (performance.now() - start);
-	//console.log("terrain.render took: " + duration);
-		
-		
-		
-	//start = performance.now();	
-		collisionTester.testPlayerMapBoundaries();
-		collisionTester.setPlayerHeight(); //collision.js
-		collisionTester.testPlayerRockCollision();
-	//duration = (performance.now() - start);	
-	//console.log("collisionTester took: " + duration);
-		
-		
-		
-	//start = performance.now();
-		rockGenerator.renderRocks();
-	//duration = (performance.now() - start);	
-	//console.log("regular rocks took: " + duration);
-	
-	//start = performance.now();
-		rockGenerator.renderTriangleRocks();
-	//duration = (performance.now() - start);	
-	//console.log("triangle rocks took: " + duration);
+	player.movePlayer();
 
-	
-	
-	//start = performance.now();
-		waterSystem.updateWaterVertices();
-		waterSystem.render();
-	//duration = (performance.now() - start);	
-	//console.log("water took: " + duration);
+	terrain.render(); 
 
-	
-	
-	//start = performance.now();
-		missionAssigner.checkOrAssignPlayerMissions();
-		gui.update();
-		gui.displayCurrentRock();
-	//duration = (performance.now() - start);	
-	//console.log("mission and gui took: " + duration);
-	
-	
-	duration = (performance.now() - start);
-	console.log("Render loop took: " + duration);
+	collisionTester.testPlayerMapBoundaries();
+	collisionTester.setPlayerHeight(); 
+	collisionTester.testPlayerRockCollision();
+
+	rockGenerator.renderRocks();
+	//rockGenerator.renderTriangleRocks();
+
+	waterSystem.updateWaterVertices();
+	waterSystem.render();
+
+	missionAssigner.checkOrAssignPlayerMissions();
+	gui.update();
+	gui.displayCurrentRock();
+
 	
 	gameTime++;
 	requestAnimationFrame(render);
@@ -283,14 +251,20 @@ function setup(){
 	gameRunning = true;
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
 	
-	//worldState.loadWorld(); //WorldState.js
+	worldState.loadWorld(); //WorldState.js
 	gui.setup();
 	missionAssigner.setup();
 	
 	
+	objLoader.loadObj("resources/rocks/rockObjs/rock_c_01.obj", depletedTexture);
+	objLoader.loadObj("resources/rocks/rockObjs/rock_d_01.obj", depletedTexture);
 	
-
-
+	objLoader.loadObj("resources/rocks/rockObjs/rock_d_02.obj", depletedTexture);
+	objLoader.loadObj("resources/rocks/rockObjs/rock_d_03.obj", depletedTexture);
+	objLoader.loadObj("resources/rocks/rockObjs/rock_d_05.obj", depletedTexture);
+	objLoader.loadObj("resources/rocks/rockObjs/rock_d_06.obj", depletedTexture);	
+	
+	rockGenerator.setupRockBuffers();
 		
 	render();
 }

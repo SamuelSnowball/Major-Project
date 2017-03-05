@@ -1,6 +1,8 @@
 
 function CollisionTester(){
 	
+	var playerHeightIncrement = 0.01;
+	
 	/*
 	Moves the player when traversing over terrain.
 
@@ -70,6 +72,7 @@ function CollisionTester(){
 
 		//Assign the nearest terrain height to the player height
 		player.set.y = nearestHeight + 1;
+
 	}
 	
 	
@@ -132,7 +135,7 @@ function CollisionTester(){
 				
 			}
 		}	
-		
+		/*
 		var triRocks = rockGenerator.getTriRocksArray.getRocks;
 		for(var i=0; i<triRocks.length; i++){
 			//If in prospect range
@@ -142,10 +145,11 @@ function CollisionTester(){
 				player.get.z > triRocks[i].z - (triRocks[i].width*3) && 
 				player.get.z < triRocks[i].z + (triRocks[i].width*3) 
 			){	
+				player.set.inProspectingRange = true;
 				isProspecting(triRocks[i]);
-				/*
-				Triangle rocks collision testing
-				*/
+				
+				//Triangle rocks collision testing
+				
 				if(	player.get.x > triRocks[i].x  - (triRocks[i].width*2) &&
 					player.get.x < triRocks[i].x + (triRocks[i].width*2) &&
 					
@@ -156,6 +160,7 @@ function CollisionTester(){
 				}
 			}
 		}
+		*/
 	}
 					
 	this.testPlayerMapBoundaries = function(){

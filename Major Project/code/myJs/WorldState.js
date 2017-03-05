@@ -17,9 +17,10 @@ function WorldState(){
 				
 				console.log("Retrieved these values from local storage: " + localStorage.getItem("playerXPos") + ", " + localStorage.getItem("playerYPos") + ", " + localStorage.getItem("playerZPos"));
 				
-				player.set.x = localStorage.getItem("playerXPos");
-				player.set.y = localStorage.getItem("playerYPos");
-				player.set.z = localStorage.getItem("playerZPos");
+				player.set.x = Math.floor(localStorage.getItem("playerXPos"));
+				player.set.y = Math.floor(localStorage.getItem("playerYPos"));
+				player.set.z = Math.floor(localStorage.getItem("playerZPos"));
+				console.log("loaded x,y,z as: " + player.get.x + ", " + player.get.y + ", " + player.get.z);
 				
 			}
 			else{
@@ -34,9 +35,10 @@ function WorldState(){
 	}
 	
 	this.saveWorld = function(){		
-		localStorage.setItem("playerXPos", player.get.x);
-		localStorage.setItem("playerYPos", player.get.y);
-		localStorage.setItem("playerZPos", player.get.z);
+		console.log("saved x,y,z as: " + player.get.x + ", " + player.get.y + ", " + player.get.z);
+		localStorage.setItem("playerXPos", Math.floor(player.get.x));
+		localStorage.setItem("playerYPos", Math.floor(player.get.y));
+		localStorage.setItem("playerZPos", Math.floor(player.get.z));
 	}
 }
 

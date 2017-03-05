@@ -1,14 +1,28 @@
-
-function RockGenerator(){
-	
-	/*
-	Stores information of all rocks in game
-	*/
 	var rockIndices = [];
 	var rockVertices = [];
 	var rockNormals = [];
 	var rockUvs = [];
 	
+	
+	function Rock(xPos, yPos, zPos, width, xRotation, yRotation, zRotation, scale, texture, numIndices){
+		this.x = xPos;
+		this.y = yPos;
+		this.z = zPos;
+		this.width = width;
+		this.xRotation = xRotation;
+		this.yRotation = yRotation;
+		this.zRotation = zRotation;
+		this.scale = scale;
+		this.texture = texture;
+		this.numIndices = numIndices;
+	}
+	
+	
+function RockGenerator(){
+	
+	/*
+	Stores information of all rocks in game
+	*/
 	var rockTextureCoordinateBuffer;
 	var rockElementBuffer;
 	var rockPositionBuffer;
@@ -36,6 +50,7 @@ function RockGenerator(){
 	
 	
 	//Tri starts
+	/*
 	var triangleRockIndices = [];
 	var triangleRockVertices = [];
 	var triangleRockNormals = [];
@@ -53,6 +68,7 @@ function RockGenerator(){
 			return triangleRocks;
 		}
 	}
+	*/
 	
 	/*
 	Have to use 2 different draw calls, so cant have in same arrays
@@ -68,22 +84,10 @@ function RockGenerator(){
 	}
 	
 	createRocks();
-	setupRockBuffers();
+	//setupRockBuffers();
 
-	setupTriangleRockBuffers();
+	//setupTriangleRockBuffers();
 	
-	function Rock(xPos, yPos, zPos, width, xRotation, yRotation, zRotation, scale, texture, numIndices){
-		this.x = xPos;
-		this.y = yPos;
-		this.z = zPos;
-		this.width = width;
-		this.xRotation = xRotation;
-		this.yRotation = yRotation;
-		this.zRotation = zRotation;
-		this.scale = scale;
-		this.texture = texture;
-		this.numIndices = numIndices;
-	}
 	
 	
 	/*
@@ -102,6 +106,7 @@ function RockGenerator(){
 			createRock(20, 30, 30, 0.1, rockTexture);
 			createRock(20, 30, 30, 0.2, rockTexture);
 			
+			/*
 			createTriangleRock(rockTexture);
 			createTriangleRock(rockTexture);
 			createTriangleRock(rockTexture);
@@ -115,7 +120,7 @@ function RockGenerator(){
 			
 			createTriangleRock(emeraldTexture);
 			createTriangleRock(emeraldTexture);
-			
+			*/
 		}
 	}
 
@@ -123,6 +128,11 @@ function RockGenerator(){
 	Pyramid vertices from: http://learningwebgl.com/blog/?p=370
 	*/
 	function createTriangleRock(textureParam){
+		var vertices = [];
+		var normals = [];
+		var uvs = [];
+		var indices = [];
+		
 		triangleRockVertices.push(0.0,  1.0 ,  0.0);
 		triangleRockVertices.push(-1.0 , -1.0 ,  1.0 );
 		triangleRockVertices.push( 1.0 , -1.0 ,  1.0 );
@@ -173,8 +183,8 @@ function RockGenerator(){
 		Then find out what the terrain vertex height is, at that point.
 		Set that height to the rock, so it doesn't appear below floor
 		*/
-		var x = Math.floor(Math.random() * 512);
-		var z = Math.floor(Math.random() * 512);
+		var x = Math.floor(Math.random() * terrain.get.getTerrainRows) + 0;
+		var z = Math.floor(Math.random() * terrain.get.getTerrainRows) + 0;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = x;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = z;
 		var rockHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
@@ -193,7 +203,7 @@ function RockGenerator(){
 	https://github.com/mrdoob/three.js/blob/master/src/geometries/SphereGeometry.js
 	(three.js is MIT licensed)
 	*/
-	function createRock(radius, widthSegments, heightSegments, scale, textureParam, quadrant){ 
+	function createRock(radius, widthSegments, heightSegments, scale, textureParam){ 
 		var phiStart = 0;
 		var phiLength = Math.PI * 2; 
 		var thetaStart = 0; 
@@ -211,6 +221,11 @@ function RockGenerator(){
 		
 		var largestZCoord = 0;
 		var smallestZCoord = 0;
+		
+		var vertices = [];
+		var normals = [];
+		var uvs = [];
+		var indices = [];
 		
 		//generate vertices, normals and uvs
 		for ( iy = 0; iy <= heightSegments; iy ++ ) {
@@ -240,12 +255,9 @@ function RockGenerator(){
 				vertex.z += rand/2;
 				
 				rockVertices.push( vertex.x, vertex.y, vertex.z );
-
 				// broken normals
 				rockNormals.push(0, 1, 0);
-				
 				// uv
-
 				rockUvs.push( u, 1 - v );
 
 				verticesRow.push( index ++ );
@@ -277,8 +289,8 @@ function RockGenerator(){
 		Give rock information, and store it ready for drawing
 		*/
 		//Where should we spawn the rock?
-		var x = Math.floor(Math.random() * 512) + 0;
-		var z = Math.floor(Math.random() * 512) + 0;
+		var x = Math.floor(Math.random() * terrain.get.getTerrainRows) + 0;
+		var z = Math.floor(Math.random() * terrain.get.getTerrainRows) + 0;
 		
 		//Find the current terrain vertex height, assign it to the rock
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = x;
@@ -332,7 +344,9 @@ function RockGenerator(){
 			console.log("TRI ROCK VERTICES LENGTH: " + triangleRockVertices.length);
 	}
 
-	function setupRockBuffers(){
+	//Needed in index setup, after objs are loaded, otherwise when constructor called in index
+	//this setupRockBuffers function gets called too early
+	this.setupRockBuffers = function(){
 		rockPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockPositionBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockVertices), gl.STATIC_DRAW);
@@ -352,8 +366,9 @@ function RockGenerator(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockNormals), gl.STATIC_DRAW);
 		
-			console.log("ROCK NORMALS LENGTH: " + rockNormals.length);
-			console.log("ROCK VERTICES LENGTH: " + rockVertices.length);
+		console.log("ROCK INDICES LENGTH: " + rockIndices.length);
+		console.log("ROCK NORMALS LENGTH: " + rockNormals.length);
+		console.log("ROCK VERTICES LENGTH: " + rockVertices.length);
 	}
 
 	/*
@@ -363,8 +378,7 @@ function RockGenerator(){
 		lightColour = [1, 1, 1];
 		for(var i=0; i<rocks.length; i++){
 			currentTexture = rocks[i].texture;
-
-			//debugger;
+			
 			scale = m4.scaling(rocks[i].scale, rocks[i].scale, rocks[i].scale);
 			xRotation = m4.xRotation(rocks[i].xRotation);
 			yRotation = m4.yRotation(rocks[i].yRotation);
@@ -417,7 +431,7 @@ function RockGenerator(){
 			
 		}
 	}
-	
+	/*
 	var triStartPosition = 0;
 	this.renderTriangleRocks = function (){
 		lightColour = [1, 1, 1];
@@ -457,8 +471,8 @@ function RockGenerator(){
 			}
 			
 		}		
-		
 	}
+	*/
 	
 }
 
