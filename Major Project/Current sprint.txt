@@ -61,13 +61,7 @@ Sprint 2 (27th Feb - 6th March)
 
 		If user in range of water vertices, then start updating them, else dont
 		
-		Removed triangle rocks, they didnt have indices and required different render function
-
-		Add in different textures
-		Add in collision
-		Add in other objs
-		Think of rock rendering efficency
-
+		
 	Notes:
 		MIT Licensing, I've included MIT code, which means I need the license
 		But ive changed bits...
@@ -77,6 +71,8 @@ Sprint 2 (27th Feb - 6th March)
 		In licenses file as well
 
 		Rock rendering efficency is bad
+
+		Could have one draw call of small rocks, once terrain + rock rendering efficiency/clipping fixed
 
 	Added:
 		Added Minimap/birds eye view
@@ -94,10 +90,11 @@ Sprint 2 (27th Feb - 6th March)
 			because will be rendering scene twice
 
 		Changed players x,y,z to private fixed scoping issues
-		Removed some triangle rocks
+		Removed triangle rocks, they didnt have indices and required different render function
 		Added flow diagram		
 		Fixed saving player position
-	
+		Added rock objs with some textures	
+
 	Problems:
 		Trying to write my own obj loader, waste of time
 

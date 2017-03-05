@@ -59,15 +59,15 @@ gl.shaderSource(fragmentShader, [
 		//Now to get final specular light value, multiply by specular light by the light colour
 		'vec3 finalSpecular = dampedFactor *  reflectivity * lightColour;',
 		
-		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',// + vec4(finalSpecular, 1.0);',
+		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',
 		
-		'if(useLight){',
+		//'if(useLight){',
 			'gl_FragColor.rgb *= light;',
 			'gl_FragColor.rgb += finalSpecular;',
-		'}',
-		'else{',
+		//'}',
+		//'else{',
 			//Then we're rendering obj rocks, dont bother with lighting
-		'}',
+		//'}',
 		
 		//Fog, mix the skyColour and colour of the object
 		//min takes in 2 colours, 

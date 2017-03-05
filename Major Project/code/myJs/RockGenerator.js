@@ -96,6 +96,16 @@ function RockGenerator(){
 		var mesh = new OBJ.Mesh(objText);
 		OBJ.initMeshBuffers(gl, mesh);
 		
+		/*
+		Inverse the rocks normals, does nothing
+		console.log("pre norms: " + mesh.vertexNormals[0]);
+		var length = mesh.vertexNormals.length;
+		for(var x=0; x<length; x++){
+			mesh.vertexNormals[x] = mesh.vertexNormals[x] * -1;
+		}
+		console.log("post norms: " + mesh.vertexNormals[0]);
+		*/
+		
 		var position = generateRockPosition();
 		mesh.x = position.x;
 		mesh.y = position.y;
