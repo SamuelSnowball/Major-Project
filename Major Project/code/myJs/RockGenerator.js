@@ -78,20 +78,21 @@ function RockGenerator(){
 			createRock(20, 30, 30, 0.2, rockTexture);
 			createRock(20, 30, 30, 0.1, rockTexture);
 			createRock(20, 30, 30, 0.2, rockTexture);
-				
-			createObjRock(objRockText0);	
-			createObjRock(objRockText1);	
-			createObjRock(objRockText2);	
-			createObjRock(objRockText3);	
-			createObjRock(objRockText4);	
-			createObjRock(objRockText5);				
+
+
+			createObjRock(objRockText0, scratchedIceTexture);	
+			createObjRock(objRockText1, blackGlassTexture);	
+			createObjRock(objRockText2, blackIceTexture);	
+			createObjRock(objRockText3, scratchedBlackTexture);	
+			createObjRock(objRockText4, blueTexture);	
+			createObjRock(objRockText5, emeraldTexture);				
 		}
 	}
 	
 	/*
 	Parameter, the obj file to use
 	*/
-	function createObjRock(objText){
+	function createObjRock(objText, texture){
 		var mesh = new OBJ.Mesh(objText);
 		OBJ.initMeshBuffers(gl, mesh);
 		
@@ -99,7 +100,7 @@ function RockGenerator(){
 		mesh.x = position.x;
 		mesh.y = position.y;
 		mesh.z = position.z;
-		
+		mesh.texture = texture;
 		mesh.scale = Math.floor(Math.random() * 5) + 0;
 
 		rockObjs.push(mesh);	
@@ -268,22 +269,22 @@ function RockGenerator(){
 	this.setupRockBuffers = function(){
 		rockPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockPositionBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockVertices), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockVertices), gl.DYNAMIC_DRAW);
 		positionAttribLocation = gl.getAttribLocation(program, 'position');
 		gl.enableVertexAttribArray(positionAttribLocation);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
 		
 		rockElementBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, rockElementBuffer);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(rockIndices), gl.STATIC_DRAW);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(rockIndices), gl.DYNAMIC_DRAW);
 		
 		rockTextureCoordinateBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockTextureCoordinateBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockUvs), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockUvs), gl.DYNAMIC_DRAW);
 		
 		rockNormalsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockNormals), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockNormals), gl.DYNAMIC_DRAW);
 		
 		console.log("ROCK INDICES LENGTH: " + rockIndices.length);
 		console.log("ROCK NORMALS LENGTH: " + rockNormals.length);
@@ -354,12 +355,17 @@ function RockGenerator(){
 	
 	/*
 	Could just have, affected by light uniform, and pass it in
+	
+	Disable light for these...
 	*/
 	this.renderObjRocks = function(){
+		//Disable lighting when rendering rocks
+		useLight = false;
+		
 		var startPosition = 0;
 		for(var i=0; i<rockObjs.length; i++){
 			lightColour = [1, 1, 1];
-			currentTexture = depletedTexture;
+			currentTexture = rockObjs[i].texture;
 				
 			scale = m4.scaling(rockObjs[i].scale, rockObjs[i].scale, rockObjs[i].scale);
 			rotateX = m4.xRotation(0);
@@ -394,6 +400,9 @@ function RockGenerator(){
 				startPosition += rockObjs[i].numIndices;
 			}		
 		}
+		
+		//Re-enable light once rendered rocks
+		useLight = true;
 	}
 	
 }

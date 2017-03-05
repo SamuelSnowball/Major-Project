@@ -31,6 +31,9 @@ gl.shaderSource(fragmentShader, [
 	'uniform vec4 skyColour;',
 	'uniform bool useFog;',
 	
+	//Should we use light (for rock objs)
+	'uniform bool useLight;',
+	
 	'void main(){',
 		//Normalize vectors to ensure size 1, so vector size doesnt affect .product
 		//Directional
@@ -58,13 +61,13 @@ gl.shaderSource(fragmentShader, [
 		
 		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',// + vec4(finalSpecular, 1.0);',
 		
-		//'if(useLight === false){',
-			//Then we're rendering obj rocks, dont bother with lighting
-		//'}',
-		//'else{',
+		'if(useLight){',
 			'gl_FragColor.rgb *= light;',
 			'gl_FragColor.rgb += finalSpecular;',
-		//'}'
+		'}',
+		'else{',
+			//Then we're rendering obj rocks, dont bother with lighting
+		'}',
 		
 		//Fog, mix the skyColour and colour of the object
 		//min takes in 2 colours, 

@@ -18,10 +18,18 @@ var rockTexture2 = new Texture('resources/rocks/rock2.png', 1, 1);
 var depletedTexture = new Texture('resources/rocks/depleted.png', 0, 0);
 var blueOreTexture = new Texture('resources/rocks/blueOre.png', 1, 1);
 var lavaRockTexture =  new Texture('resources/lava.png', 1, 1);
-var emeraldTexture =  new Texture('resources/rocks/emerald.png', 1, 1);
 //1st parameter lower number = less shine damper, so more bright
 var waterTexture = new Texture('resources/water/water.png', 10, 5);
 var lavaTexture = new Texture('resources/lava.png', 1, 1);
+
+//From same resource
+var scratchedIceTexture = new Texture('resources/rocks/scratchedIce.png', 1, 1);
+var blackGlassTexture = new Texture('resources/rocks/blackGlass.png', 1, 1);
+var blackIceTexture = new Texture('resources/rocks/blackIce.png', 1, 1);
+var scratchedBlackTexture = new Texture('resources/rocks/scratchedBlack.png', 1, 1);
+var blueTexture = new Texture('resources/rocks/blue.png', 1, 1);
+
+var emeraldTexture =  new Texture('resources/rocks/emerald.png', 1, 1);
 
 /*
 Loads procedurals, doesn't load regular ones because they need to done asap

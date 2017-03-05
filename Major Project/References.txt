@@ -15,3 +15,6 @@ Terrain indices: http://stackoverflow.com/questions/5915753/generate-a-plane-wit
 Lava: http://mysteriousdove.deviantart.com/art/Lava-Texture-2560-x-1440-498672313
 
 Website used to change perlin color: http://manytools.org/image/colorize-filter/
+
+
+A bunch from here: https://creativeherald.com/gallery/examples-of-scratch-textures/
