@@ -9,12 +9,13 @@ var myPerlinTexture;
 var myParticleTexture;
 var playerTexture;
 
+
 //Textures to do
 var marsRedTerrainTexture;
 
 var rockTexture = new Texture('resources/rocks/rock.png', 1, 1);
 var rockTexture2 = new Texture('resources/rocks/rock2.png', 1, 1);
-var depletedTexture = new Texture('resources/rocks/depleted.png', 1, 1);
+var depletedTexture = new Texture('resources/rocks/depleted.png', 0, 0);
 var blueOreTexture = new Texture('resources/rocks/blueOre.png', 1, 1);
 var lavaRockTexture =  new Texture('resources/lava.png', 1, 1);
 var emeraldTexture =  new Texture('resources/rocks/emerald.png', 1, 1);
@@ -50,7 +51,6 @@ function TextureLoader(){
 		gl.bindTexture(gl.TEXTURE_2D, playerTexture.getTextureAttribute.texture);		
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
 				  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing	
-		
 	}
 	
 }

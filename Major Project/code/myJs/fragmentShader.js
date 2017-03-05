@@ -36,7 +36,7 @@ gl.shaderSource(fragmentShader, [
 		//Directional
 		'vec3 unitNormal = normalize(surfaceNormal);',
 		'float uncheckedBrightness = dot(unitNormal, reverseLightDirection);',
-		'float brightness = max(uncheckedBrightness, 1.0);', //gives ambient light and not below 0.2
+		'float brightness = max(uncheckedBrightness, 0.5);', //gives ambient light and not below 0.2
 		'vec3 diffuse = brightness * lightColour ;',
 		
 		//New specular, reverseLightDirection/unitLightVector might have to be re-reversed here
@@ -58,9 +58,13 @@ gl.shaderSource(fragmentShader, [
 		
 		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',// + vec4(finalSpecular, 1.0);',
 		
-		//Now add the specular light
-		'gl_FragColor.rgb *= light;',
-		'gl_FragColor.rgb += finalSpecular;', //was just specular
+		//'if(useLight === false){',
+			//Then we're rendering obj rocks, dont bother with lighting
+		//'}',
+		//'else{',
+			'gl_FragColor.rgb *= light;',
+			'gl_FragColor.rgb += finalSpecular;',
+		//'}'
 		
 		//Fog, mix the skyColour and colour of the object
 		//min takes in 2 colours, 

@@ -134,10 +134,15 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 
 
 
-<!-- Libraries 
-<script src="libraries/mdn-webgl-master/library/matrices.js"></script> -->
+<!-- Libraries -->
 <script src="libraries/m4.js"></script>
 <script src="libraries/perlin.js"></script>
+<script src="libraries/webgl-obj-loader.js"></script>
+
+<!-- Objs -->
+<script type="text/plain">
+	test
+</script>
 
 <!-- Not my js files-->
 <script src="code/js/ImprovedNoise.js"></script>
@@ -165,7 +170,6 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/Player.js"></script>
 <script src="code/myJs/MissionAssigner.js"></script>
 <script src="code/myJs/Sound.js"></script>
-<script src="code/myJs/ObjLoader.js"></script>
 
 <!-- Broken -->
 <script src="code/myJs/WorldState.js"></script>
@@ -196,7 +200,6 @@ var rockGenerator = new RockGenerator();
 var waterSystem = new WaterSystem();
 var missionAssigner = new MissionAssigner();
 var sound = new Sound();
-var objLoader = new ObjLoader();
 
 //Taken
 var fpsElement = document.getElementById("fps");
@@ -213,11 +216,15 @@ function render(){
 	
 	/*
 	Auto-save the game every 20 seconds or so
+	But only save if they're not in minimap mode
+	Otherwise their Y position gets saved at 500
 	*/
 	if(gameTime === saveTime){
-		console.log("World auto saved");
-		worldState.saveWorld();
-		gameTime = 0;
+		if(useFog === true){
+			console.log("World auto saved");
+			worldState.saveWorld();
+			gameTime = 0;
+		}
 	}
 	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
 	
@@ -227,10 +234,10 @@ function render(){
 
 	collisionTester.testPlayerMapBoundaries();
 	collisionTester.setPlayerHeight(); 
-	collisionTester.testPlayerRockCollision();
+	//collisionTester.testPlayerRockCollision();
 
 	rockGenerator.renderRocks();
-	//rockGenerator.renderTriangleRocks();
+	rockGenerator.renderObjRocks();
 
 	waterSystem.updateWaterVertices();
 	waterSystem.render();
@@ -238,11 +245,24 @@ function render(){
 	missionAssigner.checkOrAssignPlayerMissions();
 	gui.update();
 	gui.displayCurrentRock();
-
 	
 	gameTime++;
 	requestAnimationFrame(render);
 }
+
+/*
+Retrieves the obj text
+*/
+function httpGet(theUrl){
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+
+
+
 
 /*
 This gets called when the user clicks to start the game
@@ -256,13 +276,7 @@ function setup(){
 	missionAssigner.setup();
 	
 	
-	objLoader.loadObj("resources/rocks/rockObjs/rock_c_01.obj", depletedTexture);
-	objLoader.loadObj("resources/rocks/rockObjs/rock_d_01.obj", depletedTexture);
-	
-	objLoader.loadObj("resources/rocks/rockObjs/rock_d_02.obj", depletedTexture);
-	objLoader.loadObj("resources/rocks/rockObjs/rock_d_03.obj", depletedTexture);
-	objLoader.loadObj("resources/rocks/rockObjs/rock_d_05.obj", depletedTexture);
-	objLoader.loadObj("resources/rocks/rockObjs/rock_d_06.obj", depletedTexture);	
+
 	
 	rockGenerator.setupRockBuffers();
 		

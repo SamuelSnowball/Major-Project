@@ -61,9 +61,22 @@ Sprint 2 (27th Feb - 6th March)
 
 		If user in range of water vertices, then start updating them, else dont
 		
-		Fixed saving player position
+		Removed triangle rocks, they didnt have indices and required different render function
+
+		Add in different textures
+		Add in collision
+		Add in other objs
+		Think of rock rendering efficency
 
 	Notes:
+		MIT Licensing, I've included MIT code, which means I need the license
+		But ive changed bits...
+		Used MIT licensed library
+
+		Remember to add proper licenses, various MIT from three.js and obj loader
+		In licenses file as well
+
+		Rock rendering efficency is bad
 
 	Added:
 		Added Minimap/birds eye view
@@ -83,9 +96,8 @@ Sprint 2 (27th Feb - 6th March)
 		Changed players x,y,z to private fixed scoping issues
 		Removed some triangle rocks
 		Added flow diagram		
-
+		Fixed saving player position
 	
 	Problems:
-		What if player in minimap, and there position saves, then they load?
-
+		Trying to write my own obj loader, waste of time
 

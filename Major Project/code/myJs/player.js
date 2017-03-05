@@ -3,7 +3,7 @@ function Player(x, y, z){
 	var x = x; 
 	var y = y;
 	var z = z;
-	var movementSpeed = 0.2;
+	var movementSpeed = 1;
 	this.xRotation = 0;
 	this.yRotation = 0;
 	var previousY = 0; //To remember Y pos when moving for fog
