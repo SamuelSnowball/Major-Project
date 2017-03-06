@@ -156,8 +156,6 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/vertexShader.js"></script>
 <script src="code/myJs/fragmentShader.js"></script>
 <script src="code/myJs/program.js"></script>
-<script src="code/myJs/projection.js"></script>
-<script src="code/myJs/matrices.js"></script>
 
 <!-- Named properly -->
 <script src="code/myJs/CollisionTester.js"></script>
@@ -234,7 +232,7 @@ function render(){
 
 	collisionTester.testPlayerMapBoundaries();
 	collisionTester.setPlayerHeight(); 
-	//collisionTester.testPlayerRockCollision();
+	collisionTester.testPlayerRockCollision();
 
 	rockGenerator.renderRocks();
 	rockGenerator.renderObjRocks();
@@ -261,14 +259,11 @@ function setup(){
 	gameRunning = true;
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
 	
-	worldState.loadWorld(); //WorldState.js
+	worldState.loadWorld();
 	gui.setup();
 	missionAssigner.setup();
 	
 	
-
-	
-	rockGenerator.setupRockBuffers();
 		
 	render();
 }

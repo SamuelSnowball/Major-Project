@@ -14,14 +14,13 @@ function RockGenerator(){
 	var rockPositionBuffer;
 	var rockNormalsBuffer;
 	
-	//Arrays, need to be visible in collisonTester, needs to have getter
+	//Rock arrays, need to be visible in collisonTester, needs to have getter
 	var rocks = [];
 	this.getRocksArray = {
 		get getRocks(){
 			return rocks;
 		}
 	}
-	
 	var rockObjs = [];
 	this.getObjRocksArray = {
 		get getRocks(){
@@ -39,7 +38,7 @@ function RockGenerator(){
 	var rockHitboxes = []; 
 	
 	/*
-	Retrieves the obj text
+	Retrieves the obj text from provided url
 	*/
 	function httpGet(theUrl){
 		var xmlHttp = new XMLHttpRequest();
@@ -57,6 +56,7 @@ function RockGenerator(){
 	var objRockText5 = httpGet("resources/rocks/rockObjs/rock_5.txt");
 	
 	createRocks();
+	setupRockBuffers();
 	
 	function Rock(xPos, yPos, zPos, width, xRotation, yRotation, zRotation, scale, texture, numIndices){
 		this.x = xPos;
@@ -102,17 +102,7 @@ function RockGenerator(){
 	function createObjRock(objText, texture){
 		var mesh = new OBJ.Mesh(objText);
 		OBJ.initMeshBuffers(gl, mesh);
-		
-		/*
-		Inverse the rocks normals, does nothing
-		console.log("pre norms: " + mesh.vertexNormals[0]);
-		var length = mesh.vertexNormals.length;
-		for(var x=0; x<length; x++){
-			mesh.vertexNormals[x] = mesh.vertexNormals[x] * -1;
-		}
-		console.log("post norms: " + mesh.vertexNormals[0]);
-		*/
-		
+
 		var position = generateRockPosition();
 		mesh.x = position.x;
 		mesh.y = position.y;
@@ -195,51 +185,46 @@ function RockGenerator(){
 		
 		//generate vertices, normals and uvs
 		for ( iy = 0; iy <= heightSegments; iy ++ ) {
-
 			var verticesRow = [];
-
 			var v = iy / heightSegments;
-
 			for ( ix = 0; ix <= widthSegments; ix ++ ) {
 
 				var u = ix / widthSegments;
 
 				// vertex
-
 				vertex.x = - radius * Math.cos( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength );
 				vertex.y = radius * Math.cos( thetaStart + v * thetaLength );
 				vertex.z = radius * Math.sin( phiStart + u * phiLength ) * Math.sin( thetaStart + v * thetaLength );
 				
-				//rand
+				//Indent/out-dent vertices for rough texture
 				var max = (Math.random() * 5) + 1;
 				var min = (Math.random() * -5) + 1;
-			
 				var rand = Math.random() * (max-min+1) + min;
-				//console.log(rand);
 				vertex.x += rand/2;
 				vertex.y += rand/2;
 				vertex.z += rand/2;
 				
 				rockVertices.push( vertex.x, vertex.y, vertex.z );
-				// broken normals
+				
+				// Normals
+				//var normalizeXNormal = m4.normalize(vertex.x);
+				//var normalizeYNormal = m4.normalize(vertex.y);
+				//var normalizeZNormal = m4.normalize(vertex.z);
+				//rockNormals.push(normalizeXNormal, normalizeYNormal, normalizeZNormal);
 				rockNormals.push(0, 1, 0);
-				// uv
+				
+				// Uvs
 				rockUvs.push( u, 1 - v );
 
 				verticesRow.push( index ++ );
-
 			}
 
 			grid.push( verticesRow );
-
 		}
 		
 		// indices
-
 		for ( iy = 0; iy < heightSegments; iy ++ ) {
-
 			for ( ix = 0; ix < widthSegments; ix ++ ) {
-
 				var a = grid[ iy ][ ix + 1 ];
 				var b = grid[ iy ][ ix ];
 				var c = grid[ iy + 1 ][ ix ];
@@ -247,7 +232,6 @@ function RockGenerator(){
 
 				if ( iy !== 0 || thetaStart > 0 ) rockIndices.push( a, b, d );
 				if ( iy !== heightSegments - 1 || thetaEnd < Math.PI ) rockIndices.push( b, c, d );
-
 			}
 		}	
 		
@@ -267,15 +251,6 @@ function RockGenerator(){
 		previousNumIndices = rockIndices.length;
 		
 		var width = scale * 30;
-		/*
-		x,y,z is in the middle of the rock,
-		So minus the width/2 to get correct coordinates
-		*/
-		
-		/*
-		Draw 4 lines at these points? rather than a cube
-		Or 2d square
-		*/
 		
 		var tempRock = new Rock(position.x, position.y, position.z, width, xRotation, yRotation, zRotation, scale, texture, numIndices);
 		rocks.push(tempRock);
@@ -283,7 +258,7 @@ function RockGenerator(){
 
 	//Needed in index setup, after objs are loaded, otherwise when constructor called in index
 	//this setupRockBuffers function gets called too early
-	this.setupRockBuffers = function(){
+	function setupRockBuffers(){
 		rockPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockPositionBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockVertices), gl.DYNAMIC_DRAW);

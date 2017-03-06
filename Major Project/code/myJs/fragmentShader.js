@@ -39,7 +39,7 @@ gl.shaderSource(fragmentShader, [
 		//Directional
 		'vec3 unitNormal = normalize(surfaceNormal);',
 		'float uncheckedBrightness = dot(unitNormal, reverseLightDirection);',
-		'float brightness = max(uncheckedBrightness, 0.5);', //gives ambient light and not below 0.2
+		'float brightness = max(uncheckedBrightness, 0.5);', //gives ambient light and not below 0.5
 		'vec3 diffuse = brightness * lightColour ;',
 		
 		//New specular, reverseLightDirection/unitLightVector might have to be re-reversed here
