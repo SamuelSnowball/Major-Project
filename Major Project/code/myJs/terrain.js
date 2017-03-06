@@ -1,5 +1,6 @@
 
 function Terrain(){
+
 	/*
 	Private variables
 	*/
@@ -182,41 +183,22 @@ function Terrain(){
 			terrainY = 0,
 			terrainZ = 0;
 			
-		var previousX, previousY, previousZ; //
+		var previousX, previousY, previousZ; 
 		for(var x=0; x<rows; x++){
 			for(var y=0; y<columns; y++){
-				
 				terrainVertices.push(terrainX); 
 				terrainVertices.push(heightMap[x][y]);
 				terrainVertices.push(terrainZ); 
 				
 				//Move along in the row
 				terrainX+=1;
-				
-				//Set all to 1... bad but should work temporaryHeightMapX
-				//terrainNormals.push(0);//x
-				//terrainNormals.push(1);//y
-			//	terrainNormals.push(0);//z
-				
-				
-				
-				//if y>1 or something
-				//var vector0 = [terrainX, heightMap[x][y], terrainZ];
-				//var vector1 = [];
-				
-				
-				
-				
 			}
 			//New row, reset X, and increment Z
 			terrainX = 0;
 			terrainZ+=1;
 		}
 		
-		//Reset all values as above loop changed them
-		x = 0; y = 0; z = 0; 
-		
-		console.log("Terrain vertices: " + size);
+		console.log("Terrain vertices size, rows*cols: " + size);
 		console.log("Individual terrain x,y,z values: " + terrainVertices.length);		
 	}
 	
@@ -266,7 +248,6 @@ function Terrain(){
 			vector1 = m4.normalize(vector1);
 			//console.log("vector 0: " + vector0);
 			//console.log("vector 1: " + vector1);
-			
 			
 			//Now cross product between vector0 and vector1
 				//vector0 * vector1, might be wrong way around,
@@ -379,10 +360,10 @@ function Terrain(){
 			for(var y=0; y<columns; y++){
 				textureCoordinates.push(xUV);  
 				textureCoordinates.push(yUV); 
-				xUV += 0.00048828125;
+				xUV += 0.0009765625;
 			}
 			xUV = 0;
-			yUV += 0.00048828125;
+			yUV += 0.0009765625;
 		}
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.DYNAMIC_DRAW);
