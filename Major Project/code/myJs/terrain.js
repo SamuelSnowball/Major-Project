@@ -452,12 +452,10 @@ function Terrain(){
 		*/
 		gl.drawElements(
 			gl.TRIANGLE_STRIP, 
-			terrainVertices.length / 3 * 2, //draw only like 100 see how far u get
+			terrainVertices.length / 3 * 2, //vertices * 2 is the number of indices
 			
 			gl.UNSIGNED_INT, 
 			0 //start from like player position
-			
-			
 		); 	
 	}
 	

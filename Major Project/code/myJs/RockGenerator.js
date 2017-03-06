@@ -1,14 +1,6 @@
 		
 function RockGenerator(){
 	
-	//Obj text files
-	var objRockText0 = httpGet("resources/rocks/rockObjs/rock_0.txt");
-	var objRockText1 = httpGet("resources/rocks/rockObjs/rock_1.txt");
-	var objRockText2 = httpGet("resources/rocks/rockObjs/rock_2.txt");
-	var objRockText3 = httpGet("resources/rocks/rockObjs/rock_3.txt");
-	var objRockText4 = httpGet("resources/rocks/rockObjs/rock_4.txt");
-	var objRockText5 = httpGet("resources/rocks/rockObjs/rock_5.txt");
-	
 	//Data
 	var rockIndices = [];
 	var rockVertices = [];
@@ -37,6 +29,33 @@ function RockGenerator(){
 		}
 	}
 	
+	/*
+	Stores x and z and scale, the y is not needed
+	x
+	z
+	x + width
+	z + width
+	*/
+	var rockHitboxes = []; 
+	
+	/*
+	Retrieves the obj text
+	*/
+	function httpGet(theUrl){
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+		xmlHttp.send( null );
+		return xmlHttp.responseText;
+	}
+
+	//Obj text files
+	var objRockText0 = httpGet("resources/rocks/rockObjs/rock_0.txt");
+	var objRockText1 = httpGet("resources/rocks/rockObjs/rock_1.txt");
+	var objRockText2 = httpGet("resources/rocks/rockObjs/rock_2.txt");
+	var objRockText3 = httpGet("resources/rocks/rockObjs/rock_3.txt");
+	var objRockText4 = httpGet("resources/rocks/rockObjs/rock_4.txt");
+	var objRockText5 = httpGet("resources/rocks/rockObjs/rock_5.txt");
+	
 	createRocks();
 	
 	function Rock(xPos, yPos, zPos, width, xRotation, yRotation, zRotation, scale, texture, numIndices){
@@ -51,17 +70,6 @@ function RockGenerator(){
 		this.texture = texture;
 		this.numIndices = numIndices;
 	}
-	
-
-
-	/*
-	Stores x and z and scale, the y is not needed
-	x
-	z
-	x + width
-	z + width
-	*/
-	var rockHitboxes = []; 
 	
 	/*
 	Pass in quadrant rock should be in as well?
@@ -78,7 +86,6 @@ function RockGenerator(){
 			createRock(20, 30, 30, 0.2, rockTexture);
 			createRock(20, 30, 30, 0.1, rockTexture);
 			createRock(20, 30, 30, 0.2, rockTexture);
-
 
 			createObjRock(objRockText0, scratchedIceTexture);	
 			createObjRock(objRockText1, blackGlassTexture);	
@@ -302,7 +309,7 @@ function RockGenerator(){
 	}
 
 	/*
-	Loop through rocks array, separate draw call for each
+	Loop through rocks array, separate draw call for each, bad..
 	*/
 	this.renderRocks = function(){
 		lightColour = [1, 1, 1];

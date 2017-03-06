@@ -4,11 +4,14 @@ Texture knowledge gained from:
 	https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
 	https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js
 */
+
+//This texture gets set to other textures whilst rendering
 var currentTexture;
+
+//Procedural texture
 var myPerlinTexture;
 var myParticleTexture;
 var playerTexture;
-
 
 //Textures to do
 var marsRedTerrainTexture;
@@ -23,13 +26,13 @@ var waterTexture = new Texture('resources/water/water.png', 10, 5);
 var lavaTexture = new Texture('resources/lava.png', 1, 1);
 
 //From same resource
-var scratchedIceTexture = new Texture('resources/rocks/scratchedIce.png', 1, 1);
-var blackGlassTexture = new Texture('resources/rocks/blackGlass.png', 1, 1);
-var blackIceTexture = new Texture('resources/rocks/blackIce.png', 1, 1);
-var scratchedBlackTexture = new Texture('resources/rocks/scratchedBlack.png', 1, 1);
-var blueTexture = new Texture('resources/rocks/blue.png', 1, 1);
+var scratchedIceTexture = new Texture('resources/rocks/scratchedIce.png', 0, 0);
+var blackGlassTexture = new Texture('resources/rocks/blackGlass.png',  0, 0);
+var blackIceTexture = new Texture('resources/rocks/blackIce.png',  0, 0);
+var scratchedBlackTexture = new Texture('resources/rocks/scratchedBlack.png',  0, 0);
+var blueTexture = new Texture('resources/rocks/blue.png',  0, 0);
 
-var emeraldTexture =  new Texture('resources/rocks/emerald.png', 1, 1);
+var emeraldTexture =  new Texture('resources/rocks/emerald.png',  0, 0);
 
 /*
 Loads procedurals, doesn't load regular ones because they need to done asap
