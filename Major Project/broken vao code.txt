@@ -1,21 +1,117 @@
 
 function Terrain(){
-
 	/*
 	Private variables
 	*/
-	var rows = 1024; //1024
-	var columns = 1024;
+	var rows = 2048; //1024
+	var columns = 2048;
 	var size = rows * columns;
 	var heightMap = [];
 
 	var terrainVertices = [];
 	var terrainNormals = [];
-	
+	/*
+	Store texture coordinates for each face
+	Texture coordinates range 0 -> 1
+	*/
+	var textureCoordinates = [];
+		
 	var terrainVertexBuffer;
 	var terrainElementsBuffer;
 	var terrainTextureCoordinateBuffer;
 	var terrainNormalBuffer;
+	
+	var terrainVAO;
+	
+	function seutpTerrainVAO(){
+	
+		lightColour = [1, 1, 1];
+		currentTexture = myPerlinTexture;
+		
+		
+		
+		
+		
+		
+		/*
+		VAO
+		*/
+		terrainVAO = gl.createVertexArray();
+		gl.bindVertexArray(terrainVAO);
+		
+		gl.enableVertexAttribArray(positionAttribLocation);
+		terrainVertexBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainVertexBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainVertices), gl.STATIC_DRAW);
+		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	
+	
+	
+		//Include reference
+		var indices = new Array(size * 2 ); // i think 64 verts = 124 indicies
+		// Set up indices
+		var i = 0;
+		for (var r = 0; r < rows - 1; ++r) {
+			indices[i++] = r * columns ;
+			for (var c = 0; c < columns ; ++c) {
+				indices[i++] = r * columns + c;
+				indices[i++] = (r + 1) * columns  + c;
+			}
+			indices[i++] = (r + 1) * columns  + (columns- 1);
+		}
+		console.log("Length of indices: " + indices.length);
+		elementsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);				
+		//No vertex attrib location
+
+		
+		/*
+		Create the buffer,
+		Bind to it,
+		Buffer the data
+		*/
+		gl.enableVertexAttribArray(textureCoordLocation);
+		terrainTextureCoordinateBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
+		
+		/*
+		Need a double for loop to set accurately
+		1/256 for max row increment?
+			=0.00390625 * 265 = 1. so increment by that
+		1/512 = 0.001953125
+		1/1024 = 0.0009765625
+		1/2048 = 0.00048828125
+		*/
+		var xUV = 0;
+		var yUV = 0;
+		for(var x=0; x<rows; x++){
+			for(var y=0; y<columns; y++){
+				textureCoordinates.push(xUV);  
+				textureCoordinates.push(yUV); 
+				xUV += 0.00048828125;
+			}
+			xUV = 0;
+			yUV += 0.00048828125;
+		}
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+
+		
+		
+		gl.enableVertexAttribArray(normalAttribLocation);
+		terrainNormalBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, terrainNormalBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainNormals), gl.STATIC_DRAW);
+		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);	
+
+
+		
+
+	console.log(terrainVAO);
+
+	}
+	
 	
 	/*
 	This stores what values should be added onto the original centre element, 
@@ -63,7 +159,8 @@ function Terrain(){
 	createCraters();
 	createTerrainVertices();
 	createTerrainNormals();//could use existing loop
-	setupTerrainBuffers();
+	
+	seutpTerrainVAO();
 	
 	/*
 	The collision class needs to find a heightMap value, given a X and Z,
@@ -85,12 +182,7 @@ function Terrain(){
 			return heightMap[temporaryHeightMapZ][temporaryHeightMapX];
 		}
 	}
-	//Needed in rockGenerator
-	this.get = {
-		get getTerrainRows(){
-			return rows;
-		}
-	};
+	
 	
 	/*
 	Private
@@ -139,8 +231,8 @@ function Terrain(){
 		yOff = 0;
 		
 		//Sand section
-		for(var x=0; x<512; x++){
-			for(var y=512; y<1024; y++){
+		for(var x=0; x<1024; x++){
+			for(var y=1024; y<2048; y++){
 				offsetIncrement = 0.05;
 				scale = 2;
 				height = perlin.noise(xOff, yOff, xOff) * scale;
@@ -154,8 +246,8 @@ function Terrain(){
 		yOff = 0;		
 		
 		//Red section
-		for(var x=512; x<1024; x++){
-			for(var y=0; y<1024; y++){
+		for(var x=1024; x<2048; x++){
+			for(var y=0; y<2048; y++){
 				offsetIncrement = 0.005;
 				scale = 50;
 				height = perlin.noise(xOff, yOff, xOff) * scale;
@@ -183,22 +275,41 @@ function Terrain(){
 			terrainY = 0,
 			terrainZ = 0;
 			
-		var previousX, previousY, previousZ; 
+		var previousX, previousY, previousZ; //
 		for(var x=0; x<rows; x++){
 			for(var y=0; y<columns; y++){
+				
 				terrainVertices.push(terrainX); 
 				terrainVertices.push(heightMap[x][y]);
 				terrainVertices.push(terrainZ); 
 				
 				//Move along in the row
-				terrainX+=1;
+				terrainX++;
+				
+				//Set all to 1... bad but should work temporaryHeightMapX
+				//terrainNormals.push(0);//x
+				//terrainNormals.push(1);//y
+			//	terrainNormals.push(0);//z
+				
+				
+				
+				//if y>1 or something
+				//var vector0 = [terrainX, heightMap[x][y], terrainZ];
+				//var vector1 = [];
+				
+				
+				
+				
 			}
 			//New row, reset X, and increment Z
 			terrainX = 0;
-			terrainZ+=1;
+			terrainZ++;
 		}
 		
-		console.log("Terrain vertices size, rows*cols: " + size);
+		//Reset all values as above loop changed them
+		x = 0; y = 0; z = 0; 
+		
+		console.log("Terrain vertices: " + size);
 		console.log("Individual terrain x,y,z values: " + terrainVertices.length);		
 	}
 	
@@ -249,6 +360,7 @@ function Terrain(){
 			//console.log("vector 0: " + vector0);
 			//console.log("vector 1: " + vector1);
 			
+			
 			//Now cross product between vector0 and vector1
 				//vector0 * vector1, might be wrong way around,
 				//Also the vectors could've been calculated wrong way around
@@ -273,7 +385,7 @@ function Terrain(){
 	
 	/*
 	Private
-	*/
+	*
 	function setupTerrainBuffers(){
 		setupTerrainVertexBuffer();
 		setupTerrainIndiciesBuffer();
@@ -281,24 +393,26 @@ function Terrain(){
 		setupTerrainNormalBuffer();
 		console.log("Setup terrain buffers");
 	}
+	*/
 	
 	/*
 	Private
-	*/
+	*
 	function setupTerrainVertexBuffer(){
 		terrainVertexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainVertexBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainVertices), gl.DYNAMIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainVertices), gl.STATIC_DRAW);
 		gl.enableVertexAttribArray(positionAttribLocation);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
 	}
+	*/
 	
 	/*
 	Private
 	
 	Code from: http://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips
 	Answer with 11 upvotes
-	*/
+	*
 	function setupTerrainIndiciesBuffer(){
 		//make the *2 stuff, overallRows and overallColumsn and remove x2
 		// * 2 orginaly then *4 cos double, make this non bad eventually, base off varaible
@@ -321,8 +435,9 @@ function Terrain(){
 		
 		elementsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.DYNAMIC_DRAW);		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);		
 	}
+	*/
 	
 	/*
 	Every texture goes from 0 -> 1, regardless of dimensions
@@ -332,51 +447,18 @@ function Terrain(){
 	Set the sampler in the shader to use that texture
 	*/
 	function setupTerrainTextureBuffer(){
-		/*
-		Create the buffer,
-		Bind to it,
-		Buffer the data
-		*/
-		terrainTextureCoordinateBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
 
-		/*
-		Store texture coordinates for each face
-		Texture coordinates range 0 -> 1
-		*/
-		var textureCoordinates = [];
-		
-		/*
-		Need a double for loop to set accurately
-		1/256 for max row increment?
-			=0.00390625 * 265 = 1. so increment by that
-		1/512 = 0.001953125
-		1/1024 = 0.0009765625
-		1/2048 = 0.00048828125
-		*/
-		var xUV = 0;
-		var yUV = 0;
-		for(var x=0; x<rows; x++){
-			for(var y=0; y<columns; y++){
-				textureCoordinates.push(xUV);  
-				textureCoordinates.push(yUV); 
-				xUV += 0.0009765625;
-			}
-			xUV = 0;
-			yUV += 0.0009765625;
-		}
-		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.DYNAMIC_DRAW);
-		//gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
 	}
 	
+	/*
 	function setupTerrainNormalBuffer(){
 		terrainNormalBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainNormalBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainNormals), gl.DYNAMIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainNormals), gl.STATIC_DRAW);
 		gl.enableVertexAttribArray(normalAttribLocation);
 		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);			
 	}
+	*/
 	
 	/*
 	Public
@@ -384,12 +466,17 @@ function Terrain(){
 	Apply matrices, then draw the terrain.
 	*/
 	this.render = function(){	
+		
+		gl.bindVertexArray(terrainVAO);
+		
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
+		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);		
+		
 		/*
 		Set the current texture, so updateAttributesAndUniforms gets updated
 		For specular light
 		*/
-		lightColour = [1, 1, 1];
-		currentTexture = myPerlinTexture;
 		//currentTexture = depletedTexture;
 		
 		/*
@@ -405,6 +492,8 @@ function Terrain(){
 		//Times matrices together
 		updateAttributesAndUniforms();
 
+		
+		/*
 		//Vertices
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainVertexBuffer);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
@@ -420,11 +509,11 @@ function Terrain(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, terrainNormalBuffer);
 		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
 		
-		
 		//Elements
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
+		*/
 		
-		//Cant draw from 0, as it makes shader process everything
+		
 		/*
 		Mode
 		Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
@@ -433,10 +522,9 @@ function Terrain(){
 		*/
 		gl.drawElements(
 			gl.TRIANGLE_STRIP, 
-			terrainVertices.length / 3 * 2, //vertices * 2 is the number of indices
-			
-			gl.UNSIGNED_INT, 
-			0 //start from like player position
+			100,//terrainVertices.length / 3 * 2,
+			gl.UNSIGNED_INT, //maybe this is the problem
+			0
 		); 	
 	}
 	
@@ -667,16 +755,6 @@ function Terrain(){
 	
 	
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

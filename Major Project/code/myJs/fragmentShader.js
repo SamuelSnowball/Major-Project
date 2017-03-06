@@ -10,32 +10,33 @@ The fragment color is computed by getting the texel,
 var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 gl.shaderSource(fragmentShader, [
 	'precision highp float;',
+	
 	'varying highp vec2 vTextureCoord;',
 	'uniform sampler2D uSampler;',
+	
+	'varying vec3 surfaceNormal;', //varying is in for frag shader
+	//Specular, take in toCameraVector
+	'varying vec3 toCameraVector;',
 	
 	'uniform vec3 lightColour;',
 	'uniform float shineDamper;',
 	'uniform float reflectivity;',
-	
-	'varying vec3 surfaceNormal;', //varying is in for frag shader
-	
-	//For directional
+	 //For directional
 	'uniform vec3 reverseLightDirection;',
 	'uniform vec3 lightDirection;',
 	
-	//Specular, take in toCameraVector
-	'varying vec3 toCameraVector;',
 	
 	//Fog
 	'varying float visibility;',
 	'uniform vec4 skyColour;',
+	'uniform bool useFog;',
 	
 	'void main(){',
 		//Normalize vectors to ensure size 1, so vector size doesnt affect .product
 		//Directional
 		'vec3 unitNormal = normalize(surfaceNormal);',
 		'float uncheckedBrightness = dot(unitNormal, reverseLightDirection);',
-		'float brightness = max(uncheckedBrightness, 1.0);', //gives ambient light and not below 0.2
+		'float brightness = max(uncheckedBrightness, 0.5);', //gives ambient light and not below 0.5
 		'vec3 diffuse = brightness * lightColour ;',
 		
 		//New specular, reverseLightDirection/unitLightVector might have to be re-reversed here
@@ -55,17 +56,23 @@ gl.shaderSource(fragmentShader, [
 		//Now to get final specular light value, multiply by specular light by the light colour
 		'vec3 finalSpecular = dampedFactor *  reflectivity * lightColour;',
 		
-		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',// + vec4(finalSpecular, 1.0);',
+		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',
 		
-		//Now add the specular light
+		//Add lighting
 		'gl_FragColor.rgb *= light;',
-		'gl_FragColor.rgb += finalSpecular;', //was just specular
-		
+		'gl_FragColor.rgb += finalSpecular;',
+
 		//Fog, mix the skyColour and colour of the object
 		//min takes in 2 colours, 
 		//make skyColour 4d first
 		//2nd is the gl_FragColor (current fragment)
-		'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
+		
+		'if(useFog){', //Check to see if we should use fog or not
+			'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
+		'}',
+		'else{',
+			'',
+		'}',
 	'}'
 ].join('\n'));
 gl.compileShader(fragmentShader);

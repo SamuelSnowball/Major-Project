@@ -11,14 +11,11 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Build terrain (ongoing) 			(time: 10h) (priority: 6)
 		Collision with rocks (ongoing) 			(time: 03h) (priority: 6)
 		Build GUIs 					(time: 10h) (priority: 6)
-		Texturing terrain 				(time: 05h) (priority: 5)
 		Add audio 					(time: 03h) (priority: 4)
 
 	Extra features:
 		Clouds 						(time: 06h) (priority: 4)
-		Fog						(time: 06h) (priority: 4)
 		Particle effects 				(time: 08h) (priority: 3)
-		Minimap 					(time: 02h) (priority: 3)
 		Shadows 					(time: 10h) (priority: 2)
 		Initial loading scene 				(time: 03h) (priority: 2)
 		Day/night cycles				(time: 05h) (priority: 1)
@@ -30,27 +27,34 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		User manual, features, how to play
 		Overall design	
 		Technical stuff
+		Class diagram
+		Test table
 
 	Current features:
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
 		Initial terrain 
 		Some rocks, with collision			(time: 08h) (priority: 8)
 		Collision with terrain (ongoing) 		(time: 08h) (priority: 6)
+		Texturing terrain 				(time: 05h) (priority: 5)
+		Minimap (Sub-task)				(time: 02h) (priority: 5)
 		Water, with specular lighting			(time: 12h) (priority: 4)
+		Fog						(time: 06h) (priority: 4)
 		
+	Small things to do:
+		Fix rocks spawning on player
+		Add screenshots of stuff, water, minimap
+		Change STATIC_DRAW renders to DYNAMIC_DRAW
 
 
 For mid project release aiming for all core done - (Possible 13th march, 3 sprints left)
 
-Before release:
+Before demo/final release:
 	Change movement speed
 	Change camera rotation speed
 	Disable use of W and S keys
+	Shorten minimap zFar range
 	
 Add a release version after each sprint as well
-
-Random notes:
-	Water/Lava generate at a certain height
 
 /////////////////////////////////////////////////////////////////////
 ####################### BEFORE STARTING SCRUM #######################
@@ -275,6 +279,7 @@ Sprint 0 (13th - 20th February)
 			30 hours coding
 			10 hours more on design how I'm going to do things etc, comments, debugging, updating this logs
 			6 hours researching on stackoverflow & youtube 
+
 			
 
 Sprint 1 (20th - 27th February)
@@ -394,6 +399,102 @@ Sprint 1 (20th - 27th February)
 			Why cant i see specular highlights on water?
 				-Its shimmering, because light coming from 1 direction
 
+
 		
+Sprint 2 (27th Feb - 6th March)
+
+	Tackling tasks from product backlog:
+		Loading and saving functions (ongoing) 		(time: 03h) (priority: 9) (actual time: 03h)
+		FINISH building terrain (ongoing) 		(time: 05h) (priority: 6) (actual time: 10h)
+		Build GUIs (Minimap + nearest rock)		(time: 02h) (priority: 6) (actual time: 01h)
+		Minimap 					(time: 02h) (priority: 5) (actual time: 06h)
+
+	Other tasks:
+		Start test table
+		
+	Sprint plan:
+		Bad minimap 
+			4x4 grid minimap, shows current quadrant, 
+			should be relativley easy
+			locked sections in red, avaliable sections in blue, current in green
+
+		Proper minimap/map
+			render the scene from above, in a small portion to the side of window
+			Could have really bad efficieny though
+			Drawing everything again :/
+
+			Possible solution, only render the minimap/map when the user
+			holds down a key, pops up in another interface!
+			Users current position gets upped by like +20y
+			Then player view gets rotated straight down?
+			Set gl.lookAt perhaps
+			
+		Load and saving
+			Player position
+			Current XP/Level
+
+		Spawn user in the correct grid square
+
+		Set noise values of 16 quadrants
+
+		Texture all 16 quadrants
+			Work on inner 4 squares first
+			Have all 16 texturs on 1 atlas, so easy to use!
+			Start with mid 4 images
+			Move perlin scales in
+			Set player spawn
+
+		Add audio
+			ambient soundtrack
+			when colliding with rocks
+			when prospect a rock
+
+		Possibily work on water on GPU and spawning it randomly
+
+		Need a bunch of rocks
+		-With names
+		-Then have missions telling user to explore the rocks
+
+		If user in range of water vertices, then start updating them, else dont
+		
+		
+	Sprint retrospective:
+		MIT Licensing, I've included MIT code, which means I need the license
+		But ive changed bits...
+		Used MIT licensed library
+
+		Remember to add proper licenses, various MIT from three.js and obj loader
+		In licenses file as well
+
+		Rock rendering efficency is bad, seperate draw call for each
+
+		Could have one draw call of small rocks, once terrain + rock rendering efficiency/clipping fixed
+
+		Added Minimap/birds eye view when ser holds M key
+			Disables fog, widens zFar when in miniMap mode
+			Otherwise, because so far away, everything would be in fog!
+
+			In minimap mode need to widen the zFar plane so player can see alot of the map
+			But then decrease back to normal, for rendering efficiney
+			The user cant see past 64z anyway due to fog, why render 512z?
+			Remade projectionMatrix every frame to set the zFar value
+
+			Added player position onto minimap, just a red square
+
+			Once finished minimap, implement into game, but need to fix rendering issues first
+			because will be rendering scene twice
+
+		Changed players x,y,z to private fixed scoping issues
+		Removed triangle rocks, they didnt have indices and required different render function	
+		Fixed saving player position
+		Added rock objs with some textures, lighting is broken with them
+
+		Added flow diagram
+		Bit more on class diagram
+
+	Notes:
+		Trying to write my own obj loader, waste of time
+		Not sure about MIT license, with obj loader and three.js sphere code
+		Found terrain rendering was horrible, processes all vertices, discards 95% of them
 
 

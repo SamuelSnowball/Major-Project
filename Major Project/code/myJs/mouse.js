@@ -1,6 +1,9 @@
 /*
-Not sure why one needs to be canvas, and the other document. 
-But it fails if they're both document
+This file contains code for pointerlock,
+
+Also holds the global rotation parameters that get used in matrices
+
+When user clicks, GUI elements display
 */
 canvas.requestPointerLock = canvas.requestPointerLock ||
                             canvas.mozRequestPointerLock;
@@ -9,8 +12,7 @@ document.exitPointerLock = document.exitPointerLock    ||
 							document.mozExitPointerLock;
 
 var pointerLocked = false;
-
-							
+			
 canvas.addEventListener('mousedown', function(){
 	
 	if(gameRunning === false){
@@ -43,13 +45,15 @@ canvas.addEventListener('mousedown', function(){
 	}
 	
 	//Show GUI elements
-	document.getElementById("overlay").style.visibility = "visible";
+	document.getElementById("xpOverlay").style.visibility = "visible";
+	
+	document.getElementById("minimapOverlay").style.visibility = "visible";
 	document.getElementById("missionOverlay").style.visibility = "visible";
 	document.getElementById("nearestRockOverlay").style.visibility = "visible";
 	
 	document.getElementById("topMiddleOverlay").style.visibility = "visible";
 	
-	document.getElementById("xpOverlay").style.visibility = "visible";
+	
 });
 
 

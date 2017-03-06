@@ -4,23 +4,35 @@ Texture knowledge gained from:
 	https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
 	https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js
 */
+
+//This texture gets set to other textures whilst rendering
 var currentTexture;
+
+//Procedural texture
 var myPerlinTexture;
 var myParticleTexture;
+var playerTexture;
 
 //Textures to do
 var marsRedTerrainTexture;
 
 var rockTexture = new Texture('resources/rocks/rock.png', 1, 1);
 var rockTexture2 = new Texture('resources/rocks/rock2.png', 1, 1);
-var depletedTexture = new Texture('resources/rocks/depleted.png', 1, 1);
+var depletedTexture = new Texture('resources/rocks/depleted.png', 0, 0);
 var blueOreTexture = new Texture('resources/rocks/blueOre.png', 1, 1);
 var lavaRockTexture =  new Texture('resources/lava.png', 1, 1);
-var emeraldTexture =  new Texture('resources/rocks/emerald.png', 1, 1);
-
 //1st parameter lower number = less shine damper, so more bright
 var waterTexture = new Texture('resources/water/water.png', 10, 5);
 var lavaTexture = new Texture('resources/lava.png', 1, 1);
+
+//From same resource
+var scratchedIceTexture = new Texture('resources/rocks/scratchedIce.png', 0, 0);
+var blackGlassTexture = new Texture('resources/rocks/blackGlass.png',  0, 0);
+var blackIceTexture = new Texture('resources/rocks/blackIce.png',  0, 0);
+var scratchedBlackTexture = new Texture('resources/rocks/scratchedBlack.png',  0, 0);
+var blueTexture = new Texture('resources/rocks/blue.png',  0, 0);
+
+var emeraldTexture =  new Texture('resources/rocks/emerald.png',  0, 0);
 
 /*
 Loads procedurals, doesn't load regular ones because they need to done asap
@@ -41,11 +53,15 @@ function TextureLoader(){
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
 				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing	
 
-		myPerlinTexture = new Texture("resources/nice2.png", 0, 0);
+		myPerlinTexture = new Texture("resources/terrain/atlas.png", 0, 0);
 		gl.bindTexture(gl.TEXTURE_2D, myPerlinTexture.getTextureAttribute.texture);		
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
 				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing	
-
+		
+		playerTexture = new Texture("", 0, 0);
+		gl.bindTexture(gl.TEXTURE_2D, playerTexture.getTextureAttribute.texture);		
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+				  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing	
 	}
 	
 }
@@ -73,7 +89,7 @@ function Texture(path, shineDamperParam, reflectivityParam){
 	
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing
+				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing
 
 	var image = new Image();
 	image.src = path;

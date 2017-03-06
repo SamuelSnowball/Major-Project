@@ -15,15 +15,17 @@ function WorldState(){
 				localStorage.getItem("playerYPos") !== "undefined" && 
 				localStorage.getItem("playerZPos") !== "undefined"){
 				
-				player.x = localStorage.getItem("playerXPos");
-				player.y = localStorage.getItem("playerYPos");
-				player.z = localStorage.getItem("playerZPos");
+				console.log("Retrieved these values from local storage: " + localStorage.getItem("playerXPos") + ", " + localStorage.getItem("playerYPos") + ", " + localStorage.getItem("playerZPos"));
 				
-				player.y += 0.0001;
+				player.set.x = Math.floor(localStorage.getItem("playerXPos"));
+				player.set.y = Math.floor(localStorage.getItem("playerYPos"));
+				player.set.z = Math.floor(localStorage.getItem("playerZPos"));
+				console.log("loaded x,y,z as: " + player.get.x + ", " + player.get.y + ", " + player.get.z);
+				
 			}
 			else{
 				//Then this is first time user is playing, set their position
-				player.x = 0, player.y = 0, player.z = 0;
+				player.set.x = 0, player.set.y = 0, player.set.z = 0;
 			}
 			
 		}
@@ -33,9 +35,10 @@ function WorldState(){
 	}
 	
 	this.saveWorld = function(){		
-		localStorage.setItem("playerXPos", player.x);
-		localStorage.setItem("playerYPos", player.y);
-		localStorage.setItem("playerZPos", player.z);
+		console.log("saved x,y,z as: " + player.get.x + ", " + player.get.y + ", " + player.get.z);
+		localStorage.setItem("playerXPos", Math.floor(player.get.x));
+		localStorage.setItem("playerYPos", Math.floor(player.get.y));
+		localStorage.setItem("playerZPos", Math.floor(player.get.z));
 	}
 }
 

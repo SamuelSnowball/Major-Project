@@ -36,18 +36,18 @@ function ParticleSystem(){
 
 		particle_positions_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, particle_positions_buffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_vertices), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_vertices), gl.DYNAMIC_DRAW);
 		positionAttribLocation = gl.getAttribLocation(program, 'position');
 		gl.enableVertexAttribArray(positionAttribLocation);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
 		
 		particle_uvs_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, particle_uvs_buffer);	
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_uvs), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_uvs), gl.DYNAMIC_DRAW);
 		
 		particle_normals_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, particle_normals_buffer);	
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_normals), gl.STATIC_DRAW);		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_normals), gl.DYNAMIC_DRAW);		
 	}
 	
 	

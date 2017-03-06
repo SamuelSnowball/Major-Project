@@ -13,9 +13,9 @@ document.body.appendChild(canvas);
 var canvas = document.getElementById('canvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-var gl = canvas.getContext('webgl');
+var gl = canvas.getContext('webgl2');
 gl.enable(gl.DEPTH_TEST);
-gl.clearColor(0.5, 0.5, 0.5, 0);
+gl.clearColor(0.1, 0.1, 0.1, 0);
 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 var ext = gl.getExtension('OES_element_index_uint');
