@@ -10,29 +10,26 @@ The fragment color is computed by getting the texel,
 var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 gl.shaderSource(fragmentShader, [
 	'precision highp float;',
+	
 	'varying highp vec2 vTextureCoord;',
 	'uniform sampler2D uSampler;',
+	
+	'varying vec3 surfaceNormal;', //varying is in for frag shader
+	//Specular, take in toCameraVector
+	'varying vec3 toCameraVector;',
 	
 	'uniform vec3 lightColour;',
 	'uniform float shineDamper;',
 	'uniform float reflectivity;',
-	
-	'varying vec3 surfaceNormal;', //varying is in for frag shader
-	
-	//For directional
+	 //For directional
 	'uniform vec3 reverseLightDirection;',
 	'uniform vec3 lightDirection;',
 	
-	//Specular, take in toCameraVector
-	'varying vec3 toCameraVector;',
 	
 	//Fog
 	'varying float visibility;',
 	'uniform vec4 skyColour;',
 	'uniform bool useFog;',
-	
-	//Should we use light (for rock objs)
-	'uniform bool useLight;',
 	
 	'void main(){',
 		//Normalize vectors to ensure size 1, so vector size doesnt affect .product
