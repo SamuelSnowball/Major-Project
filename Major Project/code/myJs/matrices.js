@@ -65,7 +65,7 @@ function computeModelMatrix(paramRotateX, paramRotateY, rotateZ, xPos, yPos, zPo
 var skyColour = [0.8, 0.8, 0.8, 0.7];
 var lightColour = [1, 1, 1];
 var useFog = true;
-var useLight = true;
+
 function updateAttributesAndUniforms(){
 
 	//Have to remake this every frame? shouldn't be awful
@@ -108,7 +108,4 @@ function updateAttributesAndUniforms(){
 	
 	//Enable/disable fog
 	gl.uniform1i(useFogLocation, useFog);
-	
-	//Enable/disable lightColour
-	gl.uniform1i(useLightLocation, useLight);
 }

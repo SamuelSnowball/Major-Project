@@ -61,14 +61,10 @@ gl.shaderSource(fragmentShader, [
 		
 		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',
 		
-		//'if(useLight){',
-			'gl_FragColor.rgb *= light;',
-			'gl_FragColor.rgb += finalSpecular;',
-		//'}',
-		//'else{',
-			//Then we're rendering obj rocks, dont bother with lighting
-		//'}',
-		
+		//Add lighting
+		'gl_FragColor.rgb *= light;',
+		'gl_FragColor.rgb += finalSpecular;',
+
 		//Fog, mix the skyColour and colour of the object
 		//min takes in 2 colours, 
 		//make skyColour 4d first

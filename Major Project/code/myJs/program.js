@@ -44,7 +44,3 @@ gl.enableVertexAttribArray(skyColourLocation);
 //Fog
 var useFogLocation = gl.getUniformLocation(program, 'useFog');
 gl.enableVertexAttribArray(useFogLocation);
-
-//Use light
-var useLightLocation = gl.getUniformLocation(program, 'sueLight');
-gl.enableVertexAttribArray(useLightLocation);
