@@ -5,7 +5,7 @@ Sprint 4 (13th - 20th March)
 
 	Tackling tasks from product backlog:
 
-		Adding fuel and money features	
+		Adding fuel and money features	 
 			Add in money variable, sell ores = get money, use to buy fuel	
 
 		Adding player inventory
