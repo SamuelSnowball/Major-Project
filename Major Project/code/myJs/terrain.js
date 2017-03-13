@@ -1,21 +1,105 @@
 
 function Terrain(){
-
-	/*
-	Private variables
-	*/
-	var rows = 1024; //1024
-	var columns = 1024;
-	var size = rows * columns;
-	var heightMap = [];
-
-	var terrainVertices = [];
-	var terrainNormals = [];
 	
-	var terrainVertexBuffer;
-	var terrainElementsBuffer;
-	var terrainTextureCoordinateBuffer;
-	var terrainNormalBuffer;
+	// Contains all quadrant VAO objects, each VAO contains a quadrants: vertices, normals, uvs and indices
+	var terrainVAOs = [];
+	
+	// A 2D array storing stacked perlin noise height values, later assigned to quadrantVertices height coordinate.
+	var heightMap;
+	
+	// The row and column size of each quadrant
+	var quadrantRowSize = 128;
+	var quadrantColumnSize = 128;
+	
+	// How many map quadrants, each having 128*128 vertices each
+	// If you update these, make sure to update them in player assign quadrant method
+	var numberQuadrantRows = 8; 
+	var numberQuadrantColumns = 8; 
+	
+	this.get = {
+		get numQuadrantRows(){
+			return numberQuadrantRows;
+		},
+		get numQuadrantColumns(){
+			return numberQuadrantColumns;
+		}
+	};
+	
+	// Contains entire map size, not individual quadrant size, needed for heightMap
+	var terrainRows = numberQuadrantRows * quadrantRowSize;
+	var terrainColumns = numberQuadrantColumns * quadrantColumnSize;
+	
+	// Data for the current quadrant, this data gets stored in the quadrants VBOs
+	var quadrantVertices = []; 
+	var quadrantNormals = [];
+	var quadrantUvs = [];
+	var quadrantIndices = [];
+	
+	// VBOs for each quadrant, they get stored in the quadrants VAO
+	var quadrantVertexBuffer;
+	var quadrantIndicesBuffer;
+	var quadrantUvBuffer;
+	var quadrantNormalBuffer;
+	
+	// Needed in createQuadrantVertices
+	var savedX = 0;
+	var savedZ = 0;
+
+	var cornerIndices = []; // Contains corner indices
+	
+	var leftEdgeIndices = []; // Contains edge indices
+	var rightEdgeIndices = []; 
+	var topEdgeIndices = []; 
+	var bottomEdgeIndices = []; 
+	
+	var renderIndices = []; // Final set of indices to render
+	
+	function buildAllTerrainData(){
+		
+		// For each map quadrant, create its data, and a VAO.
+		for(var x=0; x<numberQuadrantRows; x++){
+			for(var z=0; z<numberQuadrantColumns; z++){	
+				
+				//Create and bind a VAO, for holding our VBO data
+				var tempVAO = vao_ext.createVertexArrayOES();  
+				vao_ext.bindVertexArrayOES(tempVAO); 
+				
+				gl.enableVertexAttribArray(positionAttribLocation);
+				gl.enableVertexAttribArray(textureCoordLocation);
+				gl.enableVertexAttribArray(normalAttribLocation);
+						
+				// Reset current quadrant data (if any), and create new quadrant data
+				createQuadrantVertices(x, z);
+				createQuadrantIndices();
+				createQuadrantUvs(x, z);
+				createQuadrantNormals();
+				
+				// Then put data in VBOs, and bind those VBOs to VAO
+				setupQuadrantVertexBuffer();
+				setupQuadrantIndiciesBuffer();
+				setupQuadrantUvBuffer();
+				setupQuadrantNormalBuffer();
+				
+				// Add current VAO to terrainVAOs array, this saves our data in the VAO
+				terrainVAOs.push(tempVAO);
+				vao_ext.bindVertexArrayOES(null); 
+				
+			}
+		}
+		
+	}
+	
+	// Create, fill and edit heightMap data
+	createHeightMap();
+	fillHeightMap();
+	//createCraters();
+	
+	// Use that heightMap data to create vertices 
+	buildAllTerrainData();
+	setupVaoIndices();
+	
+	
+	
 	
 	/*
 	This stores what values should be added onto the original centre element, 
@@ -57,13 +141,9 @@ function Terrain(){
 		
 		*/
 	];
-	
-	createHeightMap();
-	fillHeightMap();
-	createCraters();
-	createTerrainVertices();
-	createTerrainNormals();//could use existing loop
-	setupTerrainBuffers();
+
+
+
 	
 	/*
 	The collision class needs to find a heightMap value, given a X and Z,
@@ -85,10 +165,10 @@ function Terrain(){
 			return heightMap[temporaryHeightMapZ][temporaryHeightMapX];
 		}
 	}
-	//Needed in rockGenerator
+	//Needed in rockGenerator, careful might be quadrantRows
 	this.get = {
 		get getTerrainRows(){
-			return rows;
+			return terrainRows;
 		}
 	};
 	
@@ -99,10 +179,32 @@ function Terrain(){
 		heightMap[terrainRows][terrainColumns];
 	*/
 	function createHeightMap(){
-		heightMap = new Array(rows); 
-		for(var i=0; i<rows; i++){
-			heightMap[i] = new Array(columns);
+		heightMap = new Array(terrainRows); 
+		for(var i=0; i<terrainRows; i++){
+			heightMap[i] = new Array(terrainColumns);
 		}
+	}
+	
+	/*
+	Private
+	
+	Takes in a coordinate, loops over specified number of octaves,
+	adds noise octaves onto each other.
+	*/
+	function stackNoise(x, y, numOctaves){
+		var v = 0;
+		var amplitude = 1;
+		var frequency = 1;
+		var noiseTotal = 0;
+		
+		for(var i=0; i<numOctaves; i++){
+			v += perlin.noise(x * amplitude, y * amplitude, x * amplitude) * frequency;
+			noiseTotal += frequency;
+			amplitude *= 0.5;
+			frequency *= 2.0;
+		}
+		
+		return v / noiseTotal;
 	}
 	
 	/*
@@ -110,12 +212,8 @@ function Terrain(){
 	
 	Fills the 2D HeightMap with initial values
 	
-	Very wide
-		var offsetIncrement = 0.001;
-		scale = 300;
-	Regular
-		var offsetIncrement = 0.05;
-		scale = 3;
+	8 x 8 quadrant map is 1024 rows by 1024 columns
+	64 quadrants
 	*/
 	function fillHeightMap(){
 		var xOff = 0;
@@ -123,14 +221,11 @@ function Terrain(){
 		var offsetIncrement;
 		var scale;
 		
-		//Brown section
-		for(var x=0; x<1024; x++){
-			for(var y=0; y<1024; y++){
-				offsetIncrement = 0.005;
-				scale = 15;
-				height = perlin.noise(xOff, yOff, xOff) * scale;
-				heightMap[x][y] = height;
-				xOff+=offsetIncrement;
+		//Does for entire map
+		for(var x=0; x<terrainRows; x++){
+			for(var y=0; y<terrainRows; y++){
+				var stacked = stackNoise(x,y,8);
+				heightMap[x][y] = stacked * 100;
 			}
 			xOff = 0;
 			yOff += offsetIncrement;
@@ -138,14 +233,21 @@ function Terrain(){
 		xOff = 0;
 		yOff = 0;
 		
-		//Sand section
-		for(var x=0; x<512; x++){
-			for(var y=512; y<1024; y++){
-				offsetIncrement = 0.05;
-				scale = 2;
-				height = perlin.noise(xOff, yOff, xOff) * scale;
-				heightMap[x][y] = height;
-				xOff+=offsetIncrement;
+		/*
+		Remember 0->383 = 128*3, NOT 384
+		
+		Spawn section boundaries:
+			(384x, 384z)
+			(384x, 640z)
+			(640x, 384z)
+			(640x, 640z)
+		*/
+		
+		//Spawn section
+		for(var x=383; x<=639; x++){
+			for(var y=383; y<=639; y++){
+				var stacked = stackNoise(x,y,8);
+				heightMap[x][y] = stacked * 10;
 			}
 			xOff = 0;
 			yOff += offsetIncrement;
@@ -154,19 +256,18 @@ function Terrain(){
 		yOff = 0;		
 		
 		//Red section
-		for(var x=512; x<1024; x++){
-			for(var y=0; y<1024; y++){
-				offsetIncrement = 0.005;
-				scale = 50;
-				height = perlin.noise(xOff, yOff, xOff) * scale;
-				heightMap[x][y] = height;
-				xOff+=offsetIncrement;
+		/*
+		for(var x=terrainRows/2; x<terrainRows; x++){
+			for(var y=0; y<terrainRows; y++){
+				var stacked = stackNoise(x,y,8);
+				heightMap[x][y] = stacked * 50;
 			}
 			xOff = 0;
 			yOff += offsetIncrement;
 		}
 		xOff = 0;
 		yOff = 0;		
+		*/
 		
 	}
 	
@@ -178,47 +279,89 @@ function Terrain(){
 	Now create the terrain vertices using x, y, z values 
 	Where y is the value from the heightMap we made.
 	*/
-	function createTerrainVertices(){
-		var terrainX = 0,
-			terrainY = 0,
-			terrainZ = 0;
+	function createQuadrantVertices(vaoXPosition, vaoZPosition){
+	
+		// Clear old quadrantVertices, need to generate a new set
+		quadrantVertices = [];
+
+		/*
+		Work out what position we should start from (quadrant start boundaries)
+		
+		Transform from current quadrant index, to start position for vertex generation
+			Example: 
+				startX = 3, startZ = 0;
+				3 * 128 (quadrant size) = X vertex generate start position (then -1)
+				0 * 128 (quadrant size) = Z vertex generate start position (then -1)
 			
-		var previousX, previousY, previousZ; 
-		for(var x=0; x<rows; x++){
-			for(var y=0; y<columns; y++){
-				terrainVertices.push(terrainX); 
-				terrainVertices.push(heightMap[x][y]);
-				terrainVertices.push(terrainZ); 
+			Example: startX = 1, startZ = 1;
+				Start at 127, 127
+		
+		Need to - 1, as it returns multiple of 128, but we're starting from 0.
+		
+		If vaoXPosition/vaoZPosition is 0, then don't -1, as it will become [-1][-1]
+		*/
+		var terrainX = vaoXPosition * quadrantRowSize;
+		var terrainZ = vaoZPosition * quadrantColumnSize;
+		var startX = terrainX; // To reset the terrainX
+		
+		/*
+		These if statements fixes bug of vertices doing:
+			0->127, then 128->256 (which also broke heightMap, as it went from 0->255)
+		It now does
+			0->127, then 127->254
+		*/
+		if(vaoXPosition > 0){
+			terrainX -=vaoXPosition;
+			startX -= vaoXPosition;
+		}
+		if(vaoZPosition > 0){
+			terrainZ -= vaoZPosition; 
+		}
+
+		// Always make quadrantRowSize * quadColumnSize number of vertices
+		for(var x = 0; x < quadrantRowSize; x++){
+			for(var z = 0; z < quadrantColumnSize; z++){
+
+				quadrantVertices.push(terrainX); 
+				quadrantVertices.push(heightMap[terrainX][terrainZ]);
+				quadrantVertices.push(terrainZ); 
 				
 				//Move along in the row
-				terrainX+=1;
+				terrainX += 1;
 			}
-			//New row, reset X, and increment Z
-			terrainX = 0;
-			terrainZ+=1;
+			
+			terrainX = startX; // Reset the terrainX to what it started on
+			terrainZ += 1; // Increment Z
 		}
-		
-		console.log("Terrain vertices size, rows*cols: " + size);
-		console.log("Individual terrain x,y,z values: " + terrainVertices.length);		
+
+		//console.log("Individual quadrant size: " + quadrantVertices.length/3);
+		//console.log("Individual quadrant x,y,z values: " + quadrantVertices.length);		
 	}
 	
 	/*
 	Could have this in another loop for efficiency, but only worked out once, so its ok
 	Not sure about what order the normals are supposed to go in
 	*/
-	function createTerrainNormals(){
-		for(var i=0; i<terrainVertices.length; i+=3){
+	function createQuadrantNormals(){
+		
+		//Reset current normals
+		quadrantNormals = [];
+		
+		/*
+		This loop can start from 0, because our vertices also get reset.
+		*/
+		for(var i=0; i<quadrantVertices.length; i+=3){
 			//Get 1st point (3 vertices), 2nd point(3 vertices), 3rd (3 vertices)(under) point
 			
 			//Top left vertex
-			var vertex0x = terrainVertices[i];
-			var vertex0y = terrainVertices[i+1];
-			var vertex0z = terrainVertices[i+2];
+			var vertex0x = quadrantVertices[i];
+			var vertex0y = quadrantVertices[i+1];
+			var vertex0z = quadrantVertices[i+2];
 			
 			//Top right vertex
-			var vertex1x = terrainVertices[i+3];
-			var vertex1y = terrainVertices[i+4];
-			var vertex1z = terrainVertices[i+5];
+			var vertex1x = quadrantVertices[i+3];
+			var vertex1y = quadrantVertices[i+4];
+			var vertex1z = quadrantVertices[i+5];
 			
 			//Under top left vertex
 			//Its the current row times the current column!
@@ -227,9 +370,9 @@ function Terrain(){
 			//i + 1 + value
 			//try value as 1024, would push current value exactly 1 row down
 			// times 3, because 3 vertices, rows isnt 100% correct, as its a 1d array, with an x,y,z each
-			var vertex2x = terrainVertices[i + (rows*3)];
-			var vertex2y = terrainVertices[(i + 1) + (rows*3)];
-			var vertex2z = terrainVertices[(i + 2) + (rows*3)];
+			var vertex2x = quadrantVertices[i + (quadrantRowSize*3)];
+			var vertex2y = quadrantVertices[(i + 1) + (quadrantRowSize*3)];
+			var vertex2z = quadrantVertices[(i + 2) + (quadrantRowSize*3)];
 			
 			//Now work out vector0, might be wrong direction
 			var vector0x = vertex1x - vertex0x;
@@ -254,9 +397,9 @@ function Terrain(){
 				//Also the vectors could've been calculated wrong way around
 			var normal = m4.cross(vector0, vector1);
 			
-			terrainNormals.push(-normal[0]); //x
-			terrainNormals.push(-normal[1]); //y
-			terrainNormals.push(-normal[2]); //z
+			quadrantNormals.push(-normal[0]); //x
+			quadrantNormals.push(-normal[1]); //y
+			quadrantNormals.push(-normal[2]); //z
 			
 			//console.log("A terrain normal is, x: " + -normal[0] + ", y: " + -normal[1] + ", z:" + -normal[2]);
 		}
@@ -267,178 +410,371 @@ function Terrain(){
 		
 		TerrainVertices length / 3 = 104k vertices, each with a normal vector, of 3 components
 		*/
-		console.log("Normals length: " + terrainNormals.length);
+		//console.log("Quadrant Normals length: " + quadrantNormals.length/3); 
+		//console.log("Quadrant Normals individual values length: " + quadrantNormals.length); 
 	}
-	
+
 	
 	/*
-	Private
+	Private, called from setupTerrainBuffers
 	*/
-	function setupTerrainBuffers(){
-		setupTerrainVertexBuffer();
-		setupTerrainIndiciesBuffer();
-		setupTerrainTextureBuffer();
-		setupTerrainNormalBuffer();
-		console.log("Setup terrain buffers");
-	}
-	
-	/*
-	Private
-	*/
-	function setupTerrainVertexBuffer(){
-		terrainVertexBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, terrainVertexBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainVertices), gl.DYNAMIC_DRAW);
-		gl.enableVertexAttribArray(positionAttribLocation);
+	function setupQuadrantVertexBuffer(){
+		quadrantVertexBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, quadrantVertexBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantVertices), gl.DYNAMIC_DRAW);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
 	}
 	
 	/*
-	Private
-	
 	Code from: http://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips
 	Answer with 11 upvotes
 	*/
-	function setupTerrainIndiciesBuffer(){
-		//make the *2 stuff, overallRows and overallColumsn and remove x2
-		// * 2 orginaly then *4 cos double, make this non bad eventually, base off varaible
-		var indices = new Array(size * 2 ); // i think 64 verts = 124 indicies
-
-		// Set up indices
+	function createQuadrantIndices(){
+		//Reset current indices
+		quadrantIndices = new Array( (quadrantVertices.length/3) * 2 ); // i think 64 verts = 124 indices
+		
 		var i = 0;
-		for (var r = 0; r < rows - 1; ++r) {
-			indices[i++] = r * columns ;
-			for (var c = 0; c < columns ; ++c) {
-				indices[i++] = r * columns + c;
-				indices[i++] = (r + 1) * columns  + c;
+		for (var r = 0; r < quadrantRowSize - 1; ++r) {
+			quadrantIndices[i++] = r * quadrantColumnSize ;
+			for (var c = 0; c < quadrantColumnSize ; ++c) {
+				quadrantIndices[i++] = r * quadrantColumnSize + c;
+				quadrantIndices[i++] = (r + 1) * quadrantColumnSize  + c;
 			}
-			indices[i++] = (r + 1) * columns  + (columns- 1);
+			quadrantIndices[i++] = (r + 1) * quadrantColumnSize  + (quadrantColumnSize- 1);
+		}
+		//console.log("Length of quadrant indices: " + quadrantIndices.length);
+	}
+	
+
+	function setupQuadrantIndiciesBuffer(){
+		quadrantIndicesBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, quadrantIndicesBuffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(quadrantIndices), gl.DYNAMIC_DRAW);		
+	}
+
+	function createQuadrantUvs(x, z){
+	
+		//Reset current UVs
+		quadrantUvs = [];
+		
+		/*
+		Set the start position for the UV coordinates
+		*/
+		var xUV;
+		var yUV;
+		if(x === 0){
+			xUV = 0;
+		}
+		else{
+			xUV = x * (1 / numberQuadrantRows);
+		}
+		if(z === 0){
+			yUV = 0;
+		}
+		else{
+			yUV = z * (1 / numberQuadrantColumns);
 		}
 		
-		//console.log(indices);
+		//Save the start position of xUV, need to reset to it in 2nd loop
+		var startUVx = xUV;
 		
-		console.log("Length of indices: " + indices.length);
+		// How much to increment UV coordinates by each loop
+		var incrementSize = 1 / quadrantRowSize / numberQuadrantRows;
 		
-		elementsBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.DYNAMIC_DRAW);		
+		//These should loop, quadRowSize * quadColumnSize number of times
+		for(var x=0; x<quadrantRowSize; x++){
+			for(var y=0; y<quadrantColumnSize; y++){
+				quadrantUvs.push(xUV);  
+				quadrantUvs.push(yUV); 
+				xUV += incrementSize;
+			}
+			xUV = startUVx;
+			yUV += incrementSize;
+		}
 	}
 	
 	/*
+	Private, called from setupTerrainBuffers
+	
 	Every texture goes from 0 -> 1, regardless of dimensions
 
 	GL has 32 texture registers, we're using TEXTURE0
 	Bind the previously loaded texture to that register
 	Set the sampler in the shader to use that texture
 	*/
-	function setupTerrainTextureBuffer(){
-		/*
-		Create the buffer,
-		Bind to it,
-		Buffer the data
-		*/
-		terrainTextureCoordinateBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
-
-		/*
-		Store texture coordinates for each face
-		Texture coordinates range 0 -> 1
-		*/
-		var textureCoordinates = [];
-		
-		/*
-		Need a double for loop to set accurately
-		1/256 for max row increment?
-			=0.00390625 * 265 = 1. so increment by that
-		1/512 = 0.001953125
-		1/1024 = 0.0009765625
-		1/2048 = 0.00048828125
-		*/
-		var xUV = 0;
-		var yUV = 0;
-		for(var x=0; x<rows; x++){
-			for(var y=0; y<columns; y++){
-				textureCoordinates.push(xUV);  
-				textureCoordinates.push(yUV); 
-				xUV += 0.0009765625;
-			}
-			xUV = 0;
-			yUV += 0.0009765625;
-		}
-		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.DYNAMIC_DRAW);
-		//gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+	function setupQuadrantUvBuffer(){
+		quadrantUvBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, quadrantUvBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantUvs), gl.DYNAMIC_DRAW);
+		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
 	}
 	
-	function setupTerrainNormalBuffer(){
-		terrainNormalBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, terrainNormalBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(terrainNormals), gl.DYNAMIC_DRAW);
-		gl.enableVertexAttribArray(normalAttribLocation);
+	/*
+	Private, called from setupTerrainBuffers
+	*/
+	function setupQuadrantNormalBuffer(){
+		quadrantNormalBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, quadrantNormalBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantNormals), gl.DYNAMIC_DRAW);
 		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);			
+	}
+	
+	
+	function setupVaoIndices(){
+		// Work out the below values, add to arrays
+		// This can be done in setup !?
+		
+		// If in a normal cell, then have indices as they are below
+		// If not, just have 4 (corner) or 6 (edge) indices and use those
+		
+		// How to calculate if on edge cell, or normal cell
+		// Base it off numberQuadrantRows * numberQuadrantColumns
+		
+		// Take 4x4 for example
+		
+			// Need to work out if corner
+			//		take (4-4) // 0
+			// 		take (4x4) - 1 // 15
+			//		take (4) - 1 // 3
+			// 		take (4) * 3 // 12
+			
+			// Edges
+			// 		any multiple of 4 is an edge element // 0, 4, 8, 12
+			//  	any number up to 4 is an edge element // 0, 1, 2, 3
+			// 		add these values to 'edges' array, IF it isn't in corners array, else its a corner
+			
+			// 2 opposite edges 
+			// 		take the last multiple of 4, and add (4-1) values onto it, they're all edges // 12, 13, 14, 15
+			// 		take number up to (4-1), add the number (4) and then -1 from it. // 3, 7, 11, 15
+			// 		add these values to 'edges' array, IF it isn't in corners array, else its a corner
+			
+			// else, they're in a centre cell
+		
+		
+		//Corners
+			cornerIndices.push( numberQuadrantRows - numberQuadrantColumns );
+			cornerIndices.push( (numberQuadrantRows * numberQuadrantColumns) - 1);
+			cornerIndices.push( numberQuadrantRows - 1 );
+			cornerIndices.push( numberQuadrantRows * (numberQuadrantColumns-1) );
+	
+		// Top edge
+			for(var e=0; e<numberQuadrantRows*numberQuadrantColumns; e+=numberQuadrantRows){
+				// If value is corner, don't add to edges
+				if(!cornerIndices.includes(e)){
+					topEdgeIndices.push(e);
+				}
+			}
+		// Left edge
+			for(var e=0; e<numberQuadrantRows; e++){
+				// If value is corner, don't add to edges
+				if(!cornerIndices.includes(e)){
+					leftEdgeIndices.push(e);
+				}
+			}	
+		// Bottom edge
+			for(var e = numberQuadrantRows-1; e<(numberQuadrantRows*numberQuadrantColumns)-1; e+=numberQuadrantRows){
+				// If value is corner, don't add to edges
+				if(!cornerIndices.includes(e)){
+					bottomEdgeIndices.push(e);
+				}
+			}	
+		// Right edge
+			for(var e = (numberQuadrantRows*numberQuadrantColumns)-numberQuadrantRows; e<(numberQuadrantRows*numberQuadrantColumns)-1; e++){
+				// If value is corner, don't add to edges
+				if(!cornerIndices.includes(e)){
+					rightEdgeIndices.push(e);
+				}
+			}		
+	}
+	
+	/*
+	Player is in a corner, create indices appropriately
+	
+	Need to check what corner they're in to calculate renderIndices properly
+	4 different indices orders, depending on what corner they're in!	
+	*/
+	function setupIndicesCornerCells(){
+
+		if(player.get.quadrant === cornerIndices[0]){
+			// Top left
+			renderIndices.push(
+				player.get.quadrant, player.get.quadrant+numberQuadrantRows, 
+				player.get.quadrant+1, player.get.quadrant+numberQuadrantRows+1
+			);
+		}
+		else if(player.get.quadrant === cornerIndices[1]){
+			// Bottom right
+			renderIndices.push(
+				player.get.quadrant-numberQuadrantRows-1, player.get.quadrant-1, 
+				player.get.quadrant-numberQuadrantRows, player.get.quadrant 				
+			);			
+		}
+		else if(player.get.quadrant === cornerIndices[2]){
+			// Bottom left
+			renderIndices.push(
+				player.get.quadrant-1, player.get.quadrant+numberQuadrantRows-1, 
+				player.get.quadrant, player.get.quadrant+numberQuadrantRows					
+			);			
+		}
+		else if(player.get.quadrant === cornerIndices[3]){
+			// Top right
+			renderIndices.push(
+				player.get.quadrant-numberQuadrantRows, player.get.quadrant, 
+				player.get.quadrant-numberQuadrantRows+1, player.get.quadrant+1				
+			);			
+		}
+		else{
+			
+		}
+
+	}
+	
+	/*
+	Player is on the map edges (boundaries), render correct cells
+	*/
+	function setupIndicesTopEdgeCells(){
+		if(topEdgeIndices.includes(player.get.quadrant)){
+			// Player on top row
+			renderIndices.push(
+				player.get.quadrant-numberQuadrantRows, player.get.quadrant, player.get.quadrant+numberQuadrantRows,	
+				player.get.quadrant-numberQuadrantRows+1, player.get.quadrant+1, player.get.quadrant+numberQuadrantRows+1
+			);	
+		}
+	}
+	function setupIndicesBottomEdgeCells(){
+		if(bottomEdgeIndices.includes(player.get.quadrant)){
+			// Player on bottom row
+			renderIndices.push(
+				player.get.quadrant-numberQuadrantRows-1, player.get.quadrant-1, player.get.quadrant+numberQuadrantRows-1,
+				player.get.quadrant-numberQuadrantRows, player.get.quadrant, player.get.quadrant+numberQuadrantRows
+			);	
+		}		
+	}
+	function setupIndicesLeftEdgeCells(){
+		if(leftEdgeIndices.includes(player.get.quadrant)){
+			// Player on left row
+			renderIndices.push(
+				player.get.quadrant-1, player.get.quadrant+numberQuadrantRows-1, 
+				player.get.quadrant,  player.get.quadrant+numberQuadrantRows,
+				player.get.quadrant+1, player.get.quadrant+numberQuadrantRows+1
+			);	
+		}
+	}
+	function setupIndicesRightEdgeCells(){
+		if(rightEdgeIndices.includes(player.get.quadrant)){
+			// Player on right row
+			renderIndices.push(
+				player.get.quadrant-numberQuadrantRows-1, player.get.quadrant-1, 
+				player.get.quadrant-numberQuadrantRows, player.get.quadrant, 
+				player.get.quadrant-numberQuadrantRows+1, player.get.quadrant+1
+			);	
+		}
+	}
+	
+	/*
+	Create indices of the standard 3x3 pattern
+	*/
+	function setupIndices3x3Cells(){
+		renderIndices.push(
+			// Top left quadrant 							Top centre quadrant			Top right quadrant
+			player.get.quadrant-(numberQuadrantRows)-1, 	player.get.quadrant-1, 		player.get.quadrant+(numberQuadrantRows)-1, 
+			
+			// Centre left quadrant							Player quadrant				Centre right quadrant
+			player.get.quadrant-(numberQuadrantRows), 		player.get.quadrant, 		player.get.quadrant+(numberQuadrantRows),
+			
+			// Bottom left quadrant							Bottom centre quadrant		Bottom right quadrant
+			player.get.quadrant-(numberQuadrantRows)+1, 	player.get.quadrant+1, 		player.get.quadrant+(numberQuadrantRows)+1
+		);
 	}
 	
 	/*
 	Public
 	
-	Apply matrices, then draw the terrain.
+	Apply matrices, bind the terrain VAO, then draw the terrain.
 	*/
 	this.render = function(){	
-		/*
-		Set the current texture, so updateAttributesAndUniforms gets updated
-		For specular light
-		*/
 		lightColour = [1, 1, 1];
 		currentTexture = myPerlinTexture;
-		//currentTexture = depletedTexture;
-		
-		/*
-		Weird names, in matrcies u have global matrixs as rotatX, rotateY,
-		but here u have xRotation..... ??????
-		*/
+
 		scale = m4.scaling(1, 1, 1);
 		rotateX = m4.xRotation(0);
 		rotateY = m4.yRotation(0);
 		rotateZ = m4.zRotation(0);
 		position = m4.translation(0, 0, 0);
 		
-		//Times matrices together
+		// Times matrices together
 		updateAttributesAndUniforms();
 
-		//Vertices
-		gl.bindBuffer(gl.ARRAY_BUFFER, terrainVertexBuffer);
-		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, terrainTextureCoordinateBuffer);
-		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture); //myPerlinTexture
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
+		//console.log("Current quadrant is: " + player.get.quadrant);
+		
+		// Reset indices to process and render
+		renderIndices = [];
+		
+		// Get the cell they're in (for example 0)
+		// 		if currentCell.isIn(cornersArray), renderCorner(), // renderCorner just sets the 4 indices
+		// 		if currentCell.isIn(edgesArray), renderEdge(); // renderEdge just sets the 6 indices
+		//		else render 3x3 // just sets the standard 9 indices
+		
+		// Work out what data we should process and render
+		if(cornerIndices.includes(player.get.quadrant)){
+			setupIndicesCornerCells();
+			console.log("in corner");
+		}
+		else if(topEdgeIndices.includes(player.get.quadrant)){
+			setupIndicesTopEdgeCells();
+			console.log("In top edge cell");
+		}
+		else if(bottomEdgeIndices.includes(player.get.quadrant)){
+			setupIndicesBottomEdgeCells();
+			console.log("In bottom edge cell");
+		}
+		else if(leftEdgeIndices.includes(player.get.quadrant)){
+			setupIndicesLeftEdgeCells();
+			console.log("In left edge cell");
+		}
+		else if(rightEdgeIndices.includes(player.get.quadrant)){
+			setupIndicesRightEdgeCells();
+			console.log("In right edge cell");
+		}
+		else{
+			setupIndices3x3Cells();
+		}
+		
 
-		//Normals
-		gl.enableVertexAttribArray(normalAttribLocation);
-		gl.bindBuffer(gl.ARRAY_BUFFER, terrainNormalBuffer);
-		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
-		
-		
-		//Elements
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementsBuffer);
-		
-		//Cant draw from 0, as it makes shader process everything
 		/*
-		Mode
-		Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
-		Type
-		The indices
+		Process and render the current player quadrant and the surrounding cells (3x3 total)
 		*/
-		gl.drawElements(
-			gl.TRIANGLE_STRIP, 
-			terrainVertices.length / 3 * 2, //vertices * 2 is the number of indices
-			
-			gl.UNSIGNED_INT, 
-			0 //start from like player position
-		); 	
+		for(var i=0; i<renderIndices.length; i++){
+			vao_ext.bindVertexArrayOES(terrainVAOs[ renderIndices[i] ]); //player.get.quadrant
+			gl.drawElements(
+				gl.TRIANGLE_STRIP, 
+				quadrantVertices.length / 3 * 2, // vertices * 2 is the number of indices
+				gl.UNSIGNED_INT, // can probably use GLU_SHORT once fixed, remove extension
+				0 // start from the start of the current quadrant
+			); 
+			vao_ext.bindVertexArrayOES(null); 
+		}
+		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -667,6 +1003,15 @@ function Terrain(){
 	
 	
 }
+
+
+
+
+
+
+
+
+
 
 
 

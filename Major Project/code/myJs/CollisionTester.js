@@ -62,8 +62,8 @@ function CollisionTester(){
 		*/
 		var nearestHeight;
 		if(tempPlayerX > 0){ //if tempPlayerX isn't NaN
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = tempPlayerX;
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = tempPlayerZ;
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = tempPlayerZ; //inversed after rebuilt terrain
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = tempPlayerX; //inversed after rebuilt terrain
 			
 			nearestHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
 		}else{
@@ -84,10 +84,6 @@ function CollisionTester(){
 	Have to have 2 different ranges here, otherwise as soon as they're colliding,
 	and they try to prospect,
 	They get moved back, out of prospect range
-	
-	Loop through all rock collision boxes, stop playing moving through rocks
-
-	Eventually just check collision of the rocks in the quadrant that the player is in
 	*/
 	this.testPlayerRockCollision = function(){
 		
@@ -102,34 +98,30 @@ function CollisionTester(){
 		player.set.inProspectingRange = false;
 		
 		//Retrieve rocks array from the rockGenerator class
-		var rocks = rockGenerator.getRocksArray.getRocks;
-		for(var i=0; i<rocks.length; i++){
+		var objRocks = rockGenerator.getObjRocksArray.getRocks;
+		for(var i=0; i<objRocks.length; i++){
 			
 			/*
 			Check if user is in prospecting range
 			*/
-			if(	
-				player.get.x > rocks[i].x - (rocks[i].scale*35) &&
-				player.get.x < rocks[i].x + (rocks[i].scale*35) &&
+			var distance = Math.sqrt( 
+				Math.pow( (objRocks[i].x - player.get.x), 2) +
+				Math.pow( (objRocks[i].y - player.get.y), 2) +
+				Math.pow( (objRocks[i].z - player.get.z), 2) 
+			);
 				
-				player.get.z > rocks[i].z - (rocks[i].scale*35)  && 
-				player.get.z <	rocks[i].z + (rocks[i].scale*35) 
-			
-			){
-				//They're in range, update GUI with current rock
+			if(distance > objRocks[i].scale * 5){
+				// Player too far away from rock to prospect
+			}
+			else{
+				// They're in range prospecting, update GUI with current rock
 				player.set.inProspectingRange = true; 
-				isProspecting(rocks[i]);
+				isProspecting(objRocks[i]);
 
 				/*
-				Regular sphere rock collision testing
 				Check if they're too close, move them back
 				*/
-				if(	player.get.x > rocks[i].x - (rocks[i].scale*25) &&
-					player.get.x < rocks[i].x + (rocks[i].scale*25) &&
-					
-					player.get.z > rocks[i].z - (rocks[i].scale*25)  && 
-					player.get.z <	rocks[i].z + (rocks[i].scale*25) 
-				){
+				if(distance < objRocks[i].scale * 3 ){
 					player.moveForwardOrBackward();
 				}
 				
@@ -166,19 +158,17 @@ function CollisionTester(){
 	this.testPlayerMapBoundaries = function(){
 		
 		/*
-		First stop them going off the map
+		Stop them going out of section 1, if < 5 xp.
 		*/
-		if(player.get.x <= 0 || player.get.x >= 2048 || player.get.z <= 0 || player.get.z >= 2048){
-			player.moveForwardOrBackward();
+		if(player.get.x <= 384 || player.get.x >= 640 || player.get.z <= 384 || player.get.z >= 640){
+			if(player.get.xp < 5){
+				player.moveForwardOrBackward();
+			}
 		}
 		
 		/*
 		Level boundaries based on player level
 		*/
-		
-		
-		
-		
 	}
 	
 	/*

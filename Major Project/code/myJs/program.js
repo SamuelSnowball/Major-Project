@@ -179,7 +179,7 @@ function updateAttributesAndUniforms(){
 var fovInRadians = Math.PI * 0.3;	
 var aspectRatio = window.innerWidth / window.innerHeight;
 var zNear = 0.1;
-var zFar = 128;
+var zFar = 256;
 
 //Projection matrix turns world coordinates to clipspace
 var projectionMatrix = 	m4.perspective(

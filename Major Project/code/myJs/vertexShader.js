@@ -22,7 +22,7 @@ gl.shaderSource(vertexShader, [
 	
 	//Fog, pass to frag
 	'varying float visibility;',
-	'const float density = 0.015;', //play with these
+	'const float density = 0.01;', //play with these
 	'const float gradient = 1.5;',
 	
 	'void main(){',

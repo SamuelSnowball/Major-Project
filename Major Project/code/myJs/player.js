@@ -1,12 +1,17 @@
 
 function Player(x, y, z){
+
 	var x = x; 
 	var y = y;
 	var z = z;
-	var movementSpeed = 1;
-	this.xRotation = 0;
-	this.yRotation = 0;
-	var previousY = 0; //To remember Y pos when moving for fog
+	
+	var movementSpeed = 0.5;
+	
+	var xRotation = 0;
+	var yRotation = 0;
+	
+	var previousY = 0; // To remember Y pos when moving camera for fog
+	var quadrant; // Current section of the map they're in
 	
 	var playerVertices = [];
 	var playerUvs = [];
@@ -26,7 +31,10 @@ function Player(x, y, z){
 	var prospecting = false; 
 	var inProspectingRange = false; //To know whether to update GUI or not
 	var xp = 0;
-	var hasMission = false;
+	
+	var hasMission = false; // if they have a mission, true false
+	var currentMission; // a number representing what mission they have
+	
 	this.get = {
 		get prospecting(){
 			return prospecting;
@@ -36,6 +44,9 @@ function Player(x, y, z){
 		},
 		get hasMission(){
 			return hasMission;
+		},
+		get currentMission(){
+			return currentMission;
 		},
 		get inProspectingRange(){
 			return inProspectingRange;
@@ -51,12 +62,18 @@ function Player(x, y, z){
 		},
 		get speed(){
 			return movementSpeed;
+		},
+		get quadrant(){
+			return quadrant;
 		}
 	}	
 	
 	this.set = {
-		set mission(missionParam){
-			hasMission = missionParam;
+		set hasMission(missionParam){
+			hasMission = missionParam; // bool if they have a mission
+		},
+		set currentMission(missionParam){
+			currentMission = missionParam; // int, what mission they have
 		},
 		set inProspectingRange(inRange){
 			inProspectingRange = inRange;
@@ -69,7 +86,13 @@ function Player(x, y, z){
 		},
 		set z(zParam){
 			z = zParam; //careful
-		}
+		},
+		set xRotation(x){
+			xRotation = x;
+		},
+		set yRotation(y){
+			yRotation = y;
+		},
 	}
 	
 	this.add = {
@@ -79,10 +102,9 @@ function Player(x, y, z){
 	}
 	
 	
-	
-	
 	setupPlayerMovement();
 	setupPlayerBuffers();
+	
 	
 	/*
 	Handles user input and changes the 4 movement variables
@@ -91,12 +113,13 @@ function Player(x, y, z){
 	2 Arrow keys:
 		Forward (up key)
 		Back (down key)
+		
 	W Key:
 		Moves camera up
+		
 	S Key:
 		Moves camera down
 	*/
-
 	var moveUp = false, 
 		moveDown = false, 
 		moveForward = false, 
@@ -119,7 +142,7 @@ function Player(x, y, z){
 			if(event.keyCode === 80){
 				prospecting = true;
 			}
-			//Holding down M key for map, disable fog so we can see properly
+			// Holding down M key for map, disable fog so we can see properly
 			if(event.keyCode === 77){
 				useFog = false;
 				zFar = 768;
@@ -153,7 +176,7 @@ function Player(x, y, z){
 			//Released M key for map, enable fog, set the players position to what it was
 			if(event.keyCode === 77){
 				useFog = true;
-				zFar = 128;
+				zFar = 256; 
 				y = previousY; //Set their position back to normal
 			}
 		});
@@ -167,9 +190,6 @@ function Player(x, y, z){
 		if(moveForward === true){	
 			x += (cameraPosition[0] - cameraTarget[0]);
 			z += (cameraPosition[2] - cameraTarget[2]);
-			
-			//Stop incrementing = true,
-			//Then in move plauyer class, if stopIncrement === true, dont increment, else move the x,y,z
 		}
 		else if(moveBack == true){
 			x -= (cameraPosition[0] - cameraTarget[0]);
@@ -229,12 +249,12 @@ function Player(x, y, z){
 		I've added the camera position on to fix it
 		*/
 		cameraTarget = [
-			cameraMatrix[12] + Math.sin(this.yRotation * cameraSpeed), 
-			cameraMatrix[13] + Math.sin(this.xRotation * cameraSpeed),
-			cameraMatrix[14] + Math.cos(this.yRotation * cameraSpeed),
+			cameraMatrix[12] + Math.sin(yRotation * cameraSpeed), 
+			cameraMatrix[13] + Math.sin(xRotation * cameraSpeed),
+			cameraMatrix[14] + Math.cos(yRotation * cameraSpeed),
 		];
 		
-		//For minimap eventually
+		// For minimap
 		if(useFog === false){
 			renderPlayerOnMinimap();
 			y = 500;
@@ -245,8 +265,7 @@ function Player(x, y, z){
 			];		
 		}
 		
-		
-		//Retrieve position from camera matrix
+		// Retrieve position from camera matrix
 		cameraPosition = [
 			cameraMatrix[12], //x
 			cameraMatrix[13], //y
@@ -257,15 +276,45 @@ function Player(x, y, z){
 		viewMatrix = m4.inverse(cameraMatrix);
 		viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 		
-		//Stops it breaking....
+		// Stops it breaking....
 		currentTexture = myPerlinTexture;
 		
-		//Do I even needs this here? probably...
-		//Times matrices together
 		updateAttributesAndUniforms();
 	}	
 	
+	/*
+	Work out what quadrant the player is in
+	So can process and render whats in view of the player
+	*/
+	this.assignPlayerQuadrant = function(){
 
+		var numberQuadrantRows = 8;
+		var numberQuadrantColumns = 8;
+		
+		// Need count variable because quadrant is a single number, cant work it out with the 2 loops properly
+		var count = 0;
+		
+		// r and c to avoid messing with player x and y
+		for(var r=0; r<numberQuadrantRows; r++){
+		
+			for(var c=0; c<numberQuadrantColumns; c++){
+				
+				if(z > (c * 128) && z < (c + 1) * 128 && 
+					x > (r * 128) && x < (r+1) * 128 ){
+					
+					quadrant = count;
+				}			
+				count ++;
+			}
+		}
+	}
+
+	
+	/*
+	All code below this is for rendering the player on the minimap,
+	Just a red square
+	*/
+	
 	
 	function setupPlayerBuffers(){
 		setupPlayerVertexBuffer();

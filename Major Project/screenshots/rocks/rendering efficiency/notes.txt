@@ -1,0 +1,16 @@
+I calculate distance from the player to the rock, if its < 128 then the rock
+gets rendered. Else it doesn't.
+
+0.png
+
+	This image shows a rock in range of the player (within 128 units)
+	Therefore it gets rendered.
+
+1.png
+
+	I then move back slightly, distance to rock is now 129
+	And distance is now > 128, so rock doesn't get rendered
+
+	You can see the rocks jumping in/out of being rendered, which isn't good
+	But I just widen the distance, so the rendering coming in/out of range is
+	covered by fog. 

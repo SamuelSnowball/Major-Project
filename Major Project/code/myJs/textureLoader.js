@@ -1,106 +1,111 @@
 /*
+This file includes the TextureLoader and Texture classes
+
 Texture knowledge gained from:
 	http://stackoverflow.com/questions/19722247/webgl-wait-for-texture-to-load/19748905#19748905
 	https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
 	https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js
 */
 
-//This texture gets set to other textures whilst rendering
+// This texture gets set to other textures whilst rendering
 var currentTexture;
 
-//Procedural texture
 var myPerlinTexture;
-var myParticleTexture;
+
 var playerTexture;
 
-//Textures to do
-var marsRedTerrainTexture;
-
-var rockTexture = new Texture('resources/rocks/rock.png', 1, 1);
-var rockTexture2 = new Texture('resources/rocks/rock2.png', 1, 1);
-var depletedTexture = new Texture('resources/rocks/depleted.png', 0, 0);
-var blueOreTexture = new Texture('resources/rocks/blueOre.png', 1, 1);
-var lavaRockTexture =  new Texture('resources/lava.png', 1, 1);
-//1st parameter lower number = less shine damper, so more bright
-var waterTexture = new Texture('resources/water/water.png', 10, 5);
-var lavaTexture = new Texture('resources/lava.png', 1, 1);
-
-//From same resource
-var scratchedIceTexture = new Texture('resources/rocks/scratchedIce.png', 0, 0);
-var blackGlassTexture = new Texture('resources/rocks/blackGlass.png',  0, 0);
-var blackIceTexture = new Texture('resources/rocks/blackIce.png',  0, 0);
-var scratchedBlackTexture = new Texture('resources/rocks/scratchedBlack.png',  0, 0);
-var blueTexture = new Texture('resources/rocks/blue.png',  0, 0);
-
-var emeraldTexture =  new Texture('resources/rocks/emerald.png',  0, 0);
+/*
+Rock textures
+*/
+var depletedTexture;
+var rockTexture0;
+var rockTexture1;
+var rockTexture2;
+var rockTexture3;
+var rockTexture4;
+var rockTexture5;
+var rockTexture6;
+var rockTexture7;
+var rockTexture8;
 
 /*
-Loads procedurals, doesn't load regular ones because they need to done asap
+Other textures
 */
+var waterTexture;
+var lavaTexture;
+
 function TextureLoader(){
 
-	loadProceduralTextures();
+	loadTextures();
 	
-	/*
-	Stacking noise, and multiplying to get a colour value
-	*/
-	function loadProceduralTextures(){
-		/*
-		Load particle texture
-		*/
-		myParticleTexture = new Texture("", 1, 1);
-		gl.bindTexture(gl.TEXTURE_2D, myParticleTexture.getTextureAttribute.texture);		
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing	
-
-		myPerlinTexture = new Texture("resources/terrain/atlas.png", 0, 0);
-		gl.bindTexture(gl.TEXTURE_2D, myPerlinTexture.getTextureAttribute.texture);		
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing	
-		
+	function loadTextures(){
+	
+		// Player texture has no image, just red its pixels to red
 		playerTexture = new Texture("", 0, 0);
 		gl.bindTexture(gl.TEXTURE_2D, playerTexture.getTextureAttribute.texture);		
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([255, 0, 0, 255])); //this line fixes a bug of texture not showing	
+				  new Uint8Array([255, 0, 0, 255]));
+				  
+		// Map texture
+		myPerlinTexture = new Texture("resources/terrain/atlas2.png", 10, 0);
+		
+		/*
+		Rock textures
+		*/
+		depletedTexture = new Texture('resources/rocks/depleted.png', 10, 0);
+		
+		rockTexture0 = new Texture('resources/rocks/0.png', 10, 0);
+		rockTexture1 = new Texture('resources/rocks/1.png', 10, 0);
+		rockTexture2 = new Texture('resources/rocks/2.png', 10, 0);
+		// from same resource/reference
+		rockTexture3 = new Texture('resources/rocks/3.png', 10, 0);
+		rockTexture4 = new Texture('resources/rocks/4.png', 10, 0);
+		rockTexture5 = new Texture('resources/rocks/5.png', 10, 0);
+		rockTexture6 = new Texture('resources/rocks/6.png', 10, 0);
+		rockTexture7 = new Texture('resources/rocks/7.png', 10, 0);
+		rockTexture8 = new Texture('resources/rocks/8.png', 10, 0);
+
+		/*
+		Other textures
+		*/
+		waterTexture = new Texture('resources/water/water.png', 10, 5);
+		lavaTexture = new Texture('resources/lava.png', 1, 1);
+		
 	}
 	
 }
-	
-//add reflectivity and shineDamper in constructor
-//also, only works for non procedural textures, could make a comepletely new proceduralTexture object maybe...
+
 function Texture(path, shineDamperParam, reflectivityParam){
+
 	var shineDamper = shineDamperParam; 
 	var reflectivity = reflectivityParam; 
-	
-	//Needs getTexture method, using this.texture doesn't work :(
 	var texture = gl.createTexture();
 	
 	this.getTextureAttribute = {
 		get texture(){
-			return texture; //this works..
+			return texture;
 		},
 		get shineDamper(){
-			return shineDamper; //and this doesn't??
+			return shineDamper; 
 		},
 		get reflectivity(){
 			return reflectivity;
 		}
 	}
 	
+	// The below lines 2/3 fix bug of texture not showing
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([0, 0, 0, 255])); //this line fixes a bug of texture not showing
+				  new Uint8Array([0, 0, 0, 255])); 
 
 	var image = new Image();
 	image.src = path;
 	image.onload = function (){handleTextureLoaded(image, texture);}	
 	
-	
 	/*
 	This gets run after image is done loading
 	*/
 	function handleTextureLoaded(image, texture){
-
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		
 		// Writes image data to the texture
@@ -119,4 +124,5 @@ function Texture(path, shineDamperParam, reflectivityParam){
 		// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	}
+	
 }
