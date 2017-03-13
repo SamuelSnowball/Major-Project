@@ -2,88 +2,8 @@
 
 <head>
 	<title>WebGL Project</title>
-	
-	<!-- Removes annoying scrollbars from window -->
-	<style type="text/css">
-		html, body {
-		overflow: hidden;
-	}
-	#banner{
-		width: 200px;
-		height: 200px;
-		margin: auto;
-	}
 
-	.container {
-		position: relative;
-		background-color: rgba(0, 0, 0, 0);
-	}
-	#minimapOverlay {
-		position: absolute;
-		left: 0%;
-		top: 57%;
-		width: 22%;
-		height: 15%;
-		background-color: rgba(0, 0, 0, 0.7);
-		color: white;
-		font-family: monospace;
-		padding: 1em;
-		border-radius: 1em;
-		border: 5px solid #0000ff;
-	}
-	#missionOverlay {
-		position: absolute;
-		left: 25%;
-		top: 60%;
-		width: 22%;
-		height: 12%;
-		background-color: rgba(0, 0, 0, 0.7);
-		color: white;
-		font-family: monospace;
-		padding: 1em;
-		border-radius: 1em;
-		border: 5px solid #0000ff;
-	}
-	#nearestRockOverlay{
-		position: absolute;
-		left: 50%;
-		top: 60%;
-		width: 22%;
-		height: 12%;
-		background-color: rgba(0, 0, 0, 0.7);
-		color: white;
-		font-family: monospace;
-		padding: 1em;
-		border-radius: 1em;
-		border: 5px solid #0000ff;	
-	}
-	#inventoryOverlay{
-		position: absolute;
-		left: 75%;
-		top: 60%;
-		width: 22%;
-		height: 12%;
-		background-color: rgba(0, 0, 0, 0.7);
-		color: white;
-		font-family: monospace;
-		padding: 1em;
-		border-radius: 1em;
-		border: 5px solid #0000ff;		
-	}
-	#xpOverlay{
-		position: absolute;
-		left: 75%;
-		top: 5%;
-		width: 22%;
-		height: 2%;
-		background-color: rgba(0, 0, 0, 0.7);
-		color: white;
-		font-family: monospace;
-		padding: 1em;
-		border-radius: 1em;
-		border: 5px solid #0000ff;		
-	}	
-	</style>
+	<link rel="stylesheet" href="code/css/gui.css">
 </head>
 
 <!-- 
@@ -92,49 +12,16 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 -->
 <body>
 
-<div id="banner"><p>Mars Mission Control Game</p></div>
+<link rel="stylesheet" href="code/css/gui.css">
 
- 
-<ul id="menu">
-  <li class="ui-state-disabled"><div>Toys (n/a)</div></li>
-  <li><div>Books</div></li>
-  <li><div>Clothing</div></li>
-  <li><div>Electronics</div>
-    <ul>
-      <li class="ui-state-disabled"><div>Home Entertainment</div></li>
-      <li><div>Car Hifi</div></li>
-      <li><div>Utilities</div></li>
-    </ul>
-  </li>
-  <li><div>Movies</div></li>
-  <li><div>Music</div>
-    <ul>
-      <li><div>Rock</div>
-        <ul>
-          <li><div>Alternative</div></li>
-          <li><div>Classic</div></li>
-        </ul>
-      </li>
-      <li><div>Jazz</div>
-        <ul>
-          <li><div>Freejazz</div></li>
-          <li><div>Big Band</div></li>
-          <li><div>Modern</div></li>
-        </ul>
-      </li>
-      <li><div>Pop</div></li>
-    </ul>
-  </li>
-  <li class="ui-state-disabled"><div>Specials (n/a)</div></li>
-</ul>
- 
+<div id="banner"><p>Mars Mission Control Game</p></div>
 
 <div>fps: <span id="fps"></span></div>
 
 <div class="container">
   <canvas id="canvas" class="canvasClass"></canvas>
   <canvas id="guiCanvas" class="canvasClass"></canvas>
-  
+
   <!-- XP, render rectangle over this html element? -->
   <div id="xpOverlay" class="canvasClass" style="visibility: hidden">
     <div>XP: <span id="xpOverlayText"></span></div>
@@ -155,10 +42,11 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
     <div><span id="currentMission"></span></div>
   </div>
 
+ 
+  
   <div id="nearestRockOverlay" class="canvasClass" style="visibility: hidden">
-    <div>Rock info: <span id="topLeft"></span></div>
-    <div><span id="topLeftText"></span></div>
   </div>
+  
   
   <div id="inventoryOverlay" class="canvasClass" style="visibility: hidden">
     <div>Inventory: <span id="topMiddle"></span></div>
@@ -190,7 +78,35 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
   
 </div>
 
+  
+<!-- ######################### -->
+<!-- Current mission --> 
+<div id="currentMissionID" title="Current Mission">
+	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
+<!-- Current mission --> 
+<!-- ######################### -->
 
+	
+	
+<!-- ######################### -->
+<!-- Menu --> 
+<ul id="menu" style="visibility: hidden">
+
+<li><div>Menu</div> <!-- Once clicked others should show -->
+	<ul>
+		<li><div>Sound</div></li>
+		<li><div>Controls</div></li>
+		<li><div>About</div></li>
+	</ul>
+		
+  <li class="ui-state-disabled"><div>Quadrant 2</div></li>
+  <li class="ui-state-disabled"><div>Quadrant 3</div></li>
+  <li class="ui-state-disabled"><div>Quadrant 4</div></li>
+  
+</ul>
+<!-- Menu --> 	
+<!-- ######################### -->
 
 <!-- Libraries -->
 <script src="libraries/m4.js"></script>

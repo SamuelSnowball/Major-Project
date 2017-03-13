@@ -120,6 +120,7 @@ function GUI(){
 		//or somehow copy existing vertices, rotate those, so dont alter original?
 	}
 	
+	
 	var slot0 = document.getElementById("slot0");
 	var slot1 = document.getElementById("slot1");
 	var slot2 = document.getElementById("slot2");

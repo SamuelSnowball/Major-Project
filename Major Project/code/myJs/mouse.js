@@ -16,8 +16,8 @@ var pointerLocked = false;
 canvas.addEventListener('mousedown', function(){
 	
 	$(function(){
-
-    $( "#menu" ).menu();
+		$("#menu").menu();
+		$("#currentMissionID").dialog();
 	})
 	
 	if(gameRunning === false){
@@ -58,6 +58,7 @@ canvas.addEventListener('mousedown', function(){
 	
 	document.getElementById("inventoryOverlay").style.visibility = "visible";
 	
+	document.getElementById("menu").style.visibility = "visible";
 });
 
 

@@ -1,0 +1,74 @@
+
+html, body {
+	overflow: hidden;
+}
+#banner{
+	width: 200px;
+	height: 200px;
+	margin: auto;
+}
+
+.container {
+	position: relative;
+	background-color: rgba(0, 0, 0, 0);
+}
+#minimapOverlay {
+	position: absolute;
+	left: 0%;
+	top: 57%;
+	width: 22%;
+	height: 15%;
+	background-color: rgba(0, 0, 0, 0.7);
+	color: white;
+	font-family: monospace;
+	padding: 1em;
+	border-radius: 1em;
+	border: 5px solid #0000ff;
+}
+#missionOverlay {
+	position: absolute;
+	left: 25%;
+	top: 60%;
+	width: 22%;
+	height: 12%;
+	background-color: rgba(0, 0, 0, 0.7);
+	color: white;
+	font-family: monospace;
+	padding: 1em;
+	border-radius: 1em;
+	border: 5px solid #0000ff;
+}
+#nearestRockOverlay{
+	position: absolute;
+}
+#inventoryOverlay{
+	position: absolute;
+	left: 75%;
+	top: 60%;
+	width: 22%;
+	height: 12%;
+	background-color: rgba(0, 0, 0, 0.7);
+	color: white;
+	font-family: monospace;
+	padding: 1em;
+	border-radius: 1em;
+	border: 5px solid #0000ff;		
+}
+#xpOverlay{
+	position: absolute;
+	left: 75%;
+	top: 5%;
+	width: 22%;
+	height: 2%;
+	background-color: rgba(0, 0, 0, 0.7);
+	color: white;
+	font-family: monospace;
+	padding: 1em;
+	border-radius: 1em;
+	border: 5px solid #0000ff;		
+}	
+#menu{
+	position: absolute;
+	left: 5%;
+	top: 5%;
+}
