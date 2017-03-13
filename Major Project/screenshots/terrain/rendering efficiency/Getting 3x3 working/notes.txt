@@ -1,0 +1,29 @@
+These images show the progress of my terrain processing and rendering.
+
+My goal was to only process and render the vertices of the current,
+and surrounding cells.
+
+The images are taken at a birds eye view of the map.
+The player is shown as the small red rectangle.
+
+1 cell.png
+	Only processing terrain vertices and rendering the quadrant 
+	that the player is in.
+	(ignore the water/lava)
+
+	The black lines show the quadrants
+
+5 cells.png
+	Rendering the current cell, and ones around it
+	(not including diagonals)
+
+top left.png / top right.png / bottom left.png / bottom right.png
+	Processing vertices, and rendering cells
+	of the 3x3 around (and including) the player
+
+	The empty black grid cells is showing the terrain 
+	that exists, but its vertices arent being rendered,
+	but more importantly, those vertices arent even processed.
+	
+
+	

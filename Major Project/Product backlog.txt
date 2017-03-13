@@ -8,16 +8,26 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Loading and saving functions (ongoing) 		(time: 03h) (priority: 9)
 		Add in rocks (ongoing)				(time: 10h) (priority: 8)
 		Create missions for user 			(time: 10h) (priority: 8)
+		Add shop					(time: 15h) (priority: 8)
 		Build terrain (ongoing) 			(time: 10h) (priority: 6)
 		Collision with rocks (ongoing) 			(time: 03h) (priority: 6)
 		Build GUIs 					(time: 10h) (priority: 6)
-		Add audio 					(time: 03h) (priority: 4)
+		Prospecting, shows progress bar + particles 	(time: 08h) (priority: 5)
+		Add audio (ongoing) 				(time: 03h) (priority: 4)
+		Add fuel and money features			(time: 08h) (priority: 4)
+		Add player inventory 				(time: 08h) (priority: 4)
+		Minimap (Added to bottom GUI)			(time: 10h) (priority: 3)
 
 	Extra features:
-		Clouds 						(time: 06h) (priority: 4)
+		Sandstorms					(time: 08h) (priority: 3)
+		Meteor showers					(time: 08h) (priority: 3)
+		Dropping supply crates				(time: 05h) (priority: 3)
 		Particle effects 				(time: 08h) (priority: 3)
 		Shadows 					(time: 10h) (priority: 2)
 		Initial loading scene 				(time: 03h) (priority: 2)
+			Great obj for loading scene:
+			http://tf3dm.com/3d-model/mission-control-26199.html
+			Could also have rocket flying through space
 		Day/night cycles				(time: 05h) (priority: 1)
 		Extra texture effects, bump mapping etc		(time: 10h) (priority: 1)
 		Rotating rock appears in GUI			(time: 05h) (priority: 1)
@@ -32,21 +42,19 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 
 	Current features:
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
-		Initial terrain 
+		Terrain 					(time: 30h) (priority: 10)
 		Some rocks, with collision			(time: 08h) (priority: 8)
 		Collision with terrain (ongoing) 		(time: 08h) (priority: 6)
 		Texturing terrain 				(time: 05h) (priority: 5)
-		Minimap (Sub-task)				(time: 02h) (priority: 5)
 		Water, with specular lighting			(time: 12h) (priority: 4)
 		Fog						(time: 06h) (priority: 4)
 		
 	Small things to do:
-		Fix rocks spawning on player
-		Add screenshots of stuff, water, minimap
+		Fix github issues
 		Change STATIC_DRAW renders to DYNAMIC_DRAW
 
 
-For mid project release aiming for all core done - (Possible 13th march, 3 sprints left)
+For mid project release aiming for all core done
 
 Before demo/final release:
 	Change movement speed
@@ -492,9 +500,115 @@ Sprint 2 (27th Feb - 6th March)
 		Added flow diagram
 		Bit more on class diagram
 
+		I don't commit enough! Do it more!
+
 	Notes:
 		Trying to write my own obj loader, waste of time
 		Not sure about MIT license, with obj loader and three.js sphere code
 		Found terrain rendering was horrible, processes all vertices, discards 95% of them
+
+
+
+Sprint 3 (6th - 13th March)
+
+	Tackling tasks from product backlog:
+
+	Other tasks:
+		Fix terrain and rock rendering efficiency
+		Restructure files
+			Add comments
+		Change STATIC_DRAW renders to DYNAMIC_DRAW
+		Commit more often
+
+	Sprint plan:
+		Rock collision (requires terrain rendering fixed)
+			If use loads of terrain sections
+			Then have rocks in a specific section
+			And only test collision for those rocks in that section (not 3x3)
+				But be careful of spawning rock on a boundary 
+
+		Some sort of danger mechanic
+			
+			Warn player of sandstorm, have to get out of area
+			Perhaps falling asteroid showers
+
+		Could have a station/building/lander where you have to go:
+			refuel, give user fuel bar, goes down when moving
+				gui to tell them to go refuel
+			deposit ore -> cargo bay full
+			fix rover etc
+			upgrade rover, faster movespeed etc, fuel tank, rover armour? vs rock
+			more powerful drill, can mine new rocks
+
+			When in range of shop, show GUI, press P to open shop
+
+		Gain experience, which is used to unlock new upgrades
+
+		Have some crates (cubes) inside the model, with mapped texture
+			DEPOSIT ROCKS
+			REFUEL
+		
+		Special crates could be dropped 'from earth'
+		Or asteroid, with bonus xp or something
+
+		Add nearest rock to GUI
+		Add effects to GUI when update
+
+		Terrain rendering plan
+
+			Temporary Goal: 
+				Process and render the vertices, of the current quadrant the player is in
+
+			Setup:
+				Have an array of all VAOs
+				Create 16 terrain VAOs, each containing:
+					A quadrants vertices, normals, uvs, indices
+					Try each quadrant as 128x128 vertices, then possibily 256x256 vertices
+			Render:
+				Get player position
+				Find the quadrant they're in, and get the matching VAO
+				Bind and render the data in that VAO
+
+			Actual goal: 
+				Split entire map into LOTS of VAOs
+				Find current player position, and get matching VAO, and surrouding 8 VAOs (quadrants basically)
+				Have to have surrounding vertices as well, so player can see into distance
+
+	Sprint retrospective:
+		Stacked noise for terrain generation!
+		Added screenshot of regular vs stacked noise
+
+		Fixed weird black lines on terrain, was due to specular parameters,
+		but was confused, as I said terrain had 0 reflectivity, and somehow
+		giving 10 shineDamper seemed to make it work
+
+		Got Terrain VAO working!
+
+		Fixed terrain rendering issues!
+			Added screenshots showing testing
+
+		Added better rock rendering efficiency
+		Calculate vector from player to rock, if over some amount
+			then the vertices dont get rendered (more importantly dont get processed)
+
+		objRock collision
+
+		Added sector 1, 4x4 squares in middle
+			requires > 5 xp to progress
+
+		Rock spawning in certain quadrants
+
+		Added utility class
+
+		Removed horrible sphere code rocks
+
+		Cleaned up texture loader
+
+	Notes:
+		Need to stop wasting time with HTML divs for guis
+
+
+
+Sprint 4 (13th - 20th March)
 
 

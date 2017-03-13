@@ -1,0 +1,51 @@
+Rock rendering efficiency notes
+
+Rock plan below
+
+
+
+		Add VAOs for rocks, different VAO for each texture
+		
+		-render rock function
+			loops over rocks array, if rock.position in quadrant/player range (can just use < 128*3 etc here
+
+				Different draw call for each set of rocks, each draw call having a different set texture
+					For each new texture, need a new draw call
+					But only need as many draw calls, as there are differently textured rocks in a 3x3 grid
+	
+		Group rocks by texture in VAOs and draw them 
+
+		Could have low low poly rocks, just render all, draw elements call for each rock?
+			-Use as non interactable floor rocks?
+			-glDrawInstanced, just 1 rock, multiple times
+
+
+
+
+
+Single VAO of rocks, index into it and render specific ones
+	or vao of rocks each with differnet texture?
+That way, binding one buffer, rendering from it
+multiple times
+
+rock0,1,2 have textureA
+rock3,4,5 have textureB
+vao = [rock0,rock1,rock2	,rock3,rock4,rock5]
+
+//this is still processing every vertex? no it isnt, because we know what to draw before clipping
+//which means not all vertices are processed
+bind vao (of all rocks)
+  for each group of rocks using the same texture (i<8 example) //sets of 8 rocks with same texture
+    bind texture  
+    for each rock
+	if(inRange of player)
+      		draw(offset of the rock in array)
+	else
+		do nothing
+	increment index before it ends
+    end for
+  end for
+
+//dont swap textures constantly		
+Having draw calls with minimal state changes (texture/vao/shader binds)
+is fixed cost and cheap

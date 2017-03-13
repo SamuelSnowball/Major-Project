@@ -83,6 +83,132 @@
 		border-radius: 1em;
 		border: 5px solid #0000ff;		
 	}
+	#shopOverlay{
+		position: absolute;
+		left: 25%;
+		top: 5%;
+		width: 50%;
+		height: 40%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 1em;
+		border: 5px solid #0000ff;		
+	}
+	#item0{
+		position: absolute;
+		left: 10%;
+		top: 15%;
+		width: 15%;
+		height: 25%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 0.1em;
+		border: 5px solid #ffffff;	
+		background-image: url("resources/shop/repair.png");		
+	}
+	#item1{
+		position: absolute;
+		left: 30%;
+		top: 15%;
+		width: 15%;
+		height: 25%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 0.1em;
+		border: 5px solid #ffffff;	
+		background-image: url("resources/lava.png");
+	}
+	#item2{
+		position: absolute;
+		left: 50%;
+		top: 15%;
+		width: 15%;
+		height: 25%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 0.1em;
+		border: 5px solid #ffffff;	
+		background-image: url("resources/lava.png");
+	}
+	#item3{
+		position: absolute;
+		left: 70%;
+		top: 15%;
+		width: 15%;
+		height: 25%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 0.1em;
+		border: 5px solid #ffffff;	
+		background-image: url("resources/lava.png");
+	}	
+	
+	#item4{
+		position: absolute;
+		left: 10%;
+		top: 45%;
+		width: 15%;
+		height: 25%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 0.1em;
+		border: 5px solid #ffffff;	
+		background-image: url("resources/lava.png");		
+	}
+	#item5{
+		position: absolute;
+		left: 30%;
+		top: 45%;
+		width: 15%;
+		height: 25%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 0.1em;
+		border: 5px solid #ffffff;	
+		background-image: url("resources/lava.png");
+	}
+	#item6{
+		position: absolute;
+		left: 50%;
+		top: 45%;
+		width: 15%;
+		height: 25%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 0.1em;
+		border: 5px solid #ffffff;	
+		background-image: url("resources/lava.png");
+	}
+	#item7{
+		position: absolute;
+		left: 70%;
+		top: 45%;
+		width: 15%;
+		height: 25%;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		font-family: monospace;
+		padding: 1em;
+		border-radius: 0.1em;
+		border: 5px solid #ffffff;	
+		background-image: url("resources/lava.png");
+	}		
 	</style>
 </head>
 
@@ -129,7 +255,7 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
     <div>Middle: <span id="topMiddle"></span></div>
     <div><span id="topMiddleText"></span></div>
   </div>
-  
+ 
 </div>
 
 
@@ -168,8 +294,8 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/Player.js"></script>
 <script src="code/myJs/MissionAssigner.js"></script>
 <script src="code/myJs/Sound.js"></script>
-
-<!-- Broken -->
+<script src="code/myJs/Shop.js"></script>
+<script src="code/myJs/Utility.js"></script>
 <script src="code/myJs/WorldState.js"></script>
 
 <!-- Needs naming -->
@@ -182,11 +308,13 @@ var perlin = new ImprovedNoise();
 
 //For saving the game
 var gameTime = 0;
-var saveTime = 1200;
-
-var loadingScreen = new LoadingScreen();
+var saveTime = 100;
 
 var textureLoader = new TextureLoader();
+var utility = new Utility();
+var loadingScreen = new LoadingScreen();
+
+
 var player = new Player(5, 1, 5); 
 var terrain = new Terrain();
 
@@ -198,6 +326,8 @@ var rockGenerator = new RockGenerator();
 var waterSystem = new WaterSystem();
 var missionAssigner = new MissionAssigner();
 var sound = new Sound();
+var shop = new Shop();
+
 
 //Taken
 var fpsElement = document.getElementById("fps");
@@ -219,7 +349,7 @@ function render(){
 	*/
 	if(gameTime === saveTime){
 		if(useFog === true){
-			console.log("World auto saved");
+			//console.log("World auto saved");
 			worldState.saveWorld();
 			gameTime = 0;
 		}
@@ -227,14 +357,15 @@ function render(){
 	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
 	
 	player.movePlayer();
+	player.assignPlayerQuadrant();
 
 	terrain.render(); 
 
+	
 	collisionTester.testPlayerMapBoundaries();
 	collisionTester.setPlayerHeight(); 
 	collisionTester.testPlayerRockCollision();
 
-	rockGenerator.renderRocks();
 	rockGenerator.renderObjRocks();
 
 	waterSystem.updateWaterVertices();
@@ -243,6 +374,11 @@ function render(){
 	missionAssigner.checkOrAssignPlayerMissions();
 	gui.update();
 	gui.displayCurrentRock();
+	
+	shop.render();
+	
+	shop.displayShopInterface();
+	
 	
 	gameTime++;
 	requestAnimationFrame(render);
@@ -261,8 +397,6 @@ function setup(){
 	
 	worldState.loadWorld();
 	gui.setup();
-	missionAssigner.setup();
-	
 	
 		
 	render();

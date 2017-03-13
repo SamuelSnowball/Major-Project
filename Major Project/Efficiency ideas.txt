@@ -2,5 +2,5 @@ For efficiency
 
 Use VAOs
 Have multiple objects in one buffer (Multiple objects VBO's in single VAO)
-Clip on GPU
+Clip on CPU
 Move verts on GPU

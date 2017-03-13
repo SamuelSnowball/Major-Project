@@ -46,13 +46,10 @@ canvas.addEventListener('mousedown', function(){
 	
 	//Show GUI elements
 	document.getElementById("xpOverlay").style.visibility = "visible";
-	
 	document.getElementById("minimapOverlay").style.visibility = "visible";
 	document.getElementById("missionOverlay").style.visibility = "visible";
 	document.getElementById("nearestRockOverlay").style.visibility = "visible";
-	
 	document.getElementById("topMiddleOverlay").style.visibility = "visible";
-	
 	
 });
 
@@ -65,21 +62,23 @@ var prevX = 0;
 var prevY = 0;
 
 canvas.addEventListener('mousemove', function(e){
+
+	/*
+	X and Y are kinda reversed here, because you move mouse on the X, to rotate terrain in Y
+	*/
 	if(pointerLocked === true){
-		/*
-		X and Y are kinda reversed here, because you move mouse on the X, to rotate terrain in Y
-		*/
 		//Horizontal
 		var currentXMovement = e.movementX;
 		currentRotateY += currentXMovement + prevX;//e.movementX;
 		prevX = currentXMovement;
-		player.yRotation = currentRotateY * rotateSpeed;
+		player.set.yRotation = currentRotateY * rotateSpeed;
 		
 		//Vertical
 		var currentYMovement = e.movementY;
 		currentRotateX += currentYMovement + prevY;
 		prevY = currentYMovement;
-		player.xRotation = currentRotateX * rotateSpeed;
+		player.set.xRotation = currentRotateX * rotateSpeed;
 	}
+	
 });
 							

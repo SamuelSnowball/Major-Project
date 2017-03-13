@@ -68,6 +68,11 @@ function GUI(){
 		currentMissionElement.appendChild(currentMissionNode);	
 	}
 	
+	this.clearMission = function(){
+		currentMissionNode = document.createTextNode("");
+		currentMissionElement.innerHTML = "";
+	}
+	
 	this.update = function(){
 		
 		//If player is viewing minimap, hide game GUIs

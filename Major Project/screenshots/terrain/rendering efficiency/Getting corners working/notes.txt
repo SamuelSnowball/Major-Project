@@ -1,0 +1,7 @@
+Tested with grid size of 4x4
+Black lines on images represent cells that you cant see
+Those vertices arent processed, or rendered.
+
+When player in corner quadrant, only 4 sections should be processed and rendered.
+With the 3x3 images, I was getting offscreen error because it was still trying to
+render a 3x3 section, these images show it fixed.
