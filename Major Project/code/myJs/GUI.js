@@ -83,7 +83,7 @@ function GUI(){
 			document.getElementById("missionOverlay").style.visibility = "hidden";
 			document.getElementById("nearestRockOverlay").style.visibility = "hidden";
 			
-			document.getElementById("topMiddleOverlay").style.visibility = "hidden";
+			document.getElementById("inventoryOverlay").style.visibility = "hidden";
 		}else{
 			//Show GUI elements
 			document.getElementById("xpOverlay").style.visibility = "visible";
@@ -92,7 +92,7 @@ function GUI(){
 			document.getElementById("missionOverlay").style.visibility = "visible";
 			document.getElementById("nearestRockOverlay").style.visibility = "visible";
 			
-			document.getElementById("topMiddleOverlay").style.visibility = "visible";
+			document.getElementById("inventoryOverlay").style.visibility = "visible";
 		}
 	
 	
@@ -119,6 +119,33 @@ function GUI(){
 		//How to rotate it, need to define vertices again?
 		//or somehow copy existing vertices, rotate those, so dont alter original?
 	}
+	
+	var slot0 = document.getElementById("slot0");
+	var slot1 = document.getElementById("slot1");
+	var slot2 = document.getElementById("slot2");
+	var slot3 = document.getElementById("slot3");
+	var slot4 = document.getElementById("slot4");
+	var slot5 = document.getElementById("slot5");
+	var slot6 = document.getElementById("slot6");
+	var slot7 = document.getElementById("slot7");
+	
+	var inventorySlotIDs = [];
+	inventorySlotIDs.push(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7);
+	
+	this.renderInventory = function(){
+		var playerInventory = player.get.inventory;
+		
+		for(var i=0; i<8; i++){
+			if(playerInventory[i] === -1){
+				//Render empty slot
+				inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
+			}
+			else{
+				inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + playerInventory[i] + ".png)";
+			}
+		}
+	}
+	
 	
 }
  

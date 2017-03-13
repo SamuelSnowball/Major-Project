@@ -38,7 +38,7 @@ function RockGenerator(){
 
 	createRocks();
 	
-	function Rock(xPos, yPos, zPos, width, xRotation, yRotation, zRotation, scale, texture, numIndices){
+	function Rock(xPos, yPos, zPos, width, xRotation, yRotation, zRotation, scale, texture, numIndices, id){
 		this.x = xPos;
 		this.y = yPos;
 		this.z = zPos;
@@ -49,6 +49,7 @@ function RockGenerator(){
 		this.scale = scale;
 		this.texture = texture;
 		this.numIndices = numIndices;
+		this.id = id;
 	}
 	
 	/*
@@ -56,15 +57,16 @@ function RockGenerator(){
 	*/
 	function createRocks(){
 		//numRocks = 3;
-		for(var i=0; i<45; i++){
-			createObjRock(objRockText0, rockTexture0);
+		for(var i=0; i<15; i++){
+			createObjRock(objRockText0, rockTexture0, 0);
+			createObjRock(objRockText0, rockTexture1, 1);
 		}
 	}
 	
 	/*
 	Parameter, the obj file to use
 	*/
-	function createObjRock(objText, texture){
+	function createObjRock(objText, texture, id){
 	
 		var mesh = new OBJ.Mesh(objText);
 		OBJ.initMeshBuffers(gl, mesh);
@@ -88,6 +90,8 @@ function RockGenerator(){
 		
 		mesh.texture = texture;
 		mesh.scale = Math.floor(Math.random() * 5) + 0;
+		
+		mesh.id = id;
 
 		rockObjs.push(mesh);
 	}

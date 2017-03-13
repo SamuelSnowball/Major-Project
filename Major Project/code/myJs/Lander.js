@@ -1,8 +1,8 @@
  
 
-function Shop(){
+function Lander(){
 	
-	var shopMesh;
+	var landerMesh;
 	
 	var x = 415;
 	var z = 415;
@@ -10,13 +10,13 @@ function Shop(){
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = x;
 	var y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue - 0.5;
 
-	var shopModelText = utility.httpGet("resources/shop/satellite.txt");
+	var landerModelText = utility.httpGet("resources/shop/satellite.txt");
 
-	setupShopData();
+	setupLanderData();
 	
-	function setupShopData(){
-		shopMesh = new OBJ.Mesh(shopModelText);
-		OBJ.initMeshBuffers(gl, shopMesh);
+	function setupLanderData(){
+		landerMesh = new OBJ.Mesh(landerModelText);
+		OBJ.initMeshBuffers(gl, landerMesh);
 	}
 	
 	this.render = function(){
@@ -34,26 +34,26 @@ function Shop(){
 		//Times matrices together
 		updateAttributesAndUniforms();
 		
-		gl.bindBuffer(gl.ARRAY_BUFFER, shopMesh.vertexBuffer);
-		gl.vertexAttribPointer(positionAttribLocation, shopMesh.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, landerMesh.vertexBuffer);
+		gl.vertexAttribPointer(positionAttribLocation, landerMesh.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 		gl.enableVertexAttribArray(textureCoordLocation);
-		gl.bindBuffer(gl.ARRAY_BUFFER, shopMesh.textureBuffer);
+		gl.bindBuffer(gl.ARRAY_BUFFER, landerMesh.textureBuffer);
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-		gl.vertexAttribPointer(textureCoordLocation, shopMesh.textureBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(textureCoordLocation, landerMesh.textureBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, shopMesh.normalBuffer);
-		gl.vertexAttribPointer(normalAttribLocation, shopMesh.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, landerMesh.normalBuffer);
+		gl.vertexAttribPointer(normalAttribLocation, landerMesh.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, shopMesh.indexBuffer);
-		gl.drawElements(gl.TRIANGLES, shopMesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, landerMesh.indexBuffer);
+		gl.drawElements(gl.TRIANGLES, landerMesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 	}
 	
 	/*
 	Show shop GUI when in range, later on when press a key open it
-	*/
+	*
 	this.displayShopInterface = function(){
 	
 		// Calculate distance from player to shop, if in range, display shop
@@ -64,9 +64,17 @@ function Shop(){
 		);
 		
 		if(distance > 5){
-		
+			document.getElementById("depositOreOverlay").style.visibility = "visible";
+			if(){
+				
+			}
+		}
+		else{
+			document.getElementById("depositOreOverlay").style.visibility = "hidden";
 		}
 		
 	}
+	*/
+	
 	
 }

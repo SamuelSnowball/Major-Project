@@ -15,6 +15,11 @@ var pointerLocked = false;
 			
 canvas.addEventListener('mousedown', function(){
 	
+	$(function(){
+
+    $( "#menu" ).menu();
+	})
+	
 	if(gameRunning === false){
 		setup();
 	}
@@ -49,7 +54,9 @@ canvas.addEventListener('mousedown', function(){
 	document.getElementById("minimapOverlay").style.visibility = "visible";
 	document.getElementById("missionOverlay").style.visibility = "visible";
 	document.getElementById("nearestRockOverlay").style.visibility = "visible";
-	document.getElementById("topMiddleOverlay").style.visibility = "visible";
+	
+	
+	document.getElementById("inventoryOverlay").style.visibility = "visible";
 	
 });
 

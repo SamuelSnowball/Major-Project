@@ -1,6 +1,35 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
+
+Minimal amount of ui rubbish
+	Remove xp
+
+	Have a missions menu UI on left that clicks in and out
+		-tick off missions
+
+	Sector 1 missions
+
+		Can only move into sector 2 once all sector 1 missions complete
+
+	Sector 2 missions
+	
+
+split css into new file
+
+add to test table
+
+new mission sound:
+https://www.freesound.org/people/Kastenfrosch/sounds/162464/
+
+
+Laser
+	vector from player to rock, will be perfect
+	what will be rendered?
+
+	laser sound:
+	https://www.freesound.org/people/kafokafo/sounds/128349/
+
 Sprint 4 (13th - 20th March)
 
 	Tackling tasks from product backlog:
@@ -17,14 +46,13 @@ Sprint 4 (13th - 20th March)
 		
 		Things to fix:
 
-			Shop:
-				Shop texture fixing
-				Add ability to sell to shop
+			Lander:
+				Add ability to deposit ores at lander
 					Removes from inventory increments money
 				Add fuel cylinder next to shop, distance varibale + gui popup to refuel
 	
 			Prospecting:
-				Add in inventory
+				Display message saying inventory full
 				Add prospecting sounds, particles, progress bar, level checks
 			
 
@@ -46,8 +74,13 @@ Sprint 4 (13th - 20th March)
 	Sprint retrospective:
 		
 			Terrain:			
-				Redo texture atlas
+				Redid texture atlas
 
-
+			Lander:
+				Fixed texture
+			
+			Player:
+				Added inventory, little 4x2 table
+				Added rock going into inventory
 
 

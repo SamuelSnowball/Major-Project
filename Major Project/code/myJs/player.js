@@ -13,6 +13,8 @@ function Player(x, y, z){
 	var previousY = 0; // To remember Y pos when moving camera for fog
 	var quadrant; // Current section of the map they're in
 	
+	var inventory = Array(8).fill(-1);
+	
 	var playerVertices = [];
 	var playerUvs = [];
 	var playerNormals = [];
@@ -65,6 +67,9 @@ function Player(x, y, z){
 		},
 		get quadrant(){
 			return quadrant;
+		},
+		get inventory(){
+			return inventory;
 		}
 	}	
 	
@@ -93,6 +98,9 @@ function Player(x, y, z){
 		set yRotation(y){
 			yRotation = y;
 		},
+		set inventory(param){
+			inventory = param;
+		}
 	}
 	
 	this.add = {
@@ -155,6 +163,10 @@ function Player(x, y, z){
 					previousY = y;
 				}
 			}
+			// Y key for yes/nodeName
+			if(event.keyCode === 89){
+				selling = true;
+			}			
 		});
 		
 		document.addEventListener('keyup', function(event){
@@ -309,6 +321,26 @@ function Player(x, y, z){
 		}
 	}
 
+	/*
+	Only call when player prospects a rock!
+	*/
+	this.addToInventory = function(rock){
+		
+		for(var i=0; i<8; i++){
+			if(inventory[i] !== -1){
+				// Then this spot is taken
+			}
+			else{
+				// The inventory spot is free
+				console.log("set rockid: " + rock.id);
+				inventory[i] = rock.id;
+				break;
+			}
+		}
+		
+		console.log("Updated inv: " + inventory);
+		
+	}
 	
 	/*
 	All code below this is for rendering the player on the minimap,

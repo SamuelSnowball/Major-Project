@@ -21,7 +21,7 @@
 	#minimapOverlay {
 		position: absolute;
 		left: 0%;
-		top: 59%;
+		top: 57%;
 		width: 22%;
 		height: 15%;
 		background-color: rgba(0, 0, 0, 0.7);
@@ -34,7 +34,7 @@
 	#missionOverlay {
 		position: absolute;
 		left: 25%;
-		top: 62%;
+		top: 60%;
 		width: 22%;
 		height: 12%;
 		background-color: rgba(0, 0, 0, 0.7);
@@ -47,7 +47,7 @@
 	#nearestRockOverlay{
 		position: absolute;
 		left: 50%;
-		top: 62%;
+		top: 60%;
 		width: 22%;
 		height: 12%;
 		background-color: rgba(0, 0, 0, 0.7);
@@ -57,10 +57,10 @@
 		border-radius: 1em;
 		border: 5px solid #0000ff;	
 	}
-	#topMiddleOverlay{
+	#inventoryOverlay{
 		position: absolute;
 		left: 75%;
-		top: 62%;
+		top: 60%;
 		width: 22%;
 		height: 12%;
 		background-color: rgba(0, 0, 0, 0.7);
@@ -94,6 +94,41 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 
 <div id="banner"><p>Mars Mission Control Game</p></div>
 
+ 
+<ul id="menu">
+  <li class="ui-state-disabled"><div>Toys (n/a)</div></li>
+  <li><div>Books</div></li>
+  <li><div>Clothing</div></li>
+  <li><div>Electronics</div>
+    <ul>
+      <li class="ui-state-disabled"><div>Home Entertainment</div></li>
+      <li><div>Car Hifi</div></li>
+      <li><div>Utilities</div></li>
+    </ul>
+  </li>
+  <li><div>Movies</div></li>
+  <li><div>Music</div>
+    <ul>
+      <li><div>Rock</div>
+        <ul>
+          <li><div>Alternative</div></li>
+          <li><div>Classic</div></li>
+        </ul>
+      </li>
+      <li><div>Jazz</div>
+        <ul>
+          <li><div>Freejazz</div></li>
+          <li><div>Big Band</div></li>
+          <li><div>Modern</div></li>
+        </ul>
+      </li>
+      <li><div>Pop</div></li>
+    </ul>
+  </li>
+  <li class="ui-state-disabled"><div>Specials (n/a)</div></li>
+</ul>
+ 
+
 <div>fps: <span id="fps"></span></div>
 
 <div class="container">
@@ -125,11 +160,34 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
     <div><span id="topLeftText"></span></div>
   </div>
   
-  <div id="topMiddleOverlay" class="canvasClass" style="visibility: hidden">
-    <div>Middle: <span id="topMiddle"></span></div>
-    <div><span id="topMiddleText"></span></div>
+  <div id="inventoryOverlay" class="canvasClass" style="visibility: hidden">
+    <div>Inventory: <span id="topMiddle"></span></div>
+	
+	<table height="100%" width="100%">
+	
+	  <tr>
+		<td id = "slot0" background="resources/rocks/0.png"></td>
+		<td id = "slot1" background="resources/rocks/1.png"></td> 
+		<td id = "slot2" background="resources/rocks/2.png"></td>
+		<td id = "slot3" background="resources/rocks/3.png"></td>
+	  </tr>         
+	                    
+	  <tr>             
+		<td id = "slot4" background="resources/rocks/4.png"></td>
+		<td id = "slot5" background="resources/rocks/5.png"></td> 
+		<td id = "slot6" background="resources/rocks/6.png"></td>
+		<td id = "slot7" background="resources/rocks/7.png"></td>
+	  </tr>
+	  
+	</table>
+	
   </div>
  
+  <div id="depositOreOverlay" class="canvasClass" style="visibility: hidden">
+    <div>Deposit Ore? Y/N?: <span id="topLeft"></span></div>
+    <div><span id="topLeftText"></span></div>
+  </div>
+  
 </div>
 
 
@@ -139,10 +197,11 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="libraries/perlin.js"></script>
 <script src="libraries/webgl-obj-loader.js"></script>
 
-<!-- Objs -->
-<script type="text/plain">
-	test
-</script>
+<link rel="stylesheet" href="libraries/jquery-ui-1.12.1.custom/jquery-ui.css">
+<script src="libraries/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+<script src="libraries/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+
 
 <!-- Not my js files-->
 <script src="code/js/ImprovedNoise.js"></script>
@@ -168,7 +227,7 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/Player.js"></script>
 <script src="code/myJs/MissionAssigner.js"></script>
 <script src="code/myJs/Sound.js"></script>
-<script src="code/myJs/Shop.js"></script>
+<script src="code/myJs/Lander.js"></script>
 <script src="code/myJs/Utility.js"></script>
 <script src="code/myJs/WorldState.js"></script>
 
@@ -177,6 +236,7 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 <script src="code/myJs/missions.js"></script>
 
 <script>
+
 var gameRunning = false;
 var perlin = new ImprovedNoise();
 
@@ -200,7 +260,7 @@ var rockGenerator = new RockGenerator();
 var waterSystem = new WaterSystem();
 var missionAssigner = new MissionAssigner();
 var sound = new Sound();
-var shop = new Shop();
+var lander = new Lander();
 
 
 //Taken
@@ -248,10 +308,10 @@ function render(){
 	missionAssigner.checkOrAssignPlayerMissions();
 	gui.update();
 	gui.displayCurrentRock();
+	gui.renderInventory();
 	
-	shop.render();
-	
-	shop.displayShopInterface();
+	lander.render();
+	//lander.displayShopInterface();
 	
 	
 	gameTime++;

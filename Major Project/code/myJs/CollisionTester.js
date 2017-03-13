@@ -184,10 +184,16 @@ function CollisionTester(){
 		}
 		else{
 			if(player.get.prospecting === true){
-				rock.texture = depletedTexture;
-				player.add.xp = 1;
-				//Display progress bar, when hits 100%, change rocks texture
-				//So pass in current rock to this function, 
+				
+				// Check if theres a free space in player inventory
+				if(player.get.inventory.includes(-1)){
+					rock.texture = depletedTexture;
+					player.add.xp = 1;
+					player.addToInventory(rock);
+				}
+				else{
+					// Display message saying inventory is full!
+				}
 			}
 		}
 	}	
