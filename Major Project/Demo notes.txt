@@ -1,32 +1,46 @@
-Intro
-Mars mission control game in WebGL
+Project description 
 
-Basically, the user plays as a rover, roaming around mars
-exploring and completeing various challenges.
+	Mars mission control game in WebGL
 
-WebGL, standing for Web Graphics libary is a JavaScript
-API for rendering 3D graphics in a browser. 
-	Full demo webgl vs opengl vs directx
+	Basically, the user plays as a rover, roaming around mars
+		exploring and completeing various challenges.
 
-Perhaps go over similar games
+	WebGL, standing for Web Graphics libary is a JavaScript
+		API for rendering graphics in a browser. 
 
+	WebGL lets you display triangles on the screen, doesn't do much more than that.
+		Theres no ability to drag and drop objects into a premade 3D scene
+		It's from scratch basically
+		
+	webgl vs opengl vs directx
 
+		decided on webgl because benefits of the browser
+		OpenGL would mean I have to write in c++ which is already challenging enough
+			let alone opengl on top.
+		I'd rather use webgl (which is basically opengl) but with JavaScript
+			so I could focus on the webgl side, and have solid underlying
+			javascript code
+
+		directX i had absoultey no experience with, as it isnt based off opengl
+			also its windows only,
 
 Technical
-Model, view, projection
+	
+	basic game render loop
+		update() 
+		render()
 
-CPU vs GPU processing
+	Use a projection matrix to convert my 3D world into 2D screenspace
+		illusion of 3d
+
+	Show terrain generation, 
+		some detail of perlin noise and smooth randomness
+		Rendering efficiency vs no efficiency
+		
+	
+Work left to do
 
 
 
-Pipeline, with screenshots of ur vertices etc
-Processes data sent to it
-Converts into points
 
 
-Rasteriziation, connects the points
-and then fills the triangle in
-
-Fragment shader
-Runs on every fragment in the triangle
-Generates colours

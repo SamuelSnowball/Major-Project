@@ -1,0 +1,30 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
+newmtl Standard
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.976471 0.000000 0.000000
+Ks 0.100000 0.100000 0.100000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Standard1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.690196 0.690196 0.690196
+Ks 0.100000 0.100000 0.100000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 1942651-white-over-black-waves-pattern-abstract-seamless-texture-vector-art-illustration.jpg
+
+newmtl b0b0b0
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.690196 0.690196 0.690196
+Ks 0.001176 0.001176 0.001176
+Ni 1.000000
+d 1.000000
+illum 2

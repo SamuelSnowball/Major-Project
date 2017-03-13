@@ -3,51 +3,31 @@
 function Shop(){
 	
 	var shopMesh;
-	var shopVertices;
-	var shopUvs;
-
-	var shopVertexBuffer;
-	var shopVertexBufferItemSize;
-	var shopTextureBuffer;
-	var shopTextureBufferItemSize;
-	var shopNormalBuffer;
-	var shopNormalBufferItemSize; 
-	var shopIndiceBuffer;
-	var shopIndiceBufferItemSize;
 	
 	var x = 415;
 	var z = 415;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = z;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = x;
-	var y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 2;
+	var y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue - 0.5;
 
-	var shopModelText = utility.httpGet("resources/shop/shop.txt");
+	var shopModelText = utility.httpGet("resources/shop/satellite.txt");
 
 	setupShopData();
 	
 	function setupShopData(){
 		shopMesh = new OBJ.Mesh(shopModelText);
 		OBJ.initMeshBuffers(gl, shopMesh);
-		
-		shopVertexBuffer = shopMesh.vertexBuffer;
-		shopVertexBufferItemSize = shopMesh.vertexBuffer.itemSize;
-		shopTextureBuffer = shopMesh.textureBuffer;
-		shopTextureBufferItemSize = shopMesh.textureBuffer.itemSize;
-		shopNormalBuffer = shopMesh.normalBuffer;
-		shopNormalBufferItemSize = shopMesh.normalBuffer.itemSize;
-		shopIndiceBuffer = shopMesh.indexBuffer;
-		shopIndiceBufferItemSize = shopMesh.indexBuffer.numItems;
 	}
 	
 	this.render = function(){
 	
 		lightColour = [1, 1, 1];
-		currentTexture = rockTexture0; // fix this
+		currentTexture = shopTexture;
 		
-		scale = m4.scaling(0.005, 0.005, 0.005);
+		scale = m4.scaling(2, 2, 2);
 		rotateX = m4.xRotation(0);
 		rotateY = m4.yRotation(0);
-		rotateZ = m4.zRotation(Math.PI / 2);
+		rotateZ = m4.zRotation(-Math.PI / 2);
 		
 		position = m4.translation(x, y, z);
 		

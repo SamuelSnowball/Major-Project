@@ -14,6 +14,8 @@ var myPerlinTexture;
 
 var playerTexture;
 
+var shopTexture;
+
 /*
 Rock textures
 */
@@ -71,6 +73,7 @@ function TextureLoader(){
 		waterTexture = new Texture('resources/water/water.png', 10, 5);
 		lavaTexture = new Texture('resources/lava.png', 1, 1);
 		
+		shopTexture = new Texture('resources/shop/shopImage.png', 10, 0);
 	}
 	
 }

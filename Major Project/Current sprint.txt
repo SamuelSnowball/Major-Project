@@ -10,13 +10,12 @@ Sprint 4 (13th - 20th March)
 
 		Adding player inventory
 			When prospect rock, adds to inventory
+		
+		Add up to date documentation!
 
 	Sprint Plan:
 		
 		Things to fix:
-
-			Terrain:			
-				Redo texture atlas
 
 			Shop:
 				Shop texture fixing
@@ -46,7 +45,8 @@ Sprint 4 (13th - 20th March)
 
 	Sprint retrospective:
 		
-
+			Terrain:			
+				Redo texture atlas
 
 
 
