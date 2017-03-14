@@ -173,19 +173,25 @@ function CollisionTester(){
 	
 	/*
 	If the user is colliding with a rock, and they're holding down P,
-	Then they're prospecting the rock
+	Then they're prospecting the rock, so increment the prospecting bar.
+	
+	Once the prospecting bar reaches 100, first check the player has inventory space, 
+	then prospect the rock, and finally change the rocks texture to depleted
 	*/
 	function isProspecting(rock){
 		/*
 		Check if rock is already depleted, if so, they cant prospect it again!
 		*/
 		if(rock.texture === depletedTexture){
-			//Already depleted!
+			// Already depleted!
 			document.getElementById("prospectingBarID").style.visibility = "hidden";	
 		}
 		else{
+			// Rock hasn't been depleted, see if the player is prospecting it
 			if(player.get.prospecting === true){
-				prospectingBarValue += 0.5;
+			
+				// Slowly increment the players prospecting bar, and show the GUI for it
+				prospectingBarValue += player.get.prospectingSpeed;
 				document.getElementById("prospectingBarID").style.visibility = "visible";	
 				$( "#prospectingBarID" ).progressbar({
 					value: prospectingBarValue,
@@ -193,8 +199,8 @@ function CollisionTester(){
 				
 				// Check if prospect bar is 100%
 				if(prospectingBarValue >= 100){
-				
-					// Check if theres a free space in player inventory
+					// Bar has reached 100%
+					// Check if there's a free space in player inventory
 					if(player.get.inventory.includes(-1)){
 						rock.texture = depletedTexture;
 						player.add.xp = 1;
@@ -207,12 +213,16 @@ function CollisionTester(){
 					// Reset the value
 					prospectingBarValue = 0;
 				}
+				else{
+					// Prospecting bar hasn't reached 100% yet, so just do nothing
+				}
 				
 			}
 			else{
+				// Player is not prospecting 
 				// Reset the value
 				prospectingBarValue = 0;
-				console.log("isnt prospecting");
+				// Hide the prospecting bar
 				document.getElementById("prospectingBarID").style.visibility = "hidden";	
 			}
 		}

@@ -1,7 +1,6 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Add prospect bar
 
 Minimal amount of ui rubbish
 
@@ -27,9 +26,11 @@ https://www.freesound.org/people/Kastenfrosch/sounds/162464/
 Laser
 	vector from player to rock, will be perfect
 	what will be rendered?
+	then add particle effects
 
 	laser sound:
 	https://www.freesound.org/people/kafokafo/sounds/128349/
+
 
 Sprint 4 (13th - 20th March)
 
@@ -65,7 +66,7 @@ Sprint 4 (13th - 20th March)
 		
 			Add rocks in certain quadrants
 			Different perlin scales for map sections
-			Collision boundaries if not high enough XP
+			Collision boundaries if havent completed all missions
 			
 			Add missions, find this rock, show rock in gui
 
@@ -85,7 +86,9 @@ Sprint 4 (13th - 20th March)
 			Player:
 				Added inventory, little 4x2 table
 				Added rock going into inventory
-
+		
+			Game mechanics
+				Adding prospect bar
 	
 
 

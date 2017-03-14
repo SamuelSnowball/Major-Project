@@ -32,6 +32,7 @@ function Player(x, y, z){
 	*/
 	var prospecting = false; 
 	var inProspectingRange = false; //To know whether to update GUI or not
+	var prospectingSpeed = 0.5;
 	var xp = 0;
 	
 	var hasMission = false; // if they have a mission, true false
@@ -70,6 +71,9 @@ function Player(x, y, z){
 		},
 		get inventory(){
 			return inventory;
+		},
+		get prospectingSpeed(){
+			return prospectingSpeed;
 		}
 	}	
 	
@@ -100,6 +104,9 @@ function Player(x, y, z){
 		},
 		set inventory(param){
 			inventory = param;
+		},
+		set prospectingSpeed(param){
+			prospectingSpeed = param;
 		}
 	}
 	
