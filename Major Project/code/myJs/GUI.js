@@ -77,6 +77,7 @@ function GUI(){
 		
 		//If player is viewing minimap, hide game GUIs
 		if(useFog === false){
+		/*
 			document.getElementById("xpOverlay").style.visibility = "hidden";
 			
 			document.getElementById("minimapOverlay").style.visibility = "hidden";
@@ -84,8 +85,10 @@ function GUI(){
 			document.getElementById("nearestRockOverlay").style.visibility = "hidden";
 			
 			document.getElementById("inventoryOverlay").style.visibility = "hidden";
+			*/
 		}else{
 			//Show GUI elements
+			/*
 			document.getElementById("xpOverlay").style.visibility = "visible";
 			
 			document.getElementById("minimapOverlay").style.visibility = "visible";
@@ -93,6 +96,7 @@ function GUI(){
 			document.getElementById("nearestRockOverlay").style.visibility = "visible";
 			
 			document.getElementById("inventoryOverlay").style.visibility = "visible";
+			*/
 		}
 	
 	

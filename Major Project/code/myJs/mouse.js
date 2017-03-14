@@ -17,13 +17,25 @@ canvas.addEventListener('mousedown', function(){
 	
 	$(function(){
 		$("#menu").menu();
-		$("#currentMissionID").dialog();
-		$("#nearestRockID").dialog({
-			height: 150,
-			width: 400,
+		$("#minimapID").dialog({
+			height: window.innerHeight/2.5,
+			width: window.innerWidth/3,
 			resizable: false,
-			position: {  at: "center bottom"}
+			position: {  at: "left bottom-10%" }
 		});
+		$("#nearestRockID").dialog({
+			height: window.innerHeight/3,
+			width: window.innerWidth/3,
+			resizable: false,
+			position: {  at: "center+1% bottom-15%"}
+		});
+		$("#currentMissionID").dialog({
+			height: window.innerHeight/3,
+			width: window.innerWidth/3,
+			resizable: false,
+			position: {  at: "right bottom-15%"}
+		});
+		
 	})
 	
 	if(gameRunning === false){
@@ -56,15 +68,20 @@ canvas.addEventListener('mousedown', function(){
 	}
 	
 	//Show GUI elements
+	/*
 	document.getElementById("xpOverlay").style.visibility = "visible";
 	document.getElementById("minimapOverlay").style.visibility = "visible";
 	document.getElementById("missionOverlay").style.visibility = "visible";
 	document.getElementById("nearestRockOverlay").style.visibility = "visible";
-	
-	
 	document.getElementById("inventoryOverlay").style.visibility = "visible";
+	*/
 	
+	document.getElementById("minimapID").style.visibility = "visible";
+	document.getElementById("nearestRockID").style.visibility = "visible";
+	document.getElementById("currentMissionID").style.visibility = "visible";
 	document.getElementById("menu").style.visibility = "visible";
+	
+	
 });
 
 

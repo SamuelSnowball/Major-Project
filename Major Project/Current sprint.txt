@@ -8,6 +8,8 @@ Minimal amount of ui rubbish
 	Have a missions menu UI on left that clicks in and out
 		-tick off missions
 
+	Keep inventory, but make rock images instead of textures
+
 	Sector 1 missions
 
 		Can only move into sector 2 once all sector 1 missions complete

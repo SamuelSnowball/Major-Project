@@ -6,10 +6,7 @@
 	<link rel="stylesheet" href="code/css/gui.css">
 </head>
 
-<!-- 
-GUI
-https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
--->
+
 <body>
 
 <link rel="stylesheet" href="code/css/gui.css">
@@ -18,34 +15,8 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 
 <div>fps: <span id="fps"></span></div>
 
-<div class="container">
-  <canvas id="canvas" class="canvasClass"></canvas>
-  <canvas id="guiCanvas" class="canvasClass"></canvas>
-
-  <!-- XP, render rectangle over this html element? -->
-  <div id="xpOverlay" class="canvasClass" style="visibility: hidden">
-    <div>XP: <span id="xpOverlayText"></span></div>
-    <div><span id="xpOverlayValue"></span></div>
-  </div>
-  
-  <div id="minimapOverlay" class="canvasClass" style="visibility: hidden">
-    <div>Current position: <span id="playerPosition"></span>
-		X: <span id="playerX"> </span>
-		Y: <span id="playerY"> </span>
-		Z: <span id="playerZ"> </span>
-	</div>
-  </div>
-
-  <!-- Displays current mission -->
-  <div id="missionOverlay" class="canvasClass" style="visibility: hidden">
-    <div>Current mission: <span id="current"></span></div>
-    <div><span id="currentMission"></span></div>
-  </div>
-
- 
-  
-  <div id="nearestRockOverlay" class="canvasClass" style="visibility: hidden">
-  </div>
+<!-- GL Canvas -->
+<canvas id="canvas" class="canvasClass"></canvas>
   
   
   <div id="inventoryOverlay" class="canvasClass" style="visibility: hidden">
@@ -70,18 +41,20 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
 	</table>
 	
   </div>
- 
-  <div id="depositOreOverlay" class="canvasClass" style="visibility: hidden">
-    <div>Deposit Ore? Y/N?: <span id="topLeft"></span></div>
-    <div><span id="topLeftText"></span></div>
-  </div>
-  
+
+
+<!-- ######################### -->
+<!-- Minimap --> 
+<div id="minimapID" title="Minimap" style="visibility: hidden">
+	<p>Map goes here.</p>
 </div>
+<!-- Minimap --> 
+<!-- ######################### -->
 
  
 <!-- ######################### -->
 <!-- Nearest rock --> 
-<div id="nearestRockID" title="Rock Information">
+<div id="nearestRockID" title="Rock Information" style="visibility: hidden">
 	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
 </div>
 <!-- Nearest rock --> 
@@ -90,7 +63,7 @@ https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
  
 <!-- ######################### -->
 <!-- Current mission --> 
-<div id="currentMissionID" title="Current Mission">
+<div id="currentMissionID" title="Current Mission" style="visibility: hidden">
 	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
 </div>
 <!-- Current mission --> 
@@ -178,12 +151,12 @@ var player = new Player(5, 1, 5);
 var terrain = new Terrain();
 
 var worldState = new WorldState(); //Loads and saves the world
-var gui = new GUI();
+//var gui = new GUI();
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 var rockGenerator = new RockGenerator();
 var waterSystem = new WaterSystem();
-var missionAssigner = new MissionAssigner();
+//var missionAssigner = new MissionAssigner();
 var sound = new Sound();
 var lander = new Lander();
 
@@ -230,10 +203,11 @@ function render(){
 	waterSystem.updateWaterVertices();
 	waterSystem.render();
 
-	missionAssigner.checkOrAssignPlayerMissions();
-	gui.update();
-	gui.displayCurrentRock();
-	gui.renderInventory();
+	//missionAssigner.checkOrAssignPlayerMissions();
+	
+	//gui.update();
+	//gui.displayCurrentRock();
+	//gui.renderInventory();
 	
 	lander.render();
 	//lander.displayShopInterface();
@@ -255,7 +229,7 @@ function setup(){
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
 	
 	worldState.loadWorld();
-	gui.setup();
+	//gui.setup();
 	
 		
 	render();
