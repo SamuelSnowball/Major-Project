@@ -19,31 +19,54 @@ canvas.addEventListener('mousedown', function(){
 	
 	$(function(){
 		$("#menu").menu();
+		
 		$("#minimapID").dialog({
 			height: window.innerHeight/2.5,
 			width: window.innerWidth/3,
 			resizable: false,
-			position: {  at: "left bottom-10%" }
+			position: {  at: "left bottom-10%" },
+			closeOnEscape: false,
+			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+			draggable: false
 		});
 		$("#nearestRockID").dialog({
 			height: window.innerHeight/3,
-			width: window.innerWidth/3,
+			width: window.innerWidth/4.5,
 			resizable: false,
-			position: {  at: "center+1% bottom-15%"}
+			position: {  at: "center-4% bottom-15%"},
+			closeOnEscape: false,
+			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+			draggable: false
+		});	
+		$("#inventoryOverlayID").dialog({
+			height: window.innerHeight/3,
+			width: window.innerWidth/4.5 - window.innerWidth/50,
+			resizable: false,
+			position: {  at: "right-32% bottom-15%"},
+			closeOnEscape: false,
+			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+			draggable: false
 		});
 		$("#currentMissionID").dialog({
 			height: window.innerHeight/3,
-			width: window.innerWidth/3 - window.innerWidth/50,
+			width: window.innerWidth/4.5 - window.innerWidth/50,
 			resizable: false,
-			position: {  at: "right bottom-15%"}
+			position: {  at: "right bottom-15%"},
+			closeOnEscape: false,
+			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+			draggable: false
 		});
+		
 		
 		$( "#xpBarID" ).progressbar({
 			value: 100,
+			closeOnEscape: false,
+			draggable: false
 		})
-		
 		$( "#prospectingBarID" ).progressbar({
 			value: prospectingBarValue,
+			closeOnEscape: false,
+			draggable: false
 		})
 
 	})
@@ -91,6 +114,8 @@ canvas.addEventListener('mousedown', function(){
 	document.getElementById("currentMissionID").style.visibility = "visible";
 	document.getElementById("menu").style.visibility = "visible";
 	document.getElementById("xpBarID").style.visibility = "visible";	
+	document.getElementById("inventoryOverlayID").style.visibility = "visible";	
+	
 	
 });
 

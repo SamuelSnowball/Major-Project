@@ -225,7 +225,7 @@ function Terrain(){
 		for(var x=0; x<terrainRows; x++){
 			for(var y=0; y<terrainRows; y++){
 				var stacked = stackNoise(x,y,8);
-				heightMap[x][y] = stacked * 100;
+				heightMap[x][y] = stacked * 15;
 			}
 			xOff = 0;
 			yOff += offsetIncrement;

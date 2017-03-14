@@ -23,26 +23,26 @@
 <canvas id="canvas" class="canvasClass"></canvas>
   
   
-  <div id="inventoryOverlay" class="canvasClass" style="visibility: hidden">
-    <div>Inventory: <span id="topMiddle"></span></div>
-	
-	<table height="100%" width="100%">
-	
-	  <tr>
-		<td id = "slot0" background="resources/rocks/0.png"></td>
-		<td id = "slot1" background="resources/rocks/1.png"></td> 
-		<td id = "slot2" background="resources/rocks/2.png"></td>
-		<td id = "slot3" background="resources/rocks/3.png"></td>
-	  </tr>         
-	                    
-	  <tr>             
-		<td id = "slot4" background="resources/rocks/4.png"></td>
-		<td id = "slot5" background="resources/rocks/5.png"></td> 
-		<td id = "slot6" background="resources/rocks/6.png"></td>
-		<td id = "slot7" background="resources/rocks/7.png"></td>
-	  </tr>
-	  
-	</table>
+  <div id="inventoryOverlayID" title="Inventory" style="visibility: hidden">
+	<p>
+		<table height="100%" width="100%">
+		
+		  <tr>
+			<td id = "slot0" background="resources/rocks/empty.png"></td>
+			<td id = "slot1" background="resources/rocks/empty.png"></td> 
+			<td id = "slot2" background="resources/rocks/empty.png"></td>
+			<td id = "slot3" background="resources/rocks/empty.png"></td>
+		  </tr>         
+							
+		  <tr>             
+			<td id = "slot4" background="resources/rocks/empty.png"></td>
+			<td id = "slot5" background="resources/rocks/empty.png"></td> 
+			<td id = "slot6" background="resources/rocks/empty.png"></td>
+			<td id = "slot7" background="resources/rocks/empty.png"></td>
+		  </tr>
+		  
+		</table>
+	</p>
 	
   </div>
 
@@ -94,15 +94,45 @@
 
 <li><div>Menu</div> <!-- Once clicked others should show -->
 	<ul>
-		<li><div>Sound</div></li>
-		<li><div>Controls</div></li>
-		<li><div>About</div></li>
-	</ul>
+	
+		<li><div>Help</div>
+			<ul>
+				<li><div>Press P to prospect</div></li>
+			</ul>
+		</li>
 		
-  <li class="ui-state-disabled"><div>Quadrant 2</div></li>
-  <li class="ui-state-disabled"><div>Quadrant 3</div></li>
-  <li class="ui-state-disabled"><div>Quadrant 4</div></li>
-  
+		<li><div>Sound</div></li>
+		
+		<li><div>Controls</div>
+			<ul>
+				<li><div>Invert controls</div></li>
+			</ul>		
+		</li>
+		
+		<li><div>About</div></li>
+		
+	</ul>
+</li>	
+
+<li><div>Missions</div>
+	<ul>
+	
+		<li><div>Area 1 Missions</div>
+			<ul>
+				<li><div>Prospect a rock</div></li>
+				<li><div>Prospect 8 rocks</div></li>
+				<li><div>Deposit ore at lander</div></li>
+			</ul>
+		</li>
+		
+		<li class="ui-state-disabled"><div>Area 2 Missions</div></li>
+		<li class="ui-state-disabled"><div>Area 3 Missions</div></li>
+		<li class="ui-state-disabled"><div>Area 4 Missions</div></li>
+		
+	</ul>
+</li>	
+		
+
 </ul>
 <!-- Menu --> 	
 <!-- ######################### -->
