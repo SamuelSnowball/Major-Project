@@ -181,19 +181,39 @@ function CollisionTester(){
 		*/
 		if(rock.texture === depletedTexture){
 			//Already depleted!
+			document.getElementById("prospectingBarID").style.visibility = "hidden";	
 		}
 		else{
 			if(player.get.prospecting === true){
+				prospectingBarValue += 0.5;
+				document.getElementById("prospectingBarID").style.visibility = "visible";	
+				$( "#prospectingBarID" ).progressbar({
+					value: prospectingBarValue,
+				})
 				
-				// Check if theres a free space in player inventory
-				if(player.get.inventory.includes(-1)){
-					rock.texture = depletedTexture;
-					player.add.xp = 1;
-					player.addToInventory(rock);
+				// Check if prospect bar is 100%
+				if(prospectingBarValue >= 100){
+				
+					// Check if theres a free space in player inventory
+					if(player.get.inventory.includes(-1)){
+						rock.texture = depletedTexture;
+						player.add.xp = 1;
+						player.addToInventory(rock);
+					}
+					else{
+						// Display message saying inventory is full!
+					}
+					
+					// Reset the value
+					prospectingBarValue = 0;
 				}
-				else{
-					// Display message saying inventory is full!
-				}
+				
+			}
+			else{
+				// Reset the value
+				prospectingBarValue = 0;
+				console.log("isnt prospecting");
+				document.getElementById("prospectingBarID").style.visibility = "hidden";	
 			}
 		}
 	}	

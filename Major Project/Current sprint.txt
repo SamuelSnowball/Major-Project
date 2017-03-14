@@ -1,9 +1,9 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
+Add prospect bar
 
 Minimal amount of ui rubbish
-	Remove xp
 
 	Have a missions menu UI on left that clicks in and out
 		-tick off missions
@@ -17,7 +17,6 @@ Minimal amount of ui rubbish
 	Sector 2 missions
 	
 
-split css into new file
 
 add to test table
 
@@ -74,7 +73,9 @@ Sprint 4 (13th - 20th March)
 
 
 	Sprint retrospective:
-		
+					
+			split css into new file	
+
 			Terrain:			
 				Redid texture atlas
 
@@ -84,5 +85,7 @@ Sprint 4 (13th - 20th March)
 			Player:
 				Added inventory, little 4x2 table
 				Added rock going into inventory
+
+	
 
 

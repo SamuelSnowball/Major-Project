@@ -12,6 +12,8 @@ document.exitPointerLock = document.exitPointerLock    ||
 							document.mozExitPointerLock;
 
 var pointerLocked = false;
+
+var prospectingBarValue = 0;
 			
 canvas.addEventListener('mousedown', function(){
 	
@@ -40,7 +42,9 @@ canvas.addEventListener('mousedown', function(){
 			value: 100,
 		})
 		
-
+		$( "#prospectingBarID" ).progressbar({
+			value: prospectingBarValue,
+		})
 
 	})
 	

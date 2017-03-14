@@ -26,6 +26,13 @@ html, body {
 	height: 40px;
 }
 
+#prospectingBarID{
+	position: absolute;
+	left: 35%;
+	top: 40%;
+	width: 300px;
+	height: 40px;
+}
 .ui-progressbar-value{
 	background: #0080ff;
 }
