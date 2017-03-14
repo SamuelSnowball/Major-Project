@@ -18,6 +18,12 @@ canvas.addEventListener('mousedown', function(){
 	$(function(){
 		$("#menu").menu();
 		$("#currentMissionID").dialog();
+		$("#nearestRockID").dialog({
+			height: 150,
+			width: 400,
+			resizable: false,
+			position: {  at: "center bottom"}
+		});
 	})
 	
 	if(gameRunning === false){

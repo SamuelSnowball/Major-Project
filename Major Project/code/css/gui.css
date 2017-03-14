@@ -41,6 +41,7 @@ html, body {
 #nearestRockOverlay{
 	position: absolute;
 }
+
 #inventoryOverlay{
 	position: absolute;
 	left: 75%;
