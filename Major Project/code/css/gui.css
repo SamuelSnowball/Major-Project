@@ -11,9 +11,21 @@ html, body {
 	margin: auto;
 }
 .ui-dialog.ui-widget-content { opacity: 0.5; background: black;}
+
 #menu{
 	position: absolute;
-	left: 5%;
-	top: 5%;
+	left: 50%;
+	top: 0%;
 }
 
+#xpBarID{
+	position: absolute;
+	left: 75%;
+	top: 0%;
+	width: 300px;
+	height: 40px;
+}
+
+.ui-progressbar-value{
+	background: #0080ff;
+}

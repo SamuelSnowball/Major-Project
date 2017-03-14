@@ -102,11 +102,11 @@ function GUI(){
 	
 		// set the nodes
 		//guiPlayerPositionNode.nodeValue = "";  // no decimal place
-		guiXNode.nodeValue = Math.floor(player.get.x);   // 2 decimal places
-		guiYNode.nodeValue = Math.floor(player.get.y);
-		guiZNode.nodeValue = Math.floor(player.get.z);	
+		//guiXNode.nodeValue = Math.floor(player.get.x);   // 2 decimal places
+		//guiYNode.nodeValue = Math.floor(player.get.y);
+		//guiZNode.nodeValue = Math.floor(player.get.z);	
 		
-		xpNode.nodeValue = Math.floor(player.get.xp);
+		//xpNode.nodeValue = Math.floor(player.get.xp);
 	}
 	
 	this.displayCurrentRock = function(){

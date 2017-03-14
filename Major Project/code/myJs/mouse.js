@@ -31,11 +31,17 @@ canvas.addEventListener('mousedown', function(){
 		});
 		$("#currentMissionID").dialog({
 			height: window.innerHeight/3,
-			width: window.innerWidth/3,
+			width: window.innerWidth/3 - window.innerWidth/50,
 			resizable: false,
 			position: {  at: "right bottom-15%"}
 		});
 		
+		$( "#xpBarID" ).progressbar({
+			value: 100,
+		})
+		
+
+
 	})
 	
 	if(gameRunning === false){
@@ -80,7 +86,7 @@ canvas.addEventListener('mousedown', function(){
 	document.getElementById("nearestRockID").style.visibility = "visible";
 	document.getElementById("currentMissionID").style.visibility = "visible";
 	document.getElementById("menu").style.visibility = "visible";
-	
+	document.getElementById("xpBarID").style.visibility = "visible";	
 	
 });
 
