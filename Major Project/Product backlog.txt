@@ -14,7 +14,7 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Build GUIs 					(time: 10h) (priority: 6)
 		Prospecting, shows progress bar + particles 	(time: 08h) (priority: 5)
 		Add audio (ongoing) 				(time: 03h) (priority: 4)
-		Add fuel and money features			(time: 08h) (priority: 4)
+		Add ability to harvest and deposit gas		(time: 08h) (priority: 4)
 		Add player inventory 				(time: 08h) (priority: 4)
 		Minimap (Added to bottom GUI)			(time: 10h) (priority: 3)
 

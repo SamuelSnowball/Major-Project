@@ -37,3 +37,11 @@ html, body {
 	width: 300px;
 	height: 40px;
 }
+
+#depositOreID{
+	position: absolute;
+	left: 35%;
+	top: 40%;
+	width: 300px;
+	height: 40px;
+}

@@ -329,6 +329,7 @@ function Player(x, y, z){
 	}
 	
 	var slot0 = document.getElementById("slot0");
+	
 	var slot1 = document.getElementById("slot1");
 	var slot2 = document.getElementById("slot2");
 	var slot3 = document.getElementById("slot3");
@@ -337,19 +338,18 @@ function Player(x, y, z){
 	var slot6 = document.getElementById("slot6");
 	var slot7 = document.getElementById("slot7");
 	
+	
 	var inventorySlotIDs = [];
 	inventorySlotIDs.push(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7);
 	
 	this.renderInventory = function(){
-		var playerInventory = player.get.inventory;
-		
-		for(var i=0; i<8; i++){
-			if(playerInventory[i] === -1){
+		for(var i=0; i<1; i++){
+			if(inventory[i] === -1){
 				//Render empty slot
 				inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
 			}
 			else{
-				inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + playerInventory[i] + ".png)";
+				inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + inventory[i] + ".png)";
 			}
 		}
 		

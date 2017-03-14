@@ -1,8 +1,15 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
+Fix inventory
+	make rock images instead of textures
+	Add depoist at lander, clears array to -1s
 
-Keep inventory, but make rock images instead of textures
+3D Rendering
+	For nearest rock
+	Copy vertices and render them
+	If no rock near player, dont draw	
+
 
 Sector 1 missions
 	Can only move into sector 2 once all sector 1 missions complete
@@ -27,9 +34,6 @@ Laser
 Sprint 4 (13th - 20th March)
 
 	Tackling tasks from product backlog:
-
-		Adding fuel and money features	 
-			Add in money variable, sell ores = get money, use to buy fuel	
 
 		Adding player inventory
 			When prospect rock, adds to inventory

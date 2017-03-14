@@ -53,8 +53,8 @@ function Lander(){
 	
 	/*
 	Show shop GUI when in range, later on when press a key open it
-	*
-	this.displayShopInterface = function(){
+	*/
+	this.depositPlayerOre = function(){
 	
 		// Calculate distance from player to shop, if in range, display shop
 		var distance = Math.sqrt( 
@@ -63,18 +63,17 @@ function Lander(){
 			Math.pow( (z - player.get.z), 2) 
 		);
 		
-		if(distance > 5){
-			document.getElementById("depositOreOverlay").style.visibility = "visible";
-			if(){
-				
-			}
+		if(distance < 10){
+			document.getElementById("depositOreID").style.visibility = "visible";	
+			$( "#depositOreID" ).progressbar();
+			player.set.inventory = [-1, -1, -1, -1, -1, -1, -1, -1];
 		}
 		else{
-			document.getElementById("depositOreOverlay").style.visibility = "hidden";
+			document.getElementById("depositOreID").style.visibility = "hidden";	
 		}
 		
 	}
-	*/
+	
 	
 	
 }

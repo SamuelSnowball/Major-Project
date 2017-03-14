@@ -57,7 +57,11 @@ canvas.addEventListener('mousedown', function(){
 			draggable: false
 		});
 		
-		
+		$( "#depositOreID" ).progressbar({
+			closeOnEscape: false,
+			draggable: false
+		})
+	
 		$( "#xpBarID" ).progressbar({
 			value: 100,
 			closeOnEscape: false,
@@ -115,7 +119,6 @@ canvas.addEventListener('mousedown', function(){
 	document.getElementById("menu").style.visibility = "visible";
 	document.getElementById("xpBarID").style.visibility = "visible";	
 	document.getElementById("inventoryOverlayID").style.visibility = "visible";	
-	
 	
 });
 

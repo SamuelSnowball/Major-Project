@@ -28,10 +28,10 @@
 		<table height="100%" width="100%">
 		
 		  <tr>
-			<td id = "slot0" background="resources/rocks/empty.png"></td>
-			<td id = "slot1" background="resources/rocks/empty.png"></td> 
-			<td id = "slot2" background="resources/rocks/empty.png"></td>
-			<td id = "slot3" background="resources/rocks/empty.png"></td>
+			<td id = "slot0" background="resources/rocks/empty.png">1</td>
+			<td id = "slot1" background="resources/rocks/empty.png">23</td> 
+			<td id = "slot2" background="resources/rocks/empty.png">23</td>
+			<td id = "slot3" background="resources/rocks/empty.png">23</td>
 		  </tr>         
 							
 		  <tr>             
@@ -57,6 +57,13 @@
 <!-- Prospecting Bar --> 
 <div id="prospectingBarID" style="visibility: hidden">Prospecting...</div>
 <!-- Prospecting Bar --> 
+<!-- ######################### -->
+
+
+<!-- ######################### -->
+<!-- Deposit ore message --> 
+<div id="depositOreID" style="visibility: hidden">Deposited ore!</div>
+<!-- Deposit ore message --> 
 <!-- ######################### -->
 
 
@@ -256,7 +263,7 @@ function render(){
 	//gui.renderInventory();
 	
 	lander.render();
-	//lander.displayShopInterface();
+	lander.depositPlayerOre();
 	
 	player.renderInventory();
 	

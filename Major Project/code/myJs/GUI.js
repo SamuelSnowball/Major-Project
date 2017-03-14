@@ -141,12 +141,15 @@ function GUI(){
 		var playerInventory = player.get.inventory;
 		
 		for(var i=0; i<8; i++){
+			console.log(playerInventory[i]);
 			if(playerInventory[i] === -1){
 				//Render empty slot
 				inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
+				
 			}
 			else{
 				inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + playerInventory[i] + ".png)";
+				console.log("url(resources/rocks/" + playerInventory[i] + ".png");
 			}
 		}
 	}
