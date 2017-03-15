@@ -181,10 +181,11 @@ function Terrain(){
 		heightMap[terrainRows][terrainColumns];
 	*/
 	function createHeightMap(){
-		heightMap = new Array(terrainRows); 
+		heightMap = new Array(terrainRows).fill(0); 
 		for(var i=0; i<terrainRows; i++){
-			heightMap[i] = new Array(terrainColumns);
+			heightMap[i] = new Array(terrainColumns).fill(0);
 		}
+		
 	}
 	
 	/*
@@ -238,7 +239,7 @@ function Terrain(){
 				}
 				else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
 					var stacked = stackNoise(x,y,8);
-					heightMap[x][y] = stacked * 50;					
+					heightMap[x][y] = stacked * 50;						
 				}
 				else if(y > terrainRows-quadrantRowSize && x < terrainRows){
 					var stacked = stackNoise(x,y,8);
@@ -256,7 +257,6 @@ function Terrain(){
 		}
 		xOff = 0;
 		yOff = 0;
-
 	}
 	
 	/*

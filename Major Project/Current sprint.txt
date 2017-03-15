@@ -3,7 +3,8 @@ it will be moved into the product backlog once the sprint has ended.
 
 To do:
 	Make player take damage if just collided
-		Fix rock collision first
+	Change xp to hp? or both
+
 	New rocks in areas
 	
 	Display message, cant navigate that terrain! would kill rover etc for map boundaries

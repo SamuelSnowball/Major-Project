@@ -12,9 +12,6 @@ html, body {
 }
 
 .ui-dialog.ui-widget-content { opacity: 0.5; background: black;}
-.ui-progressbar-value{
-	background: #0080ff;
-}
 
 #menu{
 	position: absolute;
@@ -22,12 +19,25 @@ html, body {
 	top: 0%;
 }
 
+.ui-progressbar-value{
+	background: #0080ff;
+}
 #xpBarID{
 	position: absolute;
 	left: 75%;
 	top: 0%;
 	width: 300px;
 	height: 40px;
+}
+
+
+#healthBarID{
+	position: absolute;
+	left: 75%;
+	top: 10%;
+	width: 300px;
+	height: 40px;
+	background: #ff0000;
 }
 
 #prospectingBarID{

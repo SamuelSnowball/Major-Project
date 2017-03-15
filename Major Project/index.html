@@ -52,6 +52,11 @@
 <!-- XP Bar --> 
 <!-- ######################### -->
 
+<!-- ######################### -->
+<!-- XP Bar --> 
+<div id="healthBarID" style="visibility: hidden">Health</div>
+<!-- XP Bar --> 
+<!-- ######################### -->
 
 <!-- ######################### -->
 <!-- Prospecting Bar --> 
@@ -246,7 +251,7 @@ function render(){
 			gameTime = 0;
 		}
 	}
-	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
+	console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
 	
 	player.movePlayer();
 	player.assignPlayerQuadrant();
@@ -290,10 +295,12 @@ function setup(){
 	gameRunning = true;
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
 	
-	worldState.loadWorld();
+	//worldState.loadWorld();
 	//gui.setup();
 	
-
+	player.set.x = 200;
+	player.set.y = 3;
+	player.set.z = 200;
 
 	render();
 }

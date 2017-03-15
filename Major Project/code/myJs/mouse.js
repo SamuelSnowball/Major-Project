@@ -70,6 +70,11 @@ canvas.addEventListener('mousedown', function(){
 			closeOnEscape: false,
 			draggable: false
 		})
+		$( "#healthBarID" ).progressbar({
+			value: 100,
+			closeOnEscape: false,
+			draggable: false
+		})
 		$( "#prospectingBarID" ).progressbar({
 			value: prospectingBarValue,
 			closeOnEscape: false,
@@ -116,13 +121,14 @@ canvas.addEventListener('mousedown', function(){
 	document.getElementById("inventoryOverlay").style.visibility = "visible";
 	*/
 	
+	
 	document.getElementById("minimapID").style.visibility = "visible";
 	document.getElementById("nearestRockID").style.visibility = "visible";
 	document.getElementById("currentMissionID").style.visibility = "visible";
 	document.getElementById("menu").style.visibility = "visible";
 	document.getElementById("xpBarID").style.visibility = "visible";	
 	document.getElementById("inventoryOverlayID").style.visibility = "visible";	
-	
+	document.getElementById("healthBarID").style.visibility = "visible";	
 });
 
 

@@ -172,22 +172,18 @@ function CollisionTester(){
 		if(player.get.x < terrainRows/numberQuadrantRows && player.get.z < terrainRows){
 			player.moveForwardOrBackward();
 			colliding = true;
-			console.log("??");
 		}
 		else if(player.get.x > terrainRows-numberQuadrantRows && player.get.z < terrainRows){
 			player.moveForwardOrBackward();
 			colliding = true;
-			console.log("??");
 		}
 		else if(player.get.z < terrainRows/numberQuadrantRows && player.get.x < terrainRows){
 			player.moveForwardOrBackward();
 			colliding = true;
-			console.log("??");
 		}
 		else if(player.get.z > terrainRows-numberQuadrantRows && player.get.x < terrainRows){
 			player.moveForwardOrBackward();
 			colliding = true;
-			console.log("??");
 		}
 		else{
 			colliding = false;
