@@ -127,7 +127,7 @@ function CollisionTester(){
 				/*
 				Check if they're too close, move them back
 				*/
-				if(distance < objRocks[i].scale * 3 ){
+				if(distance < objRocks[i].scale * 1.5 ){
 					player.moveForwardOrBackward();
 				}
 				

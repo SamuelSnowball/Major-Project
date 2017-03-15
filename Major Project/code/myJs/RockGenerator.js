@@ -50,12 +50,12 @@ function RockGenerator(){
 		this.id = id;
 	}
 	
-	/*
-	Public because otherwise terrain doesn't generate fast enough?
-	*/
-	this.createRocks = function(){
+	createRocks();
+	
+
+	function createRocks(){
 		//numRocks = 3;
-		for(var i=0; i<15; i++){
+		for(var i=0; i<35; i++){
 			createObjRock(objRockText0, rockTexture0, 0, 0);
 			createObjRock(objRockText0, rockTexture1, 1, 0);
 			

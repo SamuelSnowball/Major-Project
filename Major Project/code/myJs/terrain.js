@@ -86,7 +86,6 @@ function Terrain(){
 				
 			}
 		}
-		
 	}
 	
 	// Create, fill and edit heightMap data

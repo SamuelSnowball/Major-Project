@@ -174,12 +174,12 @@
 
 <!-- Named properly -->
 <script src="code/myJs/CollisionTester.js"></script>
+<script src="code/myJs/Terrain.js"></script>
 <script src="code/myJs/RockGenerator.js"></script>
 <script src="code/myJs/GUI.js"></script>
 <script src="code/myJs/LoadingScreen.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
 <script src="code/myJs/WaterSystem.js"></script>
-<script src="code/myJs/Terrain.js"></script>
 <script src="code/myJs/Player.js"></script>
 <script src="code/myJs/MissionAssigner.js"></script>
 <script src="code/myJs/Sound.js"></script>
@@ -206,13 +206,15 @@ var loadingScreen = new LoadingScreen();
 
 
 var player = new Player(5, 1, 5); 
+
 var terrain = new Terrain();
+var rockGenerator = new RockGenerator();
 
 var worldState = new WorldState(); //Loads and saves the world
 //var gui = new GUI();
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
-var rockGenerator = new RockGenerator();
+
 var waterSystem = new WaterSystem();
 //var missionAssigner = new MissionAssigner();
 var sound = new Sound();
@@ -290,8 +292,8 @@ function setup(){
 	
 	worldState.loadWorld();
 	//gui.setup();
+	
 
-	rockGenerator.createRocks();
 
 	render();
 }
