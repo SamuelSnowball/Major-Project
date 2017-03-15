@@ -4,13 +4,9 @@
 
 Things left to add to the project: (Estimation time in hours, 10 priority is highest)
 
-	Core features:
+	Features left to implement:
 		Loading and saving functions (ongoing) 		(time: 03h) (priority: 9)
-		Add in rocks (ongoing)				(time: 10h) (priority: 8)
 		Create missions for user 			(time: 10h) (priority: 8)
-		Add shop					(time: 15h) (priority: 8)
-		Build terrain (ongoing) 			(time: 10h) (priority: 6)
-		Collision with rocks (ongoing) 			(time: 03h) (priority: 6)
 		Build GUIs 					(time: 10h) (priority: 6)
 		Prospecting, shows progress bar + particles 	(time: 08h) (priority: 5)
 		Add audio (ongoing) 				(time: 03h) (priority: 4)
@@ -43,7 +39,7 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 	Current features:
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
 		Terrain 					(time: 30h) (priority: 10)
-		Some rocks, with collision			(time: 08h) (priority: 8)
+		Some rocks, with collision			(time: 20h) (priority: 8)
 		Collision with terrain (ongoing) 		(time: 08h) (priority: 6)
 		Texturing terrain 				(time: 05h) (priority: 5)
 		Water, with specular lighting			(time: 12h) (priority: 4)

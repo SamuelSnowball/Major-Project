@@ -8,7 +8,8 @@ Fix inventory
 3D Rendering
 	For nearest rock
 	Copy vertices and render them
-	If no rock near player, dont draw	
+	If no rock near player, dont draw
+	in render, translate its position to screenwidth/5 etc	
 
 
 Sector 1 missions
