@@ -169,6 +169,9 @@ function Terrain(){
 	this.get = {
 		get getTerrainRows(){
 			return terrainRows;
+		},
+		get getNumberQuadrantRows(){
+			return numberQuadrantRows;
 		}
 	};
 	
@@ -224,51 +227,37 @@ function Terrain(){
 		//Does for entire map
 		for(var x=0; x<terrainRows; x++){
 			for(var y=0; y<terrainRows; y++){
-				var stacked = stackNoise(x,y,8);
-				heightMap[x][y] = stacked * 15;
+				// Left row out of bounds section
+				if(x < terrainRows/numberQuadrantRows && y < terrainRows){
+					var stacked = stackNoise(x,y,8);
+					heightMap[x][y] = stacked * 50;					
+				}
+				// Right row out of bounds section
+				else if(x > terrainRows-quadrantRowSize && y < terrainRows){
+					var stacked = stackNoise(x,y,8);
+					heightMap[x][y] = stacked * 50;	
+				}
+				else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
+					var stacked = stackNoise(x,y,8);
+					heightMap[x][y] = stacked * 50;					
+				}
+				else if(y > terrainRows-quadrantRowSize && x < terrainRows){
+					var stacked = stackNoise(x,y,8);
+					heightMap[x][y] = stacked * 50;						
+				}
+				else{
+					var stacked = stackNoise(x,y,8);
+					heightMap[x][y] = stacked * 15;		
+				}
+				
+
 			}
 			xOff = 0;
 			yOff += offsetIncrement;
 		}
 		xOff = 0;
 		yOff = 0;
-		
-		/*
-		Remember 0->383 = 128*3, NOT 384
-		
-		Spawn section boundaries:
-			(384x, 384z)
-			(384x, 640z)
-			(640x, 384z)
-			(640x, 640z)
-		*/
-		
-		//Spawn section
-		for(var x=383; x<=639; x++){
-			for(var y=383; y<=639; y++){
-				var stacked = stackNoise(x,y,8);
-				heightMap[x][y] = stacked * 10;
-			}
-			xOff = 0;
-			yOff += offsetIncrement;
-		}
-		xOff = 0;
-		yOff = 0;		
-		
-		//Red section
-		/*
-		for(var x=terrainRows/2; x<terrainRows; x++){
-			for(var y=0; y<terrainRows; y++){
-				var stacked = stackNoise(x,y,8);
-				heightMap[x][y] = stacked * 50;
-			}
-			xOff = 0;
-			yOff += offsetIncrement;
-		}
-		xOff = 0;
-		yOff = 0;		
-		*/
-		
+
 	}
 	
 	/*

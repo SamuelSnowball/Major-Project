@@ -1,6 +1,23 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
+To do:
+	Make player take damage if just collided
+		Fix rock collision first
+	New rocks in areas
+	
+	Display message, cant navigate that terrain! would kill rover etc for map boundaries
+
+	Sector 1 missions
+		Can only move into sector 2 once all sector 1 missions complete
+	Sector 2 missions
+
+	Terrain:
+		Have insanely spiky regions on the borders of the map,
+		that the rover cant drive on!!
+		Means they wont stare into nothing
+	
+
 Fix inventory
 	make rock images instead of textures
 	Add depoist at lander, clears array to -1s
@@ -11,11 +28,6 @@ Fix inventory
 	If no rock near player, dont draw
 	in render, translate its position to screenwidth/5 etc	
 
-
-Sector 1 missions
-	Can only move into sector 2 once all sector 1 missions complete
-Sector 2 missions
-	
 
 add to test table
 

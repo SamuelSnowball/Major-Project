@@ -66,6 +66,11 @@
 <!-- Deposit ore message --> 
 <!-- ######################### -->
 
+<!-- ######################### -->
+<!-- OutOfBounds message --> 
+<div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
+<!-- OutOfBounds messagee --> 
+<!-- ######################### -->
 
 <!-- ######################### -->
 <!-- Minimap --> 
@@ -285,8 +290,9 @@ function setup(){
 	
 	worldState.loadWorld();
 	//gui.setup();
-	
-		
+
+	rockGenerator.createRocks();
+
 	render();
 }
 

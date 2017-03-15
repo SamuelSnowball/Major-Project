@@ -61,7 +61,10 @@ canvas.addEventListener('mousedown', function(){
 			closeOnEscape: false,
 			draggable: false
 		})
-	
+		$( "#outOfBoundsID" ).progressbar({
+			closeOnEscape: false,
+			draggable: false
+		})
 		$( "#xpBarID" ).progressbar({
 			value: 100,
 			closeOnEscape: false,

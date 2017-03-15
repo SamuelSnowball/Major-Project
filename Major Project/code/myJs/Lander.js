@@ -4,8 +4,8 @@ function Lander(){
 	
 	var landerMesh;
 	
-	var x = 415;
-	var z = 415;
+	var x = 325;
+	var z = 325;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = z;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = x;
 	var y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue - 0.5;

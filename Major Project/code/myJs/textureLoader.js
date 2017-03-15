@@ -49,7 +49,7 @@ function TextureLoader(){
 				  new Uint8Array([255, 0, 0, 255]));
 				  
 		// Map texture
-		myPerlinTexture = new Texture("resources/terrain/atlas2.png", 10, 0);
+		myPerlinTexture = new Texture("resources/terrain/map.png", 10, 0);
 		
 		/*
 		Rock textures

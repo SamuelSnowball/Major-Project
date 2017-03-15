@@ -18,7 +18,7 @@ html, body {
 
 #menu{
 	position: absolute;
-	left: 0%;
+	left: 20%;
 	top: 0%;
 }
 
@@ -39,6 +39,14 @@ html, body {
 }
 
 #depositOreID{
+	position: absolute;
+	left: 35%;
+	top: 40%;
+	width: 300px;
+	height: 40px;
+}
+
+#outOfBoundsID{
 	position: absolute;
 	left: 35%;
 	top: 40%;

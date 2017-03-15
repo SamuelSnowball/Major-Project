@@ -60,6 +60,9 @@ Before demo/final release:
 	
 Add a release version after each sprint as well
 
+Water notes:
+	Could create trench in terrain and have water in it, easy
+
 /////////////////////////////////////////////////////////////////////
 ####################### BEFORE STARTING SCRUM #######################
 /////////////////////////////////////////////////////////////////////

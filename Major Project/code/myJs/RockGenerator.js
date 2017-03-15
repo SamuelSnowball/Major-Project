@@ -36,8 +36,6 @@ function RockGenerator(){
 	var objRockText4 = utility.httpGet("resources/rocks/rockObjs/rock_4.txt");
 	var objRockText5 = utility.httpGet("resources/rocks/rockObjs/rock_5.txt");
 
-	createRocks();
-	
 	function Rock(xPos, yPos, zPos, width, xRotation, yRotation, zRotation, scale, texture, numIndices, id){
 		this.x = xPos;
 		this.y = yPos;
@@ -53,27 +51,64 @@ function RockGenerator(){
 	}
 	
 	/*
-	Pass in quadrant rock should be in as well?
+	Public because otherwise terrain doesn't generate fast enough?
 	*/
-	function createRocks(){
+	this.createRocks = function(){
 		//numRocks = 3;
 		for(var i=0; i<15; i++){
-			createObjRock(objRockText0, rockTexture0, 0);
-			createObjRock(objRockText0, rockTexture1, 1);
+			createObjRock(objRockText0, rockTexture0, 0, 0);
+			createObjRock(objRockText0, rockTexture1, 1, 0);
+			
+			createObjRock(objRockText1, rockTexture2, 2, 1);
+			createObjRock(objRockText1, rockTexture3, 3, 1);
+			createObjRock(objRockText1, rockTexture4, 4, 1);
+			
+			createObjRock(objRockText2, rockTexture5, 5, 2);
+			createObjRock(objRockText2, rockTexture6, 6, 2);
+			createObjRock(objRockText2, rockTexture7, 7, 2);
 		}
 	}
 	
 	/*
 	Parameter, the obj file to use
 	*/
-	function createObjRock(objText, texture, id){
+	function createObjRock(objText, texture, id, area){
+		
+		var minXSpawn, maxXSpawn;
+		var minZSpawn, maxZSpawn;
+		switch(area){
+			case 0:
+				minXSpawn = 0;
+				maxXSpawn = 512;
+				minZSpawn = 0;
+				maxZSpawn = 512;
+				break;
+			case 1:
+				minXSpawn = 0;
+				maxXSpawn = 512;
+				minZSpawn = 512;
+				maxZSpawn = 1024;
+				break;
+			case 2:
+				minXSpawn = 512;
+				maxXSpawn = 1024;
+				minZSpawn = 0;
+				maxZSpawn = 512;
+				break;
+			case 3:
+				minXSpawn = 512;
+				maxXSpawn = 1024;
+				minZSpawn = 512;
+				maxZSpawn = 1024;
+				break;				
+		}
 	
 		var mesh = new OBJ.Mesh(objText);
 		OBJ.initMeshBuffers(gl, mesh);
 
 		// Generate x,z position, use those to find the rock height
-		var positionX = utility.randomIntBetween( 384, 640 );
-		var positionZ = utility.randomIntBetween( 384, 640 );
+		var positionX = utility.randomIntBetween( minXSpawn, maxXSpawn );
+		var positionZ = utility.randomIntBetween( minZSpawn, maxZSpawn );
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = positionZ;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = positionX;
 		var rockHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;

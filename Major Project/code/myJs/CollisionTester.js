@@ -3,6 +3,12 @@ function CollisionTester(){
 	
 	var playerHeightIncrement = 0.01;
 	
+	// Needed to test player map boundaries
+	var terrainRows = terrain.get.getTerrainRows;
+	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
+					
+					
+	
 	/*
 	Moves the player when traversing over terrain.
 
@@ -154,21 +160,50 @@ function CollisionTester(){
 		}
 		*/
 	}
-					
+	
+
 	this.testPlayerMapBoundaries = function(){
+	
+		var colliding = false;
 		
 		/*
-		Stop them going out of section 1, if < 5 xp.
+		Stop them going out of section
 		*/
-		if(player.get.x <= 384 || player.get.x >= 640 || player.get.z <= 384 || player.get.z >= 640){
-			if(player.get.xp < 5){
-				player.moveForwardOrBackward();
-			}
+		if(player.get.x < terrainRows/numberQuadrantRows && player.get.z < terrainRows){
+			player.moveForwardOrBackward();
+			colliding = true;
+			console.log("??");
+		}
+		else if(player.get.x > terrainRows-numberQuadrantRows && player.get.z < terrainRows){
+			player.moveForwardOrBackward();
+			colliding = true;
+			console.log("??");
+		}
+		else if(player.get.z < terrainRows/numberQuadrantRows && player.get.x < terrainRows){
+			player.moveForwardOrBackward();
+			colliding = true;
+			console.log("??");
+		}
+		else if(player.get.z > terrainRows-numberQuadrantRows && player.get.x < terrainRows){
+			player.moveForwardOrBackward();
+			colliding = true;
+			console.log("??");
+		}
+		else{
+			colliding = false;
 		}
 		
-		/*
-		Level boundaries based on player level
-		*/
+		// Show GUI element
+		if(colliding){
+			document.getElementById("outOfBoundsID").style.visibility = "visible";	
+			$( "#outOfBoundsID" ).progressbar({
+				
+			})
+		}
+		else{
+			document.getElementById("outOfBoundsID").style.visibility = "hidden";	
+		}
+		
 	}
 	
 	/*

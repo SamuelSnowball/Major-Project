@@ -206,13 +206,20 @@ function Player(x, y, z){
 	Push them different ways based on movement direction
 	*/	
 	this.moveForwardOrBackward = function(){
+		
 		if(moveForward === true){	
-			x += (cameraPosition[0] - cameraTarget[0]);
-			z += (cameraPosition[2] - cameraTarget[2]);
+			x += (cameraPosition[0] - cameraTarget[0]) * 15;
+			z += (cameraPosition[2] - cameraTarget[2]) * 15;
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(z); //inversed after rebuilt terrain
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(x); //inversed after rebuilt terrain
+			y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.2;
 		}
 		else if(moveBack == true){
-			x -= (cameraPosition[0] - cameraTarget[0]);
-			z -= (cameraPosition[2] - cameraTarget[2]);
+			x -= (cameraPosition[0] - cameraTarget[0]) * 15;
+			z -= (cameraPosition[2] - cameraTarget[2]) * 15;
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(z); //inversed after rebuilt terrain
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(x); //inversed after rebuilt terrain
+			y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.2;
 		}
 		else{
 		
