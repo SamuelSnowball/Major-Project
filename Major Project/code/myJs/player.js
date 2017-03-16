@@ -35,6 +35,8 @@ function Player(x, y, z){
 	var prospectingSpeed = 0.5;
 	var xp = 0;
 	
+	var health = 100;
+	
 	var hasMission = false; // if they have a mission, true false
 	var currentMission; // a number representing what mission they have
 	
@@ -224,6 +226,12 @@ function Player(x, y, z){
 		else{
 		
 		}	
+		
+		health -= 10;;
+		document.getElementById("healthBarID").style.visibility = "visible";	
+		$( "#healthBarID" ).progressbar({
+			value: health,
+		})
 	}
 	
 	/*

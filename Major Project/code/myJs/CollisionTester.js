@@ -103,6 +103,8 @@ function CollisionTester(){
 		*/
 		player.set.inProspectingRange = false;
 		
+		var playerInRangeOfAnyRock = false;
+		
 		//Retrieve rocks array from the rockGenerator class
 		var objRocks = rockGenerator.getObjRocksArray.getRocks;
 		for(var i=0; i<objRocks.length; i++){
@@ -118,8 +120,20 @@ function CollisionTester(){
 				
 			if(distance > objRocks[i].scale * 5){
 				// Player too far away from rock to prospect
+				// Hide inventory full interface
+				
 			}
 			else{
+				playerInRangeOfAnyRock = true;
+				// If they're in range of rock and have no space, tell them inventory is full
+				if(playerInRangeOfAnyRock === true && !player.get.inventory.includes(-1)){
+					console.log("this happened");
+					document.getElementById("inventoryBarID").style.visibility = "visible";	
+					$( "#inventoryBarID" ).progressbar({
+							
+					})
+				}
+			
 				// They're in range prospecting, update GUI with current rock
 				player.set.inProspectingRange = true; 
 				isProspecting(objRocks[i]);
@@ -132,6 +146,12 @@ function CollisionTester(){
 				}
 				
 			}
+			
+			// Inventory is full and they need to empty it
+			if(playerInRangeOfAnyRock === false && !player.get.inventory.includes(-1)){
+				document.getElementById("inventoryBarID").style.visibility = "hidden";	
+			}
+			
 		}	
 		/*
 		var triRocks = rockGenerator.getTriRocksArray.getRocks;
@@ -222,25 +242,28 @@ function CollisionTester(){
 			if(player.get.prospecting === true){
 			
 				// Slowly increment the players prospecting bar, and show the GUI for it
-				prospectingBarValue += player.get.prospectingSpeed;
+				prospectingBarValue += 10;//player.get.prospectingSpeed;
 				document.getElementById("prospectingBarID").style.visibility = "visible";	
 				$( "#prospectingBarID" ).progressbar({
 					value: prospectingBarValue,
 				})
 				
-				// Check if prospect bar is 100%
-				if(prospectingBarValue >= 100){
+				/*
+				// If they're prospecting and have no space, tell them inventory is full
+				if(!player.get.inventory.includes(-1)){
+					document.getElementById("inventoryBarID").style.visibility = "visible";	
+					$( "#inventoryBarID" ).progressbar({
+							
+					})
+				}
+				*/
+				
+				// Check if prospect bar is 100% && Check if there's a free space in player inventory
+				if(prospectingBarValue >= 100 && player.get.inventory.includes(-1)){
 					// Bar has reached 100%
-					// Check if there's a free space in player inventory
-					if(player.get.inventory.includes(-1)){
-						rock.texture = depletedTexture;
-						player.add.xp = 1;
-						player.addToInventory(rock);
-					}
-					else{
-						// Display message saying inventory is full!
-					}
-					
+					rock.texture = depletedTexture;
+					player.add.xp = 1;
+					player.addToInventory(rock);	
 					// Reset the value
 					prospectingBarValue = 0;
 				}
@@ -256,6 +279,9 @@ function CollisionTester(){
 				// Hide the prospecting bar
 				document.getElementById("prospectingBarID").style.visibility = "hidden";	
 			}
+			
+			
+			
 		}
 	}	
 

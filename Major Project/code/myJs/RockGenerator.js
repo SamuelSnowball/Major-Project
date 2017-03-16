@@ -113,8 +113,6 @@ function RockGenerator(){
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = positionX;
 		var rockHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
 		
-		//console.log(positionX + ", " + positionZ);
-		
 		mesh.x = positionX;
 		mesh.y = rockHeight;
 		mesh.z = positionZ;

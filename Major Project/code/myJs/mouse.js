@@ -80,7 +80,11 @@ canvas.addEventListener('mousedown', function(){
 			closeOnEscape: false,
 			draggable: false
 		})
-
+		$( "#inventoryBarID" ).progressbar({
+			value: prospectingBarValue,
+			closeOnEscape: false,
+			draggable: false
+		})
 	})
 	
 	if(gameRunning === false){
@@ -113,15 +117,6 @@ canvas.addEventListener('mousedown', function(){
 	}
 	
 	//Show GUI elements
-	/*
-	document.getElementById("xpOverlay").style.visibility = "visible";
-	document.getElementById("minimapOverlay").style.visibility = "visible";
-	document.getElementById("missionOverlay").style.visibility = "visible";
-	document.getElementById("nearestRockOverlay").style.visibility = "visible";
-	document.getElementById("inventoryOverlay").style.visibility = "visible";
-	*/
-	
-	
 	document.getElementById("minimapID").style.visibility = "visible";
 	document.getElementById("nearestRockID").style.visibility = "visible";
 	document.getElementById("currentMissionID").style.visibility = "visible";

@@ -161,7 +161,13 @@ function Terrain(){
 			temporaryHeightMapZ = name;
 		},
 		get getTemporaryHeightMapValue(){
-			return heightMap[temporaryHeightMapZ][temporaryHeightMapX];
+			if(temporaryHeightMapZ > 0 && temporaryHeightMapZ < 1024
+			&& temporaryHeightMapX > 0 && temporaryHeightMapX < 1024){
+				return heightMap[temporaryHeightMapZ][temporaryHeightMapX];
+			}
+			else{
+				return 0;
+			}
 		}
 	}
 	//Needed in rockGenerator, careful might be quadrantRows
