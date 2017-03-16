@@ -142,13 +142,13 @@ function CollisionTester(){
 				Check if they're too close, move them back
 				*/
 				if(distance < objRocks[i].scale * 1.5 ){
-					player.moveForwardOrBackward();
+					movePlayerForwardOrBackward(true);
 				}
 				
 			}
 			
-			// Inventory is full and they need to empty it
-			if(playerInRangeOfAnyRock === false && !player.get.inventory.includes(-1)){
+			// If player not in range of rock, hide inventory full message
+			if(playerInRangeOfAnyRock === false){
 				document.getElementById("inventoryBarID").style.visibility = "hidden";	
 			}
 			
@@ -181,6 +181,53 @@ function CollisionTester(){
 		*/
 	}
 	
+	/*
+	Moves the player forwards/backwards depending on the direction they where moving when they collided
+
+	If direction === 1
+		Then player has collided moving forwards, so move the player backwards
+	If direction === -1
+		Then player has collided moving backward, so move the player forwards
+	*/
+	function pushPlayer(direction){
+		player.add.x = direction * (cameraPosition[0] - cameraTarget[0]) * 15;
+		player.add.z = direction * (cameraPosition[2] - cameraTarget[2]) * 15;
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(player.get.z); 
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(player.get.x);
+		player.add.y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.2;
+	}
+	
+
+	
+	/*
+	Check if they're going forwards or backwards
+	Push them different ways based on movement direction
+	
+	If parameter is true, they collided with a rock, decrement player HP
+	else, they collided with edge of map, keep HP same
+	*/	
+	function movePlayerForwardOrBackward(rockCollision){
+		
+		if(player.get.movingForward === true){	
+			pushPlayer(1);
+		}
+		else if(player.get.movingBackward === true){
+			pushPlayer(-1);
+		}
+		else{
+		
+		}	
+		
+		// If they collided with a rock, make them lose HP
+		if(rockCollision){
+			player.add.health = -10;
+			document.getElementById("healthBarID").style.visibility = "visible";	
+			$( "#healthBarID" ).progressbar({
+				value: player.get.health,
+			})
+		}
+		
+	}
 
 	this.testPlayerMapBoundaries = function(){
 	
@@ -190,19 +237,19 @@ function CollisionTester(){
 		Stop them going out of section
 		*/
 		if(player.get.x < terrainRows/numberQuadrantRows && player.get.z < terrainRows){
-			player.moveForwardOrBackward();
+			movePlayerForwardOrBackward(false);
 			colliding = true;
 		}
 		else if(player.get.x > terrainRows-numberQuadrantRows && player.get.z < terrainRows){
-			player.moveForwardOrBackward();
+			movePlayerForwardOrBackward(false);
 			colliding = true;
 		}
 		else if(player.get.z < terrainRows/numberQuadrantRows && player.get.x < terrainRows){
-			player.moveForwardOrBackward();
+			movePlayerForwardOrBackward(false);
 			colliding = true;
 		}
 		else if(player.get.z > terrainRows-numberQuadrantRows && player.get.x < terrainRows){
-			player.moveForwardOrBackward();
+			movePlayerForwardOrBackward(false);
 			colliding = true;
 		}
 		else{

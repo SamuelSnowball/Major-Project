@@ -7,6 +7,7 @@ To do:
 	New rocks in areas
 	
 	Display message, cant navigate that terrain! would kill rover etc for map boundaries
+		Fix! add to test table
 
 	Sector 1 missions
 		Can only move into sector 2 once all sector 1 missions complete
@@ -99,6 +100,7 @@ Sprint 4 (13th - 20th March)
 		
 			Game mechanics
 				Adding prospect bar
+	
 	
 
 

@@ -40,6 +40,25 @@ function Player(x, y, z){
 	var hasMission = false; // if they have a mission, true false
 	var currentMission; // a number representing what mission they have
 	
+	/*
+	Handles user input and changes the 4 movement variables
+	The movement variables are used in the player class
+
+	2 Arrow keys:
+		Forward (up key)
+		Back (down key)
+		
+	W Key:
+		Moves camera up
+		
+	S Key:
+		Moves camera down
+	*/
+	var moveUp = false, 
+		moveDown = false, 
+		moveForward = false, 
+		moveBack = false;	
+	
 	this.get = {
 		get prospecting(){
 			return prospecting;
@@ -76,6 +95,15 @@ function Player(x, y, z){
 		},
 		get prospectingSpeed(){
 			return prospectingSpeed;
+		},
+		get movingForward(){
+			return moveForward;
+		},
+		get movingBackward(){
+			return moveBack;
+		},
+		get health(){
+			return health;
 		}
 	}	
 	
@@ -115,32 +143,26 @@ function Player(x, y, z){
 	this.add = {
 		set xp(xpParam){
 			xp += xpParam;
+		},
+		set health(hpParam){
+			health += hpParam;
+		},
+		set x(xParam){
+			x += xParam;
+		},
+		set y(yParam){
+			y += yParam;
+		},
+		set z(zParam){
+			z += zParam;
 		}
+		
 	}
 	
 	
 	setupPlayerMovement();
 	setupPlayerBuffers();
 	
-	
-	/*
-	Handles user input and changes the 4 movement variables
-	The movement variables are used in the player class
-
-	2 Arrow keys:
-		Forward (up key)
-		Back (down key)
-		
-	W Key:
-		Moves camera up
-		
-	S Key:
-		Moves camera down
-	*/
-	var moveUp = false, 
-		moveDown = false, 
-		moveForward = false, 
-		moveBack = false;	
 		
 	function setupPlayerMovement(){
 		document.addEventListener('keydown', function(event){
@@ -203,36 +225,6 @@ function Player(x, y, z){
 		});
 	}
 	
-	/*
-	Check if they're going forwards or backwards
-	Push them different ways based on movement direction
-	*/	
-	this.moveForwardOrBackward = function(){
-		
-		if(moveForward === true){	
-			x += (cameraPosition[0] - cameraTarget[0]) * 15;
-			z += (cameraPosition[2] - cameraTarget[2]) * 15;
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(z); //inversed after rebuilt terrain
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(x); //inversed after rebuilt terrain
-			y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.2;
-		}
-		else if(moveBack == true){
-			x -= (cameraPosition[0] - cameraTarget[0]) * 15;
-			z -= (cameraPosition[2] - cameraTarget[2]) * 15;
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(z); //inversed after rebuilt terrain
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(x); //inversed after rebuilt terrain
-			y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.2;
-		}
-		else{
-		
-		}	
-		
-		health -= 10;;
-		document.getElementById("healthBarID").style.visibility = "visible";	
-		$( "#healthBarID" ).progressbar({
-			value: health,
-		})
-	}
 	
 	/*
 	Checks what key the player is holding down,
