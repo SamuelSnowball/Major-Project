@@ -177,6 +177,9 @@ function Terrain(){
 		},
 		get getNumberQuadrantRows(){
 			return numberQuadrantRows;
+		},
+		get getQuadrantRowSize(){
+			return quadrantRowSize;
 		}
 	};
 	

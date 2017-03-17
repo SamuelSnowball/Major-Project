@@ -5,7 +5,7 @@ function Player(x, y, z){
 	var y = y;
 	var z = z;
 	
-	var movementSpeed = 0.5;
+	var movementSpeed = 1.0;
 	
 	var xRotation = 0;
 	var yRotation = 0;

@@ -6,8 +6,21 @@ function CollisionTester(){
 	// Needed to test player map boundaries
 	var terrainRows = terrain.get.getTerrainRows;
 	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
+	var quadrantRowSize = terrain.get.getQuadrantRowSize;
 					
-					
+	var tempPlayerX = 0;
+	var tempPlayerZ = 0;
+	
+	var mapTopLeftCornerVector = [128, 0, 128];
+	var mapTopRightCornerVector = [896, 0, 128];
+	var mapBottomLeftCornerVector = [128, 0, 896];
+	var mapBottomRightCornerVector = [896, 0, 896];
+	
+	this.testAllCollision = function(){
+		setPlayerHeight();
+		testPlayerRockCollision();
+		testPlayerMapBoundaries();
+	}
 	
 	/*
 	Moves the player when traversing over terrain.
@@ -15,35 +28,28 @@ function CollisionTester(){
 	Uses the players current X and Z position to find what terrain vertex they're nearest to.
 	The players height then gets assigned to the nearest terrain vertex.
 	*/
-	this.setPlayerHeight = function(){
+	function setPlayerHeight(){
 		if(useFog === false){
-			//Player is viewing minimap, dont set their height
+			// Player is viewing minimap, dont set their height
 			return;
 		}
-	
-		/*
-		Use playerX and Z to find value its height in heightMap array
 		
-		playerX,Y,Z can be negative, so turn positive first
+		// Retrieve the players current x and z position
+		tempPlayerX = player.get.x;
+		tempPlayerZ = player.get.z;
 		
-		If it isn't negative, keep it the same and assign it
-		*/
-		var tempPlayerX = 0;
-		var tempPlayerZ = 0;
-		if(player.x < 0){
-			tempPlayerX = player.get.x * -1;
-		}else{
-			tempPlayerX = player.get.x;
-		}
-		if(player.z < 0){
-			tempPlayerZ = player.get.z * -1;
-		}else{
-			tempPlayerZ = player.get.z;
-		}
+		floorTemporaryPlayerCoordinates();
+		var nearestHeight = findNearestTerrainVertex();
+		
+		player.set.y = nearestHeight;
+	}
 
-		/*
-		Player coordinates get floored so they don't screw up the array indexing, must be a integer.
-		*/
+	/*
+	Player coordinates are sometimes decimals, 
+	So get floored so they don't mess up the array indexing,
+	as array indexes must be a integer.
+	*/
+	function floorTemporaryPlayerCoordinates(){
 		if(tempPlayerX / terrain.scale < 0.5){
 			tempPlayerX = Math.floor(tempPlayerX);
 		}else{
@@ -54,34 +60,35 @@ function CollisionTester(){
 			tempPlayerZ = Math.floor(tempPlayerZ);
 		}else{
 			tempPlayerZ = Math.ceil(tempPlayerZ);
-		}
-		
-		/*
-		Need to find what height to position the player at.
-		So need to find what terrain vertex they're nearest to.
-		
-		Do this by passing in the player X and Z coordinates into the heightMap,
-		to return the nearest terrain Y value.
-		
-		Get the nearest height from the heightMap, which is private,
-		So call the getter method
-		*/
+		}	
+	}
+
+	/*
+	Need to find what height to position the player at.
+	So need to find what terrain vertex they're nearest to.
+	
+	Do this by passing in the player X and Z coordinates into the heightMap,
+	to return the corresponding terrain vertex height value.
+	
+	Get the nearest height from the heightMap, which is private,
+	So call the getter method
+	*/	
+	function findNearestTerrainVertex(){
 		var nearestHeight;
-		if(tempPlayerX > 0){ //if tempPlayerX isn't NaN
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = tempPlayerZ; //inversed after rebuilt terrain
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = tempPlayerX; //inversed after rebuilt terrain
-			
+		
+		if(tempPlayerX > 0){ 
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = tempPlayerZ; 
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = tempPlayerX;
 			nearestHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
-		}else{
+		}
+		else{
 			nearestHeight = 0;
 		}
 
-		//Assign the nearest terrain height to the player height
-		player.set.y = nearestHeight + 1;
-
+		// Return the nearest vertex height, +1, otherwise the player would be in the floor
+		// We want the player hovering and moving just over the terrain, not inside of it.
+		return nearestHeight + 1;
 	}
-	
-	
 	
 	/*
 	If they're in prospecting range, allow them to prospect
@@ -91,7 +98,7 @@ function CollisionTester(){
 	and they try to prospect,
 	They get moved back, out of prospect range
 	*/
-	this.testPlayerRockCollision = function(){
+	function testPlayerRockCollision(){
 		
 		/*
 		Say they're not in any prospecting range, then when we check if they are, edit this variable
@@ -190,8 +197,8 @@ function CollisionTester(){
 		Then player has collided moving backward, so move the player forwards
 	*/
 	function pushPlayer(direction){
-		player.add.x = direction * (cameraPosition[0] - cameraTarget[0]) * 15;
-		player.add.z = direction * (cameraPosition[2] - cameraTarget[2]) * 15;
+		player.add.x = direction * (cameraPosition[0] - cameraTarget[0]) * 5;
+		player.add.z = direction * (cameraPosition[2] - cameraTarget[2]) * 5;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(player.get.z); 
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(player.get.x);
 		player.add.y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.2;
@@ -206,8 +213,9 @@ function CollisionTester(){
 	If parameter is true, they collided with a rock, decrement player HP
 	else, they collided with edge of map, keep HP same
 	*/	
-	function movePlayerForwardOrBackward(rockCollision){
-		
+	function movePlayerForwardOrBackward(rockCollision, cornerX, cornerZ){
+	
+		// Only do this if they didn't collide with a corner
 		if(player.get.movingForward === true){	
 			pushPlayer(1);
 		}
@@ -229,28 +237,41 @@ function CollisionTester(){
 		
 	}
 
-	this.testPlayerMapBoundaries = function(){
+	function testPlayerMapBoundaries(){
 	
 		var colliding = false;
 		
+		testPlayerCornerCollision(mapBottomLeftCornerVector);
+		testPlayerCornerCollision(mapBottomRightCornerVector);
+		testPlayerCornerCollision(mapTopLeftCornerVector);
+		testPlayerCornerCollision(mapTopRightCornerVector);
+
 		/*
 		Stop them going out of section
+		
+		x < 128 && 
 		*/
+		console.log("tr: " + terrainRows);
+		console.log("nqr: " + numberQuadrantRows);
+		console.log("x must be greater than: " + terrainRows-numberQuadrantRows);
 		if(player.get.x < terrainRows/numberQuadrantRows && player.get.z < terrainRows){
 			movePlayerForwardOrBackward(false);
 			colliding = true;
+			console.log("1"); 
 		}
-		else if(player.get.x > terrainRows-numberQuadrantRows && player.get.z < terrainRows){
+		else if(player.get.x > terrainRows-quadrantRowSize && player.get.z < terrainRows){
 			movePlayerForwardOrBackward(false);
 			colliding = true;
 		}
 		else if(player.get.z < terrainRows/numberQuadrantRows && player.get.x < terrainRows){
 			movePlayerForwardOrBackward(false);
 			colliding = true;
+				console.log("3"); 
 		}
-		else if(player.get.z > terrainRows-numberQuadrantRows && player.get.x < terrainRows){
+		else if(player.get.z > terrainRows-quadrantRowSize && player.get.x < terrainRows){
 			movePlayerForwardOrBackward(false);
 			colliding = true;
+			console.log("4");
 		}
 		else{
 			colliding = false;
@@ -267,6 +288,42 @@ function CollisionTester(){
 			document.getElementById("outOfBoundsID").style.visibility = "hidden";	
 		}
 		
+	}
+	
+	/*
+	Test if player is near a corner, and move them back if so
+	*/
+	function testPlayerCornerCollision(cornerVector){
+		var playerVector = [player.get.x, player.get.y, player.get.z];
+		
+		var distanceToCorner = Math.sqrt( 
+			Math.pow( (playerVector[0] - cornerVector[0]), 2) +
+			Math.pow( (playerVector[1] - cornerVector[1]), 2) +
+			Math.pow( (playerVector[2] - cornerVector[2]), 2) 
+		);
+		//console.log(distanceToCorner);
+		if(distanceToCorner < 10){	
+			//movePlayerForwardOrBackward(false);
+			//move the player different direction based on the corner they hit
+			if(cornerVector[0] === 128 && cornerVector[2] === 128){
+				player.set.x = player.get.x + 5;
+				player.set.z = player.get.z + 5;
+			}
+			else if(cornerVector[0] === 896 && cornerVector[2] === 128){
+				console.log("corner1");
+				player.set.x = player.get.x - 5;
+				player.set.z = player.get.z + 5;
+			}
+			else if(cornerVector[0] === 128 && cornerVector[2] === 896){
+				console.log("corner2");
+				player.set.x = player.get.x + 5;
+				player.set.z = player.get.z - 5;
+			}
+			else if(cornerVector[0] === 896 && cornerVector[2] === 896){
+				player.set.x = player.get.x - 5;
+				player.set.z = player.get.z - 5;
+			}
+		}		
 	}
 	
 	/*
