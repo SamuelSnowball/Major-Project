@@ -22,115 +22,48 @@
 <!-- GL Canvas -->
 <canvas id="canvas" class="canvasClass"></canvas>
   
-  <div id="mainOverlay"style="visibility: hidden">
+<div id="mainOverlay"style="visibility: hidden">
   <ul>
-    <li><a href="#tabs-1">Rock Information</a></li>
-    <li><a href="#tabs-2">Inventory</a></li>
-    <li><a href="#tabs-3">Current mission</a></li>
+    <li><a href="#tabs-1">Rock Information (1)</a></li>
+    <li><a href="#tabs-2">Inventory (2)</a></li>
+    <li><a href="#tabs-3">Current mission (3)</a></li>
   </ul>
   <div id="tabs-1">
     <p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
   </div>
+  
   <div id="tabs-2">
-    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+	<table class="myTable" cellpadding="0" cellspacing="0" width="100%" height="100%" border="0">
+	  <tr>
+		<td id="slot0" height="20px">Jill</td>
+		<td id="slot1">Smith</td> 
+		<td id="slot2">50</td>
+		<td id="slot3">94</td>
+	  </tr>
+	  <tr>
+		<td id="slot4">Eve</td>
+		<td id="slot5">Jackson</td> 
+		<td id="slot6">94</td>
+		<td id="slot7">94</td>
+	  </tr>
+	</table>
   </div>
+  
   <div id="tabs-3">
     <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
     <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
   </div>
 </div>
-  
-  
-  <!--
-  <div id="inventoryOverlayID" title="Inventory" style="visibility: hidden">
-	<p>
-		<table height="100%" width="100%">
-		
-		  <tr>
-			<td id = "slot0" background="resources/rocks/empty.png">1</td>
-			<td id = "slot1" background="resources/rocks/empty.png">23</td> 
-			<td id = "slot2" background="resources/rocks/empty.png">23</td>
-			<td id = "slot3" background="resources/rocks/empty.png">23</td>
-		  </tr>         
-							
-		  <tr>             
-			<td id = "slot4" background="resources/rocks/empty.png"></td>
-			<td id = "slot5" background="resources/rocks/empty.png"></td> 
-			<td id = "slot6" background="resources/rocks/empty.png"></td>
-			<td id = "slot7" background="resources/rocks/empty.png"></td>
-		  </tr>
-		  
-		</table>
-	</p>
-	
-  </div>
-  -->
-  
 
-<!-- ######################### -->
-<!-- XP Bar --> 
+
 <div id="xpBarID" style="visibility: hidden">Experience</div>
-<!-- XP Bar --> 
-<!-- ######################### -->
-
-
-<!-- ######################### -->
-<!-- Inventory Bar --> 
 <div id="inventoryBarID" style="visibility: hidden">Inventory full! Deposit ores at lander</div>
-<!-- Inventory Bar --> 
-<!-- ######################### -->
-
-
-<!-- ######################### -->
-<!-- XP Bar --> 
 <div id="healthBarID" style="visibility: hidden">Health</div>
-<!-- XP Bar --> 
-<!-- ######################### -->
-
-<!-- ######################### -->
-<!-- Prospecting Bar --> 
 <div id="prospectingBarID" style="visibility: hidden">Prospecting...</div>
-<!-- Prospecting Bar --> 
-<!-- ######################### -->
-
-
-<!-- ######################### -->
-<!-- Deposit ore message --> 
 <div id="depositOreID" style="visibility: hidden">Deposited ore!</div>
-<!-- Deposit ore message --> 
-<!-- ######################### -->
-
-<!-- ######################### -->
-<!-- OutOfBounds message --> 
 <div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
-<!-- OutOfBounds messagee --> 
-<!-- ######################### -->
+<div id="minimapID" title="Minimap" style="visibility: hidden"></div>
 
-<!-- ######################### -->
-<!-- Minimap --> 
-<div id="minimapID" title="Minimap" style="visibility: hidden">
-	<p>Map goes here.</p>
-</div>
-<!-- Minimap --> 
-<!-- ######################### -->
-
- 
-<!-- ######################### -->
-<!-- Nearest rock --> 
-<div id="nearestRockID" title="Rock Information" style="visibility: hidden">
-	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
-</div>
-<!-- Nearest rock --> 
-<!-- ######################### -->
-
- 
-<!-- ######################### -->
-<!-- Current mission --> 
-<div id="currentMissionID" title="Current Mission" style="visibility: hidden">
-	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
-</div>
-<!-- Current mission --> 
-<!-- ######################### -->
 
 	
 	
@@ -245,7 +178,7 @@ var terrain = new Terrain();
 var rockGenerator = new RockGenerator();
 
 var worldState = new WorldState(); //Loads and saves the world
-//var gui = new GUI();
+
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 
@@ -254,6 +187,7 @@ var waterSystem = new WaterSystem();
 var sound = new Sound();
 var lander = new Lander();
 var player = new Player(5, 1, 5); 
+var gui = new GUI();
 
 
 //Taken
@@ -268,6 +202,7 @@ function render(){
 
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 	
 	/*
 	Auto-save the game every 20 seconds or so
@@ -322,9 +257,12 @@ function setup(){
 	gameRunning = true;
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
 	
+	// Breaks if clicked too fast
+	gui.showElements();
+		
 	//worldState.loadWorld();
-	//gui.setup();
-	
+
+
 	player.set.x = 200;
 	player.set.z = 200;
 	

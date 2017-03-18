@@ -1,6 +1,11 @@
+Test on IS machine on monday
+Put version on public_html, fixwebperms
+
 Project description 
 
-	Mars mission control game in WebGL
+	Mars mission control game in WebGL using SCRUM methododlogy
+		Allows me to complete most important things first, and worry about
+		documentation when it will add value to what i have.
 
 	Basically, the user plays as a rover, roaming around mars
 		exploring and completeing various challenges.
@@ -12,9 +17,9 @@ Project description
 		Theres no ability to drag and drop objects into a premade 3D scene
 		It's from scratch basically
 		
-	webgl vs opengl vs directx
+	webgl vs opengl vs directx, LEARNING WebGL and GLSL never used before
 
-		decided on webgl because benefits of the browser
+		decided on webgl because benefits of the browser and not confident enough with c++
 		OpenGL would mean I have to write in c++ which is already challenging enough
 			let alone opengl on top.
 		I'd rather use webgl (which is basically opengl) but with JavaScript
@@ -24,22 +29,45 @@ Project description
 		directX i had absoultey no experience with, as it isnt based off opengl
 			also its windows only,
 
-Technical
-	
-	basic game render loop
-		update() 
-		render()
+	also could've used library i was familar with, three.js, or a full on game engine
+		but i'd get no enjoyment out of either as not learning much
 
-	Use a projection matrix to convert my 3D world into 2D screenspace
+	
+
+Technical
+	Overall I have to go back and improve things, which isnt really what scrum is about
+	As I find out new more efficient methods
+	Also, 
+	
+	basic game structure
+		setup() vertices are created
+		update() vertices are moved
+		render() vertices are displayed
+
+	Model everything in 3D
+		Use a projection matrix to convert my 3D world into 2D screenspace
 		illusion of 3d
 
 	Show terrain generation, 
-		some detail of perlin noise and smooth randomness
+		make grid of vertices, and set their height with perlin noise
 		Rendering efficiency vs no efficiency
-		
-	
-Work left to do
 
+	Player height setting,
+		sets height to the nearest terrain vertex height, hence the bumpyness
+		
+	Added water, same as terrain but vertices are updated	
+	Some game mechanics
+
+Mention documentation
+	Test table
+	Class diagram
+	Flow diagram
+
+
+Work left to do
+	UI stuff, a home screen
+	Minimap to go in bottom corner
+	
 
 
 

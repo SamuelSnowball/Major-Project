@@ -197,11 +197,18 @@ function Player(x, y, z){
 					previousY = y;
 				}
 			}
-			// Y key for yes/nodeName
-			if(event.keyCode === 89){
-				selling = true;
+			if(event.keyCode === 49){
+				gui.showRockInformation();
 			}			
+			if(event.keyCode === 50){
+				gui.showInventory();
+			}		
+			if(event.keyCode === 51){
+				gui.showMission();
+			}		
+			
 		});
+		
 		
 		document.addEventListener('keyup', function(event){
 			if(event.keyCode == 38){
@@ -333,7 +340,6 @@ function Player(x, y, z){
 				count ++;
 			}
 		}
-		console.log(quadrant);
 	}
 	
 	var slot0 = document.getElementById("slot0");
@@ -351,25 +357,17 @@ function Player(x, y, z){
 	inventorySlotIDs.push(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7);
 	
 	this.renderInventory = function(){
-		for(var i=0; i<1; i++){
+		for(var i=0; i<8; i++){
 			if(inventory[i] === -1){
 				//Render empty slot
-				//inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
+				inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
 			}
 			else{
-				//inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + inventory[i] + ".png)";
+				inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + inventory[i] + ".png)";
 			}
 		}
 		
-		$("#inventoryOverlayID").dialog({
-			height: window.innerHeight/3,
-			width: window.innerWidth/4.5 - window.innerWidth/50,
-			resizable: false,
-			position: {  at: "right-32% bottom-15%"},
-			closeOnEscape: false,
-			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-			draggable: false
-		});
+		//remake  gui?
 	}
 
 	/*

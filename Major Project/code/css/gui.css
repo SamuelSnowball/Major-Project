@@ -5,6 +5,7 @@ html, body {
 	height: 100%;
 	margin: 0px;
 }
+
 #banner{
 	width: 200px;
 	height: 200px;
@@ -19,9 +20,15 @@ html, body {
 	top: 0%;
 }
 
+.myTable tr td { 
+	width: 25%; 
+	height: 25%;
+}
+
 .ui-progressbar-value{
 	background: #0080ff;
 }
+
 #xpBarID{
 	position: absolute;
 	left: 78%;
@@ -29,6 +36,7 @@ html, body {
 	width: 300px;
 	height: 40px;
 }
+
 #healthBarID{
 	position: absolute;
 	left: 78%;
@@ -77,10 +85,3 @@ html, body {
 	height: 40%;
 }
 
-.toolbar{
-	position: absolute;
-	left: 34%;
-	top: 55%;
-	width: 600px;
-	height: 40px;	
-}

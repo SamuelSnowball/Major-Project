@@ -2,20 +2,13 @@ This file contains the current sprint information,
 it will be moved into the product backlog once the sprint has ended.
 
 To do:
-	Bigger map
-	Fix everything..
+	Mountain/water sections, now have 144 quadrants loads	
 
-To do:
-	Tabbed bottom inv section
-	Could have dialog underneath toolbar
-		Text gets changed based on last clicked toolbar
-	Swap with hotkeys so dont have to escape pointerlock
+	Missions show in GUI
+
 	Change xp/hp colours
 
 	New rocks in areas
-	
-	Display message, cant navigate that terrain! would kill rover etc for map boundaries
-		Fix! add to test table
 
 	Sector 1 missions
 		Can only move into sector 2 once all sector 1 missions complete
@@ -25,7 +18,7 @@ To do:
 
 Fix inventory
 	make rock images instead of textures
-	Add depoist at lander, clears array to -1s
+
 
 3D Rendering
 	For nearest rock
@@ -62,13 +55,7 @@ Sprint 4 (13th - 20th March)
 		
 		Things to fix:
 
-			Lander:
-				Add ability to deposit ores at lander
-					Removes from inventory increments money
-				Add fuel cylinder next to shop, distance varibale + gui popup to refuel
-	
 			Prospecting:
-				Display message saying inventory full
 				Add prospecting sounds, particles, progress bar, level checks
 			
 
@@ -77,10 +64,6 @@ Sprint 4 (13th - 20th March)
 			Find upgrades in random parts of the map
 				Add in random OBJs of crashed things
 				Saves having a shop interface
-		
-			Add rocks in certain quadrants
-			Different perlin scales for map sections
-			Collision boundaries if havent completed all missions
 			
 			Add missions, find this rock, show rock in gui
 
@@ -111,6 +94,9 @@ Sprint 4 (13th - 20th March)
 		
 			Game mechanics
 				Adding prospect bar
+
+			GUI 
+				Swap between GUIs with 1,2,3 keys
 	
 	
 

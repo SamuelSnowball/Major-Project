@@ -17,100 +17,6 @@ var prospectingBarValue = 0;
 			
 canvas.addEventListener('mousedown', function(){
 	
-	$(function(){
-		$("#menu").menu();
-		
-		$("#minimapID").dialog({
-			height: window.innerHeight/2.5,
-			width: window.innerWidth/3,
-			resizable: false,
-			position: {  at: "left bottom-10%" },
-			closeOnEscape: false,
-			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-			draggable: false
-		});
-		/*
-		$("#nearestRockID").dialog({
-			height: window.innerHeight/3,
-			width: window.innerWidth/4.5,
-			resizable: false,
-			position: {  at: "center-4% bottom-15%"},
-			closeOnEscape: false,
-			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-			draggable: false
-		});	
-		$("#inventoryOverlayID").dialog({
-			height: window.innerHeight/3,
-			width: window.innerWidth/4.5 - window.innerWidth/50,
-			resizable: false,
-			position: {  at: "right-32% bottom-15%"},
-			closeOnEscape: false,
-			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-			draggable: false
-		});
-		$("#currentMissionID").dialog({
-			height: window.innerHeight/3,
-			width: window.innerWidth/4.5 - window.innerWidth/50,
-			resizable: false,
-			position: {  at: "right bottom-15%"},
-			closeOnEscape: false,
-			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-			draggable: false
-		});
-		*/
-		
-		$( "#depositOreID" ).progressbar({
-			closeOnEscape: false,
-			draggable: false
-		})
-		$( "#outOfBoundsID" ).progressbar({
-			closeOnEscape: false,
-			draggable: false
-		})
-		$( "#xpBarID" ).progressbar({
-			value: 100,
-			closeOnEscape: false,
-			draggable: false
-		})
-		$( "#healthBarID" ).progressbar({
-			value: 100,
-			closeOnEscape: false,
-			draggable: false
-		})
-		$( "#prospectingBarID" ).progressbar({
-			value: prospectingBarValue,
-			closeOnEscape: false,
-			draggable: false
-		})
-		$( "#inventoryBarID" ).progressbar({
-			value: prospectingBarValue,
-			closeOnEscape: false,
-			draggable: false
-		})
-	
-	
-	
-		$( "#rockButton" ).button({
-		  "icon": "ui-icon-search",
-		});
-		$( "#inventoryButton" ).button({
-		  "icon": "ui-icon-gear",
-		});
-		$( "#missionButton" ).button({
-		  "icon": "ui-icon-alert",
-		});
-	 
-		$( ".toolbar" ).controlgroup({
-
-		});
-		
-		//get windowinnerWidth pass as string to at part, then concat
-		//but since its based on toolbar always the same, so can use px?
-	
-		$( "#mainOverlay" ).tabs();
-		
-	}); //end jquery func
-	
 	if(gameRunning === false){
 		setup();
 	}
@@ -140,23 +46,8 @@ canvas.addEventListener('mousedown', function(){
 		document.exitPointerLock();
 	}
 	
-	//Show GUI elements
-	document.getElementById("minimapID").style.visibility = "visible";
-	document.getElementById("nearestRockID").style.visibility = "visible";
-	document.getElementById("currentMissionID").style.visibility = "visible";
-	document.getElementById("menu").style.visibility = "visible";
-	document.getElementById("xpBarID").style.visibility = "visible";	
-	//document.getElementById("inventoryOverlayID").style.visibility = "visible";	
-	document.getElementById("healthBarID").style.visibility = "visible";	
 	
-	document.getElementById("mainOverlay").style.visibility = "visible";	
-	
-	//document.getElementById("rockButton").style.visibility = "visible";	
-	//document.getElementById("inventoryButton").style.visibility = "visible";	
-	//document.getElementById("missionButton").style.visibility = "visible";	
-	
-	
-	
+
 }); //end mouse down
 
 
