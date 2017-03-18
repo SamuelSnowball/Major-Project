@@ -2,6 +2,13 @@ This file contains the current sprint information,
 it will be moved into the product backlog once the sprint has ended.
 
 To do:
+	Bigger map
+	Fix everything..
+
+	Currently 1024x1024 = 8x8, 
+	Maybe 1536x1536 = 12x12
+
+To do:
 	Tabbed bottom inv section
 	Could have dialog underneath toolbar
 		Text gets changed based on last clicked toolbar

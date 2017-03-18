@@ -228,7 +228,7 @@ var utility = new Utility();
 var loadingScreen = new LoadingScreen();
 
 
-var player = new Player(5, 1, 5); 
+
 
 var terrain = new Terrain();
 var rockGenerator = new RockGenerator();
@@ -242,6 +242,7 @@ var waterSystem = new WaterSystem();
 //var missionAssigner = new MissionAssigner();
 var sound = new Sound();
 var lander = new Lander();
+var player = new Player(5, 1, 5); 
 
 
 //Taken
@@ -314,9 +315,8 @@ function setup(){
 	//gui.setup();
 	
 	player.set.x = 200;
-	player.set.y = 3;
 	player.set.z = 200;
-
+	
 	render();
 }
 

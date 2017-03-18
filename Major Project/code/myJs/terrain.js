@@ -13,21 +13,28 @@ function Terrain(){
 	
 	// How many map quadrants, each having 128*128 vertices each
 	// If you update these, make sure to update them in player assign quadrant method
-	var numberQuadrantRows = 8; 
-	var numberQuadrantColumns = 8; 
-	
-	this.get = {
-		get numQuadrantRows(){
-			return numberQuadrantRows;
-		},
-		get numQuadrantColumns(){
-			return numberQuadrantColumns;
-		}
-	};
+	var numberQuadrantRows = 12; 
+	var numberQuadrantColumns = 12; 
 	
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;
 	var terrainColumns = numberQuadrantColumns * quadrantColumnSize;
+	
+	//Needed in rockGenerator, careful might be quadrantRows
+	this.get = {
+		get getTerrainRows(){
+			return terrainRows;
+		},
+		get getNumberQuadrantRows(){
+			return numberQuadrantRows;
+		},
+		get getNumberQuadrantColumns(){
+			return numberQuadrantColumns;
+		},
+		get getQuadrantRowSize(){
+			return quadrantRowSize;
+		}
+	};
 	
 	// Data for the current quadrant, this data gets stored in the quadrants VBOs
 	var quadrantVertices = []; 
@@ -170,18 +177,6 @@ function Terrain(){
 			}
 		}
 	}
-	//Needed in rockGenerator, careful might be quadrantRows
-	this.get = {
-		get getTerrainRows(){
-			return terrainRows;
-		},
-		get getNumberQuadrantRows(){
-			return numberQuadrantRows;
-		},
-		get getQuadrantRowSize(){
-			return quadrantRowSize;
-		}
-	};
 	
 	/*
 	Private
@@ -739,7 +734,6 @@ function Terrain(){
 		else{
 			setupIndices3x3Cells();
 		}
-		
 
 		/*
 		Process and render the current player quadrant and the surrounding cells (3x3 total)

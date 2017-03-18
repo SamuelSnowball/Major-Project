@@ -5,7 +5,7 @@ function Player(x, y, z){
 	var y = y;
 	var z = z;
 	
-	var movementSpeed = 2.3;
+	var movementSpeed = 0.3;
 	
 	var xRotation = 0;
 	var yRotation = 0;
@@ -13,6 +13,9 @@ function Player(x, y, z){
 	var previousY = 0; // To remember Y pos when moving camera for fog
 	var quadrant; // Current section of the map they're in
 	
+	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
+	var numberQuadrantColumns = terrain.get.getNumberQuadrantColumns;
+
 	var inventory = Array(8).fill(-1);
 	
 	var playerVertices = [];
@@ -313,10 +316,7 @@ function Player(x, y, z){
 	So can process and render whats in view of the player
 	*/
 	this.assignPlayerQuadrant = function(){
-
-		var numberQuadrantRows = 8;
-		var numberQuadrantColumns = 8;
-		
+	
 		// Need count variable because quadrant is a single number, cant work it out with the 2 loops properly
 		var count = 0;
 		
@@ -333,6 +333,7 @@ function Player(x, y, z){
 				count ++;
 			}
 		}
+		console.log(quadrant);
 	}
 	
 	var slot0 = document.getElementById("slot0");
