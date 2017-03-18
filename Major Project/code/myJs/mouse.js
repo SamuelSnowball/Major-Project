@@ -29,6 +29,7 @@ canvas.addEventListener('mousedown', function(){
 			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
 			draggable: false
 		});
+		/*
 		$("#nearestRockID").dialog({
 			height: window.innerHeight/3,
 			width: window.innerWidth/4.5,
@@ -56,6 +57,7 @@ canvas.addEventListener('mousedown', function(){
 			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
 			draggable: false
 		});
+		*/
 		
 		$( "#depositOreID" ).progressbar({
 			closeOnEscape: false,
@@ -85,6 +87,40 @@ canvas.addEventListener('mousedown', function(){
 			closeOnEscape: false,
 			draggable: false
 		})
+
+				$( "#rockButton" ).button({
+		  "icon": "ui-icon-search",
+		});
+		$( "#inventoryButton" ).button({
+		  "icon": "ui-icon-gear",
+		});
+		$( "#missionButton" ).button({
+		  "icon": "ui-icon-alert",
+		});
+	 
+		$( ".toolbar" ).controlgroup({
+
+		});
+		
+		$( "#mainOverlay" ).dialog({
+			open: function(event, ui) { 
+				$(".ui-dialog-titlebar-close").hide(); 
+				$("#mainOverlay").siblings('.ui-dialog-titlebar').remove();
+			},
+			
+			height: window.innerHeight/3 * 1.2,
+			width: window.innerWidth/3 * 2 - window.innerWidth/75,
+			position: {   
+				at: "right-50px bottom+10%", 
+			},
+			resizable: false,
+			closeOnEscape: false,
+
+			draggable: false
+		});
+	
+
+	
 	})
 	
 	if(gameRunning === false){
@@ -122,8 +158,16 @@ canvas.addEventListener('mousedown', function(){
 	document.getElementById("currentMissionID").style.visibility = "visible";
 	document.getElementById("menu").style.visibility = "visible";
 	document.getElementById("xpBarID").style.visibility = "visible";	
-	document.getElementById("inventoryOverlayID").style.visibility = "visible";	
+	//document.getElementById("inventoryOverlayID").style.visibility = "visible";	
 	document.getElementById("healthBarID").style.visibility = "visible";	
+	
+	document.getElementById("mainOverlay").style.visibility = "visible";	
+	
+	document.getElementById("rockButton").style.visibility = "visible";	
+	document.getElementById("inventoryButton").style.visibility = "visible";	
+	document.getElementById("missionButton").style.visibility = "visible";	
+	
+	
 });
 
 

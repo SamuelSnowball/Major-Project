@@ -68,3 +68,11 @@ html, body {
 	width: 300px;
 	height: 40px;
 }
+
+.toolbar{
+	position: absolute;
+	left: 34%;
+	top: 60%;
+	width: 600px;
+	height: 40px;	
+}

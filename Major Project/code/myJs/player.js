@@ -5,7 +5,7 @@ function Player(x, y, z){
 	var y = y;
 	var z = z;
 	
-	var movementSpeed = 1.0;
+	var movementSpeed = 2.3;
 	
 	var xRotation = 0;
 	var yRotation = 0;
@@ -353,10 +353,10 @@ function Player(x, y, z){
 		for(var i=0; i<1; i++){
 			if(inventory[i] === -1){
 				//Render empty slot
-				inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
+				//inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
 			}
 			else{
-				inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + inventory[i] + ".png)";
+				//inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + inventory[i] + ".png)";
 			}
 		}
 		

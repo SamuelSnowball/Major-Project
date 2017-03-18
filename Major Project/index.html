@@ -22,7 +22,15 @@
 <!-- GL Canvas -->
 <canvas id="canvas" class="canvasClass"></canvas>
   
+  <div id="mainOverlay"style="visibility: visible">Main overlay</div>
   
+    <div class="toolbar">
+		<button id="rockButton" style="visibility: hidden">Rock Information</button>
+		<button id="inventoryButton" style="visibility: hidden">Inventory</button>
+		<button id="missionButton" style="visibility: hidden">Current mission</button>
+	</div>
+  
+  <!--
   <div id="inventoryOverlayID" title="Inventory" style="visibility: hidden">
 	<p>
 		<table height="100%" width="100%">
@@ -45,6 +53,8 @@
 	</p>
 	
   </div>
+  -->
+  
 
 <!-- ######################### -->
 <!-- XP Bar --> 
@@ -259,7 +269,7 @@ function render(){
 			gameTime = 0;
 		}
 	}
-	console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
+	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
 	
 	player.movePlayer();
 	player.assignPlayerQuadrant();

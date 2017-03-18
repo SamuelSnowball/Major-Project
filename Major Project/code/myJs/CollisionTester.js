@@ -134,7 +134,6 @@ function CollisionTester(){
 				playerInRangeOfAnyRock = true;
 				// If they're in range of rock and have no space, tell them inventory is full
 				if(playerInRangeOfAnyRock === true && !player.get.inventory.includes(-1)){
-					console.log("this happened");
 					document.getElementById("inventoryBarID").style.visibility = "visible";	
 					$( "#inventoryBarID" ).progressbar({
 							
@@ -201,7 +200,7 @@ function CollisionTester(){
 		player.add.z = direction * (cameraPosition[2] - cameraTarget[2]) * 5;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(player.get.z); 
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(player.get.x);
-		player.add.y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.2;
+		player.add.y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.4;
 	}
 	
 
@@ -245,19 +244,30 @@ function CollisionTester(){
 		testPlayerCornerCollision(mapBottomRightCornerVector);
 		testPlayerCornerCollision(mapTopLeftCornerVector);
 		testPlayerCornerCollision(mapTopRightCornerVector);
-
+		
+		// Test if nearly at collision boundary and show gui if they are
+		if(player.get.x < terrainRows/numberQuadrantRows + 10 && player.get.z < terrainRows - 10){
+			showMapCollisionGui();
+		}
+		else if(player.get.x > terrainRows-quadrantRowSize - 10 && player.get.z < terrainRows - 10){
+			showMapCollisionGui();
+		}
+		else if(player.get.z < terrainRows/numberQuadrantRows + 10 && player.get.x < terrainRows - 10){
+			showMapCollisionGui();
+		}
+		else if(player.get.z > terrainRows-quadrantRowSize - 10 && player.get.x < terrainRows - 10){
+			showMapCollisionGui();
+		}
+		else{
+			document.getElementById("outOfBoundsID").style.visibility = "hidden";	
+		}
+		
 		/*
 		Stop them going out of section
-		
-		x < 128 && 
 		*/
-		console.log("tr: " + terrainRows);
-		console.log("nqr: " + numberQuadrantRows);
-		console.log("x must be greater than: " + terrainRows-numberQuadrantRows);
 		if(player.get.x < terrainRows/numberQuadrantRows && player.get.z < terrainRows){
 			movePlayerForwardOrBackward(false);
 			colliding = true;
-			console.log("1"); 
 		}
 		else if(player.get.x > terrainRows-quadrantRowSize && player.get.z < terrainRows){
 			movePlayerForwardOrBackward(false);
@@ -266,28 +276,24 @@ function CollisionTester(){
 		else if(player.get.z < terrainRows/numberQuadrantRows && player.get.x < terrainRows){
 			movePlayerForwardOrBackward(false);
 			colliding = true;
-				console.log("3"); 
 		}
 		else if(player.get.z > terrainRows-quadrantRowSize && player.get.x < terrainRows){
 			movePlayerForwardOrBackward(false);
 			colliding = true;
-			console.log("4");
 		}
 		else{
 			colliding = false;
 		}
 		
-		// Show GUI element
-		if(colliding){
-			document.getElementById("outOfBoundsID").style.visibility = "visible";	
-			$( "#outOfBoundsID" ).progressbar({
-				
-			})
-		}
-		else{
-			document.getElementById("outOfBoundsID").style.visibility = "hidden";	
-		}
+		// Show GUI element, for like 5 seconds
 		
+	}
+	
+	function showMapCollisionGui(){
+		document.getElementById("outOfBoundsID").style.visibility = "visible";	
+		$( "#outOfBoundsID" ).progressbar({
+			
+		})
 	}
 	
 	/*
@@ -346,7 +352,7 @@ function CollisionTester(){
 			if(player.get.prospecting === true){
 			
 				// Slowly increment the players prospecting bar, and show the GUI for it
-				prospectingBarValue += 10;//player.get.prospectingSpeed;
+				prospectingBarValue += player.get.prospectingSpeed;
 				document.getElementById("prospectingBarID").style.visibility = "visible";	
 				$( "#prospectingBarID" ).progressbar({
 					value: prospectingBarValue,

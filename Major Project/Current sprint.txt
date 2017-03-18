@@ -2,6 +2,10 @@ This file contains the current sprint information,
 it will be moved into the product backlog once the sprint has ended.
 
 To do:
+	Tabbed bottom inv section
+	Could have dialog underneath toolbar
+		Text gets changed based on last clicked toolbar
+	Swap with hotkeys so dont have to escape pointerlock
 	Change xp/hp colours
 
 	New rocks in areas
@@ -87,6 +91,8 @@ Sprint 4 (13th - 20th March)
 				Added insanely spiky regions on the borders of the map,
 					that the rover cant drive on!!
 				Means they wont stare into nothing
+
+				Added Map boundaries + gui popup
 	
 
 			Lander:
