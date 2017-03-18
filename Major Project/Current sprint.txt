@@ -5,9 +5,6 @@ To do:
 	Bigger map
 	Fix everything..
 
-	Currently 1024x1024 = 8x8, 
-	Maybe 1536x1536 = 12x12
-
 To do:
 	Tabbed bottom inv section
 	Could have dialog underneath toolbar
@@ -24,6 +21,7 @@ To do:
 		Can only move into sector 2 once all sector 1 missions complete
 	Sector 2 missions
 
+	It shows deposited ore, even if u have none
 
 Fix inventory
 	make rock images instead of textures
@@ -93,13 +91,13 @@ Sprint 4 (13th - 20th March)
 					
 			split css into new file	
 
-			Terrain:			
+			Terrain:
+				Expanded map from 1024x1024 to 1536x1536 (64 quadrants to 144)			
 				Redid texture atlas
 				Added insanely spiky regions on the borders of the map,
 					that the rover cant drive on!!
-				Means they wont stare into nothing
-
-				Added Map boundaries + gui popup
+					Means they wont stare into nothing
+					Added Map boundaries + gui popup
 	
 
 			Lander:

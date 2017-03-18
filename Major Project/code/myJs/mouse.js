@@ -87,8 +87,10 @@ canvas.addEventListener('mousedown', function(){
 			closeOnEscape: false,
 			draggable: false
 		})
-
-				$( "#rockButton" ).button({
+	
+	
+	
+		$( "#rockButton" ).button({
 		  "icon": "ui-icon-search",
 		});
 		$( "#inventoryButton" ).button({
@@ -102,26 +104,12 @@ canvas.addEventListener('mousedown', function(){
 
 		});
 		
-		$( "#mainOverlay" ).dialog({
-			open: function(event, ui) { 
-				$(".ui-dialog-titlebar-close").hide(); 
-				$("#mainOverlay").siblings('.ui-dialog-titlebar').remove();
-			},
-			
-			height: window.innerHeight/3 * 1.2,
-			width: window.innerWidth/3 * 2 - window.innerWidth/75,
-			position: {   
-				at: "right-50px bottom+10%", 
-			},
-			resizable: false,
-			closeOnEscape: false,
-
-			draggable: false
-		});
+		//get windowinnerWidth pass as string to at part, then concat
+		//but since its based on toolbar always the same, so can use px?
 	
-
-	
-	})
+		$( "#mainOverlay" ).tabs();
+		
+	}); //end jquery func
 	
 	if(gameRunning === false){
 		setup();
@@ -163,12 +151,13 @@ canvas.addEventListener('mousedown', function(){
 	
 	document.getElementById("mainOverlay").style.visibility = "visible";	
 	
-	document.getElementById("rockButton").style.visibility = "visible";	
-	document.getElementById("inventoryButton").style.visibility = "visible";	
-	document.getElementById("missionButton").style.visibility = "visible";	
+	//document.getElementById("rockButton").style.visibility = "visible";	
+	//document.getElementById("inventoryButton").style.visibility = "visible";	
+	//document.getElementById("missionButton").style.visibility = "visible";	
 	
 	
-});
+	
+}); //end mouse down
 
 
 var currentRotateY = 0;

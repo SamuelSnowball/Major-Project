@@ -69,10 +69,18 @@ html, body {
 	height: 40px;
 }
 
-.toolbar{
+#mainOverlay{
 	position: absolute;
 	left: 34%;
 	top: 60%;
+	width: 66%;
+	height: 40%;
+}
+
+.toolbar{
+	position: absolute;
+	left: 34%;
+	top: 55%;
 	width: 600px;
 	height: 40px;	
 }
