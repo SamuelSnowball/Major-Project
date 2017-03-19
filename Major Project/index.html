@@ -65,10 +65,6 @@
 <div id="minimapID" title="Minimap" style="visibility: hidden"></div>
 
 
-	
-	
-<!-- ######################### -->
-<!-- Menu --> 
 <ul id="menu" style="visibility: hidden">
 
 <li><div>Menu</div> <!-- Once clicked others should show -->
@@ -113,33 +109,24 @@
 		
 
 </ul>
-<!-- Menu --> 	
-<!-- ######################### -->
-
-
-
 
 <!-- Libraries -->
 <script src="libraries/m4.js"></script>
 <script src="libraries/perlin.js"></script>
 <script src="libraries/webgl-obj-loader.js"></script>
 
-
-
 <!-- Not my js files-->
 <script src="code/js/ImprovedNoise.js"></script>
 
 
-<!-- Needs to be in this weird order -->
+<!-- WebGL setup files including shaders and program -->
 <script src="code/myJs/glSetup.js"></script>
-<!-- This needs to be above matrices.js and below glSetup, and a texture object is created in matrices.js -->
 <script src="code/myJs/TextureLoader.js"></script>
-
 <script src="code/myJs/vertexShader.js"></script>
 <script src="code/myJs/fragmentShader.js"></script>
 <script src="code/myJs/program.js"></script>
 
-<!-- Named properly -->
+<!-- Game files -->
 <script src="code/myJs/CollisionTester.js"></script>
 <script src="code/myJs/Terrain.js"></script>
 <script src="code/myJs/RockGenerator.js"></script>
@@ -156,16 +143,11 @@
 
 <!-- Needs naming -->
 <script src="code/myJs/mouse.js"></script>
-<script src="code/myJs/missions.js"></script>
 
 <script>
 
 var gameRunning = false;
 var perlin = new ImprovedNoise();
-
-//For saving the game
-var gameTime = 0;
-var saveTime = 100;
 
 var textureLoader = new TextureLoader();
 var utility = new Utility();
@@ -189,10 +171,14 @@ var lander = new Lander();
 var player = new Player(5, 1, 5); 
 var gui = new GUI();
 
+//For saving the game
+var gameTime = 0;
+var saveTime = 100;
 
 //Taken
 var fpsElement = document.getElementById("fps");
 var then = Date.now() / 1000;  // get time in seconds
+
 function render(){
 	var now = Date.now() / 1000;  // get time in seconds
     var elapsedTime = now - then;
@@ -203,7 +189,6 @@ function render(){
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	
 	/*
 	Auto-save the game every 20 seconds or so
 	But only save if they're not in minimap mode
@@ -211,7 +196,7 @@ function render(){
 	*/
 	if(gameTime === saveTime){
 		if(useFog === true){
-			//console.log("World auto saved");
+			console.log("World auto saved");
 			worldState.saveWorld();
 			gameTime = 0;
 		}
@@ -231,10 +216,7 @@ function render(){
 	waterSystem.render();
 
 	//missionAssigner.checkOrAssignPlayerMissions();
-	
-	//gui.update();
-	//gui.displayCurrentRock();
-	//gui.renderInventory();
+
 	
 	lander.render();
 	lander.depositPlayerOre();
@@ -256,15 +238,12 @@ This gets called when the user clicks to start the game
 function setup(){
 	gameRunning = true;
 	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
+
+	// Show GUIs
+	gui.showElements();	
 	
-	// Breaks if clicked too fast
-	gui.showElements();
-		
-	//worldState.loadWorld();
-
-
-	player.set.x = 200;
-	player.set.z = 200;
+	// Load player data if it exists
+	worldState.loadWorld();
 	
 	render();
 }

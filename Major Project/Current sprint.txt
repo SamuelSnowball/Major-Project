@@ -1,6 +1,10 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
+Notes: 
+	For water spawns, just decrement heightmap values in double for
+	Then its easy,
+
 To do:
 	Mountain/water sections, now have 144 quadrants loads	
 

@@ -1,4 +1,6 @@
-
+/*
+This file creates and displays the GUI elements of the game
+*/
 function GUI(){
 
 	$(function(){
@@ -14,8 +16,6 @@ function GUI(){
 			draggable: false,
 			autoOpen: false,
 		});
-		
-
 		
 		$( "#depositOreID" ).progressbar({
 			closeOnEscape: false,
@@ -73,6 +73,46 @@ function GUI(){
 	
 	this.showMission = function(){
 		$("#mainOverlay").tabs("option", "active", 2);
+	}
+	
+	this.showFullInventory = function(){
+		document.getElementById("inventoryBarID").style.visibility = "visible";	
+		$( "#inventoryBarID" ).progressbar({
+				
+		})	
+	}
+	
+	this.hideFullInventory = function(){
+		document.getElementById("inventoryBarID").style.visibility = "hidden";	
+	}
+	
+	this.showHealthBar = function(){
+		document.getElementById("healthBarID").style.visibility = "visible";	
+		$( "#healthBarID" ).progressbar({
+			value: player.get.health,
+		})
+	}
+	
+	this.showMapCollision = function(){
+		document.getElementById("outOfBoundsID").style.visibility = "visible";	
+		$( "#outOfBoundsID" ).progressbar({
+			
+		})		
+	}
+	
+	this.hideMapCollision = function(){
+		document.getElementById("outOfBoundsID").style.visibility = "hidden";		
+	}
+	
+	this.hideProspectingBar = function(){
+		document.getElementById("prospectingBarID").style.visibility = "hidden";		
+	}
+	
+	this.showProspectingBar = function(){
+		document.getElementById("prospectingBarID").style.visibility = "visible";	
+		$( "#prospectingBarID" ).progressbar({
+			value: prospectingBarValue,
+		})
 	}
 	
 }

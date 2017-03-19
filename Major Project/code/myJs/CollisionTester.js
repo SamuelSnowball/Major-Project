@@ -1,21 +1,28 @@
-
+/*
+Tests collision for the player against:
+	Terrain
+	Rocks
+	Map boundaries
+*/
 function CollisionTester(){
-	
-	var playerHeightIncrement = 0.01;
-	
-	// Needed to test player map boundaries
+
 	var terrainRows = terrain.get.getTerrainRows;
 	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
 	var quadrantRowSize = terrain.get.getQuadrantRowSize;
-					
+				
+	// Used to find the nearest terrain vertex height to the player
 	var tempPlayerX = 0;
 	var tempPlayerZ = 0;
 	
-	var mapTopLeftCornerVector = [128, 0, 128];
-	var mapTopRightCornerVector = [896, 0, 128];
-	var mapBottomLeftCornerVector = [128, 0, 896];
-	var mapBottomRightCornerVector = [896, 0, 896];
+	// The positions of the map boundary corners, need to stop player going outside of them
+	var mapTopLeftCornerVector = [quadrantRowSize, 0, quadrantRowSize];
+	var mapTopRightCornerVector = [terrainRows-quadrantRowSize, 0, quadrantRowSize];
+	var mapBottomLeftCornerVector = [quadrantRowSize, 0, terrainRows-quadrantRowSize];
+	var mapBottomRightCornerVector = [terrainRows-quadrantRowSize, 0, terrainRows-quadrantRowSize];
 	
+	/*
+	Called from render(), tests all collision
+	*/
 	this.testAllCollision = function(){
 		setPlayerHeight();
 		testPlayerRockCollision();
@@ -30,11 +37,12 @@ function CollisionTester(){
 	*/
 	function setPlayerHeight(){
 		if(useFog === false){
-			// Player is viewing minimap, dont set their height
+			// Player is viewing minimap, don't set their height
 			return;
 		}
 		
-		// Retrieve the players current x and z position
+		// Retrieve the players current x and z position, 
+		// Use these values to find the height we should set for them
 		tempPlayerX = player.get.x;
 		tempPlayerZ = player.get.z;
 		
@@ -94,8 +102,8 @@ function CollisionTester(){
 	If they're in prospecting range, allow them to prospect
 	If they're too close to the rock, move them back
 	
-	Have to have 2 different ranges here, otherwise as soon as they're colliding,
-	and they try to prospect,
+	Have to have 2 different ranges here, 
+	Otherwise as soon as they're colliding, and they try to prospect,
 	They get moved back, out of prospect range
 	*/
 	function testPlayerRockCollision(){
@@ -127,26 +135,19 @@ function CollisionTester(){
 				
 			if(distance > objRocks[i].scale * 5){
 				// Player too far away from rock to prospect
-				// Hide inventory full interface
-				
 			}
 			else{
 				playerInRangeOfAnyRock = true;
 				// If they're in range of rock and have no space, tell them inventory is full
 				if(playerInRangeOfAnyRock === true && !player.get.inventory.includes(-1)){
-					document.getElementById("inventoryBarID").style.visibility = "visible";	
-					$( "#inventoryBarID" ).progressbar({
-							
-					})
+					gui.showFullInventory();
 				}
 			
 				// They're in range prospecting, update GUI with current rock
 				player.set.inProspectingRange = true; 
 				isProspecting(objRocks[i]);
 
-				/*
-				Check if they're too close, move them back
-				*/
+				// Check if they're too close, move them back
 				if(distance < objRocks[i].scale * 1.5 ){
 					movePlayerForwardOrBackward(true);
 				}
@@ -155,36 +156,9 @@ function CollisionTester(){
 			
 			// If player not in range of rock, hide inventory full message
 			if(playerInRangeOfAnyRock === false){
-				document.getElementById("inventoryBarID").style.visibility = "hidden";	
+				gui.hideFullInventory();
 			}
-			
 		}	
-		/*
-		var triRocks = rockGenerator.getTriRocksArray.getRocks;
-		for(var i=0; i<triRocks.length; i++){
-			//If in prospect range
-			if(	player.get.x > triRocks[i].x  - (triRocks[i].width*3) &&
-				player.get.x < triRocks[i].x + (triRocks[i].width*3) &&
-				
-				player.get.z > triRocks[i].z - (triRocks[i].width*3) && 
-				player.get.z < triRocks[i].z + (triRocks[i].width*3) 
-			){	
-				player.set.inProspectingRange = true;
-				isProspecting(triRocks[i]);
-				
-				//Triangle rocks collision testing
-				
-				if(	player.get.x > triRocks[i].x  - (triRocks[i].width*2) &&
-					player.get.x < triRocks[i].x + (triRocks[i].width*2) &&
-					
-					player.get.z > triRocks[i].z - (triRocks[i].width*2) && 
-					player.get.z < triRocks[i].z + (triRocks[i].width*2) 
-				){	
-					player.moveForwardOrBackward();
-				}
-			}
-		}
-		*/
 	}
 	
 	/*
@@ -203,8 +177,6 @@ function CollisionTester(){
 		player.add.y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.4;
 	}
 	
-
-	
 	/*
 	Check if they're going forwards or backwards
 	Push them different ways based on movement direction
@@ -214,7 +186,7 @@ function CollisionTester(){
 	*/	
 	function movePlayerForwardOrBackward(rockCollision, cornerX, cornerZ){
 	
-		// Only do this if they didn't collide with a corner
+		// If they collided whilst moving forward, push them back etc
 		if(player.get.movingForward === true){	
 			pushPlayer(1);
 		}
@@ -225,21 +197,20 @@ function CollisionTester(){
 		
 		}	
 		
-		// If they collided with a rock, make them lose HP
+		// Then they collided with a rock rather than a map boundary, make them lose HP
 		if(rockCollision){
 			player.add.health = -10;
-			document.getElementById("healthBarID").style.visibility = "visible";	
-			$( "#healthBarID" ).progressbar({
-				value: player.get.health,
-			})
+			gui.showHealthBar();
 		}
 		
 	}
-
-	function testPlayerMapBoundaries(){
 	
-		var colliding = false;
-		
+	/*
+	Tests if player is going out of map boundaries, moves them back if so
+	*/
+	function testPlayerMapBoundaries(){
+
+		// Test if player at corners, move them back if so
 		testPlayerCornerCollision(mapBottomLeftCornerVector);
 		testPlayerCornerCollision(mapBottomRightCornerVector);
 		testPlayerCornerCollision(mapTopLeftCornerVector);
@@ -247,19 +218,19 @@ function CollisionTester(){
 		
 		// Test if nearly at collision boundary and show gui if they are
 		if(player.get.x < terrainRows/numberQuadrantRows + 10 && player.get.z < terrainRows - 10){
-			showMapCollisionGui();
+			gui.showMapCollision();
 		}
 		else if(player.get.x > terrainRows-quadrantRowSize - 10 && player.get.z < terrainRows - 10){
-			showMapCollisionGui();
+			gui.showMapCollision();
 		}
 		else if(player.get.z < terrainRows/numberQuadrantRows + 10 && player.get.x < terrainRows - 10){
-			showMapCollisionGui();
+			gui.showMapCollision();
 		}
 		else if(player.get.z > terrainRows-quadrantRowSize - 10 && player.get.x < terrainRows - 10){
-			showMapCollisionGui();
+			gui.showMapCollision();
 		}
 		else{
-			document.getElementById("outOfBoundsID").style.visibility = "hidden";	
+			gui.hideMapCollision();
 		}
 		
 		/*
@@ -267,37 +238,26 @@ function CollisionTester(){
 		*/
 		if(player.get.x < terrainRows/numberQuadrantRows && player.get.z < terrainRows){
 			movePlayerForwardOrBackward(false);
-			colliding = true;
 		}
 		else if(player.get.x > terrainRows-quadrantRowSize && player.get.z < terrainRows){
 			movePlayerForwardOrBackward(false);
-			colliding = true;
 		}
 		else if(player.get.z < terrainRows/numberQuadrantRows && player.get.x < terrainRows){
 			movePlayerForwardOrBackward(false);
-			colliding = true;
 		}
 		else if(player.get.z > terrainRows-quadrantRowSize && player.get.x < terrainRows){
 			movePlayerForwardOrBackward(false);
-			colliding = true;
 		}
 		else{
-			colliding = false;
+
 		}
-		
-		// Show GUI element, for like 5 seconds
-		
-	}
-	
-	function showMapCollisionGui(){
-		document.getElementById("outOfBoundsID").style.visibility = "visible";	
-		$( "#outOfBoundsID" ).progressbar({
-			
-		})
+
 	}
 	
 	/*
 	Test if player is near a corner, and move them back if so
+	
+	Parameter cornerVector, the corner vector to test player vector against
 	*/
 	function testPlayerCornerCollision(cornerVector){
 		var playerVector = [player.get.x, player.get.y, player.get.z];
@@ -307,10 +267,9 @@ function CollisionTester(){
 			Math.pow( (playerVector[1] - cornerVector[1]), 2) +
 			Math.pow( (playerVector[2] - cornerVector[2]), 2) 
 		);
-		//console.log(distanceToCorner);
+
 		if(distanceToCorner < 10){	
-			//movePlayerForwardOrBackward(false);
-			//move the player different direction based on the corner they hit
+			// Move the player different direction based on the corner they hit
 			if(cornerVector[0] === 128 && cornerVector[2] === 128){
 				player.set.x = player.get.x + 5;
 				player.set.z = player.get.z + 5;
@@ -345,7 +304,7 @@ function CollisionTester(){
 		*/
 		if(rock.texture === depletedTexture){
 			// Already depleted!
-			document.getElementById("prospectingBarID").style.visibility = "hidden";	
+			gui.hideProspectingBar();
 		}
 		else{
 			// Rock hasn't been depleted, see if the player is prospecting it
@@ -353,20 +312,7 @@ function CollisionTester(){
 			
 				// Slowly increment the players prospecting bar, and show the GUI for it
 				prospectingBarValue += player.get.prospectingSpeed;
-				document.getElementById("prospectingBarID").style.visibility = "visible";	
-				$( "#prospectingBarID" ).progressbar({
-					value: prospectingBarValue,
-				})
-				
-				/*
-				// If they're prospecting and have no space, tell them inventory is full
-				if(!player.get.inventory.includes(-1)){
-					document.getElementById("inventoryBarID").style.visibility = "visible";	
-					$( "#inventoryBarID" ).progressbar({
-							
-					})
-				}
-				*/
+				gui.showProspectingBar();
 				
 				// Check if prospect bar is 100% && Check if there's a free space in player inventory
 				if(prospectingBarValue >= 100 && player.get.inventory.includes(-1)){
@@ -383,15 +329,10 @@ function CollisionTester(){
 				
 			}
 			else{
-				// Player is not prospecting 
-				// Reset the value
+				// Player is not prospecting, reset the value
 				prospectingBarValue = 0;
-				// Hide the prospecting bar
-				document.getElementById("prospectingBarID").style.visibility = "hidden";	
+				gui.hideProspectingBar();
 			}
-			
-			
-			
 		}
 	}	
 
