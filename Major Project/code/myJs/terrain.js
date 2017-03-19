@@ -1,13 +1,10 @@
 
 function Terrain(){
 	
-	// Contains all quadrant VAO objects, each VAO contains a quadrants: vertices, normals, uvs and indices
-	var terrainVAOs = [];
-	
 	// A 2D array storing stacked perlin noise height values, later assigned to quadrantVertices height coordinate.
 	var heightMap;
 	
-	// The row and column size of each quadrant
+	// The row and column size (number of vertices) of each quadrant
 	var quadrantRowSize = 128;
 	var quadrantColumnSize = 128;
 	
@@ -19,6 +16,37 @@ function Terrain(){
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;
 	var terrainColumns = numberQuadrantColumns * quadrantColumnSize;
+	
+	// Needed in createQuadrantVertices, what position to start generating quadrant vertices from
+	var savedX = 0;
+	var savedZ = 0;
+	
+	// Contains all quadrant VAO objects, each VAO contains a quadrants: vertices, normals, uvs and indices
+	var terrainVAOs = [];
+	
+	// VBOs for each quadrant, they get stored in the main terrain VAO, just above
+	var quadrantVertexBuffer;
+	var quadrantIndicesBuffer;
+	var quadrantUvBuffer;
+	var quadrantNormalBuffer;
+	
+	// Data for the current quadrant, this data gets stored in the quadrants VBOs
+	var quadrantVertices = []; 
+	var quadrantNormals = [];
+	var quadrantUvs = [];
+	var quadrantIndices = [];
+
+	// Contains corner indices of the VAO array
+	var cornerIndices = []; 
+	
+	// Contains edge indices of the VAO array
+	var leftEdgeIndices = []; 
+	var rightEdgeIndices = []; 
+	var topEdgeIndices = []; 
+	var bottomEdgeIndices = []; 
+	
+	// Final set of indices to render
+	var renderIndices = []; 
 	
 	//Needed in rockGenerator, careful might be quadrantRows
 	this.get = {
@@ -35,79 +63,7 @@ function Terrain(){
 			return quadrantRowSize;
 		}
 	};
-	
-	// Data for the current quadrant, this data gets stored in the quadrants VBOs
-	var quadrantVertices = []; 
-	var quadrantNormals = [];
-	var quadrantUvs = [];
-	var quadrantIndices = [];
-	
-	// VBOs for each quadrant, they get stored in the quadrants VAO
-	var quadrantVertexBuffer;
-	var quadrantIndicesBuffer;
-	var quadrantUvBuffer;
-	var quadrantNormalBuffer;
-	
-	// Needed in createQuadrantVertices
-	var savedX = 0;
-	var savedZ = 0;
 
-	// Contains corner indices of the VAO array
-	var cornerIndices = []; 
-	
-	// Contains edge indices of the VAO array
-	var leftEdgeIndices = []; 
-	var rightEdgeIndices = []; 
-	var topEdgeIndices = []; 
-	var bottomEdgeIndices = []; 
-	
-	var renderIndices = []; // Final set of indices to render
-	
-	function buildAllTerrainData(){
-		
-		// For each map quadrant, create its data, and a VAO.
-		for(var x=0; x<numberQuadrantRows; x++){
-			for(var z=0; z<numberQuadrantColumns; z++){	
-				
-				//Create and bind a VAO, for holding our VBO data
-				var tempVAO = vao_ext.createVertexArrayOES();  
-				vao_ext.bindVertexArrayOES(tempVAO); 
-				
-				gl.enableVertexAttribArray(positionAttribLocation);
-				gl.enableVertexAttribArray(textureCoordLocation);
-				gl.enableVertexAttribArray(normalAttribLocation);
-						
-				// Reset current quadrant data (if any), and create new quadrant data
-				createQuadrantVertices(x, z);
-				createQuadrantIndices();
-				createQuadrantUvs(x, z);
-				createQuadrantNormals();
-				
-				// Then put data in VBOs, and bind those VBOs to VAO
-				setupQuadrantVertexBuffer();
-				setupQuadrantIndiciesBuffer();
-				setupQuadrantUvBuffer();
-				setupQuadrantNormalBuffer();
-				
-				// Add current VAO to terrainVAOs array, this saves our data in the VAO
-				terrainVAOs.push(tempVAO);
-				vao_ext.bindVertexArrayOES(null); 
-				
-			}
-		}
-	}
-	
-	// Create, fill and edit heightMap data
-	createHeightMap();
-	fillHeightMap();
-	
-	// Use that heightMap data to create vertices 
-	buildAllTerrainData();
-	setupVaoIndices();
-	
-
-
-	
 	/*
 	The collision class needs to find a heightMap value, given a X and Z,
 	so it can move the player to the nearest vertex height.
@@ -131,6 +87,52 @@ function Terrain(){
 			}
 			else{
 				return 0;
+			}
+		}
+	}
+	
+	// Create, fill and edit heightMap data
+	createHeightMap();
+	fillHeightMap();
+	
+	// Use that heightMap data to create vertices 
+	buildAllTerrainData();
+	setupVaoIndices();
+	
+	/*
+	Loops over each quadrant
+	
+	For each map quadrant, create its data, and a VAO, store that VAO in the terrainVAOs array.
+	*/
+	function buildAllTerrainData(){
+
+		for(var x=0; x<numberQuadrantRows; x++){
+			for(var z=0; z<numberQuadrantColumns; z++){	
+				// Create and bind a VAO, for holding our VBO data
+				var tempVAO = vao_ext.createVertexArrayOES();  
+				vao_ext.bindVertexArrayOES(tempVAO); 
+				
+				// When a VAO is created all attrib locations are disabled by default
+				// So need to enable them for each VAO
+				gl.enableVertexAttribArray(positionAttribLocation);
+				gl.enableVertexAttribArray(textureCoordLocation);
+				gl.enableVertexAttribArray(normalAttribLocation);
+						
+				// Reset current quadrant data (if any), and create new quadrant data
+				createQuadrantVertices(x, z);
+				createQuadrantIndices();
+				createQuadrantUvs(x, z);
+				createQuadrantNormals();
+				
+				// Then put data in VBOs, and bind those VBOs to VAO
+				setupQuadrantVertexBuffer();
+				setupQuadrantIndiciesBuffer();
+				setupQuadrantUvBuffer();
+				setupQuadrantNormalBuffer();
+				
+				// Add current VAO to terrainVAOs array, this saves our data in the VAO
+				terrainVAOs.push(tempVAO);
+				vao_ext.bindVertexArrayOES(null); 
 			}
 		}
 	}
@@ -282,9 +284,6 @@ function Terrain(){
 			terrainX = startX; // Reset the terrainX to what it started on
 			terrainZ += 1; // Increment Z
 		}
-
-		//console.log("Individual quadrant size: " + quadrantVertices.length/3);
-		//console.log("Individual quadrant x,y,z values: " + quadrantVertices.length);		
 	}
 	
 	/*
@@ -338,29 +337,16 @@ function Terrain(){
 			//Need to normalize vectors
 			vector0 = m4.normalize(vector0);
 			vector1 = m4.normalize(vector1);
-			//console.log("vector 0: " + vector0);
-			//console.log("vector 1: " + vector1);
 			
-			//Now cross product between vector0 and vector1
-				//vector0 * vector1, might be wrong way around,
-				//Also the vectors could've been calculated wrong way around
+			// Now cross product between vector0 and vector1
+			// vector0 * vector1, might be wrong way around,
+			// Also the vectors could've been calculated wrong way around
 			var normal = m4.cross(vector0, vector1);
 			
 			quadrantNormals.push(-normal[0]); //x
 			quadrantNormals.push(-normal[1]); //y
 			quadrantNormals.push(-normal[2]); //z
-			
-			//console.log("A terrain normal is, x: " + -normal[0] + ", y: " + -normal[1] + ", z:" + -normal[2]);
 		}
-		
-		/*
-		Should have same number of normals to individual x,y,z points
-		Because each x,y,z has a normal x,y,z
-		
-		TerrainVertices length / 3 = 104k vertices, each with a normal vector, of 3 components
-		*/
-		//console.log("Quadrant Normals length: " + quadrantNormals.length/3); 
-		//console.log("Quadrant Normals individual values length: " + quadrantNormals.length); 
 	}
 
 	
@@ -394,7 +380,6 @@ function Terrain(){
 		//console.log("Length of quadrant indices: " + quadrantIndices.length);
 	}
 	
-
 	function setupQuadrantIndiciesBuffer(){
 		quadrantIndicesBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, quadrantIndicesBuffer);
@@ -469,71 +454,78 @@ function Terrain(){
 	}
 	
 	
+	/*
+	Find out what indices the corner and edge quadrants are at
+	Add theses indices to cornerIndices and all edgeIndices arrays
+		
+	If player in corner we have 4 indices to process and render
+	If player in edge we have 6 indices to process and render
+	If player in regular cell we have 9 indices to process and render
+	
+	How to calculate if on edge cell, corner cell or normal cell?
+		Base it off numberQuadrantRows * numberQuadrantColumns
+	
+	Take 4x4 cells (0->15 index) for example:
+	
+		[0, 4,  8, 12]
+		[1, 5,  9, 13]
+		[2, 6, 10, 14]
+		[3, 7, 11, 15]
+	
+		Need to work out the corners
+			take (4-4) // 0 index of 1st corner
+			take (4x4) - 1 // 15 index of 2nd corner
+			take (4) - 1 // 3 index of 3rd corner
+			take (4) * 3 // 12 index of 4th corner
+		
+		First 2 Edges of map
+			any multiple of 4 is an edge element // 0, 4, 8, 12
+			any number up to 4 is an edge element // 0, 1, 2, 3
+			add these values to 'edges' array, IF it isn't in corners array, else its a corner
+		
+		2 opposite edges 
+			take the last multiple of 4, and add (4-1) values onto it, they're all edges // 12, 13, 14, 15
+			take number up to (4-1), add the number (4) and then -1 from it. // 3, 7, 11, 15
+			add these values to 'edges' array, IF it isn't in corners array, else its a corner
+		
+		Else, they're in a centre cell, so render a 3x3 grid
+	*/
 	function setupVaoIndices(){
-		// Work out the below values, add to arrays
-		// This can be done in setup !?
-		
-		// If in a normal cell, then have indices as they are below
-		// If not, just have 4 (corner) or 6 (edge) indices and use those
-		
-		// How to calculate if on edge cell, or normal cell
-		// Base it off numberQuadrantRows * numberQuadrantColumns
-		
-		// Take 4x4 for example
-		
-			// Need to work out if corner
-			//		take (4-4) // 0
-			// 		take (4x4) - 1 // 15
-			//		take (4) - 1 // 3
-			// 		take (4) * 3 // 12
-			
-			// Edges
-			// 		any multiple of 4 is an edge element // 0, 4, 8, 12
-			//  	any number up to 4 is an edge element // 0, 1, 2, 3
-			// 		add these values to 'edges' array, IF it isn't in corners array, else its a corner
-			
-			// 2 opposite edges 
-			// 		take the last multiple of 4, and add (4-1) values onto it, they're all edges // 12, 13, 14, 15
-			// 		take number up to (4-1), add the number (4) and then -1 from it. // 3, 7, 11, 15
-			// 		add these values to 'edges' array, IF it isn't in corners array, else its a corner
-			
-			// else, they're in a centre cell
-		
-		
+
 		//Corners
-			cornerIndices.push( numberQuadrantRows - numberQuadrantColumns );
-			cornerIndices.push( (numberQuadrantRows * numberQuadrantColumns) - 1);
-			cornerIndices.push( numberQuadrantRows - 1 );
-			cornerIndices.push( numberQuadrantRows * (numberQuadrantColumns-1) );
+		cornerIndices.push( numberQuadrantRows - numberQuadrantColumns );
+		cornerIndices.push( (numberQuadrantRows * numberQuadrantColumns) - 1);
+		cornerIndices.push( numberQuadrantRows - 1 );
+		cornerIndices.push( numberQuadrantRows * (numberQuadrantColumns-1) );
 	
 		// Top edge
-			for(var e=0; e<numberQuadrantRows*numberQuadrantColumns; e+=numberQuadrantRows){
-				// If value is corner, don't add to edges
-				if(!cornerIndices.includes(e)){
-					topEdgeIndices.push(e);
-				}
+		for(var e=0; e<numberQuadrantRows*numberQuadrantColumns; e+=numberQuadrantRows){
+			// If value is corner, don't add to edges
+			if(!cornerIndices.includes(e)){
+				topEdgeIndices.push(e);
 			}
+		}
 		// Left edge
-			for(var e=0; e<numberQuadrantRows; e++){
-				// If value is corner, don't add to edges
-				if(!cornerIndices.includes(e)){
-					leftEdgeIndices.push(e);
-				}
-			}	
+		for(var e=0; e<numberQuadrantRows; e++){
+			// If value is corner, don't add to edges
+			if(!cornerIndices.includes(e)){
+				leftEdgeIndices.push(e);
+			}
+		}	
 		// Bottom edge
-			for(var e = numberQuadrantRows-1; e<(numberQuadrantRows*numberQuadrantColumns)-1; e+=numberQuadrantRows){
-				// If value is corner, don't add to edges
-				if(!cornerIndices.includes(e)){
-					bottomEdgeIndices.push(e);
-				}
-			}	
+		for(var e = numberQuadrantRows-1; e<(numberQuadrantRows*numberQuadrantColumns)-1; e+=numberQuadrantRows){
+			// If value is corner, don't add to edges
+			if(!cornerIndices.includes(e)){
+				bottomEdgeIndices.push(e);
+			}
+		}	
 		// Right edge
-			for(var e = (numberQuadrantRows*numberQuadrantColumns)-numberQuadrantRows; e<(numberQuadrantRows*numberQuadrantColumns)-1; e++){
-				// If value is corner, don't add to edges
-				if(!cornerIndices.includes(e)){
-					rightEdgeIndices.push(e);
-				}
-			}		
+		for(var e = (numberQuadrantRows*numberQuadrantColumns)-numberQuadrantRows; e<(numberQuadrantRows*numberQuadrantColumns)-1; e++){
+			// If value is corner, don't add to edges
+			if(!cornerIndices.includes(e)){
+				rightEdgeIndices.push(e);
+			}
+		}		
 	}
 	
 	/*
@@ -657,9 +649,8 @@ function Terrain(){
 		gl.activeTexture(gl.TEXTURE0);
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
 		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
-		//console.log("Current quadrant is: " + player.get.quadrant);
 		
-		// Reset indices to process and render
+		// Reset VAO indices to process and render
 		renderIndices = [];
 		
 		// Get the cell they're in (for example 0)
@@ -670,33 +661,30 @@ function Terrain(){
 		// Work out what data we should process and render
 		if(cornerIndices.includes(player.get.quadrant)){
 			setupIndicesCornerCells();
-			console.log("in corner");
 		}
 		else if(topEdgeIndices.includes(player.get.quadrant)){
 			setupIndicesTopEdgeCells();
-			console.log("In top edge cell");
 		}
 		else if(bottomEdgeIndices.includes(player.get.quadrant)){
 			setupIndicesBottomEdgeCells();
-			console.log("In bottom edge cell");
 		}
 		else if(leftEdgeIndices.includes(player.get.quadrant)){
 			setupIndicesLeftEdgeCells();
-			console.log("In left edge cell");
 		}
 		else if(rightEdgeIndices.includes(player.get.quadrant)){
 			setupIndicesRightEdgeCells();
-			console.log("In right edge cell");
 		}
 		else{
 			setupIndices3x3Cells();
 		}
 
 		/*
+		4 (corner) -> 9 (regular cell) draw calls, one for each quadrant
+		
 		Process and render the current player quadrant and the surrounding cells (3x3 total)
 		*/
 		for(var i=0; i<renderIndices.length; i++){
-			vao_ext.bindVertexArrayOES(terrainVAOs[ renderIndices[i] ]); //player.get.quadrant
+			vao_ext.bindVertexArrayOES(terrainVAOs[ renderIndices[i] ]); 
 			gl.drawElements(
 				gl.TRIANGLE_STRIP, 
 				quadrantVertices.length / 3 * 2, // vertices * 2 is the number of indices
@@ -705,7 +693,6 @@ function Terrain(){
 			); 
 			vao_ext.bindVertexArrayOES(null); 
 		}
-		
 	}
 	
 }
