@@ -343,7 +343,6 @@ function Player(x, y, z){
 	}
 	
 	var slot0 = document.getElementById("slot0");
-	
 	var slot1 = document.getElementById("slot1");
 	var slot2 = document.getElementById("slot2");
 	var slot3 = document.getElementById("slot3");
@@ -360,10 +359,10 @@ function Player(x, y, z){
 		for(var i=0; i<8; i++){
 			if(inventory[i] === -1){
 				//Render empty slot
-				inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
+				//inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
 			}
 			else{
-				inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + inventory[i] + ".png)";
+				//inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + inventory[i] + ".png)";
 			}
 		}
 		

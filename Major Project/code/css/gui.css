@@ -20,11 +20,6 @@ html, body {
 	top: 0%;
 }
 
-.myTable tr td { 
-	width: 25%; 
-	height: 25%;
-}
-
 .ui-progressbar-value{
 	background: #0080ff;
 }

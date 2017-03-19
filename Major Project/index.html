@@ -33,20 +33,11 @@
   </div>
   
   <div id="tabs-2">
-	<table class="myTable" cellpadding="0" cellspacing="0" width="100%" height="100%" border="0">
-	  <tr>
-		<td id="slot0" height="20px">Jill</td>
-		<td id="slot1">Smith</td> 
-		<td id="slot2">50</td>
-		<td id="slot3">94</td>
-	  </tr>
-	  <tr>
-		<td id="slot4">Eve</td>
-		<td id="slot5">Jackson</td> 
-		<td id="slot6">94</td>
-		<td id="slot7">94</td>
-	  </tr>
-	</table>
+	<tr>
+	<td><img src="resources/rocks/0_inv.png" alt="description here" /></td>
+	<td><img src="resources/rocks/1_inv.png" alt="description here" /></td>
+	<td><img src="resources/rocks/2_inv.png" alt="description here" /></td>
+	</tr>
   </div>
   
   <div id="tabs-3">
@@ -206,7 +197,7 @@ function render(){
 	player.movePlayer();
 	player.assignPlayerQuadrant();
 
-	terrain.render(); 
+	//terrain.render(); 
 
 	collisionTester.testAllCollision();
 
