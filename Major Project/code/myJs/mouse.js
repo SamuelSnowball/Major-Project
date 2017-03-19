@@ -17,34 +17,37 @@ var prospectingBarValue = 0;
 			
 canvas.addEventListener('mousedown', function(){
 	
-	if(gameRunning === false){
-		setup();
-	}
-	else{
-		//Game already running, dont run setup again
-	}
+	$(document).ready(function() {
+		if(gameRunning === false){
+			setup();
+		}
+		else{
+			//Game already running, dont run setup again
+		}
 
-	//Remove background image and text when game starts
-	var banner = document.getElementById('banner');
-	if(banner !== null){
-		banner.parentNode.removeChild(banner);
-	}
-	document.body.style.backgroundImage = ""; 
+		//Remove background image and text when game starts
+		var banner = document.getElementById('banner');
+		if(banner !== null){
+			banner.parentNode.removeChild(banner);
+		}
+		document.body.style.backgroundImage = ""; 
+		
+		/*
+		The boolean pointerLocked might screw up if they exit via escape
+		*/
+		if(pointerLocked === false){
+			canvas.requestPointerLock();
+			console.log("Pointer locked!");
+			pointerLocked = true;
+		}
+		else{
+			// They clicked again, attempt to unlock
+			pointerLocked = false;
+			console.log("Pointer unlocked!");
+			document.exitPointerLock();
+		}		
+	});
 	
-	/*
-	The boolean pointerLocked might screw up if they exit via escape
-	*/
-	if(pointerLocked === false){
-		canvas.requestPointerLock();
-		console.log("Pointer locked!");
-		pointerLocked = true;
-	}
-	else{
-		// They clicked again, attempt to unlock
-		pointerLocked = false;
-		console.log("Pointer unlocked!");
-		document.exitPointerLock();
-	}
 	
 	
 
