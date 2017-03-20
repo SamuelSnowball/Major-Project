@@ -1,7 +1,6 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-<<<<<<< HEAD
 Sprint 5 (20th - 27th March)
 
 	Tackling tasks from product backlog:
@@ -17,5 +16,3 @@ Sprint 5 (20th - 27th March)
 		Add missions, find this rock, show rock in gui
 
 		3D Rock in GUI, do this last
-=======
->>>>>>> origin/master
