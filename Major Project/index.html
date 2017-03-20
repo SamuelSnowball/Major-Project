@@ -146,7 +146,7 @@ var waterSystem = new WaterSystem();
 var missionAssigner = new MissionAssigner();
 var sound = new Sound();
 var lander = new Lander();
-var player = new Player(5, 1, 5); 
+var player = new Player(315, 1, 315); 
 var gui = new GUI();
 
 //For saving the game
@@ -198,8 +198,6 @@ function render(){
 	lander.render();
 	lander.depositPlayerOre();
 	
-	player.renderInventory();
-	
 	gameTime++;
 	requestAnimationFrame(render);
 }
@@ -219,7 +217,7 @@ function setup(){
 	gui.showElements();	
 	
 	// Load player data if it exists
-	worldState.loadWorld();
+	// worldState.loadWorld();
 	
 	render();
 }

@@ -299,6 +299,9 @@ function CollisionTester(){
 	then prospect the rock, and finally change the rocks texture to depleted
 	*/
 	function isProspecting(rock){
+		
+		gui.renderInventory();
+		
 		/*
 		Check if rock is already depleted, if so, they cant prospect it again!
 		*/
@@ -309,7 +312,7 @@ function CollisionTester(){
 		else{
 			// Rock hasn't been depleted, see if the player is prospecting it
 			if(player.get.prospecting === true){
-			
+				
 				// Slowly increment the players prospecting bar, and show the GUI for it
 				prospectingBarValue += player.get.prospectingSpeed;
 				gui.showProspectingBar();

@@ -123,5 +123,32 @@ function GUI(){
 		document.getElementById("missionTextID").innerHTML = "";	
 	}
 	
+	var slot0 = document.getElementById("slot0");
+	var slot1 = document.getElementById("slot1");
+	var slot2 = document.getElementById("slot2");
+	var slot3 = document.getElementById("slot3");
+	var slot4 = document.getElementById("slot4");
+	var slot5 = document.getElementById("slot5");
+	var slot6 = document.getElementById("slot6");
+	var slot7 = document.getElementById("slot7");
+	
+	var inventorySlotIDs = [];
+	inventorySlotIDs.push(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7);
+	
+	this.renderInventory = function(){
+		
+		var playerInv = player.get.inventory;
+	
+		for(var i=0; i<player.get.inventorySize; i++){
+			if(playerInv[i] === -1){
+				inventorySlotIDs[i].src = "resources/rocks/empty.png"
+			}
+			else{
+				inventorySlotIDs[i].src = "resources/rocks/" + playerInv[i] + "_inv.png";
+			}
+		}
+
+	}
+	
 }
  

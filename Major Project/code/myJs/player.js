@@ -96,6 +96,9 @@ function Player(x, y, z){
 		get inventory(){
 			return inventory;
 		},
+		get inventorySize(){
+			return inventorySize;
+		},
 		get prospectingSpeed(){
 			return prospectingSpeed;
 		},
@@ -342,41 +345,14 @@ function Player(x, y, z){
 		}
 	}
 	
-	var slot0 = document.getElementById("slot0");
-	var slot1 = document.getElementById("slot1");
-	var slot2 = document.getElementById("slot2");
-	var slot3 = document.getElementById("slot3");
-	var slot4 = document.getElementById("slot4");
-	var slot5 = document.getElementById("slot5");
-	var slot6 = document.getElementById("slot6");
-	var slot7 = document.getElementById("slot7");
-	
-	
-	var inventorySlotIDs = [];
-	inventorySlotIDs.push(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7);
-	
-	this.renderInventory = function(){
-		for(var i=0; i<inventorySize; i++){
-			if(inventory[i] === -1){
-				//Render empty slot
-				
-				
-			}
-			else{
-				inventorySlotIDs[i].src = "resources/rocks/" + inventory[i] + "_inv.png";
-				
-			}
-		}
-		
-		//remake  gui?
-	}
+
 
 	/*
 	Only call when player prospects a rock!
 	*/
 	this.addToInventory = function(rock){
 		
-		for(var i=0; i<8; i++){
+		for(var i=0; i<inventorySize; i++){
 			if(inventory[i] !== -1){
 				// Then this spot is taken
 			}
