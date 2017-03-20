@@ -1,53 +1,18 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Sprint 4 (13th - 20th March)
+Sprint 5 (20th - 27th March)
 
 	Tackling tasks from product backlog:
 
-		Adding fuel and money features	 
-			Add in money variable, sell ores = get money, use to buy fuel	
+		New rocks in areas
 
-		Adding player inventory
-			When prospect rock, adds to inventory
+		Sector 1 missions
+			Can only move into sector 2 once all sector 1 missions complete
+		Sector 2 missions
 
-	Sprint Plan:
-		
-		Things to fix:
+		It shows deposited ore, even if u have none
 
-			Terrain:			
-				Redo texture atlas
+		Add missions, find this rock, show rock in gui
 
-			Shop:
-				Shop texture fixing
-				Add ability to sell to shop
-					Removes from inventory increments money
-				Add fuel cylinder next to shop, distance varibale + gui popup to refuel
-	
-			Prospecting:
-				Add in inventory
-				Add prospecting sounds, particles, progress bar, level checks
-			
-
-		Things to fix part 2:	
-
-			Find upgrades in random parts of the map
-				Add in random OBJs of crashed things
-				Saves having a shop interface
-		
-			Add rocks in certain quadrants
-			Different perlin scales for map sections
-			Collision boundaries if not high enough XP
-			
-			Add missions, find this rock, show rock in gui
-
-			Add player rotation to the minimap
-
-
-	Sprint retrospective:
-		
-
-
-
-
-
+		3D Rock in GUI, do this last
