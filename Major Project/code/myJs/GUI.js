@@ -1,127 +1,127 @@
-var guiPlayerPositionNode;
-var guiXNode;
-var guiYNode;
-var guiZNode;
-
-var currentMissionNode;
-var currentMissionElement;
-
-var nearestRockNode;
-var nearestRockElement;
-
+/*
+This file creates and displays the GUI elements of the game
+*/
 function GUI(){
+
+	$(function(){
+		$("#menu").menu();
+		
+		$("#minimapID").dialog({
+			height: window.innerHeight/2.5,
+			width: window.innerWidth/3,
+			resizable: false,
+			position: {  at: "left bottom-10%" },
+			closeOnEscape: false,
+			open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+			draggable: false,
+			autoOpen: false,
+		});
+		
+		$( "#depositOreID" ).progressbar({
+			closeOnEscape: false,
+			draggable: false
+		})
+		$( "#outOfBoundsID" ).progressbar({
+			closeOnEscape: false,
+			draggable: false
+		})
+		$( "#xpBarID" ).progressbar({
+			value: 100,
+			closeOnEscape: false,
+			draggable: false
+		})
+		$( "#healthBarID" ).progressbar({
+			value: 100,
+			closeOnEscape: false,
+			draggable: false
+		})
+		$( "#prospectingBarID" ).progressbar({
+			value: prospectingBarValue,
+			closeOnEscape: false,
+			draggable: false
+		})
+		$( "#inventoryBarID" ).progressbar({
+			value: prospectingBarValue,
+			closeOnEscape: false,
+			draggable: false
+		})
+
+		$( "#mainOverlay" ).tabs();
+
+	}); //end jquery func
 	
-	/*
-	Gets elements that need changing
+	this.showElements = function(){
+		document.getElementById("minimapID").style.visibility = "visible";
+		document.getElementById("menu").style.visibility = "visible";
+		document.getElementById("xpBarID").style.visibility = "visible";	
+		document.getElementById("healthBarID").style.visibility = "visible";	
+		document.getElementById("mainOverlay").style.visibility = "visible";	
+		
+		// Shows the minimap, don't remove
+		var theDialog = $("#minimapID").dialog();
+		theDialog.dialog("open");
+	}
 
-	SET BACkground image of div thing
-
-	Knowledge gained from:
-	https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
-	*/
-	this.setup = function(){	
-		var playerPositionElement = document.getElementById("playerPosition");
-		var playerXElement = document.getElementById("playerX");
-		var playerYElement = document.getElementById("playerY");
-		var playerZElement = document.getElementById("playerZ");
-		
-		// From globals
-		// Create text nodes to save some time for the browser.
-		guiPlayerPositionNode = document.createTextNode("");
-		guiXNode = document.createTextNode("");
-		guiYNode = document.createTextNode("");
-		guiZNode = document.createTextNode("");	
-		 
-		// Add those text nodes where they need to go
-		playerPositionElement.appendChild(guiPlayerPositionNode);
-		playerXElement.appendChild(guiXNode);
-		playerYElement.appendChild(guiYNode);
-		playerZElement.appendChild(guiZNode);
-		
-		/*
-		Mission GUI
-		*/
-		currentMissionElement = document.getElementById("currentMission");
-		currentMissionNode = document.createTextNode("");
-		currentMissionElement.appendChild(currentMissionNode);
-		
-		
-		/*
-		XP GUI
-		xpOverlayValue
-		*/
-		var xpElement = document.getElementById("xpOverlay");
-		xpNode = document.createTextNode("");
-		xpElement.appendChild(xpNode);
-		
-		/*
-		current rock 
-		*/
-		nearestRockElement = document.getElementById("nearestRockOverlay");
-		nearestRockNode = document.createTextNode("");
-		nearestRockElement.appendChild(currentMissionNode);		
-		
+	this.showRockInformation = function(){
+		$("#mainOverlay").tabs("option", "active", 0);
+		$("#tabs-1").text("your text herasde");		
 	}
 	
-	this.updateMission = function(mission){
-		currentMissionNode = document.createTextNode(mission);
-		currentMissionElement.appendChild(currentMissionNode);	
+	this.showInventory = function(){
+		$("#mainOverlay").tabs("option", "active", 1);
+	}
+	
+	this.showMission = function(){
+		$("#mainOverlay").tabs("option", "active", 2);
+	}
+	
+	this.showFullInventory = function(){
+		document.getElementById("inventoryBarID").style.visibility = "visible";	
+		$( "#inventoryBarID" ).progressbar({
+				
+		})	
+	}
+	
+	this.hideFullInventory = function(){
+		document.getElementById("inventoryBarID").style.visibility = "hidden";	
+	}
+	
+	this.showHealthBar = function(){
+		document.getElementById("healthBarID").style.visibility = "visible";	
+		$( "#healthBarID" ).progressbar({
+			value: player.get.health,
+		})
+	}
+	
+	this.showMapCollision = function(){
+		document.getElementById("outOfBoundsID").style.visibility = "visible";	
+		$( "#outOfBoundsID" ).progressbar({
+			
+		})		
+	}
+	
+	this.hideMapCollision = function(){
+		document.getElementById("outOfBoundsID").style.visibility = "hidden";		
+	}
+	
+	this.hideProspectingBar = function(){
+		document.getElementById("prospectingBarID").style.visibility = "hidden";		
+	}
+	
+	this.showProspectingBar = function(){
+		document.getElementById("prospectingBarID").style.visibility = "visible";	
+		$( "#prospectingBarID" ).progressbar({
+			value: prospectingBarValue,
+		})
+	}
+	
+	this.updateMission = function(missionText){
+		document.getElementById("missionTextID").innerHTML = missionText;	
 	}
 	
 	this.clearMission = function(){
-		currentMissionNode = document.createTextNode("");
-		currentMissionElement.innerHTML = "";
-	}
-	
-	this.update = function(){
-		
-		//If player is viewing minimap, hide game GUIs
-		if(useFog === false){
-			document.getElementById("xpOverlay").style.visibility = "hidden";
-			
-			document.getElementById("minimapOverlay").style.visibility = "hidden";
-			document.getElementById("missionOverlay").style.visibility = "hidden";
-			document.getElementById("nearestRockOverlay").style.visibility = "hidden";
-			
-			document.getElementById("topMiddleOverlay").style.visibility = "hidden";
-		}else{
-			//Show GUI elements
-			document.getElementById("xpOverlay").style.visibility = "visible";
-			
-			document.getElementById("minimapOverlay").style.visibility = "visible";
-			document.getElementById("missionOverlay").style.visibility = "visible";
-			document.getElementById("nearestRockOverlay").style.visibility = "visible";
-			
-			document.getElementById("topMiddleOverlay").style.visibility = "visible";
-		}
-	
-	
-		// set the nodes
-		//guiPlayerPositionNode.nodeValue = "";  // no decimal place
-		guiXNode.nodeValue = Math.floor(player.get.x);   // 2 decimal places
-		guiYNode.nodeValue = Math.floor(player.get.y);
-		guiZNode.nodeValue = Math.floor(player.get.z);	
-		
-		xpNode.nodeValue = Math.floor(player.get.xp);
-	}
-	
-	this.displayCurrentRock = function(){
-		//Check if player is near a rock,
-		//eventually get its texture and find its 2d version
-		if(player.get.inProspectingRange === true){
-			nearestRockElement.style.backgroundImage = "url('resources/rocks/guiRock.png')";
-		}
-		else{
-			nearestRockElement.style.backgroundImage = "none";
-		}
-		
-		//Could just display image of the rock
-		//How to rotate it, need to define vertices again?
-		//or somehow copy existing vertices, rotate those, so dont alter original?
+		document.getElementById("missionTextID").innerHTML = "";	
 	}
 	
 }
- 
-
-
  
