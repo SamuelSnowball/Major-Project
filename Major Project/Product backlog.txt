@@ -4,25 +4,27 @@
 
 Things left to add to the project: (Estimation time in hours, 10 priority is highest)
 
-	Core features:
+	Features left to implement:
 		Loading and saving functions (ongoing) 		(time: 03h) (priority: 9)
-		Add in rocks (ongoing)				(time: 10h) (priority: 8)
 		Create missions for user 			(time: 10h) (priority: 8)
-		Add shop					(time: 15h) (priority: 8)
-		Build terrain (ongoing) 			(time: 10h) (priority: 6)
-		Collision with rocks (ongoing) 			(time: 03h) (priority: 6)
-		Build GUIs 					(time: 10h) (priority: 6)
-		Prospecting, shows progress bar + particles 	(time: 08h) (priority: 5)
+			Still need to add to GUI
+			And check for completed missions
 		Add audio (ongoing) 				(time: 03h) (priority: 4)
-		Add fuel and money features			(time: 08h) (priority: 4)
-		Add player inventory 				(time: 08h) (priority: 4)
 		Minimap (Added to bottom GUI)			(time: 10h) (priority: 3)
+			Add player rotation to minimap
 
 	Extra features:
+		Add ability to harvest and deposit gas		(time: 08h) (priority: 4)
+		Laser, use vector from player to rock, 		(time: 06h) (priority: 3)
+			what will be rendered?
+			then add particle effects
+			laser sound:
+			https://www.freesound.org/people/kafokafo/sounds/128349/
 		Sandstorms					(time: 08h) (priority: 3)
 		Meteor showers					(time: 08h) (priority: 3)
 		Dropping supply crates				(time: 05h) (priority: 3)
 		Particle effects 				(time: 08h) (priority: 3)
+		Rotating rock appears in GUI			(time: 05h) (priority: 3)
 		Shadows 					(time: 10h) (priority: 2)
 		Initial loading scene 				(time: 03h) (priority: 2)
 			Great obj for loading scene:
@@ -30,8 +32,24 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 			Could also have rocket flying through space
 		Day/night cycles				(time: 05h) (priority: 1)
 		Extra texture effects, bump mapping etc		(time: 10h) (priority: 1)
-		Rotating rock appears in GUI			(time: 05h) (priority: 1)
 		Set different colours for ambient, specular     (time: 02h) (priority: 1)
+
+		Prospecting:
+			Add prospecting sounds, particles, progress bar, level checks
+		Find upgrades in random parts of the map
+			Add in random OBJs of crashed things
+			Saves having a shop interface
+		Mountain/water sections, now have 144 quadrants loads	
+		Change xp/hp colours
+
+		3D Rendering
+			For nearest rock
+			Copy vertices and render them
+			If no rock near player, dont draw
+			in render, translate its position to screenwidth/5 etc	
+
+		new mission sound:
+			https://www.freesound.org/people/Kastenfrosch/sounds/162464/
 
 	Documentation to write:
 		User manual, features, how to play
@@ -42,12 +60,18 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 
 	Current features:
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
-		Terrain 					(time: 30h) (priority: 10)
-		Some rocks, with collision			(time: 08h) (priority: 8)
-		Collision with terrain (ongoing) 		(time: 08h) (priority: 6)
+		Terrain + rendering efficiency			(time: 30h) (priority: 10)
+		Rocks (objs) with collision			(time: 20h) (priority: 8)
+		Collision with terrain 				(time: 08h) (priority: 6)
+		Build GUIs 					(time: 10h) (priority: 6)
 		Texturing terrain 				(time: 05h) (priority: 5)
+		Prospecting, shows progress bar 		(time: 08h) (priority: 5)
+			Particles could be added
 		Water, with specular lighting			(time: 12h) (priority: 4)
+			Expand to cover quadrants
+			With less vertices
 		Fog						(time: 06h) (priority: 4)
+		Add player inventory 				(time: 08h) (priority: 4)
 		
 	Small things to do:
 		Fix github issues
@@ -63,6 +87,9 @@ Before demo/final release:
 	Shorten minimap zFar range
 	
 Add a release version after each sprint as well
+
+Water notes:
+	Could create trench in terrain and have water in it, easy
 
 /////////////////////////////////////////////////////////////////////
 ####################### BEFORE STARTING SCRUM #######################
@@ -610,5 +637,46 @@ Sprint 3 (6th - 13th March)
 
 
 Sprint 4 (13th - 20th March)
+
+Notes: 
+	For water spawns, just decrement heightmap values in double for
+	Then its easy,
+
+To do:
+
+	Tackling tasks from product backlog:
+
+		Adding player inventory
+			When prospect rock, adds to inventory
+	
+		Remake GUIs
+		
+	Sprint retrospective:
+					
+			split css into new file	
+
+			Terrain:
+				Expanded map from 1024x1024 to 1536x1536 (64 quadrants to 144)			
+				Redid texture atlas
+				Added insanely spiky regions on the borders of the map,
+					that the rover cant drive on!!
+					Means they wont stare into nothing
+					Added Map boundaries + gui popup
+
+			Lander:
+				Fixed texture
+				Added depositing ores at lander
+			
+			Player:
+				Added inventory
+				Added rock going into inventory
+				Added HP
+		
+			Game mechanics
+				Adding prospect bar
+
+			GUI 
+				Swap between GUIs with 1,2,3 keys
+	
 
 

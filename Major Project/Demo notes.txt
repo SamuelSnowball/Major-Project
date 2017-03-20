@@ -1,32 +1,74 @@
-Intro
-Mars mission control game in WebGL
+Test on IS machine on monday
+Put version on public_html, fixwebperms
 
-Basically, the user plays as a rover, roaming around mars
-exploring and completeing various challenges.
+Project description 
 
-WebGL, standing for Web Graphics libary is a JavaScript
-API for rendering 3D graphics in a browser. 
-	Full demo webgl vs opengl vs directx
+	Mars mission control game in WebGL using SCRUM methododlogy
+		Allows me to complete most important things first, and worry about
+		documentation when it will add value to what i have.
 
-Perhaps go over similar games
+	Basically, the user plays as a rover, roaming around mars
+		exploring and completeing various challenges.
 
+	WebGL, standing for Web Graphics libary is a JavaScript
+		API for rendering graphics in a browser. 
 
+	WebGL lets you display triangles on the screen, doesn't do much more than that.
+		Theres no ability to drag and drop objects into a premade 3D scene
+		It's from scratch basically
+		
+	webgl vs opengl vs directx, LEARNING WebGL and GLSL never used before
+
+		decided on webgl because benefits of the browser and not confident enough with c++
+		OpenGL would mean I have to write in c++ which is already challenging enough
+			let alone opengl on top.
+		I'd rather use webgl (which is basically opengl) but with JavaScript
+			so I could focus on the webgl side, and have solid underlying
+			javascript code
+
+		directX i had absoultey no experience with, as it isnt based off opengl
+			also its windows only,
+
+	also could've used library i was familar with, three.js, or a full on game engine
+		but i'd get no enjoyment out of either as not learning much
+
+	
 
 Technical
-Model, view, projection
+	Overall I have to go back and improve things, which isnt really what scrum is about
+	As I find out new more efficient methods
+	Also, 
+	
+	basic game structure
+		setup() vertices are created
+		update() vertices are moved
+		render() vertices are displayed
 
-CPU vs GPU processing
+	Model everything in 3D
+		Use a projection matrix to convert my 3D world into 2D screenspace
+		illusion of 3d
+
+	Show terrain generation, 
+		make grid of vertices, and set their height with perlin noise
+		Rendering efficiency vs no efficiency
+
+	Player height setting,
+		sets height to the nearest terrain vertex height, hence the bumpyness
+		
+	Added water, same as terrain but vertices are updated	
+	Some game mechanics
+
+Mention documentation
+	Test table
+	Class diagram
+	Flow diagram
+
+
+Work left to do
+	UI stuff, a home screen
+	Minimap to go in bottom corner
+	
 
 
 
-Pipeline, with screenshots of ur vertices etc
-Processes data sent to it
-Converts into points
 
-
-Rasteriziation, connects the points
-and then fills the triangle in
-
-Fragment shader
-Runs on every fragment in the triangle
-Generates colours
