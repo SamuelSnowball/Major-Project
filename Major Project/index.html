@@ -1,13 +1,11 @@
 <!DOCTYPE HTML>
 
 <head>
-	<title>WebGL Project</title>
-
+	<title>Mars Rover Game</title>
 	<link rel="stylesheet" href="code/css/gui.css">
 	<link rel="stylesheet" href="libraries/jquery-ui-1.12.1.custom/jquery-ui.css">
 	<script src="libraries/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 	<script src="libraries/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
-
 </head>
 
 
@@ -16,12 +14,12 @@
 <link rel="stylesheet" href="code/css/gui.css">
 
 <div id="banner"><p>Mars Mission Control Game</p></div>
-
 <div>fps: <span id="fps"></span></div>
 
 <!-- GL Canvas -->
 <canvas id="canvas" class="canvasClass"></canvas>
-  
+
+<!-- The main user interface -->
 <div id="mainOverlay"style="visibility: hidden">
   <ul>
     <li><a href="#tabs-1">Rock Information (1)</a></li>
@@ -29,23 +27,29 @@
     <li><a href="#tabs-3">Current mission (3)</a></li>
   </ul>
   <div id="tabs-1">
-    <p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
+   Tab 1
   </div>
   
   <div id="tabs-2">
 	<tr>
-	<td><img src="resources/rocks/0_inv.png" alt="description here" /></td>
-	<td><img src="resources/rocks/1_inv.png" alt="description here" /></td>
-	<td><img src="resources/rocks/2_inv.png" alt="description here" /></td>
+	<td><img id="slot0" src=""/></td>
+	<td><img id="slot1" src=""/></td>
+	<td><img id="slot2" src=""/></td>
+	<td><img id="slot3" src=""/></td>
+	<td><img id="slot4" src=""/></td>
+	<td><img id="slot5" src=""/></td>
+	<td><img id="slot6" src=""/></td>
+	<td><img id="slot7" src=""/></td>
 	</tr>
   </div>
   
   <div id="tabs-3">
-    <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
-    <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+	<div id="missionTextID">
+		Tab 3
+    </div>
   </div>
 </div>
-
+<!-- End of user interface -->
 
 <div id="xpBarID" style="visibility: hidden">Experience</div>
 <div id="inventoryBarID" style="visibility: hidden">Inventory full! Deposit ores at lander</div>
@@ -55,51 +59,42 @@
 <div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
 <div id="minimapID" title="Minimap" style="visibility: hidden"></div>
 
-
+<!-- Menu at top left -->
 <ul id="menu" style="visibility: hidden">
-
-<li><div>Menu</div> <!-- Once clicked others should show -->
-	<ul>
-	
-		<li><div>Help</div>
-			<ul>
-				<li><div>Press P to prospect</div></li>
-			</ul>
-		</li>
-		
-		<li><div>Sound</div></li>
-		
-		<li><div>Controls</div>
-			<ul>
-				<li><div>Invert controls</div></li>
-			</ul>		
-		</li>
-		
-		<li><div>About</div></li>
-		
-	</ul>
-</li>	
-
-<li><div>Missions</div>
-	<ul>
-	
-		<li><div>Area 1 Missions</div>
-			<ul>
-				<li><div>Prospect a rock</div></li>
-				<li><div>Prospect 8 rocks</div></li>
-				<li><div>Deposit ore at lander</div></li>
-			</ul>
-		</li>
-		
-		<li class="ui-state-disabled"><div>Area 2 Missions</div></li>
-		<li class="ui-state-disabled"><div>Area 3 Missions</div></li>
-		<li class="ui-state-disabled"><div>Area 4 Missions</div></li>
-		
-	</ul>
-</li>	
-		
-
+	<li>
+		<div>Menu</div> <!-- Once clicked others should show -->
+		<ul>
+			<li><div>Help</div>
+				<ul>
+					<li><div>Press P to prospect</div></li>
+				</ul>
+			</li>
+			<li><div>Sound</div></li>
+			<li><div>Controls</div>
+				<ul>
+					<li><div>Invert controls</div></li>
+				</ul>		
+			</li>
+			<li><div>About</div></li>
+		</ul>
+	</li>	
+	<li>
+		<div>Missions</div>
+		<ul>
+			<li><div>Area 1 Missions</div>
+				<ul>
+					<li><div>Prospect a rock</div></li>
+					<li><div>Prospect 8 rocks</div></li>
+					<li><div>Deposit ore at lander</div></li>
+				</ul>
+			</li>
+			<li class="ui-state-disabled"><div>Area 2 Missions</div></li>
+			<li class="ui-state-disabled"><div>Area 3 Missions</div></li>
+			<li class="ui-state-disabled"><div>Area 4 Missions</div></li>
+		</ul>
+	</li>	
 </ul>
+<!-- End Menu -->
 
 <!-- Libraries -->
 <script src="libraries/m4.js"></script>
@@ -108,7 +103,6 @@
 
 <!-- Not my js files-->
 <script src="code/js/ImprovedNoise.js"></script>
-
 
 <!-- WebGL setup files including shaders and program -->
 <script src="code/myJs/glSetup.js"></script>
@@ -143,20 +137,13 @@ var perlin = new ImprovedNoise();
 var textureLoader = new TextureLoader();
 var utility = new Utility();
 var loadingScreen = new LoadingScreen();
-
-
-
-
 var terrain = new Terrain();
 var rockGenerator = new RockGenerator();
-
 var worldState = new WorldState(); //Loads and saves the world
-
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
-
 var waterSystem = new WaterSystem();
-//var missionAssigner = new MissionAssigner();
+var missionAssigner = new MissionAssigner();
 var sound = new Sound();
 var lander = new Lander();
 var player = new Player(5, 1, 5); 
@@ -197,7 +184,7 @@ function render(){
 	player.movePlayer();
 	player.assignPlayerQuadrant();
 
-	//terrain.render(); 
+	terrain.render(); 
 
 	collisionTester.testAllCollision();
 
@@ -206,14 +193,12 @@ function render(){
 	waterSystem.updateWaterVertices();
 	waterSystem.render();
 
-	//missionAssigner.checkOrAssignPlayerMissions();
-
+	missionAssigner.checkOrAssignPlayerMissions();
 	
 	lander.render();
 	lander.depositPlayerOre();
 	
 	player.renderInventory();
-	
 	
 	gameTime++;
 	requestAnimationFrame(render);

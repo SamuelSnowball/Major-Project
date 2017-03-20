@@ -316,6 +316,7 @@ function CollisionTester(){
 				
 				// Check if prospect bar is 100% && Check if there's a free space in player inventory
 				if(prospectingBarValue >= 100 && player.get.inventory.includes(-1)){
+					
 					// Bar has reached 100%
 					rock.texture = depletedTexture;
 					player.add.xp = 1;

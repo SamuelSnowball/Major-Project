@@ -115,5 +115,13 @@ function GUI(){
 		})
 	}
 	
+	this.updateMission = function(missionText){
+		document.getElementById("missionTextID").innerHTML = missionText;	
+	}
+	
+	this.clearMission = function(){
+		document.getElementById("missionTextID").innerHTML = "";	
+	}
+	
 }
  

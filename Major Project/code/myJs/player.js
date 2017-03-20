@@ -15,8 +15,6 @@ function Player(x, y, z){
 	
 	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
 	var numberQuadrantColumns = terrain.get.getNumberQuadrantColumns;
-
-	var inventory = Array(8).fill(-1);
 	
 	var playerVertices = [];
 	var playerUvs = [];
@@ -37,6 +35,8 @@ function Player(x, y, z){
 	var inProspectingRange = false; //To know whether to update GUI or not
 	var prospectingSpeed = 0.5;
 	var xp = 0;
+	var inventorySize = 4;
+	var inventory = Array(inventorySize).fill(-1);
 	
 	var health = 100;
 	
@@ -356,13 +356,15 @@ function Player(x, y, z){
 	inventorySlotIDs.push(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7);
 	
 	this.renderInventory = function(){
-		for(var i=0; i<8; i++){
+		for(var i=0; i<inventorySize; i++){
 			if(inventory[i] === -1){
 				//Render empty slot
-				//inventorySlotIDs[i].style.backgroundImage = "url('resources/rocks/empty.png')";
+				
+				
 			}
 			else{
-				//inventorySlotIDs[i].style.backgroundImage = "url(resources/rocks/" + inventory[i] + ".png)";
+				inventorySlotIDs[i].src = "resources/rocks/" + inventory[i] + "_inv.png";
+				
 			}
 		}
 		

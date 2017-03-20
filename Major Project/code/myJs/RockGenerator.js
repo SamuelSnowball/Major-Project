@@ -55,17 +55,17 @@ function RockGenerator(){
 
 	function createRocks(){
 		//numRocks = 3;
-		for(var i=0; i<35; i++){
+		for(var i=0; i<25; i++){
 			createObjRock(objRockText0, rockTexture0, 0, 0);
 			createObjRock(objRockText0, rockTexture1, 1, 0);
-			
 			createObjRock(objRockText1, rockTexture2, 2, 1);
 			createObjRock(objRockText1, rockTexture3, 3, 1);
-			createObjRock(objRockText1, rockTexture4, 4, 1);
-			
+			createObjRock(objRockText1, rockTexture4, 4, 2);
 			createObjRock(objRockText2, rockTexture5, 5, 2);
-			createObjRock(objRockText2, rockTexture6, 6, 2);
-			createObjRock(objRockText2, rockTexture7, 7, 2);
+			createObjRock(objRockText2, rockTexture6, 6, 3);
+			createObjRock(objRockText2, rockTexture7, 7, 3);
+			// Still can use rockText 3 and higher
+			// Also need different sections as dont fit max 1536x1536
 		}
 	}
 	
