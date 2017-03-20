@@ -16,5 +16,3 @@ Sprint 5 (20th - 27th March)
 		Add missions, find this rock, show rock in gui
 
 		3D Rock in GUI, do this last
-		
-		Test

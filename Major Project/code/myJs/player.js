@@ -5,13 +5,16 @@ function Player(x, y, z){
 	var y = y;
 	var z = z;
 	
-	var movementSpeed = 0.5;
+	var movementSpeed = 0.3;
 	
 	var xRotation = 0;
 	var yRotation = 0;
 	
 	var previousY = 0; // To remember Y pos when moving camera for fog
 	var quadrant; // Current section of the map they're in
+	
+	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
+	var numberQuadrantColumns = terrain.get.getNumberQuadrantColumns;
 	
 	var playerVertices = [];
 	var playerUvs = [];
@@ -30,10 +33,34 @@ function Player(x, y, z){
 	*/
 	var prospecting = false; 
 	var inProspectingRange = false; //To know whether to update GUI or not
+	var prospectingSpeed = 0.5;
 	var xp = 0;
+	var inventorySize = 4;
+	var inventory = Array(inventorySize).fill(-1);
+	
+	var health = 100;
 	
 	var hasMission = false; // if they have a mission, true false
 	var currentMission; // a number representing what mission they have
+	
+	/*
+	Handles user input and changes the 4 movement variables
+	The movement variables are used in the player class
+
+	2 Arrow keys:
+		Forward (up key)
+		Back (down key)
+		
+	W Key:
+		Moves camera up
+		
+	S Key:
+		Moves camera down
+	*/
+	var moveUp = false, 
+		moveDown = false, 
+		moveForward = false, 
+		moveBack = false;	
 	
 	this.get = {
 		get prospecting(){
@@ -65,6 +92,21 @@ function Player(x, y, z){
 		},
 		get quadrant(){
 			return quadrant;
+		},
+		get inventory(){
+			return inventory;
+		},
+		get prospectingSpeed(){
+			return prospectingSpeed;
+		},
+		get movingForward(){
+			return moveForward;
+		},
+		get movingBackward(){
+			return moveBack;
+		},
+		get health(){
+			return health;
 		}
 	}	
 	
@@ -93,37 +135,37 @@ function Player(x, y, z){
 		set yRotation(y){
 			yRotation = y;
 		},
+		set inventory(param){
+			inventory = param;
+		},
+		set prospectingSpeed(param){
+			prospectingSpeed = param;
+		}
 	}
 	
 	this.add = {
 		set xp(xpParam){
 			xp += xpParam;
+		},
+		set health(hpParam){
+			health += hpParam;
+		},
+		set x(xParam){
+			x += xParam;
+		},
+		set y(yParam){
+			y += yParam;
+		},
+		set z(zParam){
+			z += zParam;
 		}
+		
 	}
 	
 	
 	setupPlayerMovement();
 	setupPlayerBuffers();
 	
-	
-	/*
-	Handles user input and changes the 4 movement variables
-	The movement variables are used in the player class
-
-	2 Arrow keys:
-		Forward (up key)
-		Back (down key)
-		
-	W Key:
-		Moves camera up
-		
-	S Key:
-		Moves camera down
-	*/
-	var moveUp = false, 
-		moveDown = false, 
-		moveForward = false, 
-		moveBack = false;	
 		
 	function setupPlayerMovement(){
 		document.addEventListener('keydown', function(event){
@@ -155,7 +197,18 @@ function Player(x, y, z){
 					previousY = y;
 				}
 			}
+			if(event.keyCode === 49){
+				gui.showRockInformation();
+			}			
+			if(event.keyCode === 50){
+				gui.showInventory();
+			}		
+			if(event.keyCode === 51){
+				gui.showMission();
+			}		
+			
 		});
+		
 		
 		document.addEventListener('keyup', function(event){
 			if(event.keyCode == 38){
@@ -182,23 +235,6 @@ function Player(x, y, z){
 		});
 	}
 	
-	/*
-	Check if they're going forwards or backwards
-	Push them different ways based on movement direction
-	*/	
-	this.moveForwardOrBackward = function(){
-		if(moveForward === true){	
-			x += (cameraPosition[0] - cameraTarget[0]);
-			z += (cameraPosition[2] - cameraTarget[2]);
-		}
-		else if(moveBack == true){
-			x -= (cameraPosition[0] - cameraTarget[0]);
-			z -= (cameraPosition[2] - cameraTarget[2]);
-		}
-		else{
-		
-		}	
-	}
 	
 	/*
 	Checks what key the player is holding down,
@@ -287,10 +323,7 @@ function Player(x, y, z){
 	So can process and render whats in view of the player
 	*/
 	this.assignPlayerQuadrant = function(){
-
-		var numberQuadrantRows = 8;
-		var numberQuadrantColumns = 8;
-		
+	
 		// Need count variable because quadrant is a single number, cant work it out with the 2 loops properly
 		var count = 0;
 		
@@ -308,7 +341,53 @@ function Player(x, y, z){
 			}
 		}
 	}
+	
+	var slot0 = document.getElementById("slot0");
+	var slot1 = document.getElementById("slot1");
+	var slot2 = document.getElementById("slot2");
+	var slot3 = document.getElementById("slot3");
+	var slot4 = document.getElementById("slot4");
+	var slot5 = document.getElementById("slot5");
+	var slot6 = document.getElementById("slot6");
+	var slot7 = document.getElementById("slot7");
+	
+	
+	var inventorySlotIDs = [];
+	inventorySlotIDs.push(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7);
+	
+	this.renderInventory = function(){
+		for(var i=0; i<inventorySize; i++){
+			if(inventory[i] === -1){
+				//Render empty slot
+				
+				
+			}
+			else{
+				inventorySlotIDs[i].src = "resources/rocks/" + inventory[i] + "_inv.png";
+				
+			}
+		}
+		
+		//remake  gui?
+	}
 
+	/*
+	Only call when player prospects a rock!
+	*/
+	this.addToInventory = function(rock){
+		
+		for(var i=0; i<8; i++){
+			if(inventory[i] !== -1){
+				// Then this spot is taken
+			}
+			else{
+				// The inventory spot is free
+				console.log("set rockid: " + rock.id);
+				inventory[i] = rock.id;
+				break;
+			}
+		}
+	}
 	
 	/*
 	All code below this is for rendering the player on the minimap,

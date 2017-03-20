@@ -5,7 +5,7 @@ Once the game starts, the animating background stops animating and gets removed.
 */
 
 //Set the loading screen image
-document.body.style.backgroundImage = "url('/major-project/major project/resources/homeImage.png')";
+document.body.style.backgroundImage = "url('resources/homeImage.png')";
 document.body.style.backgroundRepeat = "no-repeat";
 
 function LoadingScreen(){
