@@ -19,45 +19,7 @@
 <!-- GL Canvas -->
 <canvas id="canvas" class="canvasClass"></canvas>
 
-<!-- The main user interface -->
-<div id="mainOverlay"style="visibility: hidden">
-  <ul>
-    <li><a href="#tabs-1">Rock Information (1)</a></li>
-    <li><a href="#tabs-2">Inventory (2)</a></li>
-    <li><a href="#tabs-3">Current mission (3)</a></li>
-  </ul>
-  <div id="tabs-1">
-   Tab 1
-  </div>
-  
-  <div id="tabs-2">
-	<tr>
-	<td><img id="slot0" src=""/></td>
-	<td><img id="slot1" src=""/></td>
-	<td><img id="slot2" src=""/></td>
-	<td><img id="slot3" src=""/></td>
-	<td><img id="slot4" src=""/></td>
-	<td><img id="slot5" src=""/></td>
-	<td><img id="slot6" src=""/></td>
-	<td><img id="slot7" src=""/></td>
-	</tr>
-  </div>
-  
-  <div id="tabs-3">
-	<div id="missionTextID">
-		Tab 3
-    </div>
-  </div>
-</div>
-<!-- End of user interface -->
-
-<div id="xpBarID" style="visibility: hidden">Experience</div>
-<div id="inventoryBarID" style="visibility: hidden">Inventory full! Deposit ores at lander</div>
-<div id="healthBarID" style="visibility: hidden">Health</div>
-<div id="prospectingBarID" style="visibility: hidden">Prospecting...</div>
-<div id="depositOreID" style="visibility: hidden">Deposited ore!</div>
 <div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
-<div id="minimapID" title="Minimap" style="visibility: hidden"></div>
 
 <!-- Menu at top left -->
 <ul id="menu" style="visibility: hidden">
@@ -78,21 +40,6 @@
 			<li><div>About</div></li>
 		</ul>
 	</li>	
-	<li>
-		<div>Missions</div>
-		<ul>
-			<li><div>Area 1 Missions</div>
-				<ul>
-					<li><div>Prospect a rock</div></li>
-					<li><div>Prospect 8 rocks</div></li>
-					<li><div>Deposit ore at lander</div></li>
-				</ul>
-			</li>
-			<li class="ui-state-disabled"><div>Area 2 Missions</div></li>
-			<li class="ui-state-disabled"><div>Area 3 Missions</div></li>
-			<li class="ui-state-disabled"><div>Area 4 Missions</div></li>
-		</ul>
-	</li>	
 </ul>
 <!-- End Menu -->
 
@@ -101,15 +48,17 @@
 <script src="libraries/perlin.js"></script>
 <script src="libraries/webgl-obj-loader.js"></script>
 
+<script src="https://twgljs.org/dist/2.x/twgl-full.min.js"></script>
+
 <!-- Not my js files-->
 <script src="code/js/ImprovedNoise.js"></script>
 
 <!-- WebGL setup files including shaders and program -->
-<script src="code/myJs/glSetup.js"></script>
+<script src="code/myJs/GLSetup.js"></script>
 <script src="code/myJs/TextureLoader.js"></script>
-<script src="code/myJs/vertexShader.js"></script>
-<script src="code/myJs/fragmentShader.js"></script>
-<script src="code/myJs/program.js"></script>
+<script src="code/myJs/VertexShader.js"></script>
+<script src="code/myJs/FragmentShader.js"></script>
+<script src="code/myJs/Program.js"></script>
 
 <!-- Game files -->
 <script src="code/myJs/CollisionTester.js"></script>
@@ -120,14 +69,13 @@
 <script src="code/myJs/ParticleSystem.js"></script>
 <script src="code/myJs/WaterSystem.js"></script>
 <script src="code/myJs/Player.js"></script>
-<script src="code/myJs/MissionAssigner.js"></script>
 <script src="code/myJs/Sound.js"></script>
 <script src="code/myJs/Lander.js"></script>
 <script src="code/myJs/Utility.js"></script>
 <script src="code/myJs/WorldState.js"></script>
 
-<!-- Needs naming -->
-<script src="code/myJs/mouse.js"></script>
+<!-- Needs OO? -->
+<script src="code/myJs/Mouse.js"></script>
 
 <script>
 
@@ -137,16 +85,17 @@ var perlin = new ImprovedNoise();
 var textureLoader = new TextureLoader();
 var utility = new Utility();
 var loadingScreen = new LoadingScreen();
+
 var terrain = new Terrain();
 var rockGenerator = new RockGenerator();
+
 var worldState = new WorldState(); //Loads and saves the world
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 var waterSystem = new WaterSystem();
-var missionAssigner = new MissionAssigner();
 var sound = new Sound();
 var lander = new Lander();
-var player = new Player(5, 1, 5); 
+var player = new Player(315, 1, 315); 
 var gui = new GUI();
 
 //For saving the game
@@ -166,7 +115,7 @@ function render(){
 
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+	
 	/*
 	Auto-save the game every 20 seconds or so
 	But only save if they're not in minimap mode
@@ -188,17 +137,13 @@ function render(){
 
 	collisionTester.testAllCollision();
 
-	rockGenerator.renderObjRocks();
+	//rockGenerator.renderObjRocks();
+	rockGenerator.renderInstancedRocks();
 
 	waterSystem.updateWaterVertices();
 	waterSystem.render();
-
-	missionAssigner.checkOrAssignPlayerMissions();
 	
 	lander.render();
-	lander.depositPlayerOre();
-	
-	player.renderInventory();
 	
 	gameTime++;
 	requestAnimationFrame(render);
@@ -219,7 +164,7 @@ function setup(){
 	gui.showElements();	
 	
 	// Load player data if it exists
-	worldState.loadWorld();
+	// worldState.loadWorld();
 	
 	render();
 }

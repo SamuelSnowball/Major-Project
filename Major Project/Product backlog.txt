@@ -5,27 +5,68 @@
 Things left to add to the project: (Estimation time in hours, 10 priority is highest)
 
 	Features left to implement:
-		Loading and saving functions (ongoing) 		(time: 03h) (priority: 9)
-		Create missions for user 			(time: 10h) (priority: 8)
-			Still need to add to GUI
-			And check for completed missions
-		Add audio (ongoing) 				(time: 03h) (priority: 4)
-		Minimap (Added to bottom GUI)			(time: 10h) (priority: 3)
-			Add player rotation to minimap
+		Small rocks					(time: 10h) (priority: 8)
+
+		Skybox 						(time: 05h) (priority: 7)
+			have sun that acts as directional light 
+			small sun, and bunch of stars as well
+			then can use fake the lighting on the rocks
+			needed for shadows anyway
+
+		Shadows, applied to larger rocks only		(time: 10h) (priority: 7)
+			Perhaps need to fix rock efficiency first
+		
+		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 6)
+			Just simple particles
+
+		Water/Lava					(time: 15h) (priority: 6)
+			update vertices on GPU, new shader?
+			if close to water, process verts etc...
+
+		Small 'sandstorms'				(time: 10h) (priority: 5)
+			Only on sand regions
+			If player in range
+
+		Popup GUI showing current info of feature 	(time: 10h) (priority: 2)
+			Transparent background, gas, rock
+
+	Features not sure about:
+
+		Terrain, randomly generated terrain
+			-How long would the delay be of creating 3 new quadrants?
+			-Requires 50k vertices created every new quadrant
+			-Also have to glue together correct textures, make rocks, water sections etc
+
+			-Calculate quadrant based on absolute position, not number of terrain rows/columns
+
+			-But what happens when player goes below 0?
+			-Array indexing would go to -1 and break
+			-Could start spawning everything at like 32,000
+			-So user never reaches (0,0,0).
+
+		Terrain not randomly generated
+			-Could have loading bar
+			-Could have 2056x2056 PREMADE, 4.2m vertices
+			-Expensive start time, but smooth throughout
+			-Need something at the edges of the map
+			-So could keep terrain boundaries
+		
+
+	
+		grey/sand texture + regions
+
+
+		Flyover like minecraft creative view,
+
 
 	Extra features:
-		Add ability to harvest and deposit gas		(time: 08h) (priority: 4)
-		Laser, use vector from player to rock, 		(time: 06h) (priority: 3)
-			what will be rendered?
-			then add particle effects
-			laser sound:
-			https://www.freesound.org/people/kafokafo/sounds/128349/
-		Sandstorms					(time: 08h) (priority: 3)
+		Add ambient audio, water audio near water
+
 		Meteor showers					(time: 08h) (priority: 3)
-		Dropping supply crates				(time: 05h) (priority: 3)
-		Particle effects 				(time: 08h) (priority: 3)
-		Rotating rock appears in GUI			(time: 05h) (priority: 3)
-		Shadows 					(time: 10h) (priority: 2)
+			Some smoke particle effect on collision + rock stays
+			Rock rotates coming down, particles behind it
+			Could have a toggle for meteor shower
+
 		Initial loading scene 				(time: 03h) (priority: 2)
 			Great obj for loading scene:
 			http://tf3dm.com/3d-model/mission-control-26199.html
@@ -34,44 +75,23 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Extra texture effects, bump mapping etc		(time: 10h) (priority: 1)
 		Set different colours for ambient, specular     (time: 02h) (priority: 1)
 
-		Prospecting:
-			Add prospecting sounds, particles, progress bar, level checks
-		Find upgrades in random parts of the map
-			Add in random OBJs of crashed things
-			Saves having a shop interface
-		Mountain/water sections, now have 144 quadrants loads	
-		Change xp/hp colours
-
-		3D Rendering
-			For nearest rock
-			Copy vertices and render them
-			If no rock near player, dont draw
-			in render, translate its position to screenwidth/5 etc	
-
-		new mission sound:
-			https://www.freesound.org/people/Kastenfrosch/sounds/162464/
-
 	Documentation to write:
-		User manual, features, how to play
 		Overall design	
 		Technical stuff
 		Class diagram
 		Test table
+		Efficiency tests?
 
 	Current features:
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
 		Terrain + rendering efficiency			(time: 30h) (priority: 10)
 		Rocks (objs) with collision			(time: 20h) (priority: 8)
-		Collision with terrain 				(time: 08h) (priority: 6)
-		Build GUIs 					(time: 10h) (priority: 6)
 		Texturing terrain 				(time: 05h) (priority: 5)
-		Prospecting, shows progress bar 		(time: 08h) (priority: 5)
-			Particles could be added
 		Water, with specular lighting			(time: 12h) (priority: 4)
 			Expand to cover quadrants
 			With less vertices
 		Fog						(time: 06h) (priority: 4)
-		Add player inventory 				(time: 08h) (priority: 4)
+
 		
 	Small things to do:
 		Fix github issues
@@ -82,9 +102,6 @@ For mid project release aiming for all core done
 
 Before demo/final release:
 	Change movement speed
-	Change camera rotation speed
-	Disable use of W and S keys
-	Shorten minimap zFar range
 	
 Add a release version after each sprint as well
 

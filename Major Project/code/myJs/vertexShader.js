@@ -12,6 +12,10 @@ gl.shaderSource(vertexShader, [
 	'uniform mat4 model;',
 	'uniform mat4 projection;',
 	
+	// Instancing
+	'attribute vec3 translation;',
+	
+	// Lighting
 	'uniform vec3 lightPosition;',
 	'attribute vec3 normal;', //attribute = in
 	'varying vec3 surfaceNormal;', //varying = out
@@ -26,7 +30,7 @@ gl.shaderSource(vertexShader, [
 	'const float gradient = 1.5;',
 	
 	'void main(){',
-		'vec4 worldPostion = model * vec4(position, 1.0);', //needed for light, 
+		'vec4 worldPostion = model * vec4(position, 1.0) + vec4(translation, 0);', //needed for light and instancing
 		//after its been transformed, rotated in world, we can use it
 		
 		//Fog

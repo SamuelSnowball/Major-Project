@@ -5,12 +5,11 @@ function Player(x, y, z){
 	var y = y;
 	var z = z;
 	
-	var movementSpeed = 0.3;
+	var movementSpeed = 0.5;
 	
 	var xRotation = 0;
 	var yRotation = 0;
-	
-	var previousY = 0; // To remember Y pos when moving camera for fog
+
 	var quadrant; // Current section of the map they're in
 	
 	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
@@ -25,23 +24,6 @@ function Player(x, y, z){
 	var playerUvsBuffer;
 	var playerIndicesBuffer;
 	var playerNormalsBuffer;	
-		
-	/*
-	P key, are they prospecting a rock?
-	
-	Prospecting getter needed in CollisonTester class
-	*/
-	var prospecting = false; 
-	var inProspectingRange = false; //To know whether to update GUI or not
-	var prospectingSpeed = 0.5;
-	var xp = 0;
-	var inventorySize = 4;
-	var inventory = Array(inventorySize).fill(-1);
-	
-	var health = 100;
-	
-	var hasMission = false; // if they have a mission, true false
-	var currentMission; // a number representing what mission they have
 	
 	/*
 	Handles user input and changes the 4 movement variables
@@ -63,21 +45,6 @@ function Player(x, y, z){
 		moveBack = false;	
 	
 	this.get = {
-		get prospecting(){
-			return prospecting;
-		},
-		get xp(){
-			return xp;
-		},
-		get hasMission(){
-			return hasMission;
-		},
-		get currentMission(){
-			return currentMission;
-		},
-		get inProspectingRange(){
-			return inProspectingRange;
-		},
 		get x(){
 			return x;
 		},
@@ -93,33 +60,15 @@ function Player(x, y, z){
 		get quadrant(){
 			return quadrant;
 		},
-		get inventory(){
-			return inventory;
-		},
-		get prospectingSpeed(){
-			return prospectingSpeed;
-		},
 		get movingForward(){
 			return moveForward;
 		},
 		get movingBackward(){
 			return moveBack;
 		},
-		get health(){
-			return health;
-		}
 	}	
 	
 	this.set = {
-		set hasMission(missionParam){
-			hasMission = missionParam; // bool if they have a mission
-		},
-		set currentMission(missionParam){
-			currentMission = missionParam; // int, what mission they have
-		},
-		set inProspectingRange(inRange){
-			inProspectingRange = inRange;
-		},
 		set x(xParam){
 			x = xParam; //careful
 		},
@@ -135,21 +84,9 @@ function Player(x, y, z){
 		set yRotation(y){
 			yRotation = y;
 		},
-		set inventory(param){
-			inventory = param;
-		},
-		set prospectingSpeed(param){
-			prospectingSpeed = param;
-		}
 	}
 	
 	this.add = {
-		set xp(xpParam){
-			xp += xpParam;
-		},
-		set health(hpParam){
-			health += hpParam;
-		},
 		set x(xParam){
 			x += xParam;
 		},
@@ -162,10 +99,7 @@ function Player(x, y, z){
 		
 	}
 	
-	
 	setupPlayerMovement();
-	setupPlayerBuffers();
-	
 		
 	function setupPlayerMovement(){
 		document.addEventListener('keydown', function(event){
@@ -181,32 +115,6 @@ function Player(x, y, z){
 			if(event.keyCode == 83){
 				moveDown = true;
 			}
-			if(event.keyCode === 80){
-				prospecting = true;
-			}
-			// Holding down M key for map, disable fog so we can see properly
-			if(event.keyCode === 77){
-				useFog = false;
-				zFar = 768;
-				/*
-				Save their y position, so we can restore it when they stop pressing M
-				*/
-				if(y > 490){
-					
-				}else{
-					previousY = y;
-				}
-			}
-			if(event.keyCode === 49){
-				gui.showRockInformation();
-			}			
-			if(event.keyCode === 50){
-				gui.showInventory();
-			}		
-			if(event.keyCode === 51){
-				gui.showMission();
-			}		
-			
 		});
 		
 		
@@ -222,15 +130,6 @@ function Player(x, y, z){
 			}
 			if(event.keyCode == 83){
 				moveDown = false;
-			}
-			if(event.keyCode === 80){
-				prospecting = false;
-			}
-			//Released M key for map, enable fog, set the players position to what it was
-			if(event.keyCode === 77){
-				useFog = true;
-				zFar = 256; 
-				y = previousY; //Set their position back to normal
 			}
 		});
 	}
@@ -313,7 +212,7 @@ function Player(x, y, z){
 		viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 		
 		// Stops it breaking....
-		currentTexture = myPerlinTexture;
+		currentTexture = mapTexture0;
 		
 		updateAttributesAndUniforms();
 	}	
@@ -340,190 +239,6 @@ function Player(x, y, z){
 				count ++;
 			}
 		}
-	}
-	
-	var slot0 = document.getElementById("slot0");
-	var slot1 = document.getElementById("slot1");
-	var slot2 = document.getElementById("slot2");
-	var slot3 = document.getElementById("slot3");
-	var slot4 = document.getElementById("slot4");
-	var slot5 = document.getElementById("slot5");
-	var slot6 = document.getElementById("slot6");
-	var slot7 = document.getElementById("slot7");
-	
-	
-	var inventorySlotIDs = [];
-	inventorySlotIDs.push(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7);
-	
-	this.renderInventory = function(){
-		for(var i=0; i<inventorySize; i++){
-			if(inventory[i] === -1){
-				//Render empty slot
-				
-				
-			}
-			else{
-				inventorySlotIDs[i].src = "resources/rocks/" + inventory[i] + "_inv.png";
-				
-			}
-		}
-		
-		//remake  gui?
-	}
-
-	/*
-	Only call when player prospects a rock!
-	*/
-	this.addToInventory = function(rock){
-		
-		for(var i=0; i<8; i++){
-			if(inventory[i] !== -1){
-				// Then this spot is taken
-			}
-			else{
-				// The inventory spot is free
-				console.log("set rockid: " + rock.id);
-				inventory[i] = rock.id;
-				break;
-			}
-		}
-	}
-	
-	/*
-	All code below this is for rendering the player on the minimap,
-	Just a red square
-	*/
-	
-	
-	function setupPlayerBuffers(){
-		setupPlayerVertexBuffer();
-		setupPlayerIndicesBuffer();
-		seutpPlayerTextureBuffer();
-		setupPlayerNormalsBuffer();
-	}
-	
-	function setupPlayerVertexBuffer(){
-		playerVertexBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, playerVertexBuffer);
-		playerVertices = [
-			// Front face
-			-1.0, -1.0,  1.0,
-			1.0, -1.0,  1.0,
-			1.0,  1.0,  1.0,
-			-1.0,  1.0,  1.0,
-			
-			// Back face
-			-1.0, -1.0, -1.0,
-			-1.0,  1.0, -1.0,
-			1.0,  1.0, -1.0,
-			1.0, -1.0, -1.0,
-			
-			// Top face
-			-1.0,  1.0, -1.0,
-			-1.0,  1.0,  1.0,
-			1.0,  1.0,  1.0,
-			1.0,  1.0, -1.0,
-			
-			// Bottom face
-			-1.0, -1.0, -1.0,
-			1.0, -1.0, -1.0,
-			1.0, -1.0,  1.0,
-			-1.0, -1.0,  1.0,
-			
-			// Right face
-			1.0, -1.0, -1.0,
-			1.0,  1.0, -1.0,
-			1.0,  1.0,  1.0,
-			1.0, -1.0,  1.0,
-			
-			// Left face
-			-1.0, -1.0, -1.0,
-			-1.0, -1.0,  1.0,
-			-1.0,  1.0,  1.0,
-			-1.0,  1.0, -1.0
-		];	
-	    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(playerVertices), gl.DYNAMIC_DRAW);			
-	}
-	
-	function setupPlayerIndicesBuffer(){
-		playerIndicesBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, playerIndicesBuffer);
-
-		playerIndices = [
-		  0,  1,  2,      0,  2,  3,    // front
-		  4,  5,  6,      4,  6,  7,    // back
-		  8,  9,  10,     8,  10, 11,   // top
-		  12, 13, 14,     12, 14, 15,   // bottom
-		  16, 17, 18,     16, 18, 19,   // right
-		  20, 21, 22,     20, 22, 23    // left
-		];
-
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(playerIndices), gl.DYNAMIC_DRAW);		
-	}
-	
-	function seutpPlayerTextureBuffer(){
-		playerUvsBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, playerUvsBuffer);
-		for(var x=0; x<playerVertices.length; x+=3){
-			playerUvs.push(0, 1);
-		}
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(playerUvs), gl.DYNAMIC_DRAW);		
-	}
-	
-	function setupPlayerNormalsBuffer(){
-		playerNormalsBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, playerNormalsBuffer);
-		for(var x=0; x<playerVertices.length; x+=3){
-			playerNormals.push(0, 1, 0);
-		}
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(playerNormals), gl.DYNAMIC_DRAW);
-	}
-	
-	function renderPlayerOnMinimap(){
-
-		lightColour = [1, 1, 1];
-		currentTexture = playerTexture;
-
-		scale = m4.scaling(5, 5, 5);
-		rotateX = m4.xRotation(0);
-		rotateY = m4.yRotation(0);
-		rotateZ = m4.zRotation(0);
-		position = m4.translation(x, 50, z);
-		
-		//Times matrices together
-		updateAttributesAndUniforms();
-
-		//Vertices
-		gl.bindBuffer(gl.ARRAY_BUFFER, playerVertexBuffer);
-		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, playerUvsBuffer);
-		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture); //myPerlinTexture
-		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-
-		//Normals
-		gl.enableVertexAttribArray(normalAttribLocation);
-		gl.bindBuffer(gl.ARRAY_BUFFER, playerNormalsBuffer);
-		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
-		
-		
-		//Elements
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, playerIndicesBuffer);
-		
-		/*
-		Mode
-		Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
-		Type
-		The indices
-		*/
-		gl.drawElements(
-			gl.TRIANGLES, 
-			36,
-			gl.UNSIGNED_SHORT, 
-			0
-		); 				
 	}
 	
 };

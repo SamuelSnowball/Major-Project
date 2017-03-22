@@ -68,6 +68,9 @@ gl.enableVertexAttribArray(skyColourLocation);
 var useFogLocation = gl.getUniformLocation(program, 'useFog');
 gl.enableVertexAttribArray(useFogLocation);
 
+//Instancing, rocks
+var instancingLocation = gl.getAttribLocation(program, "translation");
+// gl.enableVertexAttribArray(instancingLocation);
 
 /*
 #################
