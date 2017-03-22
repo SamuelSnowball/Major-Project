@@ -20,18 +20,17 @@ var ext = gl.getExtension('OES_element_index_uint');
 if (!ext) {
   console.error ("ERROR: Your browser does not support WebGL UINT extension");
 }
-else{
-	console.log("browser supports UINT extension");
-}
 
 //Needed for VAO objects
 var vao_ext = gl.getExtension ("OES_vertex_array_object");
 if (!vao_ext) {
   console.error ("ERROR: Your browser does not support WebGL VAO extension");
 }
-else{
-	console.log("browser supports vao extension");
-}
 
+// For instancing
+var extension = gl.getExtension("ANGLE_instanced_arrays");
+if (!extension) {
+  console.error("need ANGLE_instanced_arrays");
+}
 
 

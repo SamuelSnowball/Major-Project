@@ -1,19 +1,72 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Sprint 5 (20th - 27th March)
+Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather than game
+
+	Game aspects where taking ages, weren't technical and didn't them find interesting
+	Now behind 1 week worth of progress, stripping out last weeks additions
+
+	Problems
+		Change project title, Mars Scene in WebGL
 
 	Tackling tasks from product backlog:
 
-		New rocks in areas
+		Small rocks					(time: 15h) (priority: 8)
 
-		Sector 1 missions
-			Can only move into sector 2 once all sector 1 missions complete
-		Sector 2 missions
+		Skybox 						(time: 05h) (priority: 7)
+			have sun that acts as directional light 
+			small sun, and bunch of stars as well
+			then can use fake the lighting on the rocks
+			needed for shadows anyway
 
-		It shows deposited ore, even if u have none
+		Shadows, applied to larger rocks only		(time: 10h) (priority: 7)
+	
+	Sprint Plan:
 
-		Add missions, find this rock, show rock in gui
+		Backup project
 
-		3D Rock in GUI, do this last
-		
+		Strip out
+			Collision, keep collision with the floor
+			GUIs - Could keep MENU GUI and have another GUI, and just show rock information when in range?
+			'minimap' and program/shader variables for disabling fog
+			inventory
+			prospecting
+			resources, rock textures etc
+
+		Also remove features from documentation
+		Add flyover movement
+		Fix terrain textures
+		Fix noise sections
+		Add new perlin seed each time
+
+		Fix UV bug
+			Instead of using 1 texture
+			Just use 4, and start UV coordinates from 0 each time.
+			Still doesn't work, wasted 3 hours
+
+		Fix collision with floor		
+
+		## Cleanup code ##
+
+		Small rocks plan
+			Find LOW poly rocks
+			CAN DRAW ALL ROCKS AS INSTANCED :)
+			should still split draw calls based on their textures
+			assign the rocks a section, easier rendering/processing
+
+		Need a quadrant for the rocks
+
+		Split rock code into different render function
+			and then for 'efficiency', calculate the vector to every rock?
+			worst case, just make terrainVAO rendering so can take in quadrant / rocks
+
+			store rock stuff in vao? later
+
+
+			could use regular draw calls, meaning duplicating vertices in 1 buffer
+				but if low poly, its ok?
+
+
+	Not using existing mars heightmap
+		-literally loading in an obj
+

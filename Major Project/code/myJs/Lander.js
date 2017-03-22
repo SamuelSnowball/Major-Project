@@ -50,53 +50,5 @@ function Lander(){
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, landerMesh.indexBuffer);
 		gl.drawElements(gl.TRIANGLES, landerMesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 	}
-	
-	/*
-	Show shop GUI when in range, later on when press a key open it
-	*/
-	this.depositPlayerOre = function(){
-	
-		// Calculate distance from player to shop, if in range, display shop
-		var distance = Math.sqrt( 
-			Math.pow( (x - player.get.x), 2) +
-			Math.pow( (y - player.get.y), 2) +
-			Math.pow( (z - player.get.z), 2) 
-		);
-		
-		if(distance < 10){
-			// If player has any rock in inventory, deposit it
-			
-			var emptyInventory = true;
-			
-			var playerInv = player.get.inventory;
-	
-			for(var i=0; i<player.get.inventorySize; i++){
-				if(playerInv[i] === -1){
-				}
-				else{
-					emptyInventory = false;
-				}
-			}
-			
-			// Then they are carrying a rock, deposit it
-			if(emptyInventory === false){
-				document.getElementById("depositOreID").style.visibility = "visible";	
-				$( "#depositOreID" ).progressbar();
-				player.set.inventory = [-1, -1, -1, -1, -1, -1, -1, -1];
-				// Update inventory GUI to remove rock images
-				gui.renderInventory();
-			}
-			else{
-				// Inventory is empty, can't deposit anything
-			}
 
-		}
-		else{
-			document.getElementById("depositOreID").style.visibility = "hidden";	
-		}
-		
-	}
-	
-	
-	
 }

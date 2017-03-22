@@ -25,7 +25,6 @@ function CollisionTester(){
 	*/
 	this.testAllCollision = function(){
 		setPlayerHeight();
-		testPlayerRockCollision();
 		testPlayerMapBoundaries();
 	}
 	
@@ -49,7 +48,14 @@ function CollisionTester(){
 		floorTemporaryPlayerCoordinates();
 		var nearestHeight = findNearestTerrainVertex();
 		
-		player.set.y = nearestHeight;
+		/*
+		If player is beneath the floor, push them back up
+		*/
+		if(player.get.y < nearestHeight){
+			player.set.y = nearestHeight;
+		}
+		
+		
 	}
 
 	/*
@@ -99,69 +105,6 @@ function CollisionTester(){
 	}
 	
 	/*
-	If they're in prospecting range, allow them to prospect
-	If they're too close to the rock, move them back
-	
-	Have to have 2 different ranges here, 
-	Otherwise as soon as they're colliding, and they try to prospect,
-	They get moved back, out of prospect range
-	*/
-	function testPlayerRockCollision(){
-		
-		/*
-		Say they're not in any prospecting range, then when we check if they are, edit this variable
-		
-		If you put it in an else, block, 
-			It breaks because they're in range of one rock
-			And it gets set to true
-			Then it tests for the next rock, and it goes false!
-		*/
-		player.set.inProspectingRange = false;
-		
-		var playerInRangeOfAnyRock = false;
-		
-		//Retrieve rocks array from the rockGenerator class
-		var objRocks = rockGenerator.getObjRocksArray.getRocks;
-		for(var i=0; i<objRocks.length; i++){
-			
-			/*
-			Check if user is in prospecting range
-			*/
-			var distance = Math.sqrt( 
-				Math.pow( (objRocks[i].x - player.get.x), 2) +
-				Math.pow( (objRocks[i].y - player.get.y), 2) +
-				Math.pow( (objRocks[i].z - player.get.z), 2) 
-			);
-				
-			if(distance > objRocks[i].scale * 5){
-				// Player too far away from rock to prospect
-			}
-			else{
-				playerInRangeOfAnyRock = true;
-				// If they're in range of rock and have no space, tell them inventory is full
-				if(playerInRangeOfAnyRock === true && !player.get.inventory.includes(-1)){
-					gui.showFullInventory();
-				}
-			
-				// They're in range prospecting, update GUI with current rock
-				player.set.inProspectingRange = true; 
-				isProspecting(objRocks[i]);
-
-				// Check if they're too close, move them back
-				if(distance < objRocks[i].scale * 1.5 ){
-					movePlayerForwardOrBackward(true);
-				}
-				
-			}
-			
-			// If player not in range of rock, hide inventory full message
-			if(playerInRangeOfAnyRock === false){
-				gui.hideFullInventory();
-			}
-		}	
-	}
-	
-	/*
 	Moves the player forwards/backwards depending on the direction they where moving when they collided
 
 	If direction === 1
@@ -196,12 +139,6 @@ function CollisionTester(){
 		else{
 		
 		}	
-		
-		// Then they collided with a rock rather than a map boundary, make them lose HP
-		if(rockCollision){
-			player.add.health = -10;
-			gui.showHealthBar();
-		}
 		
 	}
 	
@@ -290,55 +227,6 @@ function CollisionTester(){
 			}
 		}		
 	}
-	
-	/*
-	If the user is colliding with a rock, and they're holding down P,
-	Then they're prospecting the rock, so increment the prospecting bar.
-	
-	Once the prospecting bar reaches 100, first check the player has inventory space, 
-	then prospect the rock, and finally change the rocks texture to depleted
-	*/
-	function isProspecting(rock){
-		
-		gui.renderInventory();
-		
-		/*
-		Check if rock is already depleted, if so, they cant prospect it again!
-		*/
-		if(rock.texture === depletedTexture){
-			// Already depleted!
-			gui.hideProspectingBar();
-		}
-		else{
-			// Rock hasn't been depleted, see if the player is prospecting it
-			if(player.get.prospecting === true){
-				
-				// Slowly increment the players prospecting bar, and show the GUI for it
-				prospectingBarValue += player.get.prospectingSpeed;
-				gui.showProspectingBar();
-				
-				// Check if prospect bar is 100% && Check if there's a free space in player inventory
-				if(prospectingBarValue >= 100 && player.get.inventory.includes(-1)){
-					
-					// Bar has reached 100%
-					rock.texture = depletedTexture;
-					player.add.xp = 1;
-					player.addToInventory(rock);	
-					// Reset the value
-					prospectingBarValue = 0;
-				}
-				else{
-					// Prospecting bar hasn't reached 100% yet, so just do nothing
-				}
-				
-			}
-			else{
-				// Player is not prospecting, reset the value
-				prospectingBarValue = 0;
-				gui.hideProspectingBar();
-			}
-		}
-	}	
 
 }
 

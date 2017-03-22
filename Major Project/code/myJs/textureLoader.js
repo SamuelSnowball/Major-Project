@@ -12,6 +12,8 @@ var currentTexture;
 
 var myPerlinTexture;
 
+var mapTexture0;
+
 var playerTexture;
 
 var shopTexture;
@@ -26,9 +28,6 @@ var rockTexture2;
 var rockTexture3;
 var rockTexture4;
 var rockTexture5;
-var rockTexture6;
-var rockTexture7;
-var rockTexture8;
 
 /*
 Other textures
@@ -49,7 +48,8 @@ function TextureLoader(){
 				  new Uint8Array([255, 0, 0, 255]));
 				  
 		// Map texture
-		myPerlinTexture = new Texture("resources/terrain/map.png", 10, 0);
+		// myPerlinTexture = new Texture("resources/terrain/map.png", 10, 0);
+		mapTexture0 = new Texture("resources/terrain/section0.png", 10, 0);
 		
 		/*
 		Rock textures
@@ -63,9 +63,6 @@ function TextureLoader(){
 		rockTexture3 = new Texture('resources/rocks/3.png', 10, 0);
 		rockTexture4 = new Texture('resources/rocks/4.png', 10, 0);
 		rockTexture5 = new Texture('resources/rocks/5.png', 10, 0);
-		rockTexture6 = new Texture('resources/rocks/6.png', 10, 0);
-		rockTexture7 = new Texture('resources/rocks/7.png', 10, 0);
-		rockTexture8 = new Texture('resources/rocks/8.png', 10, 0);
 
 		/*
 		Other textures

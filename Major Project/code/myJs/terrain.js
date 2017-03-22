@@ -10,8 +10,8 @@ function Terrain(){
 	
 	// How many map quadrants, each having 128*128 vertices each
 	// If you update these, make sure to update them in player assign quadrant method
-	var numberQuadrantRows = 12; 
-	var numberQuadrantColumns = 12; 
+	var numberQuadrantRows = 4; 
+	var numberQuadrantColumns = 4; 
 	
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;
@@ -35,6 +35,9 @@ function Terrain(){
 	var quadrantNormals = [];
 	var quadrantUvs = [];
 	var quadrantIndices = [];
+	
+	// New
+	var quadrantFloorVerticesLength = 0;
 
 	// Contains corner indices of the VAO array
 	var cornerIndices = []; 
@@ -61,7 +64,7 @@ function Terrain(){
 		},
 		get getQuadrantRowSize(){
 			return quadrantRowSize;
-		}
+		},
 	};
 
 	/*
@@ -81,8 +84,8 @@ function Terrain(){
 			temporaryHeightMapZ = name;
 		},
 		get getTemporaryHeightMapValue(){
-			if(temporaryHeightMapZ > 0 && temporaryHeightMapZ < 1024
-			&& temporaryHeightMapX > 0 && temporaryHeightMapX < 1024){
+			if(temporaryHeightMapZ > 0 && temporaryHeightMapZ < terrainRows
+			&& temporaryHeightMapX > 0 && temporaryHeightMapX < terrainRows){
 				return heightMap[temporaryHeightMapZ][temporaryHeightMapX];
 			}
 			else{
@@ -115,7 +118,7 @@ function Terrain(){
 	For each map quadrant, create its data, and a VAO, store that VAO in the terrainVAOs array.
 	*/
 	function buildAllTerrainData(){
-
+		
 		for(var x=0; x<numberQuadrantRows; x++){
 			for(var z=0; z<numberQuadrantColumns; z++){	
 				// Create and bind a VAO, for holding our VBO data
@@ -134,6 +137,11 @@ function Terrain(){
 				createQuadrantUvs(x, z);
 				createQuadrantNormals();
 				
+				// Create rock data for the quadrant
+                // add to the translations not vertices
+				// gl.enableVertexAttribArray(instancingLocation);
+				// gl.disableVertexAttribArray(instancingLocation);
+				
 				// Then put data in VBOs, and bind those VBOs to VAO
 				setupQuadrantVertexBuffer();
 				setupQuadrantIndiciesBuffer();
@@ -146,6 +154,9 @@ function Terrain(){
 			}
 		}
 	}
+	
+	
+	
 	
 	/*
 	####################################
@@ -290,13 +301,13 @@ function Terrain(){
 				0->127, then 127->254
 			*/
 			if(vaoXPosition > 0){
-				terrainX -=vaoXPosition;
-				startX -= vaoXPosition;
+				//terrainX -=vaoXPosition;
+				//startX -= vaoXPosition;
 			}
 			if(vaoZPosition > 0){
-				terrainZ -= vaoZPosition; 
+				//terrainZ -= vaoZPosition; 
 			}
-
+			
 			// Always make quadrantRowSize * quadColumnSize (128*128) number of vertices
 			for(var x = 0; x < quadrantRowSize; x++){
 				for(var z = 0; z < quadrantColumnSize; z++){
@@ -309,7 +320,11 @@ function Terrain(){
 				terrainX = startX; // Reset the terrainX to what it started on
 				terrainZ += 1; // Increment Z
 			}
+			//console.log("quad verts length: " + quadrantVertices.length/3);
+			
+			quadrantFloorVerticesLength = quadrantVertices.length;
 		}
+		
 
 		/*
 		Private
@@ -339,6 +354,9 @@ function Terrain(){
 		
 		Creates the quadrants UV coordinates
 		*/
+		//could get passed the start position of the creatVertices function
+		//creatVertices could return the position it started at, pass into this one
+		//use that start position / terrainSize to get?
 		function createQuadrantUvs(x, z){
 		
 			// Reset current UVs
@@ -347,35 +365,37 @@ function Terrain(){
 			// Set the start position for the UV coordinates
 			var xUV;
 			var yUV;
-			if(x === 0){
-				xUV = 0;
-			}
-			else{
-				xUV = x * (1 / numberQuadrantRows);
-			}
-			if(z === 0){
-				yUV = 0;
-			}
-			else{
-				yUV = z * (1 / numberQuadrantColumns);
-			}
-			
-			// Save the start position of xUV, need to reset to it in 2nd loop
-			var startUVx = xUV;
+			//if(x === 0){
+				xUV = 0; 
+			//}
+			//else{
+			//	xUV = x * (1 / numberQuadrantRows); //x *( 1 / 12)
+			//}
+			//if(z === 0){
+			yUV = 0;
+
 			
 			// How much to increment UV coordinates by each loop
-			var incrementSize = 1 / quadrantRowSize / numberQuadrantRows;
+			// var incrementSize = 1 / quadrantRowSize / numberQuadrantRows;
+			
+			var incrementSize = 1 / (quadrantRowSize-1); // Need to -1 so it ends at (1, 1)
+		
+			// Save the start position of xUV, need to reset to it in 2nd loop
+			//var startUVx = xUV + incrementSize;
 			
 			// These should loop, quadRowSize * quadColumnSize (128*128) number of times
+			//debugger;
 			for(var x=0; x<quadrantRowSize; x++){
-				for(var y=0; y<quadrantColumnSize; y++){
+				for(var y=0; y<quadrantRowSize; y++){
 					quadrantUvs.push(xUV);  
 					quadrantUvs.push(yUV); 
 					xUV += incrementSize;
 				}
-				xUV = startUVx;
+				xUV = 0;
 				yUV += incrementSize;
 			}
+			//console.log("UV LENGTH: " + quadrantUvs.length);
+			//console.log(quadrantUvs);
 		}
 		
 		/*
@@ -717,7 +737,7 @@ function Terrain(){
 	*/
 	this.render = function(){	
 		lightColour = [1, 1, 1];
-		currentTexture = myPerlinTexture;
+		currentTexture = mapTexture0;
 
 		scale = m4.scaling(1, 1, 1);
 		rotateX = m4.xRotation(0);
@@ -766,10 +786,19 @@ function Terrain(){
 		Process and render the current player quadrant and the surrounding cells (3x3 total)
 		*/
 		for(var i=0; i<renderIndices.length; i++){
+			
+			/*
+			Render indices[i] contains the VBO's, of everything
+			
+			Have number of terrain vertices per quadrant
+			Then number of rock vertices per quadrant
+			*/
 			vao_ext.bindVertexArrayOES(terrainVAOs[ renderIndices[i] ]); 
+			
+			// Terrain, use quadrantTerrainVertices.length / 3
 			gl.drawElements(
 				gl.TRIANGLE_STRIP, 
-				quadrantVertices.length / 3 * 2, // vertices * 2 is the number of indices
+				quadrantFloorVerticesLength / 3 * 2, // vertices * 2 is the number of indices
 				gl.UNSIGNED_INT, // can probably use GLU_SHORT once fixed, remove extension
 				0 // start from the start of the current quadrant
 			); 

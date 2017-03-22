@@ -16,32 +16,29 @@ function RockGenerator(){
 	
 	var translations = [];
 	var translationBuffer;
-	var numInstances = 5;
-	var buffers;
-	//createInstancedRocksForQuadrant(); // MAKES VERTS
-	//setupInstancedRocks();
-	seutpInstancedRockBuffers(); // SETUPS UP BUFFERS
 	
+	createInstancedRocksForQuadrant();
+	setupInstancedRocks();
+	seutpInstancedRockBuffers();
 	
-	/*
+	var numInstances = 1;
 	function setupInstancedRocks(){	
 		// For each quadrant, generate translations for the single rock mesh
 		for(var i=0; i<numInstances; i++){
 			addTranslations();
 		}
 	}
-	*/
 	
 	function seutpInstancedRockBuffers(){
-	/*
+	
 		rockVerticesBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockVerticesBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockVertices), gl.DYNAMIC_DRAW);
 		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 		
 		rockIndicesBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, rockIndicesBuffer);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Float32Array(rockIndices), gl.DYNAMIC_DRAW);
+		gl.bindBuffer(gl.ARRAY_BUFFER, rockIndicesBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockIndices), gl.DYNAMIC_DRAW);
 
 		rockNormalsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
@@ -56,127 +53,62 @@ function RockGenerator(){
 		//translations
 		translationBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, translationBuffer);
-		translations.push(310, 5, 310, 315, 5, 315);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(translations), gl.DYNAMIC_DRAW);
 		gl.vertexAttribPointer(instancingLocation, 3, gl.FLOAT, false, 0, 0);	
-	*/
-	buffers = twgl.createBuffersFromArrays(gl, {
-  position: [  // one face
-					// Front face
-				  -1.0, -1.0,  1.0,
-				   1.0, -1.0,  1.0,
-				   1.0,  1.0,  1.0,
-				  -1.0,  1.0,  1.0,
-				  
-				  // Back face
-				  -1.0, -1.0, -1.0,
-				  -1.0,  1.0, -1.0,
-				   1.0,  1.0, -1.0,
-				   1.0, -1.0, -1.0,
-				  
-				  // Top face
-				  -1.0,  1.0, -1.0,
-				  -1.0,  1.0,  1.0,
-				   1.0,  1.0,  1.0,
-				   1.0,  1.0, -1.0,
-				  
-				  // Bottom face
-				  -1.0, -1.0, -1.0,
-				   1.0, -1.0, -1.0,
-				   1.0, -1.0,  1.0,
-				  -1.0, -1.0,  1.0,
-				  
-				  // Right face
-				   1.0, -1.0, -1.0,
-				   1.0,  1.0, -1.0,
-				   1.0,  1.0,  1.0,
-				   1.0, -1.0,  1.0,
-				  
-				  // Left face
-				  -1.0, -1.0, -1.0,
-				  -1.0, -1.0,  1.0,
-				  -1.0,  1.0,  1.0,
-				  -1.0,  1.0, -1.0
-  ],
-  indices: 		[		0,  1,  2,      0,  2,  3,    // front
-				4,  5,  6,      4,  6,  7,    // back
-				8,  9,  10,     8,  10, 11,   // top
-				12, 13, 14,     12, 14, 15,   // bottom
-				16, 17, 18,     16, 18, 19,   // right
-				20, 21, 22,     20, 22, 23 ],   // left 
-  translation: [310,5,310,
-				315,5,315,
-				325,8,325,
-				335,9,335,
-				345,10,345],
-});
 	}
 	
-	/*
-	Try with twgl helper library, see if still out of range verts in atribute 0
-	*/
 	this.renderInstancedRocks = function(){
-		gl.disableVertexAttribArray(normalAttribLocation);
-		gl.disableVertexAttribArray(textureCoordLocation);
+		// to, start just draw instanced cubes with some translations
+		// Rocks, use rockVertices.length / 3, and dont start drawing from 0 
+		// glDrawElementInstanced
+		// ext.drawArraysInstancedANGLE(mode, first, numVertices, numInstances);
+		// have buffer containing matrix translations for each rock
+
+		//gl.disableVertexAttribArray(textureCoordLocation);
+		//gl.disableVertexAttribArray(normalAttribLocation);
+		gl.enableVertexAttribArray(instancingLocation);
 		
-		// 0 //gl.bindBuffer(gl.ARRAY_BUFFER, rockVerticesBuffer);
-		// 0 //gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+		//bind pos,translation,uv,txt coord buffers etc
+		//offsets are all 0, because 
+		gl.bindBuffer(gl.ARRAY_BUFFER, rockVerticesBuffer);
+		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 		
-		//gl.bindBuffer(gl.ARRAY_BUFFER, translationBuffer);
-		//gl.enableVertexAttribArray(instancingLocation);
-		//gl.vertexAttribPointer(instancingLocation, 3, gl.FLOAT, false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, rockUvsBuffer);
+		gl.vertexAttribPointer(textureCoordLocation, 3, gl.FLOAT, false, 0, 0);	
 		
-		//gl.bindBuffer(gl.ARRAY_BUFFER, rockUvsBuffer);
-		//gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
-		//
-		//gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
-		//gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);	
-		  
-		// 0 // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, rockIndicesBuffer);
-		  
-		// 0 // extension.vertexAttribDivisorANGLE(positionAttribLocation, 0);
-	//	extension.vertexAttribDivisorANGLE(instancingLocation, 1);
-	
-		//extension.vertexAttribDivisorANGLE(textureCoordLocation, 1);
-		//extension.vertexAttribDivisorANGLE(normalAttribLocation, 1);
+		gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
+		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);	
 		
-		// need matrix location here?, updateAttributesAndUniforms() ??  
-		// extension.drawElementsInstancedANGLE(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, numInstances);
+		gl.bindBuffer(gl.ARRAY_BUFFER, translationBuffer);
+		gl.vertexAttribPointer(instancingLocation, 3, gl.FLOAT, false, 0, 0);	
 		
+		gl.bindBuffer(gl.ARRAY_BUFFER, rockIndicesBuffer);
 		
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-	  gl.enableVertexAttribArray(positionAttribLocation);
-	  gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	  
-	  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.translation);
-	  gl.enableVertexAttribArray(instancingLocation);
-	  gl.vertexAttribPointer(instancingLocation, 3, gl.FLOAT, false, 0, 0);
-	  
-	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
-	  
-	  extension.vertexAttribDivisorANGLE(positionAttribLocation, 0);
-	   extension.vertexAttribDivisorANGLE(instancingLocation, 1);
-	   
-	  //need to pass in matrices? or translatons?
-	  
-		 extension.drawElementsInstancedANGLE(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, numInstances);
+		// add offsets into buffer creation as well
+		// debugger;
 		
+		ext.vertexAttribDivisorANGLE(positionAttribLocation, 1);
+		ext.vertexAttribDivisorANGLE(textureCoordLocation, 1);
+		ext.vertexAttribDivisorANGLE(normalAttribLocation, 1);
+		ext.vertexAttribDivisorANGLE(instancingLocation, 1);
+		
+		ext.drawArraysInstancedANGLE(gl.TRIANGLES, 0, 36, numInstances);
 		
 		gl.disableVertexAttribArray(instancingLocation);
 		
-		gl.enableVertexAttribArray(textureCoordLocation);
-		gl.enableVertexAttribArray(normalAttribLocation);	
+		//gl.enableVertexAttribArray(textureCoordLocation);
+		//gl.enableVertexAttribArray(normalAttribLocation);
 		
 	}
-	//
-	//function addTranslations(){
-	//	translations.push(Math.random() * 50, Math.random() * 50, Math.random() * 50);
-	//}
+	
+	function addTranslations(){
+		translations.push(Math.random() * 50, Math.random() * 50, Math.random() * 50);
+	}
 	
 	function setupTranslationBuffer(){
 		translationBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, translationBuffer);
-		//gl.enableVertexAttribArray(instancingLocation);
+		gl.enableVertexAttribArray(instancingLocation);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(translations), gl.DYNAMIC_DRAW);
 		gl.vertexAttribPointer(instancingLocation, 3, gl.FLOAT, false, 0, 0);
 	}
@@ -497,5 +429,4 @@ function RockGenerator(){
 	}
 	
 }
-
 
