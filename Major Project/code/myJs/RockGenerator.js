@@ -1,6 +1,21 @@
 		
 function RockGenerator(){
 
+	//Obj text files
+	var objRockText0 = utility.httpGet("resources/rocks/rockObjs/rock_0.txt");
+	var objRockText1 = utility.httpGet("resources/rocks/rockObjs/rock_1.txt");
+	var objRockText2 = utility.httpGet("resources/rocks/rockObjs/rock_2.txt");
+	var objRockText3 = utility.httpGet("resources/rocks/rockObjs/rock_3.txt");
+	var objRockText4 = utility.httpGet("resources/rocks/rockObjs/rock_4.txt");
+	var objRockText5 = utility.httpGet("resources/rocks/rockObjs/rock_5.txt");
+	
+	var low_poly_obj_rock_0 = utility.httpGet("resources/rocks/rockObjs/low_poly_rock_0.txt");
+	var low_poly_obj_rock_1 = utility.httpGet("resources/rocks/rockObjs/low_poly_rock_1.txt");
+	
+	var new1 = utility.httpGet("resources/rocks/rockObjs/new.txt");
+	var new2 = utility.httpGet("resources/rocks/rockObjs/new2.txt");
+	var new3 = utility.httpGet("resources/rocks/rockObjs/new3.txt");
+	
 	//Data
 	var rockIndices = [];
 	var rockVertices = [];
@@ -16,7 +31,7 @@ function RockGenerator(){
 	
 	var translations = [];
 	var translationBuffer;
-	var numInstances = 2000;
+	var numInstances = 10000;
 	var buffers;
 	
 	//var testTransform;// = m4.translation(310, 5, 310) * m4.xRotation(1) * m4.scale(4, 4, 4);
@@ -43,7 +58,7 @@ function RockGenerator(){
 	}
 	*/
 	
-		
+		var mesh;
 	function seutpInstancedRockBuffers(){
 	/*
 		rockVerticesBuffer = gl.createBuffer();
@@ -72,73 +87,19 @@ function RockGenerator(){
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(translations), gl.DYNAMIC_DRAW);
 		gl.vertexAttribPointer(instancingLocation, 3, gl.FLOAT, false, 0, 0);	
 	*/
+		
+		
+	//low_poly_obj_rock_0	
+	//objRockText0
+	// the problem is, the faces are made of quads or something, but need to split into triangles
+	mesh = new OBJ.Mesh(new3);
+	OBJ.initMeshBuffers(gl, mesh);
+	
+	console.log(mesh.vertexBuffer.numItems);
+	
 	buffers = twgl.createBuffersFromArrays(gl, {
-  position: [  // one face
-					// Front face
-				  -1.0, -1.0,  1.0,
-				   1.0, -1.0,  1.0,
-				   1.0,  1.0,  1.0,
-				  -1.0,  1.0,  1.0,
-				  
-				  // Back face
-				  -1.0, -1.0, -1.0,
-				  -1.0,  1.0, -1.0,
-				   1.0,  1.0, -1.0,
-				   1.0, -1.0, -1.0,
-				  
-				  // Top face
-				  -1.0,  1.0, -1.0,
-				  -1.0,  1.0,  1.0,
-				   1.0,  1.0,  1.0,
-				   1.0,  1.0, -1.0,
-				  
-				  // Bottom face
-				  -1.0, -1.0, -1.0,
-				   1.0, -1.0, -1.0,
-				   1.0, -1.0,  1.0,
-				  -1.0, -1.0,  1.0,
-				  
-				  // Right face
-				   1.0, -1.0, -1.0,
-				   1.0,  1.0, -1.0,
-				   1.0,  1.0,  1.0,
-				   1.0, -1.0,  1.0,
-				  
-				  // Left face
-				  -1.0, -1.0, -1.0,
-				  -1.0, -1.0,  1.0,
-				  -1.0,  1.0,  1.0,
-				  -1.0,  1.0, -1.0
-  ],
-  indices: 		[		0,  1,  2,      0,  2,  3,    // front
-				4,  5,  6,      4,  6,  7,    // back
-				8,  9,  10,     8,  10, 11,   // top
-				12, 13, 14,     12, 14, 15,   // bottom
-				16, 17, 18,     16, 18, 19,   // right
-				20, 21, 22,     20, 22, 23 ],   // left 
-				/*
-  translation: [310,5,310,
-				315,5,315,
-				325,8,325,
-				335,9,335,
-				345,10,345],
-				*/
-				/*
-					fullTransforms = m4.multiply(position, rotateZ);
-	fullTransforms = m4.multiply(fullTransforms, rotateY);
-	fullTransforms = m4.multiply(fullTransforms, rotateX);
-	fullTransforms = m4.multiply(fullTransforms, scale);
-	
-	gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
-	*/
-	//translation
-	
-	//fullTransforms: [
-		//m4.translation(randx,y,randz) * m4.rotationX,Y,Z * m4.scale();
-	//	m4.translation(310, 5, 310) * m4.xRotation(1) * m4.scale(4, 4, 4),
-	//]
-	
-	
+	position: [],
+	indices: [],
 	//numbers could be other way around, like 0->1 going down rather than accross
 	fullTransformsRow0: [],//[testTransform[0], testTransform[4], testTransform[8], testTransform[12]],
 	fullTransformsRow1: [],//[testTransform[1], testTransform[5], testTransform[9], testTransform[13]],
@@ -221,13 +182,15 @@ function RockGenerator(){
 	useInstancing = true;
 	gl.uniform1i(useInstancingLocation, useInstancing);
 		
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-	  gl.enableVertexAttribArray(positionAttribLocation);
-	  gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	//gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+	gl.bindBuffer(gl.ARRAY_BUFFER, mesh.vertexBuffer);
+	gl.enableVertexAttribArray(positionAttribLocation);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 	  
 	// need normals and UVS and vertexAttribDivisorANGLE them
 	  
-	  
+	// mesh.index buffer
+	 
 	 // change shader to matrix4 attribute
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow0);
 	gl.enableVertexAttribArray(instancingLocation0);
@@ -245,28 +208,38 @@ function RockGenerator(){
 	gl.enableVertexAttribArray(instancingLocation3);
 	gl.vertexAttribPointer(instancingLocation3, 4, gl.FLOAT, false, 0, 0);
 	  
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+	//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
 	  
 	extension.vertexAttribDivisorANGLE(positionAttribLocation, 0);
 	extension.vertexAttribDivisorANGLE(instancingLocation0, 1);
 	extension.vertexAttribDivisorANGLE(instancingLocation1, 1);
 	extension.vertexAttribDivisorANGLE(instancingLocation2, 1);
 	extension.vertexAttribDivisorANGLE(instancingLocation3, 1);
-	   
-	//need to pass in matrices? or translatons?
-	extension.drawElementsInstancedANGLE(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, numInstances);
+
+	/*
+	This draw call is weird, because of the faces in the low poly obj rock files.
+	
+	Advice I used:
+		"It’s probably a convex polygonal face
+		You may be safe in triangulating it as a triangle fan"
+	
+	For the low poly objs I changed:
+		gl.TRIANGLES to gl.TRIANGLE_FAN
+		mesh.vertexBuffer.numItems to mesh.indexBuffer.numItems
+	*/
+	extension.drawElementsInstancedANGLE(gl.TRIANGLE_FAN, mesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0, numInstances);
 		
-		
-		useInstancing = false;
-		gl.uniform1i(useInstancingLocation, useInstancing);
-		
-		gl.disableVertexAttribArray(instancingLocation0);
-		gl.disableVertexAttribArray(instancingLocation1);
-		gl.disableVertexAttribArray(instancingLocation2);
-		gl.disableVertexAttribArray(instancingLocation3);
-		
-		gl.enableVertexAttribArray(textureCoordLocation);
-		gl.enableVertexAttribArray(normalAttribLocation);	
+	useInstancing = false;
+	gl.uniform1i(useInstancingLocation, useInstancing);
+	
+	gl.disableVertexAttribArray(instancingLocation0);
+	gl.disableVertexAttribArray(instancingLocation1);
+	gl.disableVertexAttribArray(instancingLocation2);
+	gl.disableVertexAttribArray(instancingLocation3);
+	
+	gl.enableVertexAttribArray(textureCoordLocation);
+	gl.enableVertexAttribArray(normalAttribLocation);	
 
 	}
 	//
@@ -437,14 +410,6 @@ function RockGenerator(){
 			return rockObjs;
 		}
 	}
-
-	//Obj text files
-	var objRockText0 = utility.httpGet("resources/rocks/rockObjs/rock_0.txt");
-	var objRockText1 = utility.httpGet("resources/rocks/rockObjs/rock_1.txt");
-	var objRockText2 = utility.httpGet("resources/rocks/rockObjs/rock_2.txt");
-	var objRockText3 = utility.httpGet("resources/rocks/rockObjs/rock_3.txt");
-	var objRockText4 = utility.httpGet("resources/rocks/rockObjs/rock_4.txt");
-	var objRockText5 = utility.httpGet("resources/rocks/rockObjs/rock_5.txt");
 
 	function Rock(xPos, yPos, zPos, width, xRotation, yRotation, zRotation, scale, texture, numIndices, id){
 		this.x = xPos;
