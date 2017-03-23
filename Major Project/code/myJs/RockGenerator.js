@@ -15,6 +15,7 @@ function RockGenerator(){
 	var new1 = utility.httpGet("resources/rocks/rockObjs/new.txt");
 	var new2 = utility.httpGet("resources/rocks/rockObjs/new2.txt");
 	var new3 = utility.httpGet("resources/rocks/rockObjs/new3.txt");
+	var new4 = utility.httpGet("resources/rocks/rockObjs/new4.txt");
 	
 	//Data
 	var rockIndices = [];
@@ -91,11 +92,13 @@ function RockGenerator(){
 		
 	//low_poly_obj_rock_0	
 	//objRockText0
-	// the problem is, the faces are made of quads or something, but need to split into triangles
-	mesh = new OBJ.Mesh(new3);
+	
+	// Add a texture in blender, which should generate texture coordinates? atm it has none
+	mesh = new OBJ.Mesh(new4);
 	OBJ.initMeshBuffers(gl, mesh);
 	
-	console.log(mesh.vertexBuffer.numItems);
+	console.log(mesh.vertexBuffer.numItems); // 120 items size 3
+	console.log(mesh.textureBuffer.numItems); // 120 items size 2 ?
 	
 	buffers = twgl.createBuffersFromArrays(gl, {
 	position: [],
@@ -150,8 +153,6 @@ function RockGenerator(){
 	Try with twgl helper library, see if still out of range verts in atribute 0
 	*/
 	this.renderInstancedRocks = function(){
-		gl.disableVertexAttribArray(normalAttribLocation);
-		gl.disableVertexAttribArray(textureCoordLocation);
 		
 		// 0 //gl.bindBuffer(gl.ARRAY_BUFFER, rockVerticesBuffer);
 		// 0 //gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
@@ -177,8 +178,19 @@ function RockGenerator(){
 		// need matrix location here?, updateAttributesAndUniforms() ??  
 		// extension.drawElementsInstancedANGLE(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, numInstances);
 	
-	
-	
+	//gl.disableVertexAttribArray(normalAttribLocation);
+	//gl.disableVertexAttribArray(textureCoordLocation);
+		
+		
+	/*
+	Texture isn't showing, because the normals aren't working yet!	
+	*/
+		
+	currentTexture = rockTexture0;
+	gl.activeTexture(gl.TEXTURE0);
+	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+	gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
+		
 	useInstancing = true;
 	gl.uniform1i(useInstancingLocation, useInstancing);
 		
@@ -186,6 +198,14 @@ function RockGenerator(){
 	gl.bindBuffer(gl.ARRAY_BUFFER, mesh.vertexBuffer);
 	gl.enableVertexAttribArray(positionAttribLocation);
 	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, mesh.textureBuffer);
+	gl.enableVertexAttribArray(textureCoordLocation);
+	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, mesh.normalBuffer);
+	gl.enableVertexAttribArray(normalAttribLocation);
+	gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
 	  
 	// need normals and UVS and vertexAttribDivisorANGLE them
 	  
@@ -212,6 +232,9 @@ function RockGenerator(){
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
 	  
 	extension.vertexAttribDivisorANGLE(positionAttribLocation, 0);
+	extension.vertexAttribDivisorANGLE(textureCoordLocation, 0); // what does this 0 mean, with it being 1, its breaks
+	extension.vertexAttribDivisorANGLE(normalAttribLocation, 0);
+	
 	extension.vertexAttribDivisorANGLE(instancingLocation0, 1);
 	extension.vertexAttribDivisorANGLE(instancingLocation1, 1);
 	extension.vertexAttribDivisorANGLE(instancingLocation2, 1);
@@ -228,7 +251,7 @@ function RockGenerator(){
 		gl.TRIANGLES to gl.TRIANGLE_FAN
 		mesh.vertexBuffer.numItems to mesh.indexBuffer.numItems
 	*/
-	extension.drawElementsInstancedANGLE(gl.TRIANGLE_FAN, mesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0, numInstances);
+	extension.drawElementsInstancedANGLE(gl.TRIANGLE_FAN, mesh.vertexBuffer.numItems, gl.UNSIGNED_SHORT, 0, numInstances);
 		
 	useInstancing = false;
 	gl.uniform1i(useInstancingLocation, useInstancing);
@@ -238,8 +261,8 @@ function RockGenerator(){
 	gl.disableVertexAttribArray(instancingLocation2);
 	gl.disableVertexAttribArray(instancingLocation3);
 	
-	gl.enableVertexAttribArray(textureCoordLocation);
-	gl.enableVertexAttribArray(normalAttribLocation);	
+	//gl.enableVertexAttribArray(textureCoordLocation);
+	//gl.enableVertexAttribArray(normalAttribLocation);	
 
 	}
 	//
