@@ -16,8 +16,19 @@ function RockGenerator(){
 	
 	var translations = [];
 	var translationBuffer;
-	var numInstances = 5;
+	var numInstances = 2000;
 	var buffers;
+	
+	//var testTransform;// = m4.translation(310, 5, 310) * m4.xRotation(1) * m4.scale(4, 4, 4);
+	var testTransform = m4.translation(310, 5, 310);
+	//var testXRotation = m4.xRotation(1);
+	var testScale = m4.scaling(4, 4, 4);
+	
+	//testTransform = m4.multiply(testTransform, testXRotation);
+	testTransform = m4.multiply(testTransform, testScale);
+	
+	console.log(testTransform);
+	
 	//createInstancedRocksForQuadrant(); // MAKES VERTS
 	//setupInstancedRocks();
 	seutpInstancedRockBuffers(); // SETUPS UP BUFFERS
@@ -32,6 +43,7 @@ function RockGenerator(){
 	}
 	*/
 	
+		
 	function seutpInstancedRockBuffers(){
 	/*
 		rockVerticesBuffer = gl.createBuffer();
@@ -104,13 +116,74 @@ function RockGenerator(){
 				12, 13, 14,     12, 14, 15,   // bottom
 				16, 17, 18,     16, 18, 19,   // right
 				20, 21, 22,     20, 22, 23 ],   // left 
+				/*
   translation: [310,5,310,
 				315,5,315,
 				325,8,325,
 				335,9,335,
 				345,10,345],
+				*/
+				/*
+					fullTransforms = m4.multiply(position, rotateZ);
+	fullTransforms = m4.multiply(fullTransforms, rotateY);
+	fullTransforms = m4.multiply(fullTransforms, rotateX);
+	fullTransforms = m4.multiply(fullTransforms, scale);
+	
+	gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
+	*/
+	//translation
+	
+	//fullTransforms: [
+		//m4.translation(randx,y,randz) * m4.rotationX,Y,Z * m4.scale();
+	//	m4.translation(310, 5, 310) * m4.xRotation(1) * m4.scale(4, 4, 4),
+	//]
+	
+	
+	//numbers could be other way around, like 0->1 going down rather than accross
+	fullTransformsRow0: [],//[testTransform[0], testTransform[4], testTransform[8], testTransform[12]],
+	fullTransformsRow1: [],//[testTransform[1], testTransform[5], testTransform[9], testTransform[13]],
+	fullTransformsRow2: [],//[testTransform[2], testTransform[6], testTransform[10], testTransform[14]],
+	fullTransformsRow3: []//[testTransform[3], testTransform[7], testTransform[11], testTransform[15]]
 });
+	
+	// Set Y with the heightmap thing
+	
+	// Bind, do ALL data, then bufferData
+	// Then do the next row
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow0);
+	var data = [];
+	for(var i=0; i<numInstances; i++){
+		data.push(testTransform[0], testTransform[4], testTransform[8], Math.random() * 512); //testTransform[12]
 	}
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+	
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow1);
+	data = [];
+	for(var i=0; i<numInstances; i++){
+		data.push(testTransform[1], testTransform[5], testTransform[9], Math.random() * 512); //testTransform[13]
+	}
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+	
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow2);
+	data = [];
+	for(var i=0; i<numInstances; i++){
+		data.push(testTransform[2], testTransform[6], testTransform[10], Math.random() * 512); //testTransform[14
+	}
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+	
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow3);
+	data = [];
+	for(var i=0; i<numInstances; i++){
+		data.push(testTransform[3], testTransform[7], testTransform[11], testTransform[15]);
+	}
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+	
+
+	}
+	
 	
 	/*
 	Try with twgl helper library, see if still out of range verts in atribute 0
@@ -142,31 +215,59 @@ function RockGenerator(){
 		
 		// need matrix location here?, updateAttributesAndUniforms() ??  
 		// extension.drawElementsInstancedANGLE(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, numInstances);
-		
+	
+	
+	
+	useInstancing = true;
+	gl.uniform1i(useInstancingLocation, useInstancing);
 		
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
 	  gl.enableVertexAttribArray(positionAttribLocation);
 	  gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 	  
-	  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.translation);
-	  gl.enableVertexAttribArray(instancingLocation);
-	  gl.vertexAttribPointer(instancingLocation, 3, gl.FLOAT, false, 0, 0);
+	// need normals and UVS and vertexAttribDivisorANGLE them
 	  
-	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
 	  
-	  extension.vertexAttribDivisorANGLE(positionAttribLocation, 0);
-	   extension.vertexAttribDivisorANGLE(instancingLocation, 1);
+	 // change shader to matrix4 attribute
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow0);
+	gl.enableVertexAttribArray(instancingLocation0);
+	gl.vertexAttribPointer(instancingLocation0, 4, gl.FLOAT, false, 0, 0);
+	  
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow1);
+	gl.enableVertexAttribArray(instancingLocation1);
+	gl.vertexAttribPointer(instancingLocation1, 4, gl.FLOAT, false, 0, 0);
+		
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow2);
+	gl.enableVertexAttribArray(instancingLocation2);
+	gl.vertexAttribPointer(instancingLocation2, 4, gl.FLOAT, false, 0, 0);
+		 
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow3);
+	gl.enableVertexAttribArray(instancingLocation3);
+	gl.vertexAttribPointer(instancingLocation3, 4, gl.FLOAT, false, 0, 0);
+	  
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+	  
+	extension.vertexAttribDivisorANGLE(positionAttribLocation, 0);
+	extension.vertexAttribDivisorANGLE(instancingLocation0, 1);
+	extension.vertexAttribDivisorANGLE(instancingLocation1, 1);
+	extension.vertexAttribDivisorANGLE(instancingLocation2, 1);
+	extension.vertexAttribDivisorANGLE(instancingLocation3, 1);
 	   
-	  //need to pass in matrices? or translatons?
-	  
-		 extension.drawElementsInstancedANGLE(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, numInstances);
+	//need to pass in matrices? or translatons?
+	extension.drawElementsInstancedANGLE(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, numInstances);
 		
 		
-		gl.disableVertexAttribArray(instancingLocation);
+		useInstancing = false;
+		gl.uniform1i(useInstancingLocation, useInstancing);
+		
+		gl.disableVertexAttribArray(instancingLocation0);
+		gl.disableVertexAttribArray(instancingLocation1);
+		gl.disableVertexAttribArray(instancingLocation2);
+		gl.disableVertexAttribArray(instancingLocation3);
 		
 		gl.enableVertexAttribArray(textureCoordLocation);
 		gl.enableVertexAttribArray(normalAttribLocation);	
-		
+
 	}
 	//
 	//function addTranslations(){

@@ -62,9 +62,19 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 
 			store rock stuff in vao? later
 
+			Need to have rotation for each as well, as translation
+				and scale as well
+			Pass in a matrix, rather than just a vec3 position
 
-			could use regular draw calls, meaning duplicating vertices in 1 buffer
-				but if low poly, its ok?
+			//have like fullInstaceTransform attribute? then somehow calculate matrixs and store
+			//could multiply the matrices in shader
+			//translate * rotate * scale 
+			//create matrices in loop with random
+
+			//shader should be + the fullTrnaslation, or times? *
+
+			//cant pass in a attribute mat4, only a uniform, which is wrong
+			//so pass in the rows, and then calculate it again :/ in shader
 
 
 	Not using existing mars heightmap
