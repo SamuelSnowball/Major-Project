@@ -2,20 +2,11 @@
 function RockGenerator(){
 
 	//Obj text files
-	var objRockText0 = utility.httpGet("resources/rocks/rockObjs/rock_0.txt");
-	var objRockText1 = utility.httpGet("resources/rocks/rockObjs/rock_1.txt");
-	var objRockText2 = utility.httpGet("resources/rocks/rockObjs/rock_2.txt");
-	var objRockText3 = utility.httpGet("resources/rocks/rockObjs/rock_3.txt");
-	var objRockText4 = utility.httpGet("resources/rocks/rockObjs/rock_4.txt");
-	var objRockText5 = utility.httpGet("resources/rocks/rockObjs/rock_5.txt");
-	
-	var low_poly_obj_rock_0 = utility.httpGet("resources/rocks/rockObjs/low_poly_rock_0.txt");
-	var low_poly_obj_rock_1 = utility.httpGet("resources/rocks/rockObjs/low_poly_rock_1.txt");
-	
-	var new1 = utility.httpGet("resources/rocks/rockObjs/new.txt");
-	var new2 = utility.httpGet("resources/rocks/rockObjs/new2.txt");
-	var new3 = utility.httpGet("resources/rocks/rockObjs/new3.txt");
-	var new4 = utility.httpGet("resources/rocks/rockObjs/new4.txt");
+	var rock21 = utility.httpGet("resources/rocks/rockObjs/objmaster2/obj/21.txt");
+	var rock29 = utility.httpGet("resources/rocks/rockObjs/objmaster2/obj/29.txt");
+	var rock30 = utility.httpGet("resources/rocks/rockObjs/objmaster2/obj/30.txt");
+	var rock31 = utility.httpGet("resources/rocks/rockObjs/objmaster2/obj/31.txt");
+	var rock32 = utility.httpGet("resources/rocks/rockObjs/objmaster2/obj/32.txt");
 	
 	//Data
 	var rockIndices = [];
@@ -35,108 +26,95 @@ function RockGenerator(){
 	var numInstances = 10000;
 	var buffers;
 	
-	//var testTransform;// = m4.translation(310, 5, 310) * m4.xRotation(1) * m4.scale(4, 4, 4);
-	var testTransform = m4.translation(310, 5, 310);
-	//var testXRotation = m4.xRotation(1);
-	var testScale = m4.scaling(4, 4, 4);
+	/*
+	The matrix that is going to be updated and stored.
+	*/
+	var testTransform = m4.translation(0,0,0);
 	
-	//testTransform = m4.multiply(testTransform, testXRotation);
-	testTransform = m4.multiply(testTransform, testScale);
-	
-	console.log(testTransform);
-	
-	//createInstancedRocksForQuadrant(); // MAKES VERTS
-	//setupInstancedRocks();
 	seutpInstancedRockBuffers(); // SETUPS UP BUFFERS
 	
-	
-	/*
-	function setupInstancedRocks(){	
-		// For each quadrant, generate translations for the single rock mesh
-		for(var i=0; i<numInstances; i++){
-			addTranslations();
-		}
-	}
-	*/
-	
-		var mesh;
+	var mesh;
 	function seutpInstancedRockBuffers(){
-	/*
-		rockVerticesBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, rockVerticesBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockVertices), gl.DYNAMIC_DRAW);
-		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-		
-		rockIndicesBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, rockIndicesBuffer);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Float32Array(rockIndices), gl.DYNAMIC_DRAW);
+		mesh = new OBJ.Mesh(rock21);
+		OBJ.initMeshBuffers(gl, mesh);
 
-		rockNormalsBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, rockNormalsBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockNormals), gl.DYNAMIC_DRAW);
-		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
-		
-		rockUvsBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, rockUvsBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rockUvs), gl.DYNAMIC_DRAW);
-		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
-		
-		//translations
-		translationBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, translationBuffer);
-		translations.push(310, 5, 310, 315, 5, 315);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(translations), gl.DYNAMIC_DRAW);
-		gl.vertexAttribPointer(instancingLocation, 3, gl.FLOAT, false, 0, 0);	
+		buffers = twgl.createBuffersFromArrays(gl, {
+			position: [],
+			indices: [],
+			fullTransformsRow0: [],
+			fullTransformsRow1: [],
+			fullTransformsRow2: [],
+			fullTransformsRow3: []
+		});
+	
+	/*
+	These loops create different translations for the rock instance.
+	Wouldn't want to render 10,000 rocks in the same place, 
+	Need to apply different matrices per rock instance
+	
+	Cant pass in a mat4 attribute into shader, 
+	Instead need to pass in 4 vec4's (16 floats, 4x4 matrix)
+	Then build the matrix in the shader from those 16 passed in floats
 	*/
-		
-		
-	//low_poly_obj_rock_0	
-	//objRockText0
+	var data = [];
+	var positionX = 0;
+	var positionZ = 0;
 	
-	// Add a texture in blender, which should generate texture coordinates? atm it has none
-	mesh = new OBJ.Mesh(new4);
-	OBJ.initMeshBuffers(gl, mesh);
-	
-	console.log(mesh.vertexBuffer.numItems); // 120 items size 3
-	console.log(mesh.textureBuffer.numItems); // 120 items size 2 ?
-	
-	buffers = twgl.createBuffersFromArrays(gl, {
-	position: [],
-	indices: [],
-	//numbers could be other way around, like 0->1 going down rather than accross
-	fullTransformsRow0: [],//[testTransform[0], testTransform[4], testTransform[8], testTransform[12]],
-	fullTransformsRow1: [],//[testTransform[1], testTransform[5], testTransform[9], testTransform[13]],
-	fullTransformsRow2: [],//[testTransform[2], testTransform[6], testTransform[10], testTransform[14]],
-	fullTransformsRow3: []//[testTransform[3], testTransform[7], testTransform[11], testTransform[15]]
-});
-	
-	// Set Y with the heightmap thing
-	
-	// Bind, do ALL data, then bufferData
+	// Need to set the height of the rock, at the generated X,Z position
+	// So need to save all generated X and Z positions
+	var savedXPositions = [];
+	var savedZPositions = [];
+
+	// Bind buffer, create all data, then buffer data
 	// Then do the next row
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow0);
-	var data = [];
-	for(var i=0; i<numInstances; i++){
-		data.push(testTransform[0], testTransform[4], testTransform[8], Math.random() * 512); //testTransform[12]
+	for(var i=0; i<numInstances; i++){			
+		positionX = Math.floor(Math.random() * 256) + 128;
+		savedXPositions.push(positionX);
+		data.push(
+			testTransform[0] * Math.random() * 10, //Scale X	
+			testTransform[4], 
+			testTransform[8], 
+			positionX // x translation
+		); 
 	}
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
 	
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow1);
-	data = [];
-	for(var i=0; i<numInstances; i++){
-		data.push(testTransform[1], testTransform[5], testTransform[9], Math.random() * 512); //testTransform[13]
-	}
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
-	
-	
+	/*
+	Z
+	*/
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow2);
 	data = [];
 	for(var i=0; i<numInstances; i++){
-		data.push(testTransform[2], testTransform[6], testTransform[10], Math.random() * 512); //testTransform[14
+		positionZ = Math.floor(Math.random() * 256) + 128;
+		savedZPositions.push(positionZ);
+		data.push(
+			testTransform[2], 
+			testTransform[6], 
+			testTransform[10] * Math.random() * 10, // Scale Z
+			positionZ   // z translation
+		); 
 	}
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
-	
+
+	/*
+	Y
+	*/
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow1);
+	data = [];
+	for(var i=0; i<numInstances; i++){
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = savedZPositions[i]; // Reversed
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = savedXPositions[i]; // Reversed
+		var rockHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
+		
+		data.push(
+			testTransform[1], 
+			testTransform[5] * Math.random() * 10, // Scale Y
+			testTransform[9], 
+			rockHeight  // y translation
+		); 
+	}
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);	
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow3);
 	data = [];
@@ -186,6 +164,8 @@ function RockGenerator(){
 	Texture isn't showing, because the normals aren't working yet!	
 	*/
 		
+	
+	
 	currentTexture = rockTexture0;
 	gl.activeTexture(gl.TEXTURE0);
 	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
@@ -251,7 +231,7 @@ function RockGenerator(){
 		gl.TRIANGLES to gl.TRIANGLE_FAN
 		mesh.vertexBuffer.numItems to mesh.indexBuffer.numItems
 	*/
-	extension.drawElementsInstancedANGLE(gl.TRIANGLE_FAN, mesh.vertexBuffer.numItems, gl.UNSIGNED_SHORT, 0, numInstances);
+	extension.drawElementsInstancedANGLE(gl.TRIANGLES, mesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0, numInstances);
 		
 	useInstancing = false;
 	gl.uniform1i(useInstancingLocation, useInstancing);

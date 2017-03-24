@@ -76,7 +76,18 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 			//cant pass in a attribute mat4, only a uniform, which is wrong
 			//so pass in the rows, and then calculate it again :/ in shader
 
+			//add num instances in render thing
+
+	/*
+	Try create vertices in blender, adding individually
+	Then hopefully obj fixes itself, and just render with gl.TRIANGLES
+	*/
+
 
 	Not using existing mars heightmap
 		-literally loading in an obj
 
+
+	Tues - removed code
+	Wed - 10hr instancing
+	Thur - 6hr instancing
