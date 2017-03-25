@@ -156,6 +156,10 @@ function updateAttributesAndUniforms(){
 		zNear,
 		zFar
 	);
+	
+	// Set instancing location to an identity matrix, otherwise it breaks
+	
+	
 
 	//why is rotate z has position?
 	fullTransforms = m4.multiply(position, rotateZ);

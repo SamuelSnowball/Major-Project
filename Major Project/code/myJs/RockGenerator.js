@@ -30,11 +30,14 @@ function RockGenerator(){
 	The matrix that is going to be updated and stored.
 	*/
 	var testTransform = m4.translation(0,0,0);
-	
-	seutpInstancedRockBuffers(); // SETUPS UP BUFFERS
+	var testYRotation = m4.yRotation(Math.random());
+	m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
+
+	setupInstancedRockBuffers(); // SETUPS UP BUFFERS
 	
 	var mesh;
-	function seutpInstancedRockBuffers(){
+	function setupInstancedRockBuffers(){
+	
 		mesh = new OBJ.Mesh(rock21);
 		OBJ.initMeshBuffers(gl, mesh);
 
@@ -55,6 +58,8 @@ function RockGenerator(){
 	Cant pass in a mat4 attribute into shader, 
 	Instead need to pass in 4 vec4's (16 floats, 4x4 matrix)
 	Then build the matrix in the shader from those 16 passed in floats
+	
+	yRotation rotates around the UP vector, so u want that one
 	*/
 	var data = [];
 	var positionX = 0;
@@ -65,14 +70,41 @@ function RockGenerator(){
 	var savedXPositions = [];
 	var savedZPositions = [];
 
+	//testTransform[0] * rotationMatrix[0]
+	
 	// Bind buffer, create all data, then buffer data
 	// Then do the next row
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow0);
-	for(var i=0; i<numInstances; i++){			
+	for(var i=0; i<numInstances; i++){	
+
+		/*
+		Apply x,y,z rotation to each row, if you should
+		Remember, rows/cols might be reversed
+
+		X Rotation
+		[1, 0, 0, 0]
+		[0, cos, -sin, 0]
+		[0, sin cos, 0]
+		[0, 0, 0, 1]
+		
+		Applies to elements: 5, 6, 9, 10
+		
+		Maybe the previous was correct? but need multiply? idk it wasnt 4x4
+		Perhaps somehow loop through all data at end and times together then with rotation
+		*/
+	
+		var testYRotation = m4.yRotation(Math.random(2 * Math.PI) + 0); // 0 -> Math.PI/2 (360 degrees)
+		m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
+		
 		positionX = Math.floor(Math.random() * 256) + 128;
 		savedXPositions.push(positionX);
+		
+		// Times each value by the correct rotation matrix value
+		// So like rotationMatrix[0] * Math.random() * 10 * testTransform[0],
+		// rotationMatrix[4] * testTransform[4]
+
 		data.push(
-			testTransform[0] * Math.random() * 10, //Scale X	
+			Math.random() * 10 * testTransform[0], //Scale X first	
 			testTransform[4], 
 			testTransform[8], 
 			positionX // x translation
@@ -86,12 +118,17 @@ function RockGenerator(){
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow2);
 	data = [];
 	for(var i=0; i<numInstances; i++){
+
+		var testYRotation = m4.yRotation(Math.random(2 * Math.PI) + 0); // 0 -> Math.PI/2 (360 degrees)
+		m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
+		
 		positionZ = Math.floor(Math.random() * 256) + 128;
+		
 		savedZPositions.push(positionZ);
 		data.push(
 			testTransform[2], 
 			testTransform[6], 
-			testTransform[10] * Math.random() * 10, // Scale Z
+			Math.random() * 10 * testTransform[10], // Scale Z first
 			positionZ   // z translation
 		); 
 	}
@@ -103,13 +140,16 @@ function RockGenerator(){
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow1);
 	data = [];
 	for(var i=0; i<numInstances; i++){
+		var testYRotation = m4.yRotation(Math.random(2 * Math.PI) + 0); // 0 -> Math.PI/2 (360 degrees)
+		m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
+		
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = savedZPositions[i]; // Reversed
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = savedXPositions[i]; // Reversed
 		var rockHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
-		
+
 		data.push(
 			testTransform[1], 
-			testTransform[5] * Math.random() * 10, // Scale Y
+			Math.random() * 10 * testTransform[5], // Scale Y first
 			testTransform[9], 
 			rockHeight  // y translation
 		); 
@@ -119,7 +159,13 @@ function RockGenerator(){
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow3);
 	data = [];
 	for(var i=0; i<numInstances; i++){
-		data.push(testTransform[3], testTransform[7], testTransform[11], testTransform[15]);
+
+		data.push(
+			testTransform[3], 
+			testTransform[7], 
+			testTransform[11], 
+			testTransform[15]
+		);
 	}
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
 	
