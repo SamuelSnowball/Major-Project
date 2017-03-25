@@ -14,6 +14,8 @@ var myPerlinTexture;
 
 var mapTexture0;
 
+var sandTexture;
+
 var playerTexture;
 
 var shopTexture;
@@ -28,6 +30,11 @@ var rockTexture2;
 var rockTexture3;
 var rockTexture4;
 var rockTexture5;
+
+var testTexture1;
+var testTexture2;
+var testTexture3;
+var testTexture4;
 
 /*
 Other textures
@@ -48,7 +55,11 @@ function TextureLoader(){
 				  new Uint8Array([255, 0, 0, 255]));
 				  
 		// Map texture
-		mapTexture0 = new Texture("resources/terrain/floor/massive.png", 10, 0, true);
+		mapTexture0 = new Texture("resources/terrain/floor/sand.png", 10, 0, true);
+		
+		
+		// http://www.textures.com/download/soilbeach0131/106132
+		sandTexture = new Texture("resources/terrain/floor/sand.png", 10, 0);
 		
 		/*
 		Rock textures
@@ -62,6 +73,15 @@ function TextureLoader(){
 		rockTexture3 = new Texture('resources/rocks/3.png', 10, 0);
 		rockTexture4 = new Texture('resources/rocks/4.png', 10, 0);
 		rockTexture5 = new Texture('resources/rocks/5.png', 10, 0);
+		
+		/*
+		http://www.textures.com/download/rocksarid0035/68071?&secure=login
+		https://www.textures.com/download/rocksarid0048/42217?&secure=login
+		https://www.textures.com/download/rocksarid0049/42220?&secure=login
+		*/
+		rockTexture6 = new Texture('resources/rocks/6.png', 10, 0);
+		rockTexture7 = new Texture('resources/rocks/7.png', 10, 0);
+		rockTexture8 = new Texture('resources/rocks/8.png', 10, 0);
 
 		/*
 		Other textures

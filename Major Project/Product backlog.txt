@@ -23,7 +23,7 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 			update vertices on GPU, new shader?
 			if close to water, process verts etc...
 
-		Small 'sandstorms'				(time: 10h) (priority: 5)
+		Small 'sandstorms'/ dust devils			(time: 10h) (priority: 5)
 			Only on sand regions
 			If player in range
 
@@ -50,14 +50,6 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 			-Expensive start time, but smooth throughout
 			-Need something at the edges of the map
 			-So could keep terrain boundaries
-		
-
-	
-		grey/sand texture + regions
-
-
-		Flyover like minecraft creative view,
-
 
 	Extra features:
 		Add ambient audio, water audio near water
@@ -85,8 +77,8 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 	Current features:
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
 		Terrain + rendering efficiency			(time: 30h) (priority: 10)
-		Rocks (objs) with collision			(time: 20h) (priority: 8)
-		Texturing terrain 				(time: 05h) (priority: 5)
+		Rocks (objs) 					(time: 20h) (priority: 8)
+		Texturing terrain 				(time: 10h) (priority: 5)
 		Water, with specular lighting			(time: 12h) (priority: 4)
 			Expand to cover quadrants
 			With less vertices
@@ -97,11 +89,9 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Fix github issues
 		Change STATIC_DRAW renders to DYNAMIC_DRAW
 
-
-For mid project release aiming for all core done
-
-Before demo/final release:
-	Change movement speed
+Rendering efficiency
+	currently processing vertices that are behind the player
+	Fixing this could mean 50% more vertices allowed
 	
 Add a release version after each sprint as well
 

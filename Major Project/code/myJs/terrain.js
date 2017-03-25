@@ -65,6 +65,9 @@ function Terrain(){
 		get getQuadrantRowSize(){
 			return quadrantRowSize;
 		},
+		get renderIndices(){
+			return renderIndices; // rocks needs these
+		}
 	};
 
 	/*
@@ -737,7 +740,7 @@ function Terrain(){
 	*/
 	this.render = function(){	
 		lightColour = [1, 1, 1];
-		currentTexture = mapTexture0;
+		currentTexture = sandTexture;
 
 		scale = m4.scaling(1, 1, 1);
 		rotateX = m4.xRotation(0);

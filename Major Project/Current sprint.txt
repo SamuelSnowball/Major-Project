@@ -44,7 +44,9 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 			Just use 4, and start UV coordinates from 0 each time.
 			Still doesn't work, wasted 3 hours
 
-		Fix collision with floor		
+			Right, generate UV coordinates as if you have 1 section
+				-ok will they stretch?
+			Then copy from that big 2d array of uv coordinates, into the buffers		
 
 		## Cleanup code ##
 
@@ -66,24 +68,54 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 				and scale as well
 			Pass in a matrix, rather than just a vec3 position
 
-			//have like fullInstaceTransform attribute? then somehow calculate matrixs and store
-			//could multiply the matrices in shader
-			//translate * rotate * scale 
-			//create matrices in loop with random
-
-			//shader should be + the fullTrnaslation, or times? *
-
-			//cant pass in a attribute mat4, only a uniform, which is wrong
-			//so pass in the rows, and then calculate it again :/ in shader
-
-			//add rotation to rock
-
 
 	Not using existing mars heightmap
 		-literally loading in an obj
 
 
-	Tues - removed code
+	Monday - game logic
+	Tues - changed project to Mars Scene, removed game code
 	Wed - 10hr instancing
 	Thur - 6hr instancing
 	Friday- 4hr objs, 1 hr texturing
+	Saturday - 2hours, instance rotation
+
+	To do:
+	
+	Rock efficiency for now:
+
+		Need a for loop creating the vaos
+			Adding translations buffers etc
+
+		Need to generate rocks for the entire map
+		Have rocks per section
+			-> 9 draw calls, wont be a problem
+			-> because not changing buffer states?
+
+		Array of rock VAOs (containing the 'mesh' object? 1 mesh per vao?)
+			Contains the translations for each quadrant?
+			Literally pass the terrainRenderIndices into rock render and
+			for(terrainRenderIndices){draw[i]}
+
+		Try without VAO?
+		Array of mesh objects, its kinda the same?
+
+		Can use STATIC_DRAW in matrix creation?
+
+	Better rock rendering efficiency:
+
+		Can have 9 sections worth of coordinates in one VAO, 
+			containing ONE set of verts/nomrals/uvs etc
+		Render the 9 sections (requires new indices function)
+		So just have 1 draw call, drawing those '9 sections' (3x3 section of 128x128)
+
+
+		Mutiple rock objs?
+		Multiple textures?
+		Requires another draw call?
+
+		set texture
+		draw
+		change texture
+		draw from other buffer
+		change texture etc

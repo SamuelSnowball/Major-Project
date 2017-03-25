@@ -158,8 +158,6 @@ function updateAttributesAndUniforms(){
 	);
 	
 	// Set instancing location to an identity matrix, otherwise it breaks
-	
-	
 
 	//why is rotate z has position?
 	fullTransforms = m4.multiply(position, rotateZ);
@@ -199,7 +197,7 @@ function updateAttributesAndUniforms(){
 var fovInRadians = Math.PI * 0.3;	
 var aspectRatio = window.innerWidth / window.innerHeight;
 var zNear = 0.1;
-var zFar = 256;
+var zFar = 512;
 
 //Projection matrix turns world coordinates to clipspace
 var projectionMatrix = 	m4.perspective(
