@@ -10,8 +10,8 @@ function Terrain(){
 	
 	// How many map quadrants, each having 128*128 vertices each
 	// If you update these, make sure to update them in player assign quadrant method
-	var numberQuadrantRows = 4; 
-	var numberQuadrantColumns = 4; 
+	var numberQuadrantRows = 12; 
+	var numberQuadrantColumns = 12; 
 	
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;

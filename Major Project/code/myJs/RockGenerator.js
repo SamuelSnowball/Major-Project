@@ -94,11 +94,13 @@ function RockGenerator(){
 			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI/2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 			
+			var scaleX = (Math.random() * 50) + 5;
+			
 			positionX = Math.floor(Math.random() * 128) + xMin;
 			savedXPositions.push(positionX);
 
 			data.push(
-				((Math.random() * 10) + 4) * testTransform[0], //Scale X first	
+				scaleX * testTransform[0], //Scale X first	
 				testTransform[4], 
 				testTransform[8], 
 				positionX // x translation
@@ -117,15 +119,15 @@ function RockGenerator(){
 			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI/2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 			
-			positionZ = Math.floor(Math.random() * 128) + zMin;
+			var scaleZ = (Math.random() * 50) + 5;
 			
-			console.log("generated z: " + positionZ);
+			positionZ = Math.floor(Math.random() * 128) + zMin;
 			
 			savedZPositions.push(positionZ);
 			data.push(
 				testTransform[2], 
 				testTransform[6], 
-				((Math.random() * 10) + 4) * testTransform[10], // Scale Z first
+				scaleZ * testTransform[10], // Scale Z first
 				positionZ   // z translation
 			); 
 		}
@@ -141,13 +143,15 @@ function RockGenerator(){
 			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI/2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 			
+			var scaleY = (Math.random() * 25) + 5;
+			
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = savedZPositions[i]; // Reversed
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = savedXPositions[i]; // Reversed
 			var rockHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
 
 			data.push(
 				testTransform[1], 
-				((Math.random() * 6) + 2) * testTransform[5], // Scale Y first
+				scaleY * testTransform[5], // Scale Y first
 				testTransform[9], 
 				rockHeight  // y translation
 			); 
@@ -192,17 +196,9 @@ function RockGenerator(){
 		gl.enableVertexAttribArray(instancingLocation2);
 		gl.enableVertexAttribArray(instancingLocation3);
 
-		/*
-		Bind VAO, render x9, unbind
-		*/
-		// Needs to get render indices and render those, 
-		// renderIndices = terrain.get.renderIndices
-		// meshArray[renderIndices[i]].vertexBuffer ??????
-		
 		var renderIndices = terrain.get.renderIndices;
 		
 		for(var i=0; i<renderIndices.length; i++){
-
 			gl.bindBuffer(gl.ARRAY_BUFFER, meshArray[renderIndices[i]].vertexBuffer);
 			gl.enableVertexAttribArray(positionAttribLocation);
 			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
