@@ -738,8 +738,15 @@ function Terrain(){
 	*/
 	this.render = function(){	
 		lightColour = [1, 1, 1];
-		currentTexture = sandTexture;
+		currentTexture = mapTexture;
 
+		useInstancing = false;
+		gl.uniform1i(useInstancingLocation, useInstancing);
+		gl.disableVertexAttribArray(instancingLocation0);
+		gl.disableVertexAttribArray(instancingLocation1);
+		gl.disableVertexAttribArray(instancingLocation2);
+		gl.disableVertexAttribArray(instancingLocation3);
+		
 		scale = m4.scaling(1, 1, 1);
 		rotateX = m4.xRotation(0);
 		rotateY = m4.yRotation(0);

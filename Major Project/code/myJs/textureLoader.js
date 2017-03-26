@@ -9,10 +9,9 @@ Texture knowledge gained from:
 
 // This texture gets set to other textures whilst rendering
 var currentTexture;
-
 var myPerlinTexture;
-
-var mapTexture0;
+var myParticleTexture;
+var mapTexture;
 
 var sandTexture;
 
@@ -54,8 +53,13 @@ function TextureLoader(){
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
 				  new Uint8Array([255, 0, 0, 255]));
 				  
+		myParticleTexture = new Texture("", 0, 0);
+		gl.bindTexture(gl.TEXTURE_2D, myParticleTexture.getTextureAttribute.texture);		
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+				  new Uint8Array([0, 0, 0, 255]));
+				  
 		// Map texture
-		mapTexture0 = new Texture("resources/terrain/floor/sand.png", 10, 0, true);
+		mapTexture = new Texture("resources/terrain/floor/sand.png", 10, 0, true);
 		
 		
 		// http://www.textures.com/download/soilbeach0131/106132

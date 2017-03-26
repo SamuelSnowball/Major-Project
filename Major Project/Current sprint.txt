@@ -9,6 +9,9 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 	Problems:
 		Change project title, Mars Scene in WebGL
 
+		Changing texture on sections
+		How to position rocks, so it looks natural
+
 	Tackling tasks from product backlog:
 
 		Small rocks					(time: 15h) (priority: 8)
@@ -67,6 +70,19 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 			Need to have rotation for each as well, as translation
 				and scale as well
 			Pass in a matrix, rather than just a vec3 position
+		
+		Dust devils plan
+			
+			Need instanced rendering
+			Need update function
+				Loops through and updates the matrices
+			Just need GL_POINTS
+	
+			Movement
+				Need a simple rotation of a few on the base
+				The entire particle system should shift in a motion as well
+					How will it move over terrain?
+				Simple cone shape
 
 
 	Not using existing mars heightmap
@@ -78,7 +94,8 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 	Wed - 10hr instancing
 	Thur - 6hr instancing
 	Friday- 4hr objs, 1 hr texturing
-	Saturday - 2hours, instance rotation
+	Saturday - 4hours, instance rotation
+	Sunday - 3hours 'UV' bug fixing
 
 	To do:
 	
@@ -91,14 +108,6 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 		Have rocks per section
 			-> 9 draw calls, wont be a problem
 			-> because not changing buffer states?
-
-		Array of rock VAOs (containing the 'mesh' object? 1 mesh per vao?)
-			Contains the translations for each quadrant?
-			Literally pass the terrainRenderIndices into rock render and
-			for(terrainRenderIndices){draw[i]}
-
-		Try without VAO?
-		Array of mesh objects, its kinda the same?
 
 		Can use STATIC_DRAW in matrix creation?
 

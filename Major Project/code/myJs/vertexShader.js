@@ -49,9 +49,11 @@ gl.shaderSource(vertexShader, [
 		//Fog
 		'vec4 positionRelativeToCamera = viewMatrix * worldPostion;',
 		
+		// Particles
+		'gl_PointSize = 5.0;',
+		
 		'gl_Position = projection * positionRelativeToCamera;',
 		'',
-		'gl_PointSize = 5.0;',
 		'',
 		'vTextureCoord = aTextureCoord;',
 		'surfaceNormal = (model * vec4(normal, 0.0)).xyz;', //will return 4d vector, so need to get xyz

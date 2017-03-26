@@ -180,7 +180,7 @@ function RockGenerator(){
 	
 	
 	this.renderInstancedRocks = function(){
-	
+
 		//6->8 nice
 		currentTexture = rockTexture6;
 		gl.activeTexture(gl.TEXTURE0);

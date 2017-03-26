@@ -132,12 +132,20 @@ function render(){
 	player.movePlayer();
 	player.assignPlayerQuadrant();
 
+	// Don't change render order
+	// terrain render generates the renderIndices, 
+	// that are needed for rock rendering
 	terrain.render(); 
+	rockGenerator.renderInstancedRocks();
+	
+	particleSystem.render(); 
+	
+	
 
 	collisionTester.testAllCollision();
 
 	//rockGenerator.renderObjRocks();
-	rockGenerator.renderInstancedRocks();
+	
 
 	waterSystem.updateWaterVertices();
 	waterSystem.render();

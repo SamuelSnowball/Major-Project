@@ -68,7 +68,7 @@ gl.shaderSource(fragmentShader, [
 		//2nd is the gl_FragColor (current fragment)
 		
 		'if(useFog){', //Check to see if we should use fog or not
-			'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
+		//	'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
 		'}',
 		'else{',
 			'',
