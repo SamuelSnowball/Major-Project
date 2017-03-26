@@ -1,5 +1,5 @@
 # Major-Project
-My final year project, a mars mission control game created with WebGL and JavaScript.
+My final year project, a Mars scene created with WebGL and JavaScript.
 
 The project is being developed using the SCRUM methodology.
 
