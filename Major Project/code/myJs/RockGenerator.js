@@ -175,7 +175,6 @@ function RockGenerator(){
 
 		
 		meshArray.push(mesh);
-		console.log(meshArray.length);
 		buffersArray.push(buffers);
 	}
 	

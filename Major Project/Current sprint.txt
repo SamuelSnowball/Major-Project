@@ -6,7 +6,7 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 	Game aspects where taking ages, weren't technical and didn't them find interesting
 	Now behind 1 week worth of progress, stripping out last weeks additions
 
-	Problems
+	Problems:
 		Change project title, Mars Scene in WebGL
 
 	Tackling tasks from product backlog:
