@@ -14,7 +14,7 @@ function ParticleSystem(){
 	/*
 	The matrix that is going to be updated and stored.
 	*/
-	var testTransform = m4.translation(0,0,0);
+	var testTransform = m4.translation(310,0,310);
 	var testYRotation = m4.yRotation(Math.random());
 	m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 	
@@ -22,9 +22,9 @@ function ParticleSystem(){
 	createParticles();
 	
 	function Particle(){
-		this.x = utility.randomIntBetween(300, 310);
+		this.x = utility.randomIntBetween(0, 10);
 		this.y = utility.randomIntBetween(0, 20);
-		this.z = utility.randomIntBetween(300, 310);
+		this.z = utility.randomIntBetween(0, 10);
 		this.velocity = Math.random() * 5;
 		
 		particle_vertices.push(this.x, this.y, this.z);
@@ -176,7 +176,6 @@ function ParticleSystem(){
 	*/
 	this.render = function(){
 
-		//6->8 nice
 		currentTexture = myParticleTexture;
 		gl.activeTexture(gl.TEXTURE0);
 		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
@@ -228,7 +227,7 @@ function ParticleSystem(){
 		extension.vertexAttribDivisorANGLE(instancingLocation2, 1);
 		extension.vertexAttribDivisorANGLE(instancingLocation3, 1);
 
-		extension.drawArraysInstancedANGLE(gl.POINTS, 0, particleCount, particleCount);
+		extension.drawArraysInstancedANGLE(gl.POINTS, 0, 1, particleCount);
 				
 		useInstancing = false;
 		gl.uniform1i(useInstancingLocation, useInstancing);

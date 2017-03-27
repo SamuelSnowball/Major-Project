@@ -71,7 +71,6 @@
 <script src="code/myJs/Sound.js"></script>
 <script src="code/myJs/Lander.js"></script>
 <script src="code/myJs/Utility.js"></script>
-<script src="code/myJs/WorldState.js"></script>
 
 <!-- Needs OO? -->
 <script src="code/myJs/Mouse.js"></script>
@@ -88,7 +87,6 @@ var loadingScreen = new LoadingScreen();
 var terrain = new Terrain();
 var rockGenerator = new RockGenerator();
 
-var worldState = new WorldState(); //Loads and saves the world
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 var waterSystem = new WaterSystem();
@@ -114,19 +112,7 @@ function render(){
 
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	
-	/*
-	Auto-save the game every 20 seconds or so
-	But only save if they're not in minimap mode
-	Otherwise their Y position gets saved at 500
-	*/
-	if(gameTime === saveTime){
-		if(useFog === true){
-			console.log("World auto saved");
-			worldState.saveWorld();
-			gameTime = 0;
-		}
-	}
+
 	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
 	
 	player.movePlayer();
@@ -143,9 +129,6 @@ function render(){
 	
 
 	collisionTester.testAllCollision();
-
-	//rockGenerator.renderObjRocks();
-	
 
 	waterSystem.updateWaterVertices();
 	waterSystem.render();
@@ -169,9 +152,6 @@ function setup(){
 
 	// Show GUIs
 	gui.showElements();	
-	
-	// Load player data if it exists
-	// worldState.loadWorld();
 	
 	render();
 }

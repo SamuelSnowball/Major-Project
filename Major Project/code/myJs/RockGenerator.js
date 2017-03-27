@@ -106,7 +106,7 @@ function RockGenerator(){
 				positionX // x translation
 			); 
 		}
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
 		gl.vertexAttribPointer(instancingLocation0, 4, gl.FLOAT, false, 0, 0);
 		
 		/*
@@ -131,7 +131,7 @@ function RockGenerator(){
 				positionZ   // z translation
 			); 
 		}
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
 		gl.vertexAttribPointer(instancingLocation2, 4, gl.FLOAT, false, 0, 0);
 		
 		/*
@@ -156,7 +156,7 @@ function RockGenerator(){
 				rockHeight  // y translation
 			); 
 		}
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);	
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);	
 		gl.vertexAttribPointer(instancingLocation1, 4, gl.FLOAT, false, 0, 0);
 		
 		
@@ -170,7 +170,7 @@ function RockGenerator(){
 				testTransform[15]
 			);
 		}
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
 		gl.vertexAttribPointer(instancingLocation3, 4, gl.FLOAT, false, 0, 0);
 
 		
