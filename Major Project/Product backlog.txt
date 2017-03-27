@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////////////////
-####################### MARS MISSON CONTROL GAME - PRODUCT BACKLOG #######################
-//////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+####################### Mars Scene in WebGL - PRODUCT BACKLOG #######################
+/////////////////////////////////////////////////////////////////////////////////////
 
 Things left to add to the project: (Estimation time in hours, 10 priority is highest)
 
@@ -12,9 +12,6 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 			small sun, and bunch of stars as well
 			then can use fake the lighting on the rocks
 			needed for shadows anyway
-
-		Shadows, applied to larger rocks only		(time: 10h) (priority: 7)
-			Perhaps need to fix rock efficiency first
 		
 		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 6)
 			Just simple particles
@@ -23,26 +20,14 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 			update vertices on GPU, new shader?
 			if close to water, process verts etc...
 
-		Small 'sandstorms'				(time: 10h) (priority: 5)
+		Small 'sandstorms'/ dust devils			(time: 10h) (priority: 5)
 			Only on sand regions
 			If player in range
 
-		Popup GUI showing current info of feature 	(time: 10h) (priority: 2)
-			Transparent background, gas, rock
+		Shadows, applied to larger rocks only		(time: 10h) (priority: 5)
+			Perhaps need to fix rock efficiency first
 
 	Features not sure about:
-
-		Terrain, randomly generated terrain
-			-How long would the delay be of creating 3 new quadrants?
-			-Requires 50k vertices created every new quadrant
-			-Also have to glue together correct textures, make rocks, water sections etc
-
-			-Calculate quadrant based on absolute position, not number of terrain rows/columns
-
-			-But what happens when player goes below 0?
-			-Array indexing would go to -1 and break
-			-Could start spawning everything at like 32,000
-			-So user never reaches (0,0,0).
 
 		Terrain not randomly generated
 			-Could have loading bar
@@ -50,14 +35,6 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 			-Expensive start time, but smooth throughout
 			-Need something at the edges of the map
 			-So could keep terrain boundaries
-		
-
-	
-		grey/sand texture + regions
-
-
-		Flyover like minecraft creative view,
-
 
 	Extra features:
 		Add ambient audio, water audio near water
@@ -66,6 +43,9 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 			Some smoke particle effect on collision + rock stays
 			Rock rotates coming down, particles behind it
 			Could have a toggle for meteor shower
+
+		Popup GUI showing current info of feature 	(time: 10h) (priority: 2)
+			Transparent background, gas, rock
 
 		Initial loading scene 				(time: 03h) (priority: 2)
 			Great obj for loading scene:
@@ -82,26 +62,24 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Test table
 		Efficiency tests?
 
-	Current features:
+	Current features: (features and hours are not up to date..)
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
 		Terrain + rendering efficiency			(time: 30h) (priority: 10)
-		Rocks (objs) with collision			(time: 20h) (priority: 8)
-		Texturing terrain 				(time: 05h) (priority: 5)
+		Rocks (objs) 					(time: 20h) (priority: 8)
+		Texturing terrain 				(time: 10h) (priority: 5)
 		Water, with specular lighting			(time: 12h) (priority: 4)
 			Expand to cover quadrants
 			With less vertices
 		Fog						(time: 06h) (priority: 4)
 
-		
-	Small things to do:
-		Fix github issues
-		Change STATIC_DRAW renders to DYNAMIC_DRAW
 
+Terrain notes:
+	Not using existing mars heightmap
+		-literally loading in an obj
 
-For mid project release aiming for all core done
-
-Before demo/final release:
-	Change movement speed
+Rendering efficiency
+	currently processing vertices that are behind the player
+	Fixing this could mean 50% more vertices allowed
 	
 Add a release version after each sprint as well
 
@@ -696,4 +674,119 @@ To do:
 				Swap between GUIs with 1,2,3 keys
 	
 
+
+Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather than game
+
+	Game aspects where taking ages, weren't technical and didn't them find interesting
+	Now behind 1 week worth of progress, stripping out last weeks additions
+
+	Tackling tasks from product backlog:
+
+		Small rocks					(time: 15h) (priority: 8)
+
+		Skybox 						(time: 05h) (priority: 7)
+			have sun that acts as directional light 
+			small sun, and bunch of stars as well
+			then can use fake the lighting on the rocks
+			needed for shadows anyway
+
+		Shadows, applied to larger rocks only		(time: 10h) (priority: 7)
+	
+	Sprint Plan:
+
+		Backup project
+
+		Strip out
+			Collision, keep collision with the floor
+			GUIs - Could keep MENU GUI and have another GUI, and just show rock information when in range?
+			'minimap' and program/shader variables for disabling fog
+			inventory
+			prospecting
+			resources, rock textures etc
+
+		Also remove features from documentation
+		Add flyover movement
+		Fix terrain textures
+		Fix noise sections
+		Add new perlin seed each time
+
+		Fix UV bug
+			Instead of using 1 texture
+			Just use 4, and start UV coordinates from 0 each time.
+			Still doesn't work, wasted 3 hours
+
+			Right, generate UV coordinates as if you have 1 section
+				-ok will they stretch?
+			Then copy from that big 2d array of uv coordinates, into the buffers		
+
+		## Cleanup code ##
+
+		Small rocks plan
+			Find LOW poly rocks
+			CAN DRAW ALL ROCKS AS INSTANCED :)
+			should still split draw calls based on their textures
+			assign the rocks a section, easier rendering/processing
+
+			Need to have matrix for each rock as well,
+				translation, rotation and scale as well for each rock instance
+				Pass in a matrix, rather than just a vec3 position
+		
+			Rock efficiency for now:
+
+				Need a for loop creating the vaos
+					Adding translations buffers etc
+				Need to generate rocks for the entire map
+				Have rocks per section
+					-> 9 draw calls, wont be a problem
+					-> because not changing buffer states
+				Can use STATIC_DRAW in matrix creation
+
+			Better rock rendering efficiency:
+
+				Can have 9 sections worth of coordinates in one VAO, 
+					containing ONE set of verts/nomrals/uvs etc
+				Render the 9 sections (requires new indices function)
+				So just have 1 draw call, drawing those '9 sections' (3x3 section of 128x128)
+
+				Mutiple rock objs?
+				Multiple textures?
+				Requires another draw call?
+
+				set texture
+				draw
+				change texture
+				draw from other buffer
+				change texture etc
+			
+		Dust devils plan
+			
+			Need instanced rendering
+			Need update function
+				Loops through and updates the matrices
+			Just need GL_POINTS
+	
+			Movement
+				Need a simple rotation of a few on the base
+				The entire particle system should shift in a motion as well
+					How will it move over terrain?
+				Simple cone shape
+
+	Sprint Retrospective:
+
+		Didn't manage to finsh finish instance rendering.	
+
+		Monday - 8hr game logic
+		Tues - 8hr planning, changing project to Mars Scene, removed game code
+		Wed - 10hr instancing
+		Thur - 10hr instancing
+		Friday- 4hr objs, 1 hr texturing
+		Saturday - 4hours, instance rotation
+		Sunday - 4hours 'UV' bug fixing, it was a problem with the normals
+			I actaully couldnt create the normals properly, as one row
+			lost access to the previous row, which it would've calculated
+			the normal from.
+
+		Total hours 48. Still need to setup it up next sprint to make up for last week.
+	
+	
 

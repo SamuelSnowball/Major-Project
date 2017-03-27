@@ -65,6 +65,9 @@ function Terrain(){
 		get getQuadrantRowSize(){
 			return quadrantRowSize;
 		},
+		get renderIndices(){
+			return renderIndices; // rocks needs these
+		}
 	};
 
 	/*
@@ -269,7 +272,9 @@ function Terrain(){
 		Now create the terrain vertices having x, y, z values 
 		Where y is the value from the heightMap we made.
 		*/
+		var savedX = 0, savedZ = 0;
 		function createQuadrantVertices(vaoXPosition, vaoZPosition){
+		
 		
 			// Clear old quadrantVertices, need to generate a new set
 			quadrantVertices = [];
@@ -290,8 +295,8 @@ function Terrain(){
 			
 			If vaoXPosition/vaoZPosition is 0, then don't -1, as it will become [-1][-1]
 			*/
-			var terrainX = vaoXPosition * quadrantRowSize;
-			var terrainZ = vaoZPosition * quadrantColumnSize;
+			var terrainX = vaoXPosition * (quadrantRowSize-1);
+			var terrainZ = vaoZPosition * (quadrantColumnSize-1);
 			var startX = terrainX; // To reset the terrainX
 			
 			/*
@@ -320,7 +325,6 @@ function Terrain(){
 				terrainX = startX; // Reset the terrainX to what it started on
 				terrainZ += 1; // Increment Z
 			}
-			//console.log("quad verts length: " + quadrantVertices.length/3);
 			
 			quadrantFloorVerticesLength = quadrantVertices.length;
 		}
@@ -363,28 +367,18 @@ function Terrain(){
 			quadrantUvs = [];
 			
 			// Set the start position for the UV coordinates
-			var xUV;
-			var yUV;
-			//if(x === 0){
-				xUV = 0; 
-			//}
-			//else{
-			//	xUV = x * (1 / numberQuadrantRows); //x *( 1 / 12)
-			//}
-			//if(z === 0){
-			yUV = 0;
+			var xUV = 0;
+			var yUV = 0;
+			
+			// 0 -> 1 UV each quadrant ?
+			// means all quadrants have same texture?
+			// or, base the texture on player quadrant
+			// requires if check in render loop
 
-			
 			// How much to increment UV coordinates by each loop
-			// var incrementSize = 1 / quadrantRowSize / numberQuadrantRows;
-			
-			var incrementSize = 1 / (quadrantRowSize-1); // Need to -1 so it ends at (1, 1)
+			var incrementSize = 1 / quadrantRowSize; 
 		
-			// Save the start position of xUV, need to reset to it in 2nd loop
-			//var startUVx = xUV + incrementSize;
-			
 			// These should loop, quadRowSize * quadColumnSize (128*128) number of times
-			//debugger;
 			for(var x=0; x<quadrantRowSize; x++){
 				for(var y=0; y<quadrantRowSize; y++){
 					quadrantUvs.push(xUV);  
@@ -394,8 +388,6 @@ function Terrain(){
 				xUV = 0;
 				yUV += incrementSize;
 			}
-			//console.log("UV LENGTH: " + quadrantUvs.length);
-			//console.log(quadrantUvs);
 		}
 		
 		/*
@@ -459,11 +451,20 @@ function Terrain(){
 				// Now cross product between vector0 and vector1
 				// vector0 * vector1, might be wrong way around,
 				// Also the vectors could've been calculated wrong way around
-				var normal = m4.cross(vector0, vector1);
+				var normal = m4.cross(vector1, vector0);
 				
-				quadrantNormals.push(-normal[0]); //x
-				quadrantNormals.push(-normal[1]); //y
-				quadrantNormals.push(-normal[2]); //z
+				/*
+				Set all normals to 1,
+				Can't notice a difference,
+				Was causing the bug with black lines
+				
+				normals[0]
+				normals[1]
+				normals[2]
+				*/
+				quadrantNormals.push(1); //x
+				quadrantNormals.push(1); //y
+				quadrantNormals.push(1); //z
 			}
 		}
 	
@@ -737,8 +738,15 @@ function Terrain(){
 	*/
 	this.render = function(){	
 		lightColour = [1, 1, 1];
-		currentTexture = mapTexture0;
+		currentTexture = mapTexture;
 
+		useInstancing = false;
+		gl.uniform1i(useInstancingLocation, useInstancing);
+		gl.disableVertexAttribArray(instancingLocation0);
+		gl.disableVertexAttribArray(instancingLocation1);
+		gl.disableVertexAttribArray(instancingLocation2);
+		gl.disableVertexAttribArray(instancingLocation3);
+		
 		scale = m4.scaling(1, 1, 1);
 		rotateX = m4.xRotation(0);
 		rotateY = m4.yRotation(0);

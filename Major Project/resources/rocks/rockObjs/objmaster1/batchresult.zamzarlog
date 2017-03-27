@@ -1,0 +1,28 @@
+
+C:\windows\system32>D:
+
+D:\uploadedFiles\76df16493140d7636a1eb93dbb07c9d-61ec3ca9e4f8ccd6>cd D:\uploadedFiles\c5f8483f97aaf227d4b9731a8e202846-63a0a0ea25307cb8\ 
+
+D:\uploadedFiles\c5f8483f97aaf227d4b9731a8e202846-63a0a0ea25307cb8>C:\ZamApps\ConversionTools\IZArc\izarce -e "D:\uploadedFiles\c5f8483f97aaf227d4b9731a8e202846-63a0a0ea25307cb8\p1bc00p91gvndse219pkon01kog5.rar" 
+IZArc Command Line Extraction Add-On Version 1.1 (Build: 130)
+Copyright(c) 2007 Ivan Zahariev, All Rights Reserved.
+http://www.izarc.org    contact@izarc.org
+
+
+Archive File: p1bc00p91gvndse219pkon01kog5.rar
+
+  extracting: rock-low-poly-05.obj                                OK
+  extracting: rock-low-poly-01.mtl                                OK
+  extracting: rock-low-poly-01.obj                                OK
+  extracting: rock-low-poly-02.mtl                                OK
+  extracting: rock-low-poly-02.obj                                OK
+  extracting: rock-low-poly-03.mtl                                OK
+  extracting: rock-low-poly-03.obj                                OK
+  extracting: rock-low-poly-04.mtl                                OK
+  extracting: rock-low-poly-04.obj                                OK
+  extracting: rock-low-poly-05.mtl                                OK
+
+D:\uploadedFiles\c5f8483f97aaf227d4b9731a8e202846-63a0a0ea25307cb8>C:\ZamApps\ConversionTools\IZArc\izarcc -a "D:\uploadedFiles\c5f8483f97aaf227d4b9731a8e202846-63a0a0ea25307cb8\p1bc00p91gvndse219pkon01kog5.zip" "*.*" 
+IZArc Command Line Compression Add-On Version 1.1 (Build: 130)
+Copyright(c) 2007 Ivan Zahariev, All Rights Reserved.
+http://ww

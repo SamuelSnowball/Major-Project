@@ -1,6 +1,0 @@
-For efficiency
-
-Use VAOs
-Have multiple objects in one buffer (Multiple objects VBO's in single VAO)
-Clip on CPU
-Move verts on GPU

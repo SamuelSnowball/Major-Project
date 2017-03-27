@@ -19,6 +19,7 @@ gl.useProgram(program); //allowed to be here? or at bottom
 var skyColour = [0.8, 0.8, 0.8, 0.7];
 var lightColour = [1, 1, 1];
 var useFog = true;
+var useInstancing = false;
 
 
 /*
@@ -69,8 +70,20 @@ var useFogLocation = gl.getUniformLocation(program, 'useFog');
 gl.enableVertexAttribArray(useFogLocation);
 
 //Instancing, rocks
-var instancingLocation = gl.getAttribLocation(program, "translation");
+//var instancingLocation = gl.getAttribLocation(program, "translation");
+var useInstancingLocation = gl.getUniformLocation(program, 'useInstancing');
+gl.enableVertexAttribArray(useInstancingLocation);	
+
+var instancingLocation0 = gl.getAttribLocation(program, "instanceMatrixRow0");
+var instancingLocation1 = gl.getAttribLocation(program, "instanceMatrixRow1");
+var instancingLocation2 = gl.getAttribLocation(program, "instanceMatrixRow2");
+var instancingLocation3 = gl.getAttribLocation(program, "instanceMatrixRow3");
+
+//gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 // gl.enableVertexAttribArray(instancingLocation);
+
+//var modelLocation = gl.getUniformLocation(program, 'model');
+//gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 
 /*
 #################
@@ -143,6 +156,8 @@ function updateAttributesAndUniforms(){
 		zNear,
 		zFar
 	);
+	
+	// Set instancing location to an identity matrix, otherwise it breaks
 
 	//why is rotate z has position?
 	fullTransforms = m4.multiply(position, rotateZ);

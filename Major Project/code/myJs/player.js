@@ -212,7 +212,7 @@ function Player(x, y, z){
 		viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 		
 		// Stops it breaking....
-		currentTexture = mapTexture0;
+		currentTexture = mapTexture;
 		
 		updateAttributesAndUniforms();
 	}	

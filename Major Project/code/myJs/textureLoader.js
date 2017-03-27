@@ -9,10 +9,11 @@ Texture knowledge gained from:
 
 // This texture gets set to other textures whilst rendering
 var currentTexture;
-
 var myPerlinTexture;
+var myParticleTexture;
+var mapTexture;
 
-var mapTexture0;
+var sandTexture;
 
 var playerTexture;
 
@@ -28,6 +29,11 @@ var rockTexture2;
 var rockTexture3;
 var rockTexture4;
 var rockTexture5;
+
+var testTexture1;
+var testTexture2;
+var testTexture3;
+var testTexture4;
 
 /*
 Other textures
@@ -47,9 +53,17 @@ function TextureLoader(){
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
 				  new Uint8Array([255, 0, 0, 255]));
 				  
+		myParticleTexture = new Texture("", 0, 0);
+		gl.bindTexture(gl.TEXTURE_2D, myParticleTexture.getTextureAttribute.texture);		
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+				  new Uint8Array([0, 0, 0, 255]));
+				  
 		// Map texture
-		// myPerlinTexture = new Texture("resources/terrain/map.png", 10, 0);
-		mapTexture0 = new Texture("resources/terrain/section0.png", 10, 0);
+		mapTexture = new Texture("resources/terrain/floor/sand.png", 10, 0, true);
+		
+		
+		// http://www.textures.com/download/soilbeach0131/106132
+		sandTexture = new Texture("resources/terrain/floor/sand.png", 10, 0);
 		
 		/*
 		Rock textures
@@ -63,6 +77,15 @@ function TextureLoader(){
 		rockTexture3 = new Texture('resources/rocks/3.png', 10, 0);
 		rockTexture4 = new Texture('resources/rocks/4.png', 10, 0);
 		rockTexture5 = new Texture('resources/rocks/5.png', 10, 0);
+		
+		/*
+		http://www.textures.com/download/rocksarid0035/68071?&secure=login
+		https://www.textures.com/download/rocksarid0048/42217?&secure=login
+		https://www.textures.com/download/rocksarid0049/42220?&secure=login
+		*/
+		rockTexture6 = new Texture('resources/rocks/6.png', 10, 0);
+		rockTexture7 = new Texture('resources/rocks/7.png', 10, 0);
+		rockTexture8 = new Texture('resources/rocks/8.png', 10, 0);
 
 		/*
 		Other textures
@@ -75,7 +98,7 @@ function TextureLoader(){
 	
 }
 
-function Texture(path, shineDamperParam, reflectivityParam){
+function Texture(path, shineDamperParam, reflectivityParam, repeat){
 
 	var shineDamper = shineDamperParam; 
 	var reflectivity = reflectivityParam; 
@@ -100,29 +123,40 @@ function Texture(path, shineDamperParam, reflectivityParam){
 
 	var image = new Image();
 	image.src = path;
-	image.onload = function (){handleTextureLoaded(image, texture);}	
+	image.onload = function (){handleTextureLoaded(image, texture, repeat);}	
 	
 	/*
 	This gets run after image is done loading
 	*/
-	function handleTextureLoaded(image, texture){
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		
-		// Writes image data to the texture
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-		
-		/*
-		Setup filtering, controls how image is filtered when scaling
-		Using linear filtering when scaling up
-		Using mipmap when scaling down
-		*/
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-		
-		gl.generateMipmap(gl.TEXTURE_2D);
-		
-		// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
-		gl.bindTexture(gl.TEXTURE_2D, null);
+	function handleTextureLoaded(image, texture, repeat){
+	
+		if(repeat){
+			gl.bindTexture(gl.TEXTURE_2D, texture);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+			gl.generateMipmap(gl.TEXTURE_2D);
+			gl.bindTexture(gl.TEXTURE_2D, null);
+		}
+		else{
+			gl.bindTexture(gl.TEXTURE_2D, texture);
+			
+			// Writes image data to the texture
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+			
+			/*
+			Setup filtering, controls how image is filtered when scaling
+			Using linear filtering when scaling up
+			Using mipmap when scaling down
+			*/
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+			
+			gl.generateMipmap(gl.TEXTURE_2D);
+			
+			// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
+			gl.bindTexture(gl.TEXTURE_2D, null);
+		}
 	}
 	
 }

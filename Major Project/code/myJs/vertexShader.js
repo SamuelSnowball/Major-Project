@@ -13,7 +13,11 @@ gl.shaderSource(vertexShader, [
 	'uniform mat4 projection;',
 	
 	// Instancing
-	'attribute vec3 translation;',
+	'uniform bool useInstancing;',
+	'attribute vec4 instanceMatrixRow0;',
+	'attribute vec4 instanceMatrixRow1;',
+	'attribute vec4 instanceMatrixRow2;',
+	'attribute vec4 instanceMatrixRow3;',
 	
 	// Lighting
 	'uniform vec3 lightPosition;',
@@ -30,15 +34,26 @@ gl.shaderSource(vertexShader, [
 	'const float gradient = 1.5;',
 	
 	'void main(){',
-		'vec4 worldPostion = model * vec4(position, 1.0) + vec4(translation, 0);', //needed for light and instancing
+		// Form the full matrix from the rows, cols then rows its weird!!
+		'mat4 fullInstanceTransform;',
+		'if(useInstancing){',
+			'fullInstanceTransform = mat4(instanceMatrixRow0, instanceMatrixRow1, instanceMatrixRow2, instanceMatrixRow3);',
+		'}',
+		'else{',
+			'fullInstanceTransform = mat4(  1,0,0,0 , 0,1,0,0, 0,0,1,0, 0,0,0,1);',
+		'}',
+	
+		'vec4 worldPostion = model * vec4(position, 1.0) * fullInstanceTransform;', //needed for light and instancing
 		//after its been transformed, rotated in world, we can use it
 		
 		//Fog
 		'vec4 positionRelativeToCamera = viewMatrix * worldPostion;',
 		
+		// Particles
+		'gl_PointSize = 5.0;',
+		
 		'gl_Position = projection * positionRelativeToCamera;',
 		'',
-		'gl_PointSize = 5.0;',
 		'',
 		'vTextureCoord = aTextureCoord;',
 		'surfaceNormal = (model * vec4(normal, 0.0)).xyz;', //will return 4d vector, so need to get xyz
