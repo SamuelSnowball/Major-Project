@@ -10,8 +10,8 @@ function Terrain(){
 	
 	// How many map quadrants, each having 128*128 vertices each
 	// If you update these, make sure to update them in player assign quadrant method
-	var numberQuadrantRows = 4; 
-	var numberQuadrantColumns = 4; 
+	var numberQuadrantRows = 8; 
+	var numberQuadrantColumns = 8; 
 	
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;
@@ -218,6 +218,12 @@ function Terrain(){
 			for(var x=0; x<terrainRows; x++){
 				for(var y=0; y<terrainRows; y++){
 					// Left row out of bounds section
+					
+					// sand texture = single noise, no stacked
+					// cliffs etc?
+					
+					
+					// Map boundaries
 					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
 						var stacked = stackNoise(x,y,8);
 						heightMap[x][y] = stacked * 50;					
@@ -235,10 +241,20 @@ function Terrain(){
 						var stacked = stackNoise(x,y,8);
 						heightMap[x][y] = stacked * 50;						
 					}
-					else{
+					
+					//Have 8 sections?
+					// Currently, half and half
+					if(x > terrainRows/numberQuadrantRows && 
+						x < terrainRows/2 &&
+						y < terrainRows){
 						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 15;		
+						heightMap[x][y] = stacked * 15;	
 					}
+					else{
+						var stacked = stackNoise(x,y,4);
+						heightMap[x][y] = stacked * 5;	
+					}
+					
 					
 
 				}

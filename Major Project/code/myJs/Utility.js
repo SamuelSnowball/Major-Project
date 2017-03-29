@@ -11,6 +11,10 @@ function Utility(){
 		return Math.floor(Math.random() * (max-min+1) + min);
 	}
 	
+	this.randomBetween = function(min, max){
+		return (Math.random() * (max-min+1) + min);
+	}
+	
 		
 	/*
 	Retrieves the obj text from provided url

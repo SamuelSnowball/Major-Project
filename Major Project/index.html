@@ -71,6 +71,7 @@
 <script src="code/myJs/Sound.js"></script>
 <script src="code/myJs/Lander.js"></script>
 <script src="code/myJs/Utility.js"></script>
+<script src="code/myJs/Skybox.js"></script>
 
 <!-- Needs OO? -->
 <script src="code/myJs/Mouse.js"></script>
@@ -94,12 +95,13 @@ var sound = new Sound();
 var lander = new Lander();
 var player = new Player(315, 1, 315); 
 var gui = new GUI();
+var skybox = new Skybox();
 
-//For saving the game
+// For saving the game
 var gameTime = 0;
 var saveTime = 100;
 
-//Taken
+// Taken
 var fpsElement = document.getElementById("fps");
 var then = Date.now() / 1000;  // get time in seconds
 
@@ -135,6 +137,8 @@ function render(){
 	
 	lander.render();
 	
+	skybox.render(viewMatrix, projectionMatrix);
+	
 	gameTime++;
 	requestAnimationFrame(render);
 }
@@ -152,6 +156,7 @@ function setup(){
 
 	// Show GUIs
 	gui.showElements();	
+
 	
 	render();
 }
