@@ -84,7 +84,14 @@ Rendering efficiency
 Add a release version after each sprint as well
 
 Water notes:
-	Could create trench in terrain and have water in it, easy
+	First fix original water, on GPU
+	Need to generate the water first, then edit the heightmap
+	because you have the spawn and end points of the water
+
+	random placement of water
+		would it occupy the whole cell?
+		would be better to just have parts of it
+
 
 /////////////////////////////////////////////////////////////////////
 ####################### BEFORE STARTING SCRUM #######################

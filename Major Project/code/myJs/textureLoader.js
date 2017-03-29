@@ -30,10 +30,7 @@ var rockTexture3;
 var rockTexture4;
 var rockTexture5;
 
-var testTexture1;
-var testTexture2;
-var testTexture3;
-var testTexture4;
+var rockTextures = [];
 
 /*
 Other textures
@@ -78,14 +75,14 @@ function TextureLoader(){
 		rockTexture4 = new Texture('resources/rocks/4.png', 10, 0);
 		rockTexture5 = new Texture('resources/rocks/5.png', 10, 0);
 		
+		rockTextures.push(rockTexture0, rockTexture1, rockTexture2, rockTexture3, rockTexture4, rockTexture5);
+		
 		/*
 		http://www.textures.com/download/rocksarid0035/68071?&secure=login
 		https://www.textures.com/download/rocksarid0048/42217?&secure=login
 		https://www.textures.com/download/rocksarid0049/42220?&secure=login
 		*/
-		rockTexture6 = new Texture('resources/rocks/6.png', 10, 0);
-		rockTexture7 = new Texture('resources/rocks/7.png', 10, 0);
-		rockTexture8 = new Texture('resources/rocks/8.png', 10, 0);
+
 
 		/*
 		Other textures

@@ -52,9 +52,18 @@ function RockGenerator(){
 	}
 	
 	function setupInstancedRockBuffers(x, z){
-	
+		
+		/*
+		Rand chances:
+			Generate big rock (low chance)
+			Generate medium rock (mid chance)
+ 			Generate small rock (high )
+		*/
+		
 		mesh = new OBJ.Mesh(rock21);
 		OBJ.initMeshBuffers(gl, mesh);
+		mesh.numInstances = Math.floor(Math.random() * 512); //math.random?
+		mesh.texture = rockTextures[Math.floor(Math.random() * 5) + 0]; // rand texture 0->7
 
 		buffers = twgl.createBuffersFromArrays(gl, {
 			position: [],
@@ -86,21 +95,37 @@ function RockGenerator(){
 		// So need to save all generated X and Z positions
 		var savedXPositions = [];
 		var savedZPositions = [];
+		
+		// Use the length of the rock (say, x) to calculate its width
+		// Use scaleX and scaleZ to set the rocks height
+		var savedXScales = [];
+		var savedZScales = [];
 
 		// Bind buffer, create all data, then buffer data
 		// Then do the next row
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow0);
-		for(var i=0; i<numInstances; i++){	
+		for(var i=0; i<mesh.numInstances; i++){	
 			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI/2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 			
-			var scaleX = (Math.random() * 50) + 5;
+			var rockSize = Math.random() * 100;
+			var scaleX;
+			if(rockSize > 95){
+				scaleX = utility.randomBetween(75, 100); // Large 5% chance
+			}
+			else if(rockSize > 75){
+				scaleX = utility.randomBetween(35, 50); // Medium 20% chance
+			}
+			else{
+				scaleX = utility.randomBetween(5, 15); // Small 75% chance
+			}
 			
 			positionX = Math.floor(Math.random() * 128) + xMin;
 			savedXPositions.push(positionX);
+			savedXScales.push(scaleX);
 
 			data.push(
-				scaleX * testTransform[0], //Scale X first	
+				testTransform[0] * scaleX,	
 				testTransform[4], 
 				testTransform[8], 
 				positionX // x translation
@@ -114,12 +139,13 @@ function RockGenerator(){
 		*/
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow2);
 		data = [];
-		for(var i=0; i<numInstances; i++){
+		for(var i=0; i<mesh.numInstances ; i++){
 
 			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI/2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 			
-			var scaleZ = (Math.random() * 50) + 5;
+			var scaleZ = savedXScales[i];// + Math.random() * 5;
+			savedZScales.push(scaleZ);
 			
 			positionZ = Math.floor(Math.random() * 128) + zMin;
 			
@@ -127,7 +153,7 @@ function RockGenerator(){
 			data.push(
 				testTransform[2], 
 				testTransform[6], 
-				scaleZ * testTransform[10], // Scale Z first
+				testTransform[10] * scaleZ,
 				positionZ   // z translation
 			); 
 		}
@@ -139,21 +165,21 @@ function RockGenerator(){
 		*/
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow1);
 		data = [];
-		for(var i=0; i<numInstances; i++){
+		for(var i=0; i<mesh.numInstances ; i++){
 			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI/2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 			
-			var scaleY = (Math.random() * 25) + 5;
+			var scaleY = (savedXScales[i] + savedZScales[i])/4;
 			
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = savedZPositions[i]; // Reversed
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = savedXPositions[i]; // Reversed
-			var rockHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
+			var rockPosition = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
 
 			data.push(
 				testTransform[1], 
-				scaleY * testTransform[5], // Scale Y first
+				testTransform[5] * scaleY, // Scale Y first
 				testTransform[9], 
-				rockHeight  // y translation
+				rockPosition  // y translation
 			); 
 		}
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);	
@@ -162,7 +188,7 @@ function RockGenerator(){
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow3);
 		data = [];
-		for(var i=0; i<numInstances; i++){
+		for(var i=0; i<mesh.numInstances ; i++){
 			data.push(
 				testTransform[3], 
 				testTransform[7], 
@@ -181,12 +207,6 @@ function RockGenerator(){
 	
 	this.renderInstancedRocks = function(){
 
-		//6->8 nice
-		currentTexture = rockTexture6;
-		gl.activeTexture(gl.TEXTURE0);
-		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
-			
 		useInstancing = true;
 		gl.uniform1i(useInstancingLocation, useInstancing);
 		
@@ -198,6 +218,12 @@ function RockGenerator(){
 		var renderIndices = terrain.get.renderIndices;
 		
 		for(var i=0; i<renderIndices.length; i++){
+		
+			currentTexture = meshArray[renderIndices[i]].texture;
+			gl.activeTexture(gl.TEXTURE0);
+			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
+			
 			gl.bindBuffer(gl.ARRAY_BUFFER, meshArray[renderIndices[i]].vertexBuffer);
 			gl.enableVertexAttribArray(positionAttribLocation);
 			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
@@ -235,12 +261,12 @@ function RockGenerator(){
 			extension.vertexAttribDivisorANGLE(instancingLocation1, 1);
 			extension.vertexAttribDivisorANGLE(instancingLocation2, 1);
 			extension.vertexAttribDivisorANGLE(instancingLocation3, 1);
-
+		
 			/*
 			This draw call is weird,
 			Uses indexBuffer.numItems instead of vertexBuffer.numItems
 			*/
-			extension.drawElementsInstancedANGLE(gl.TRIANGLES, meshArray[renderIndices[i]].indexBuffer.numItems, gl.UNSIGNED_SHORT, 0, numInstances);
+			extension.drawElementsInstancedANGLE(gl.TRIANGLES, meshArray[renderIndices[i]].indexBuffer.numItems, gl.UNSIGNED_SHORT, 0, meshArray[renderIndices[i]].numInstances);
 		}
 						
 		useInstancing = false;

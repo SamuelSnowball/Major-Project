@@ -1,39 +1,31 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Random Mars Scene
--If its a randomly generated mars scene, then I can keep all lighting/fog aspects
-	-Just the map has boundaries
+Random Mars Scene vs terrain generator
+	If its a randomly generated mars scene, then I can keep all lighting/fog aspects
+		Just the map has boundaries
+		Do I even need a lander?
 
-To do:
-	The amount of rocks
-	The scale of rocks, could have double for loop if between 128,128 then scale = 100 etc 
-	The rock texture, all rocks in quadrant need the same texture
-	//At render time in the renderIndices loop, meshArray.texture
-	//Might not be awful.
+Sprint 6: 27th march - 3rd april 
 
-	Terrain texture, somehow have a realisitc noise texture
+	Sprint plan:
+		The amount of rocks
+		The scale of rocks, could have double for loop if between 128,128 then scale = 100 etc
+			Base the Z scale, on what the X was.
+			Like zScale = (rand) + x (as min) 
+		The rock texture, all rocks in quadrant need the same texture
+			At render time in the renderIndices loop, meshArray.texture
+			Might not be awful.
+			It holds 60fps!
 
-	Different noise sections, random
+		Different noise sections, random
+		The greater the noise scale, the less rocks
 
-	Skybox
-	Set the directional light from the sun in the skybox
+		Skybox
+		Set the directional light from the sun in the skybox
 
-
-First fix original water, on GPU
-
-Need to generate the water first, then edit the heightmap
-because you have the spawn and end points of the water
-
-heightmap would be ok
-which mean vertices would be ok
-
-random placement of water
--would it occupy the whole cell?
--would be better to just have parts of it
+	Sprint retrospective:
+		Fixed amount of rocks
 
 
-Future
--allow user to set the randomness properties, through rowsxcolumns size GUI,
--clickable map squares, increment perlin scale
 
