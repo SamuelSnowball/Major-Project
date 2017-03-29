@@ -68,12 +68,12 @@ function Skybox(){
 		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 		
 		var faces = [
-			["resources/skybox/right.png", gl.TEXTURE_CUBE_MAP_POSITIVE_X],
-			["resources/skybox/left.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_X],
-			["resources/skybox/top.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Y],
-			["resources/skybox/bottom.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Y],
-			["resources/skybox/back.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Z],
-			["resources/skybox/front.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Z]
+			["resources/skybox/hw_red/right.png", gl.TEXTURE_CUBE_MAP_POSITIVE_X],
+			["resources/skybox/hw_red/left.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_X],
+			["resources/skybox/hw_red/top.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Y],
+			["resources/skybox/hw_red/bottom.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Y],
+			["resources/skybox/hw_red/back.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Z],
+			["resources/skybox/hw_red/front.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Z]
 		];
 		
 		for (var i = 0; i < faces.length; i++) {
