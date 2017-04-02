@@ -16,7 +16,7 @@ console.log("Link status: " + gl.getProgramInfoLog(program));
 gl.useProgram(program); //allowed to be here? or at bottom
 
 //Global variables to change and load into shaders
-var skyColour = [0.8, 0.8, 0.8, 0.7];
+var skyColour = [0.8, 0.5, 0.5, 0.7];
 var lightColour = [1, 1, 1];
 var useFog = true;
 var useInstancing = false;

@@ -72,6 +72,7 @@
 <script src="code/myJs/Lander.js"></script>
 <script src="code/myJs/Utility.js"></script>
 <script src="code/myJs/Skybox.js"></script>
+<script src="code/myJs/WaterFrameBuffer.js"></script>
 
 <!-- Needs OO? -->
 <script src="code/myJs/Mouse.js"></script>
@@ -90,12 +91,78 @@ var rockGenerator = new RockGenerator();
 
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
-var waterSystem = new WaterSystem();
+//var waterSystem = new WaterSystem();
 var sound = new Sound();
 var lander = new Lander();
 var player = new Player(315, 1, 315); 
 var gui = new GUI();
 var skybox = new Skybox();
+
+var waterFrameBuffers = new WaterFrameBuffer();
+
+/*
+Isn't rendering with scene texture atm
+Don't even have UV coordaintes atm
+*/
+	gl.enableVertexAttribArray(positionAttribLocation);
+	gl.enableVertexAttribArray(textureCoordLocation);
+	
+var squareVertexPositionBuffer = gl.createBuffer();;
+    gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
+var vertices = [
+         1.0,  1.0,  0.0,
+        -1.0,  1.0,  0.0,
+         1.0, -1.0,  0.0,
+        -1.0, -1.0,  0.0
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	
+var	squareUVBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer);
+var	uvs = [
+		0,0,
+		0,1,
+		1,0,
+		1,1
+	];
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+	
+function renderTemporaryGUI(){
+
+	
+	gl.enableVertexAttribArray(positionAttribLocation);
+	gl.enableVertexAttribArray(textureCoordLocation);
+	
+	scale = m4.scaling(5, 5, 5);
+	rotateX = m4.xRotation(Date.now() * 0.0003);
+	rotateY = m4.yRotation(0);
+	rotateZ = m4.zRotation(0);
+	position = m4.translation(310, 5, 310);
+
+
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, reflectionTexture);
+	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+	
+	updateAttributesAndUniforms();
+
+
+	
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
+    gl.vertexAttribPointer(positionAttribLocation,3, gl.FLOAT, false, 0, 0);
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer);
+    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+	
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	
+	gl.disableVertexAttribArray(positionAttribLocation);
+	gl.disableVertexAttribArray(textureCoordLocation);
+	
+}
 
 // For saving the game
 var gameTime = 0;
@@ -111,34 +178,54 @@ function render(){
     then = now;
 	var fps = 1 / elapsedTime;
     fpsElement.innerText = fps.toFixed(0); 
-
+	
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+	
 	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
 	
 	player.movePlayer();
 	player.assignPlayerQuadrant();
 
+	
 	// Don't change render order
 	// terrain render generates the renderIndices, 
 	// that are needed for rock rendering
 	terrain.render(); 
 	rockGenerator.renderInstancedRocks();
-	
 	particleSystem.render(); 
-	
-	
-
 	collisionTester.testAllCollision();
-
-	waterSystem.updateWaterVertices();
-	waterSystem.render();
-	
 	lander.render();
 	
-	skybox.render(viewMatrix, projectionMatrix);
 	
+	
+	//skybox.render(viewMatrix, projectionMatrix);
+	//renderTemporaryGUI();  // REMOVE THIS WHEN WORKING!
+	
+	
+	// Want to render scene to a frame buffer, so bind it
+	// make sure this gets rendered to something that the original scene doesn't render
+	gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
+	gl.viewport(0, 0, 2048, 2048);
+		terrain.render(); 
+		rockGenerator.renderInstancedRocks();
+		particleSystem.render(); 
+		lander.render();
+		//skybox.render(viewMatrix, projectionMatrix);
+	// Unbinds 
+	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+	
+	
+	renderTemporaryGUI();  
+	
+	// Have now switched back to default frame buffer
+	
+	// The scene is now loaded in the FBO
+	// Use that texture to render the square
+	
+
+		
 	gameTime++;
 	requestAnimationFrame(render);
 }

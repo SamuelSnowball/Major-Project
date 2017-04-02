@@ -22,10 +22,15 @@ Sprint 6: 27th march - 3rd april
 		The greater the noise scale, the less rocks
 
 		Skybox
-		Set the directional light from the sun in the skybox
+
+		Craters + gas, use obj and particles
 
 	Sprint retrospective:
 		Fixed amount of rocks
+		Fixed rock dimensions
+
+		Added skybox
+			Fog currently disabled
 
 
 

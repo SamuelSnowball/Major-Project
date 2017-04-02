@@ -25,7 +25,7 @@ function CollisionTester(){
 	*/
 	this.testAllCollision = function(){
 		setPlayerHeight();
-		testPlayerMapBoundaries();
+		//testPlayerMapBoundaries();
 	}
 	
 	/*

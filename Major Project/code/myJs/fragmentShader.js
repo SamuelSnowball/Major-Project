@@ -59,8 +59,8 @@ gl.shaderSource(fragmentShader, [
 		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',
 		
 		//Add lighting
-		'gl_FragColor.rgb *= light;',
-		'gl_FragColor.rgb += finalSpecular;',
+		//'gl_FragColor.rgb *= light;',
+		//'gl_FragColor.rgb += finalSpecular;',
 
 		//Fog, mix the skyColour and colour of the object
 		//min takes in 2 colours, 
@@ -68,7 +68,7 @@ gl.shaderSource(fragmentShader, [
 		//2nd is the gl_FragColor (current fragment)
 		
 		'if(useFog){', //Check to see if we should use fog or not
-			//'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
+			'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
 		'}',
 		'else{',
 			'',

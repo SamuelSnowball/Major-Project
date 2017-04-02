@@ -1,7 +1,62 @@
 
 
-
 function WaterSystem(){
+
+	
+	// Need shaders as well
+	var waterVertexShader = gl.createShader(gl.VERTEX_SHADER);
+	gl.shaderSource(waterVertexShader, [
+		'attribute vec3 waterPosition;',
+
+		'uniform mat4 projectionMatrix;',
+		'uniform mat4 viewMatrix;',
+
+		'void main(void){',
+			'gl_Position = projectionMatrix * viewMatrix * vec4(waterPosition, 1.0); ',
+			'waterTextureCoords = waterPosition;',
+		'}'
+		
+	].join('\n'));
+	gl.compileShader(waterVertexShader);
+	console.log("Water vertex shader compliation status: " + gl.getShaderInfoLog(waterVertexShader));
+	
+	var waterFragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+	gl.shaderSource(waterFragmentShader, [
+		'precision highp float;',
+		
+		'varying highp vec2 vTextureCoord;',
+		'uniform sampler2D uSampler;',
+
+		'vec3 texture(samplerCube sampler, vec3 c){',
+			'return textureCube(sampler, c).rgb;',
+		'}',
+		
+		'void main(void){',
+			'vec3 sample = texture(cubeMap, waterTextureCoords);',
+			'gl_FragColor = vec4(sample, 1.0);',
+		'}'
+		
+	].join('\n'));
+	gl.compileShader(waterFragmentShader);
+	console.log("Water fragment shader compliation status: " + gl.getShaderInfoLog(waterFragmentShader));
+	
+	var waterProgram = gl.createProgram();
+	gl.attachShader(waterProgram, waterVertexShader);
+	gl.attachShader(waterProgram, waterFragmentShader);
+	gl.linkProgram(waterProgram);
+	console.log("waterProgram status: " + gl.getProgramInfoLog(waterProgram));
+
+	gl.useProgram(waterProgram);
+		var waterPositionAttribLocation = gl.getAttribLocation(skyboxProgram, 'skyboxPosition');
+		gl.enableVertexAttribArray(waterPositionAttribLocation);
+		
+		var waterViewMatrixLocation = gl.getUniformLocation(skyboxProgram, 'viewMatrix');
+		gl.uniformMatrix4fv(waterViewMatrixLocation, false, new Float32Array(viewMatrix));
+		
+		var waterProjectionLocation = gl.getUniformLocation(skyboxProgram, 'projectionMatrix');
+		gl.uniformMatrix4fv(waterProjectionLocation, false, new Float32Array(projectionMatrix));
+	gl.useProgram(program);
+	
 	
 	var waterVertexBuffer = gl.createBuffer(); 
 	var waterTextureCoordinateBuffer;
@@ -251,84 +306,11 @@ function WaterSystem(){
 			}	
 		}
 	}
-	
-	/*
-	Improvements:
-		Too many loops... looping 2d heightmap, then looping again re assigning vertices
-			-or resetting them or something
-		Update vertices on GPU
-		Add specular lighting
-		Have more vertices in smaller space?
-		Assign individual vertices directions, instead of entire rows?
-		
-		## Try assign a random height and direction to every vertex, should be good ##
-	
-	The current row, needs to be near the previous row height, using count variable for it
-	
-	2D array so its easier
-			Assign all heights in a row to 1 value at once,
-	You could also assign a direction to the whole row
-	
 
-		Need current row direction
-		
-		if waterVertices[x][y`] < 0
-			direction = up
-		else if waterVertices[x][y] > 1
-			direction = down
-		
-		if row direction === down
-			waterVertices[x][y] -= speed
-		else
-			waterVertices[x][y] += speed
-			
-	After loop, now have 2D heightmap, re assign to a 1d array with x,z coordinates and draw it	
-	Call: createWaterVertices() after changed heightMap values
-	*/	
-	this.updateWaterVertices = function(){
-	//this actually justt updates the waterHeightMap, not the vertices
-		/*
-		Check/change direction
-		*/
-		var currentDirection;
-		for(var x=0; x<waterRows; x++){
-			//Get the current direction
-			
-		
-			for(var y=0; y<waterColumns; y++){
-			
-				currentDirection = waterDirections[x][y];
-
-				/*
-				Its checking every single vertex in the row,
-				Only needs to check the start
-				*/
-				if(waterHeightMap[x][y] < -2.6){ //min height
-					//If height less than 0
-					//Reverse its direction
-					waterDirections[x][y] = 1;
-				}
-				else if(waterHeightMap[x][y] > -1.6){ //max height
-					//If height over 3
-					//Reverse its direction
-					waterDirections[x][y] = -1;
-				}
-				else{
-					//Its in the middle, leave it
-				}
-				
-				/*
-				Now change height based on direction
-				*/
-				waterHeightMap[x][y] += (0.01 * currentDirection);
-			}
-		}
-
-		//Re-create waterVertices with the new waterHeightMap
-		createWaterVertices();
-	}
 	
 	this.render = function(){
+	
+	
 		currentTexture = waterTexture;
 		lightColour = [0.2, 0.2, 0.8];
 		
@@ -340,7 +322,7 @@ function WaterSystem(){
 		also need to change max/min height values in updateWaterVertices, 
 		also spawn points in fillWaterHeightMap
 		*/
-		position = m4.translation(47-16, -2.1, 47-16); 
+		position = m4.translation(310, 15.1, 310); 
 		
 		//Times matrices together
 		updateAttributesAndUniforms();
@@ -371,60 +353,7 @@ function WaterSystem(){
 			waterVertices.length / 3 * 2,
 			gl.UNSIGNED_INT, 
 			waterElementsBuffer
-		); 	
-		
-		
-		/*
-		
-		
-		Render lava, hacky
-		
-		
-		*/
-		currentTexture = lavaTexture;
-		lightColour = [1, 0.6, 0.6]; //red
-		
-		scale = m4.scaling(1, 1, 1);
-		xRotation = m4.xRotation(0);
-		yRotation = m4.yRotation(0);
-		/*
-		If you change this position, 
-		also need to change max/min height values in updateWaterVertices, 
-		also spawn points in fillWaterHeightMap
-		*/
-		position = m4.translation(-10, -2.1, -10); 
-		
-		//Times matrices together
-		updateAttributesAndUniforms();
-			
-		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexBuffer);
-		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, waterTextureCoordinateBuffer);
-		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
-		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-		
-		gl.enableVertexAttribArray(normalAttribLocation);
-		gl.bindBuffer(gl.ARRAY_BUFFER, waterNormalsBuffer);
-		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
-
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, waterElementsBuffer);
-		
-		/*
-		Mode
-		Number of indices ( divide by 3 because 3 vertices per vertex ) then * 2 to get number of indices
-		Type
-		The indices
-		*/
-		gl.drawElements(
-			gl.TRIANGLE_STRIP, 
-			waterVertices.length / 3 * 2,
-			gl.UNSIGNED_INT, 
-			waterElementsBuffer
-		); 			
+		); 		
 	}
-	
 	
 }

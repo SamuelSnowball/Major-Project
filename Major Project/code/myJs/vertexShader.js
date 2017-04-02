@@ -31,7 +31,7 @@ gl.shaderSource(vertexShader, [
 	//Fog, pass to frag
 	'varying float visibility;',
 	'const float density = 0.01;', //play with these
-	'const float gradient = 1.5;',
+	'const float gradient = 3.5;',
 	
 	'void main(){',
 		// Form the full matrix from the rows, cols then rows its weird!!

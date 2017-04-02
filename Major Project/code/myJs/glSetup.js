@@ -33,4 +33,12 @@ if (!extension) {
   console.error("need ANGLE_instanced_arrays");
 }
 
+var water_ext = gl.getExtension('WEBGL_depth_texture');
+if (!water_ext) {
+  console.error("need water extension");
+}
 
+var draw_ext = gl.getExtension('WEBGL_draw_buffers');
+if (!draw_ext) {
+  console.error("need draw buffer extension");
+}

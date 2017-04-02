@@ -13,9 +13,6 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 			then can use fake the lighting on the rocks
 			needed for shadows anyway
 		
-		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 6)
-			Just simple particles
-
 		Water/Lava					(time: 15h) (priority: 6)
 			update vertices on GPU, new shader?
 			if close to water, process verts etc...
@@ -23,6 +20,9 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Small 'sandstorms'/ dust devils			(time: 10h) (priority: 5)
 			Only on sand regions
 			If player in range
+
+		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 6)
+			Just simple particles
 
 		Shadows, applied to larger rocks only		(time: 10h) (priority: 5)
 			Perhaps need to fix rock efficiency first
