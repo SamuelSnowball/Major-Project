@@ -58,7 +58,7 @@ gl.shaderSource(fragmentShader, [
 		
 		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',
 		
-		//Add lighting
+		//Add lighting 
 		//'gl_FragColor.rgb *= light;',
 		//'gl_FragColor.rgb += finalSpecular;',
 
