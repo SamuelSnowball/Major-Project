@@ -16,6 +16,7 @@ console.log("Link status: " + gl.getProgramInfoLog(program));
 gl.useProgram(program); //allowed to be here? or at bottom
 
 //Global variables to change and load into shaders
+var clipPlane = [0, 0, 0, 0];
 var skyColour = [0.8, 0.5, 0.5, 0.7];
 var lightColour = [1, 1, 1];
 var useFog = true;
@@ -78,6 +79,9 @@ var instancingLocation0 = gl.getAttribLocation(program, "instanceMatrixRow0");
 var instancingLocation1 = gl.getAttribLocation(program, "instanceMatrixRow1");
 var instancingLocation2 = gl.getAttribLocation(program, "instanceMatrixRow2");
 var instancingLocation3 = gl.getAttribLocation(program, "instanceMatrixRow3");
+
+var clipPlaneLocation = gl.getUniformLocation(program, 'clipPlane');
+gl.enableVertexAttribArray(clipPlaneLocation);	
 
 //gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 // gl.enableVertexAttribArray(instancingLocation);
@@ -185,6 +189,9 @@ function updateAttributesAndUniforms(){
 	
 	//Enable/disable fog
 	gl.uniform1i(useFogLocation, useFog);
+	
+	//Clip plane
+	gl.uniform4fv(clipPlaneLocation, clipPlane);
 }
 
 

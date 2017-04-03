@@ -7,6 +7,9 @@ gl.shaderSource(vertexShader, [
 	'attribute vec2 aTextureCoord;',
 	'varying highp vec2 vTextureCoord;',
 	
+	// Out the position to fragment shader, for water
+	'varying vec4 fragPosition;',
+	
 	'uniform mat4 viewMatrix;',
 	'uniform mat4 inverseViewMatrix;', //glsl inverse doesn't work, so pass in this
 	'uniform mat4 model;',
@@ -69,6 +72,9 @@ gl.shaderSource(vertexShader, [
 		'visibility = exp(-pow((distance*density), gradient));',
 		//Ensure stays between 0 and 1
 		'visibility = clamp(visibility, 0.0, 1.0);',
+		
+		// Pass position to fragment shader
+		'fragPosition = worldPostion;',
 	'}'
 ].join('\n'));
 gl.compileShader(vertexShader);

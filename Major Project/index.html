@@ -49,7 +49,7 @@
 
 <script src="libraries/webgl-obj-loader.js"></script>
 
-<script src="https://twgljs.org/dist/2.x/twgl-full.min.js"></script>
+<script src="libraries/twgl-full.min.js"></script>
 
 
 <!-- WebGL setup files including shaders and program -->
@@ -91,7 +91,7 @@ var rockGenerator = new RockGenerator();
 
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
-//var waterSystem = new WaterSystem();
+var waterSystem = new WaterSystem();
 var sound = new Sound();
 var lander = new Lander();
 var player = new Player(315, 1, 315); 
@@ -129,17 +129,17 @@ var	uvs = [
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
     gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 	
-function renderTemporaryGUI(){
+function renderReflectionGUI(){
 
 	
 	gl.enableVertexAttribArray(positionAttribLocation);
 	gl.enableVertexAttribArray(textureCoordLocation);
 	
-	scale = m4.scaling(5, 5, 5);
-	rotateX = m4.xRotation(Date.now() * 0.0003);
+	scale = m4.scaling(35, 35, 35);
+	rotateX = m4.xRotation(0);
 	rotateY = m4.yRotation(0);
-	rotateZ = m4.zRotation(0);
-	position = m4.translation(310, 5, 310);
+	rotateZ = m4.zRotation(-Math.PI / 2);
+	position = m4.translation(310, 15, 310);
 
 
 	gl.activeTexture(gl.TEXTURE0);
@@ -164,6 +164,119 @@ function renderTemporaryGUI(){
 	
 }
 
+
+
+
+
+var squareVertexPositionBuffer2 = gl.createBuffer();;
+    gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
+var vertices2 = [
+         1.0,  1.0,  0.0,
+        -1.0,  1.0,  0.0,
+         1.0, -1.0,  0.0,
+        -1.0, -1.0,  0.0
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices2), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	
+var	squareUVBuffer2 = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
+var	uvs2 = [
+		0,0,
+		0,1,
+		1,0,
+		1,1
+	];
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs2), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+function renderRefractionGUI(){
+	
+	gl.enableVertexAttribArray(positionAttribLocation);
+	gl.enableVertexAttribArray(textureCoordLocation);
+	
+	scale = m4.scaling(35, 35, 35);
+	rotateX = m4.xRotation(0);
+	rotateY = m4.yRotation(0);
+	rotateZ = m4.zRotation(-Math.PI / 2);
+	position = m4.translation(390, 15, 310);
+
+
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, refractionTexture);
+	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+	
+	updateAttributesAndUniforms();
+
+
+	
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
+    gl.vertexAttribPointer(positionAttribLocation,3, gl.FLOAT, false, 0, 0);
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
+    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+	
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	
+	gl.disableVertexAttribArray(positionAttribLocation);
+	gl.disableVertexAttribArray(textureCoordLocation);	
+	
+}
+
+
+
+
+function renderToRefractionBuffer(){
+	gl.bindFramebuffer(gl.FRAMEBUFFER, refractionFrameBuffer);
+		// Want to render everything under the water, normal is pointing down
+		clipPlane = [0, -1, 0, 0]; // last param is water height
+		gl.clearColor(0.8, 0.8, 0.8, 0.7);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		gl.viewport(0, 0, 1024, 1024);
+			player.movePlayer();
+			player.assignPlayerQuadrant();
+			terrain.render(); 
+			rockGenerator.renderInstancedRocks();
+			particleSystem.render(); 
+			lander.render();
+			waterSystem.render();
+			skybox.render(viewMatrix, projectionMatrix);
+	// Unbinds 
+	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+}
+
+function renderToReflectionBuffer(){
+	/*
+	Want to render scene to a texture (frame buffer), so bind it
+	Clear it
+	Render to the texture (frame buffer)
+	Then unbind it
+	
+	Then later on, we can render a square with that texture
+	
+	Make sure this gets rendered to something that the original scene doesn't render
+	*/
+	gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
+		// Want to render everything above the waters surface, so normal as 0,1,0
+		// Horizontal plane, pointing upwards 
+		clipPlane = [0, 1, 0, 0]; // last param is water height
+		gl.clearColor(0.8, 0.8, 0.8, 0.7);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		gl.viewport(0, 0, 1024, 1024);
+			player.movePlayer();
+			player.assignPlayerQuadrant();
+			terrain.render(); 
+			rockGenerator.renderInstancedRocks();
+			particleSystem.render(); 
+			lander.render();
+			waterSystem.render();
+			skybox.render(viewMatrix, projectionMatrix);
+	// Unbinds 
+	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+}
+
 // For saving the game
 var gameTime = 0;
 var saveTime = 100;
@@ -178,16 +291,26 @@ function render(){
     then = now;
 	var fps = 1 / elapsedTime;
     fpsElement.innerText = fps.toFixed(0); 
+
+	renderToReflectionBuffer();
+	renderToRefractionBuffer();
 	
+	
+	/*
+	Now render the scene as usual
+	We've already switched back to the default frame buffer
+	*/
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	// 0, 1, 0, 0 = clips off everything under 0
+	
+	// Cant disable clipPlane on some drivers, just set the plane really high
+	clipPlane = [0, -1, 0, 1000];
 	
 	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
-	
 	player.movePlayer();
 	player.assignPlayerQuadrant();
 
-	
 	// Don't change render order
 	// terrain render generates the renderIndices, 
 	// that are needed for rock rendering
@@ -196,36 +319,17 @@ function render(){
 	particleSystem.render(); 
 	collisionTester.testAllCollision();
 	lander.render();
-	
-	
-	
+	waterSystem.render();
 	//skybox.render(viewMatrix, projectionMatrix);
-	//renderTemporaryGUI();  // REMOVE THIS WHEN WORKING!
-	
-	
-	// Want to render scene to a frame buffer, so bind it
-	// make sure this gets rendered to something that the original scene doesn't render
-	gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
-	gl.viewport(0, 0, 2048, 2048);
-		terrain.render(); 
-		rockGenerator.renderInstancedRocks();
-		particleSystem.render(); 
-		lander.render();
-		//skybox.render(viewMatrix, projectionMatrix);
-	// Unbinds 
-	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-	gl.viewport(0, 0, window.innerWidth, window.innerHeight);
-	
-	
-	renderTemporaryGUI();  
-	
-	// Have now switched back to default frame buffer
-	
-	// The scene is now loaded in the FBO
-	// Use that texture to render the square
-	
 
-		
+	/*
+	Have now switched back to default frame buffer
+	The scene is now loaded in the FBO
+	Use that texture to render the square	
+	*/
+	renderReflectionGUI();  
+	renderRefractionGUI();
+	
 	gameTime++;
 	requestAnimationFrame(render);
 }
