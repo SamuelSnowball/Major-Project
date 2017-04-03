@@ -5,17 +5,8 @@
 Things left to add to the project: (Estimation time in hours, 10 priority is highest)
 
 	Features left to implement:
-		Small rocks					(time: 10h) (priority: 8)
-
-		Skybox 						(time: 05h) (priority: 7)
-			have sun that acts as directional light 
-			small sun, and bunch of stars as well
-			then can use fake the lighting on the rocks
-			needed for shadows anyway
 		
-		Water/Lava					(time: 15h) (priority: 6)
-			update vertices on GPU, new shader?
-			if close to water, process verts etc...
+		Water/Lava					(time: 45h) (priority: 6)
 
 		Small 'sandstorms'/ dust devils			(time: 10h) (priority: 5)
 			Only on sand regions
@@ -23,20 +14,13 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 
 		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 6)
 			Just simple particles
+		
+		Scene home screen 				(time: 04h) (priority: 3)
 
-		Shadows, applied to larger rocks only		(time: 10h) (priority: 5)
-			Perhaps need to fix rock efficiency first
-
-	Features not sure about:
-
-		Terrain not randomly generated
-			-Could have loading bar
-			-Could have 2056x2056 PREMADE, 4.2m vertices
-			-Expensive start time, but smooth throughout
-			-Need something at the edges of the map
-			-So could keep terrain boundaries
+		Scene loading bar				(time: 01h) (priority: 3)
 
 	Extra features:
+
 		Add ambient audio, water audio near water
 
 		Meteor showers					(time: 08h) (priority: 3)
@@ -47,12 +31,8 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Popup GUI showing current info of feature 	(time: 10h) (priority: 2)
 			Transparent background, gas, rock
 
-		Initial loading scene 				(time: 03h) (priority: 2)
-			Great obj for loading scene:
-			http://tf3dm.com/3d-model/mission-control-26199.html
-			Could also have rocket flying through space
 		Day/night cycles				(time: 05h) (priority: 1)
-		Extra texture effects, bump mapping etc		(time: 10h) (priority: 1)
+		Extra texture effects, bump mapping etc		(time: 40h) (priority: 1)
 		Set different colours for ambient, specular     (time: 02h) (priority: 1)
 
 	Documentation to write:
@@ -65,12 +45,11 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 	Current features: (features and hours are not up to date..)
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
 		Terrain + rendering efficiency			(time: 30h) (priority: 10)
-		Rocks (objs) 					(time: 20h) (priority: 8)
+		Rocks, instance rendered (objs)			(time: 20h) (priority: 8)
+		Skybox						(time: 10h) (priority: 7)
 		Texturing terrain 				(time: 10h) (priority: 5)
-		Water, with specular lighting			(time: 12h) (priority: 4)
-			Expand to cover quadrants
-			With less vertices
 		Fog						(time: 06h) (priority: 4)
+		
 
 
 Terrain notes:
@@ -797,3 +776,49 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 	
 	
 
+Sprint 6: 27th march - 3rd april 
+
+	Tackling tasks from product backlog (wont complete water this sprint):
+
+		Skybox						(time: 10h) (priority: 7)
+		Water/Lava					(time: 45h) (priority: 6)
+
+	Sprint plan:
+		Fix:
+		The amount of rocks in different sections
+		The scale of rocks, could have double for loop if between 128,128 then scale = 100 etc
+			Base the Z scale, on what the X was.
+			Like zScale = (rand) + x (as min) 
+		The rock texture, all rocks in quadrant need the same texture
+			At render time in the renderIndices loop, meshArray.texture
+			Might not be awful.
+			It holds 60fps!
+
+		Add Skybox
+
+		Add Water, very big task
+
+	Sprint retrospective:
+		Fixed amount of rocks
+		Fixed rock dimensions
+
+		Added skybox
+
+		Started water
+			Now rendering the scene 3 times - dropping to 30FPS
+			Could disable rendering rocks on reflection/refraction textures if needed
+
+			Various problems:
+				Probably 20 hours staring at, and fixing WebGL errors
+				Following water tutorials, then realizing the WebGL spec doesn't even have the features needed
+
+				It broke the skybox... NO idea why
+				Difficult with OpenGL ES, lacks some features
+				Lacks shader > signs, took a while to work out that
+				Lacks built in glClipDistance, wrote own
+	
+			Included adding reflection and refraction textures
+			Currently just rendering them on quads, but eventually on the water quad
+
+		The water is not finished, and wasn't even possible to complete within a sprint, however
+		the foundations are there.
