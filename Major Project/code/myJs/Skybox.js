@@ -3,12 +3,6 @@ function Skybox(){
 
 	var skybox_texture = loadCubeMap();
 	
-	/*
-	#############
-	Shaders below
-	#############
-	*/
-	
 	var skyboxVertexShader = gl.createShader(gl.VERTEX_SHADER);
 	gl.shaderSource(skyboxVertexShader, [
 		'attribute vec3 skyboxPosition;',
@@ -41,9 +35,19 @@ function Skybox(){
 			'return textureCube(sampler, c).rgb;',
 		'}',
 		
+		// blends skybox with fog colour
+		'uniform vec4 skyColour;',
+		'float lowerLimit = 0.0;',
+		'float upperLimit = 20.0;',
+		
 		'void main(void){',
 			'vec3 sample = texture(cubeMap, skyboxTextureCoords);',
-			'gl_FragColor = vec4(sample, 1.0);',
+			//'sample = vec4(sample, 1.0);',
+			
+			'float factor = (skyboxTextureCoords.y - lowerLimit) / (upperLimit - lowerLimit);',
+			'factor = clamp(factor, 0.0, 1.0);',
+			
+			'gl_FragColor = mix(skyColour, vec4(sample, 1.0), factor);',
 		'}'
 		
 	].join('\n'));
@@ -56,8 +60,7 @@ function Skybox(){
 	gl.linkProgram(skyboxProgram);
 	console.log("skyboxProgram status: " + gl.getProgramInfoLog(skyboxProgram));
 	gl.useProgram(skyboxProgram); //allowed to be here? or at bottom
-	
-	// Taken
+
 	function loadCubeMap() {
 		var texture = gl.createTexture();
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
@@ -93,25 +96,23 @@ function Skybox(){
 	}
 
 	/*
-	#############
-	Shaders above
-	#############
-	*/
-
-	/*
 	Attribute locations in new shaders
-	
-	Need texture coordinates as well?
 	*/
 	gl.useProgram(skyboxProgram);
 		var skyboxPositionAttribLocation = gl.getAttribLocation(skyboxProgram, 'skyboxPosition');
+		gl.enableVertexAttribArray(skyboxPositionAttribLocation);
+		
 		var skyboxViewMatrixLocation = gl.getUniformLocation(skyboxProgram, 'viewMatrix');
 		gl.uniformMatrix4fv(skyboxViewMatrixLocation, false, new Float32Array(viewMatrix));
+		
 		var skyboxProjectionLocation = gl.getUniformLocation(skyboxProgram, 'projectionMatrix');
 		gl.uniformMatrix4fv(skyboxProjectionLocation, false, new Float32Array(projectionMatrix));
+		
+		var skyboxFogColourLocation = gl.getUniformLocation(skyboxProgram, 'skyColour');
+		gl.enableVertexAttribArray(skyboxFogColourLocation);
 	gl.useProgram(program);
 	
-	var SIZE = 256; // same as zFar
+	var SIZE = 256;
 	
 	var skybox_vertices_buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, skybox_vertices_buffer);
@@ -164,22 +165,21 @@ function Skybox(){
 	function updateSkyboxAttributesAndUniforms(viewMatrix, projectionMatrix){
 		// Remove the translation from the view matrix
 		// So the skybox doesn't move in relation to the camera
+		// Stays at max clip space coordinates
 		viewMatrix[12] = 0;
 		viewMatrix[13] = 0;
 		viewMatrix[14] = 0;
 		
+		gl.uniform4fv(skyboxFogColourLocation, skyColour);
 		gl.uniformMatrix4fv(skyboxViewMatrixLocation, false, new Float32Array(viewMatrix));
 		gl.uniformMatrix4fv(skyboxProjectionLocation, false, new Float32Array(projectionMatrix));
 	}
 	
-	// takes in matrix, which calls updateSkyboxAttributesAndUniforms
-	// might not need parameters, the matrices are global anyway
 	this.render = function(viewMatrix, projectionMatrix){
 		gl.useProgram(skyboxProgram);
-		gl.enableVertexAttribArray(skyboxPositionAttribLocation);
+
 		updateSkyboxAttributesAndUniforms(viewMatrix, projectionMatrix);
 	
-		//currentTexture = skybox_texture;
 		gl.activeTexture(gl.TEXTURE0);
 		gl.uniform1i(gl.getUniformLocation(skyboxProgram, "skyboxTextureCoords"), 0);
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, skybox_texture);
@@ -189,8 +189,6 @@ function Skybox(){
 		
 		gl.drawArrays(gl.TRIANGLES, 0, skybox_vertices.length/3);
 		
-		
-		gl.disableVertexAttribArray(skyboxPositionAttribLocation);
 		gl.useProgram(program);
 	}
 	

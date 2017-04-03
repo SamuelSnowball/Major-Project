@@ -1,31 +1,7 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Random Mars Scene vs terrain generator
-	If its a randomly generated mars scene, then I can keep all lighting/fog aspects
-		Just the map has boundaries
-		Do I even need a lander?
 
-Sprint 6: 27th march - 3rd april 
-
-	Sprint plan:
-		The amount of rocks
-		The scale of rocks, could have double for loop if between 128,128 then scale = 100 etc
-			Base the Z scale, on what the X was.
-			Like zScale = (rand) + x (as min) 
-		The rock texture, all rocks in quadrant need the same texture
-			At render time in the renderIndices loop, meshArray.texture
-			Might not be awful.
-			It holds 60fps!
-
-		Different noise sections, random
-		The greater the noise scale, the less rocks
-
-		Skybox
-		Set the directional light from the sun in the skybox
-
-	Sprint retrospective:
-		Fixed amount of rocks
 
 
 

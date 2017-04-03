@@ -25,6 +25,9 @@ gl.shaderSource(fragmentShader, [
 	'uniform vec3 reverseLightDirection;',
 	'uniform vec3 lightDirection;',
 	
+	// Clip plane for water
+	'uniform vec4 clipPlane;',
+	'varying vec4 fragPosition;',
 	
 	//Fog
 	'varying float visibility;',
@@ -56,11 +59,29 @@ gl.shaderSource(fragmentShader, [
 		//Now to get final specular light value, multiply by specular light by the light colour
 		'vec3 finalSpecular = dampedFactor *  reflectivity * lightColour;',
 		
+		// Clip plane equation test, discard fragment if fails
+		
+		/*
+		Cant use lessThan passing in 2 floats,
+		Have to use vec2's at least
+		
+		So just use the float returned from dot, and add a 0, to make vec2
+		*/
+		
+		'vec2 temp = vec2(dot(fragPosition, clipPlane), 0);',
+		'vec2 zero = vec2(0, 0);',
+		'bvec2 result = bvec2(lessThan(temp, zero));',
+		
+		// Don't care about result 1, thats just comparing 0 to 0
+		'if( result[0] == true ){',
+			'discard;',
+		'}',
+		
 		'gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',
 		
-		//Add lighting
-		'gl_FragColor.rgb *= light;',
-		'gl_FragColor.rgb += finalSpecular;',
+		//Add lighting 
+		//'gl_FragColor.rgb *= light;',
+		//'gl_FragColor.rgb += finalSpecular;',
 
 		//Fog, mix the skyColour and colour of the object
 		//min takes in 2 colours, 
@@ -68,7 +89,7 @@ gl.shaderSource(fragmentShader, [
 		//2nd is the gl_FragColor (current fragment)
 		
 		'if(useFog){', //Check to see if we should use fog or not
-			//'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
+			'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
 		'}',
 		'else{',
 			'',

@@ -10,8 +10,8 @@ function Terrain(){
 	
 	// How many map quadrants, each having 128*128 vertices each
 	// If you update these, make sure to update them in player assign quadrant method
-	var numberQuadrantRows = 8; 
-	var numberQuadrantColumns = 8; 
+	var numberQuadrantRows = 4; 
+	var numberQuadrantColumns = 4; 
 	
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;
@@ -251,8 +251,8 @@ function Terrain(){
 						heightMap[x][y] = stacked * 15;	
 					}
 					else{
-						var stacked = stackNoise(x,y,4);
-						heightMap[x][y] = stacked * 5;	
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 30;	
 					}
 					
 					

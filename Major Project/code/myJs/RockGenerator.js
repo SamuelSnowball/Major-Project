@@ -199,7 +199,6 @@ function RockGenerator(){
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
 		gl.vertexAttribPointer(instancingLocation3, 4, gl.FLOAT, false, 0, 0);
 
-		
 		meshArray.push(mesh);
 		buffersArray.push(buffers);
 	}
@@ -216,7 +215,7 @@ function RockGenerator(){
 		gl.enableVertexAttribArray(instancingLocation3);
 
 		var renderIndices = terrain.get.renderIndices;
-		
+
 		for(var i=0; i<renderIndices.length; i++){
 		
 			currentTexture = meshArray[renderIndices[i]].texture;
