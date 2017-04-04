@@ -26,6 +26,9 @@ function Lander(){
 		OBJ.initMeshBuffers(gl, landerMesh);
 	}
 	
+	/*
+	Renders the lander 
+	*/
 	this.render = function(){
 	
 		lightColour = [1, 1, 1];
@@ -38,7 +41,7 @@ function Lander(){
 		
 		position = m4.translation(x, y, z);
 		
-		//Times matrices together
+		// Times matrices together
 		updateAttributesAndUniforms();
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, landerMesh.vertexBuffer);

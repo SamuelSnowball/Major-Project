@@ -1,8 +1,7 @@
 /*
-Generates translations to apply to the singular rock vertex set
-All rocks generated use the same model
-
-The rocks are instanced rendered
+All rocks use the same OBJ model
+This file generates translations to apply to the singular rock vertex set
+The rocks are then instanced rendered
 
 Uses the obj loader library: webgl-obj-loader from frenchtoast747 on GitHub
 	https://github.com/frenchtoast747/webgl-obj-loader
@@ -250,6 +249,8 @@ function RockGenerator(){
 	/*
 	9 instanced draw calls
 	Uses the terrain render indices to determine what rocks should be processed, then rendered
+	
+	See terrain.render for comments on terrain render indices
 	*/
 	this.renderInstancedRocks = function(){
 

@@ -6,72 +6,71 @@ This file currently handles:
 	
 	Global definition of matrices and camera matrix info
 	
-	The updateAttributesAndUniforms to pull values from global matrices, and update the projectionMatrix
+	The updateAttributesAndUniforms to pull values from global matrices, and update the shader values
 */
 var program = gl.createProgram();
 gl.attachShader(program, vertexShader);
 gl.attachShader(program, fragmentShader);
 gl.linkProgram(program);
 console.log("Link status: " + gl.getProgramInfoLog(program));
-gl.useProgram(program); //allowed to be here? or at bottom
+gl.useProgram(program); 
 
-//Global variables to change and load into shaders
+// Global variables to change and load into shaders
 var clipPlane = [0, 0, 0, 0];
 var skyColour = [0.8, 0.5, 0.5, 0.7];
 var lightColour = [1, 1, 1];
 var useFog = true;
 var useInstancing = false;
 
-
 /*
 Get location of variables in shaders
 Enable them so can use them
 */
 
-//Uvs
-var textureCoordLocation = gl.getAttribLocation(program, "aTextureCoord");
-gl.enableVertexAttribArray(textureCoordLocation);
-
-//Vertices
+// Vertices
 var positionAttribLocation = gl.getAttribLocation(program, 'position');
 gl.enableVertexAttribArray(positionAttribLocation);
 
-//Normals
+// Uvs
+var textureCoordLocation = gl.getAttribLocation(program, "aTextureCoord");
+gl.enableVertexAttribArray(textureCoordLocation);
+
+// Normals
 var normalAttribLocation = gl.getAttribLocation(program, 'normal');
 gl.enableVertexAttribArray(normalAttribLocation);
 
-//Light position, can remove this?
+// Light position, can remove this?
 var lightPositionAttribLocation = gl.getUniformLocation(program, 'lightPosition');
 gl.enableVertexAttribArray(lightPositionAttribLocation);
 
-//Light color
+// Light color
 var lightColourAttribLocation = gl.getUniformLocation(program, 'lightColour');
 gl.enableVertexAttribArray(lightColourAttribLocation);
 
-//Specular lighting, for use on textures
+// Specular lighting, for use on textures
 var shineDamperAttribLocation = gl.getUniformLocation(program, 'shineDamper');
 gl.enableVertexAttribArray(shineDamperAttribLocation);
+
 var reflectivityAttribLocation = gl.getUniformLocation(program, 'reflectivity');
 gl.enableVertexAttribArray(reflectivityAttribLocation);
 
-//Directional lighting
+// Directional lighting
 var reverseLightDirectionLocation = gl.getUniformLocation(program, 'reverseLightDirection');
 gl.enableVertexAttribArray(reverseLightDirectionLocation);
 
-//Specular
+// Specular
 var lightDirectionLocation = gl.getUniformLocation(program, 'lightDirection');
 gl.enableVertexAttribArray(lightDirectionLocation);
 
-//Sky color for fog
+// Sky colour for fog
 var skyColourLocation = gl.getUniformLocation(program, 'skyColour');
 gl.enableVertexAttribArray(skyColourLocation);
 
-//Fog
+// Fog
 var useFogLocation = gl.getUniformLocation(program, 'useFog');
 gl.enableVertexAttribArray(useFogLocation);
 
-//Instancing, rocks
-//var instancingLocation = gl.getAttribLocation(program, "translation");
+// Instancing location for rocks
 var useInstancingLocation = gl.getUniformLocation(program, 'useInstancing');
 gl.enableVertexAttribArray(useInstancingLocation);	
 
@@ -82,12 +81,6 @@ var instancingLocation3 = gl.getAttribLocation(program, "instanceMatrixRow3");
 
 var clipPlaneLocation = gl.getUniformLocation(program, 'clipPlane');
 gl.enableVertexAttribArray(clipPlaneLocation);	
-
-//gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
-// gl.enableVertexAttribArray(instancingLocation);
-
-//var modelLocation = gl.getUniformLocation(program, 'model');
-//gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 
 /*
 #################
@@ -109,7 +102,7 @@ var modelLocation = gl.getUniformLocation(program, 'model');
 gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 
 /*
-Camera
+### Camera ###
 */
 	var cameraSpeed = 0.003;
 
@@ -144,26 +137,15 @@ Camera
 	//Inverse view matrix
 	var inverseViewMatrixLocation = gl.getUniformLocation(program, 'inverseViewMatrix');
 	gl.uniformMatrix4fv(inverseViewMatrixLocation, false, new Float32Array(m4.inverse(viewMatrix)));
-
+/*
+### End camera ###
+*/
 
 /*
 Loads global variables and matrices into shader every frame
-
-Have to remake projectionMatrix every frame? shouldn't be awful
-Need to update the zFar parameters when user in minimap mode
 */
 function updateAttributesAndUniforms(){
 
-	projectionMatrix = 	m4.perspective(
-		fovInRadians,
-		aspectRatio,
-		zNear,
-		zFar
-	);
-	
-	// Set instancing location to an identity matrix, otherwise it breaks
-
-	//why is rotate z has position?
 	fullTransforms = m4.multiply(position, rotateZ);
 	fullTransforms = m4.multiply(fullTransforms, rotateY);
 	fullTransforms = m4.multiply(fullTransforms, rotateX);
@@ -178,23 +160,21 @@ function updateAttributesAndUniforms(){
 	gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
 	gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
 	
-	//Directional lighting, coming straight down
+	// Directional lighting, coming straight down
 	gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0, -1, 0]));
-	//For specular lighting, its the same as above...
-	//This is the surfaceToLightVector, so yeah, it goes up!
+	// For specular lighting, its the same as above...
+	// This is the surfaceToLightVector, so yeah, it goes up!
 	gl.uniform3fv(lightDirectionLocation, m4.normalize([0, 1, 0]));
 	
-	//Fog
+	// Fog
 	gl.uniform4fv(skyColourLocation, skyColour);
 	
-	//Enable/disable fog
+	// Enable/disable fog
 	gl.uniform1i(useFogLocation, useFog);
 	
-	//Clip plane
+	// Clip plane
 	gl.uniform4fv(clipPlaneLocation, clipPlane);
 }
-
-
 
 /*
 #################
@@ -217,7 +197,4 @@ var projectionMatrix = 	m4.perspective(
 var projectionLocation = gl.getUniformLocation(program, 'projection');
 var gl = this.gl;
 gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
-
-
-
 
