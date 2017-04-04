@@ -1,7 +1,25 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
+Sprint 7 4th - 11th March
+
+	Tackling tasks from product backlog:
+		
+		Finish water
+		
+	Other tasks:
+
+		Cleanup code from last sprint, it was a bit rushed
+		Fix skybox bug with water
+		The bigger the rock, the lower it should spawn
+		Fix 2d rocks
 
 
+	Sprint retrospective:
 
+		
+	Possible problems:
+		Position of camera when rendering reflection	
+
+		Lighting is currently disabled!
 

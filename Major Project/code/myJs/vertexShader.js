@@ -4,8 +4,8 @@ Vertex shader
 var vertexShader = gl.createShader(gl.VERTEX_SHADER);
 gl.shaderSource(vertexShader, [
 	'attribute vec3 position;',
-	'attribute vec2 aTextureCoord;',
-	'varying highp vec2 vTextureCoord;',
+	'attribute vec2 aTextureCoord;', // um. why both?
+	'varying highp vec2 vTextureCoord;', // um. why both?, maybe because this is saying "out" to frag!
 	
 	// Out the position to fragment shader, for water
 	'varying vec4 fragPosition;',

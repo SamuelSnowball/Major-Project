@@ -222,7 +222,6 @@ function Terrain(){
 					// sand texture = single noise, no stacked
 					// cliffs etc?
 					
-					
 					// Map boundaries
 					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
 						var stacked = stackNoise(x,y,8);
@@ -254,6 +253,13 @@ function Terrain(){
 						var stacked = stackNoise(x,y,8);
 						heightMap[x][y] = stacked * 30;	
 					}
+					
+										
+					// Water section
+					if(x > 150 && x < 300 && y > 150 && y < 300){
+						heightMap[x][y] = -15;
+					}
+					
 					
 					
 

@@ -66,6 +66,12 @@ function Player(x, y, z){
 		get movingBackward(){
 			return moveBack;
 		},
+		get xRotation(){
+			return xRotation;
+		},
+		get yRotation(){
+			return yRotation;
+		},
 	}	
 	
 	this.set = {
@@ -188,17 +194,6 @@ function Player(x, y, z){
 			cameraMatrix[13] + Math.sin(xRotation * cameraSpeed),
 			cameraMatrix[14] + Math.cos(yRotation * cameraSpeed),
 		];
-		
-		// For minimap
-		if(useFog === false){
-			renderPlayerOnMinimap();
-			y = 500;
-			cameraTarget = [
-				cameraMatrix[12] , 
-				cameraMatrix[13] -1,
-				cameraMatrix[14] -0.0001
-			];		
-		}
 		
 		// Retrieve position from camera matrix
 		cameraPosition = [
