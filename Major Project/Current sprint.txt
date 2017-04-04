@@ -19,7 +19,7 @@ Sprint 7 4th - 11th March
 
 		
 	Possible problems:
-		Position of camera when rendering reflection	
-
-		Lighting is currently disabled!
+		Position of camera when rendering reflection
+		If remove tiling, then horrible distortion on sides of screen
+			In water tutorial 5, he mentions distortion
 

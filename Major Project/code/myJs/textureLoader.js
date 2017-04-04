@@ -95,7 +95,7 @@ function TextureLoader(){
 		
 		shopTexture = new Texture('resources/shop/shopImage.png', 10, 0);
 		
-		WATER_DUDV_MAP_TEXTURE = new Texture('resources/water/waterDUDV.png', 10, 0);
+		WATER_DUDV_MAP_TEXTURE = new Texture('resources/water/waterDUDV.png', 10, 5);
 	}
 	
 }
