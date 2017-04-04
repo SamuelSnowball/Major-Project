@@ -91,7 +91,7 @@ var rockGenerator = new RockGenerator();
 
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
-var waterSystem = new WaterSystem();
+
 var sound = new Sound();
 var lander = new Lander();
 var player = new Player(315, 1, 315); 
@@ -99,6 +99,7 @@ var gui = new GUI();
 var skybox = new Skybox();
 
 var waterFrameBuffers = new WaterFrameBuffer();
+var waterSystem = new WaterSystem();
 
 /*
 Isn't rendering with scene texture atm
@@ -229,7 +230,7 @@ function renderRefractionGUI(){
 function renderToRefractionBuffer(){
 	gl.bindFramebuffer(gl.FRAMEBUFFER, refractionFrameBuffer);
 		// Want to render everything under the water, normal is pointing down
-		clipPlane = [0, -1, 0, 0]; // last param is water height
+		clipPlane = [0, -1, 0, -waterHeight]; // last param is water height
 		gl.clearColor(0.8, 0.8, 0.8, 0.7);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		gl.viewport(0, 0, 1024, 1024);
@@ -239,14 +240,26 @@ function renderToRefractionBuffer(){
 			rockGenerator.renderInstancedRocks();
 			particleSystem.render(); 
 			lander.render();
-			waterSystem.render();
+			//waterSystem.render();
 			skybox.render(viewMatrix, projectionMatrix);
 	// Unbinds 
 	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	gl.viewport(0, 0, window.innerWidth, window.innerHeight);
 }
 
+/*
+To create illusion of reflection texture
+Need to move camera under the water, before rendering the reflection texture
+
+The camera should move down by:
+	its original distance above the water * 2
+The pitch of the camera also needs to be inverted
+
+
+
+*/
 function renderToReflectionBuffer(){
+	
 	/*
 	Want to render scene to a texture (frame buffer), so bind it
 	Clear it
@@ -258,9 +271,23 @@ function renderToReflectionBuffer(){
 	Make sure this gets rendered to something that the original scene doesn't render
 	*/
 	gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
+	
+		// Calculate distance we want to move camera down by
+		// This assumes water at 0
+
+		var distance = 2 * (player.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
+	
+		// Move down
+		cameraPosition[1] -= distance;
+		player.set.xRotation = player.get.xRotation * -1;
+		
+		//cameraMatrix[12] + Math.sin(-player.get.yRotation * cameraSpeed), 
+		//cameraMatrix[13] + Math.sin(-player.get.xRotation * cameraSpeed),
+		//cameraMatrix[14] + Math.cos(-player.get.yRotation * cameraSpeed),
+	
 		// Want to render everything above the waters surface, so normal as 0,1,0
 		// Horizontal plane, pointing upwards 
-		clipPlane = [0, 1, 0, 0]; // last param is water height
+		clipPlane = [0, 1, 0, -waterHeight]; // last param is water height
 		gl.clearColor(0.8, 0.8, 0.8, 0.7);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		gl.viewport(0, 0, 1024, 1024);
@@ -270,8 +297,16 @@ function renderToReflectionBuffer(){
 			rockGenerator.renderInstancedRocks();
 			particleSystem.render(); 
 			lander.render();
-			waterSystem.render();
+			//waterSystem.render(viewMatrix, projectionMatrix);
 			skybox.render(viewMatrix, projectionMatrix);
+			
+		// Reset camera
+		cameraPosition[1] += distance;
+		player.set.xRotation = player.get.xRotation * -1;
+		//cameraMatrix[12] + Math.sin(player.get.yRotation * cameraSpeed), 
+		//cameraMatrix[13] + Math.sin(player.get.xRotation * cameraSpeed),
+		//cameraMatrix[14] + Math.cos(player.get.yRotation * cameraSpeed),
+
 	// Unbinds 
 	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	gl.viewport(0, 0, window.innerWidth, window.innerHeight);
@@ -291,9 +326,11 @@ function render(){
     then = now;
 	var fps = 1 / elapsedTime;
     fpsElement.innerText = fps.toFixed(0); 
-
+	
 	renderToReflectionBuffer();
 	renderToRefractionBuffer();
+	
+	
 	
 	
 	/*
@@ -305,7 +342,7 @@ function render(){
 	// 0, 1, 0, 0 = clips off everything under 0
 	
 	// Cant disable clipPlane on some drivers, just set the plane really high
-	clipPlane = [0, -1, 0, 1000];
+	clipPlane = [0, 0, 0, 0];
 	
 	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
 	player.movePlayer();
@@ -319,16 +356,16 @@ function render(){
 	particleSystem.render(); 
 	collisionTester.testAllCollision();
 	lander.render();
-	waterSystem.render();
-	//skybox.render(viewMatrix, projectionMatrix);
+	waterSystem.render(viewMatrix, projectionMatrix);
+	skybox.render(viewMatrix, projectionMatrix);
 
 	/*
 	Have now switched back to default frame buffer
 	The scene is now loaded in the FBO
 	Use that texture to render the square	
 	*/
-	renderReflectionGUI();  
-	renderRefractionGUI();
+	//renderReflectionGUI();  
+	//renderRefractionGUI();
 	
 	gameTime++;
 	requestAnimationFrame(render);

@@ -44,6 +44,7 @@ function Player(x, y, z){
 		moveForward = false, 
 		moveBack = false;	
 	
+	// Getters
 	this.get = {
 		get x(){
 			return x;
@@ -66,8 +67,15 @@ function Player(x, y, z){
 		get movingBackward(){
 			return moveBack;
 		},
+		get xRotation(){
+			return xRotation;
+		},
+		get yRotation(){
+			return yRotation;
+		},
 	}	
 	
+	// Setters
 	this.set = {
 		set x(xParam){
 			x = xParam; //careful
@@ -96,9 +104,9 @@ function Player(x, y, z){
 		set z(zParam){
 			z += zParam;
 		}
-		
 	}
 	
+	// Constructor
 	setupPlayerMovement();
 		
 	function setupPlayerMovement(){
@@ -116,7 +124,6 @@ function Player(x, y, z){
 				moveDown = true;
 			}
 		});
-		
 		
 		document.addEventListener('keyup', function(event){
 			if(event.keyCode == 38){
@@ -189,17 +196,6 @@ function Player(x, y, z){
 			cameraMatrix[14] + Math.cos(yRotation * cameraSpeed),
 		];
 		
-		// For minimap
-		if(useFog === false){
-			renderPlayerOnMinimap();
-			y = 500;
-			cameraTarget = [
-				cameraMatrix[12] , 
-				cameraMatrix[13] -1,
-				cameraMatrix[14] -0.0001
-			];		
-		}
-		
 		// Retrieve position from camera matrix
 		cameraPosition = [
 			cameraMatrix[12], //x
@@ -213,13 +209,12 @@ function Player(x, y, z){
 		
 		// Stops it breaking....
 		currentTexture = mapTexture;
-		
 		updateAttributesAndUniforms();
 	}	
 	
 	/*
 	Work out what quadrant the player is in
-	So can process and render whats in view of the player
+	So can process and render what's in view of the player
 	*/
 	this.assignPlayerQuadrant = function(){
 	
@@ -241,7 +236,4 @@ function Player(x, y, z){
 		}
 	}
 	
-};
-
-
-	
+}

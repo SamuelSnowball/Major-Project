@@ -3,15 +3,21 @@ Vertex shader
 */
 var vertexShader = gl.createShader(gl.VERTEX_SHADER);
 gl.shaderSource(vertexShader, [
+
+	 // Vertex position
 	'attribute vec3 position;',
+	
+	// Get texture coordinate
 	'attribute vec2 aTextureCoord;',
+	// And then pass to fragment shader
 	'varying highp vec2 vTextureCoord;',
 	
 	// Out the position to fragment shader, for water
 	'varying vec4 fragPosition;',
 	
+	// Standard matrices
 	'uniform mat4 viewMatrix;',
-	'uniform mat4 inverseViewMatrix;', //glsl inverse doesn't work, so pass in this
+	'uniform mat4 inverseViewMatrix;', // GLSL inverse function doesn't work, so pass in this
 	'uniform mat4 model;',
 	'uniform mat4 projection;',
 	
@@ -28,15 +34,17 @@ gl.shaderSource(vertexShader, [
 	'varying vec3 surfaceNormal;', //varying = out
 	'varying vec3 surfaceToLightVector;',
 	
-	//For specular
+	// For specular
 	'varying vec3 toCameraVector;',
 	
-	//Fog, pass to frag
+	// Fog, pass to fragment shader
 	'varying float visibility;',
-	'const float density = 0.01;', //play with these
+	'const float density = 0.01;', 
 	'const float gradient = 3.5;',
 	
 	'void main(){',
+	
+		// If using instanced rendering (for rocks only)
 		// Form the full matrix from the rows, cols then rows its weird!!
 		'mat4 fullInstanceTransform;',
 		'if(useInstancing){',
@@ -46,31 +54,35 @@ gl.shaderSource(vertexShader, [
 			'fullInstanceTransform = mat4(  1,0,0,0 , 0,1,0,0, 0,0,1,0, 0,0,0,1);',
 		'}',
 	
-		'vec4 worldPostion = model * vec4(position, 1.0) * fullInstanceTransform;', //needed for light and instancing
-		//after its been transformed, rotated in world, we can use it
+		// Transform and rotate the vertex position, so we can use it
+		'vec4 worldPostion = model * vec4(position, 1.0) * fullInstanceTransform;', 
 		
-		//Fog
+		// Fog
 		'vec4 positionRelativeToCamera = viewMatrix * worldPostion;',
 		
 		// Particles
 		'gl_PointSize = 5.0;',
 		
+		// Set the final output vertex position
 		'gl_Position = projection * positionRelativeToCamera;',
-		'',
-		'',
+
+		// Pass the texture coordinate to the fragment shader
 		'vTextureCoord = aTextureCoord;',
-		'surfaceNormal = (model * vec4(normal, 0.0)).xyz;', //will return 4d vector, so need to get xyz
-		'surfaceToLightVector = lightPosition - worldPostion.xyz;', //4d vec, need 3d, so get xyz
 		
-		//Don't have camera position in the shader, so cant just subtract to get the toCameraVector
-		//Do have the viewMatrix though, contains the negative camera position, so just inverse it
-		'toCameraVector = (inverseViewMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPostion.xyz;', //cameraPosition - worldPostion
+		// Calculate the surface normal
+		'surfaceNormal = (model * vec4(normal, 0.0)).xyz;', 
+		'surfaceToLightVector = lightPosition - worldPostion.xyz;',
 		
-		//We have vec of vertex from the camera, so get distance from length of the vector
+		// Don't have camera position in the shader, so can't just subtract to get the toCameraVector
+		// Do have the viewMatrix though, contains the negative camera position, so just inverse it
+		'toCameraVector = (inverseViewMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPostion.xyz;', 
+		
+		// Fog
+		// We have vector of vertex from the camera, so get distance from length of the vector
 		'float distance = length(positionRelativeToCamera.xyz);',
-		//Use that to calculate visibility
+		// Use that to calculate visibility
 		'visibility = exp(-pow((distance*density), gradient));',
-		//Ensure stays between 0 and 1
+		// Ensure stays between 0 and 1
 		'visibility = clamp(visibility, 0.0, 1.0);',
 		
 		// Pass position to fragment shader
