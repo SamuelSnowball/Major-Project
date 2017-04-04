@@ -15,13 +15,13 @@ gl.shaderSource(fragmentShader, [
 	'uniform sampler2D uSampler;',
 	
 	'varying vec3 surfaceNormal;', //varying is in for frag shader
-	//Specular, take in toCameraVector
+	// Specular, take in toCameraVector
 	'varying vec3 toCameraVector;',
 	
 	'uniform vec3 lightColour;',
 	'uniform float shineDamper;',
 	'uniform float reflectivity;',
-	 //For directional
+	 // For directional
 	'uniform vec3 reverseLightDirection;',
 	'uniform vec3 lightDirection;',
 	
@@ -83,19 +83,10 @@ gl.shaderSource(fragmentShader, [
 		'gl_FragColor.rgb *= light;',
 		'gl_FragColor.rgb += finalSpecular;',
 
-		//Fog, mix the skyColour and colour of the object
-		//min takes in 2 colours, 
-		//make skyColour 4d first
-		//2nd is the gl_FragColor (current fragment)
-		
-		'if(useFog){', //Check to see if we should use fog or not
-		
-			// mixing skyColour with gl_FragColor is that right?
-			'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
-		'}',
-		'else{',
-			'',
-		'}',
+		// Fog, mix the skyColour and colour of the object
+		// mixing skyColour with gl_FragColor is that right?
+		'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
+
 	'}'
 ].join('\n'));
 gl.compileShader(fragmentShader);

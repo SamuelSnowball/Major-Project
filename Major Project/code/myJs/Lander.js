@@ -1,17 +1,24 @@
- 
+ /*
+This is the file for the rover lander
 
+Uses the obj loader library: webgl-obj-loader from frenchtoast747 on GitHub
+	https://github.com/frenchtoast747/webgl-obj-loader
+*/
 function Lander(){
 	
 	var landerMesh;
 	
+	// Position of the lander
 	var x = 325;
 	var z = 325;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = z;
 		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = x;
 	var y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue - 0.5;
+	
+	// Obj model of lander
+	var landerModelText = utility.httpGet("resources/lander/satellite.txt");
 
-	var landerModelText = utility.httpGet("resources/shop/satellite.txt");
-
+	// Constructor
 	setupLanderData();
 	
 	function setupLanderData(){
@@ -22,7 +29,7 @@ function Lander(){
 	this.render = function(){
 	
 		lightColour = [1, 1, 1];
-		currentTexture = shopTexture;
+		currentTexture = landerTexture;
 		
 		scale = m4.scaling(2, 2, 2);
 		rotateX = m4.xRotation(0);

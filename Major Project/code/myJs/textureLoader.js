@@ -5,34 +5,33 @@ Texture knowledge gained from:
 	http://stackoverflow.com/questions/19722247/webgl-wait-for-texture-to-load/19748905#19748905
 	https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
 	https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js
+	
+Some rock resources from:
+	http://www.textures.com/download/rocksarid0035/68071?&secure=login
+	https://www.textures.com/download/rocksarid0048/42217?&secure=login
+	https://www.textures.com/download/rocksarid0049/42220?&secure=login
+	
+Sand:
+	http://www.textures.com/download/soilbeach0131/106132
 */
 
 // This texture gets set to other textures whilst rendering
 var currentTexture;
-var myPerlinTexture;
+
 var myParticleTexture;
 var mapTexture;
-
-
 var WATER_DUDV_MAP_TEXTURE;
-	
-var sandTexture;
-
-var playerTexture;
-
-var shopTexture;
+var landerTexture;
 
 /*
 Rock textures
 */
-var depletedTexture;
 var rockTexture0;
 var rockTexture1;
 var rockTexture2;
 var rockTexture3;
 var rockTexture4;
 var rockTexture5;
-
 var rockTextures = [];
 
 /*
@@ -46,12 +45,6 @@ function TextureLoader(){
 	loadTextures();
 	
 	function loadTextures(){
-	
-		// Player texture has no image, just red its pixels to red
-		playerTexture = new Texture("", 0, 0);
-		gl.bindTexture(gl.TEXTURE_2D, playerTexture.getTextureAttribute.texture);		
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([255, 0, 0, 255]));
 				  
 		myParticleTexture = new Texture("", 0, 0);
 		gl.bindTexture(gl.TEXTURE_2D, myParticleTexture.getTextureAttribute.texture);		
@@ -61,40 +54,19 @@ function TextureLoader(){
 		// Map texture
 		mapTexture = new Texture("resources/terrain/floor/sand.png", 10, 0, true);
 		
-		
-		// http://www.textures.com/download/soilbeach0131/106132
-		sandTexture = new Texture("resources/terrain/floor/sand.png", 10, 0);
-		
-		/*
-		Rock textures
-		*/
-		depletedTexture = new Texture('resources/rocks/depleted.png', 10, 0);
-		
+		// Rock textures
 		rockTexture0 = new Texture('resources/rocks/0.png', 10, 0);
 		rockTexture1 = new Texture('resources/rocks/1.png', 10, 0);
 		rockTexture2 = new Texture('resources/rocks/2.png', 10, 0);
-		// from same resource/reference
 		rockTexture3 = new Texture('resources/rocks/3.png', 10, 0);
 		rockTexture4 = new Texture('resources/rocks/4.png', 10, 0);
 		rockTexture5 = new Texture('resources/rocks/5.png', 10, 0);
-		
 		rockTextures.push(rockTexture0, rockTexture1, rockTexture2, rockTexture3, rockTexture4, rockTexture5);
-		
-		/*
-		http://www.textures.com/download/rocksarid0035/68071?&secure=login
-		https://www.textures.com/download/rocksarid0048/42217?&secure=login
-		https://www.textures.com/download/rocksarid0049/42220?&secure=login
-		*/
 
-
-		/*
-		Other textures
-		*/
-		waterTexture = new Texture('resources/water/water.png', 10, 5);
-		lavaTexture = new Texture('resources/lava.png', 1, 1);
+		// Lander texture
+		landerTexture = new Texture('resources/lander/lander.png', 10, 0);
 		
-		shopTexture = new Texture('resources/shop/shopImage.png', 10, 0);
-		
+		// Water dudv texture
 		WATER_DUDV_MAP_TEXTURE = new Texture('resources/water/waterDUDV.png', 10, 5);
 	}
 	
@@ -106,6 +78,7 @@ function Texture(path, shineDamperParam, reflectivityParam, repeat){
 	var reflectivity = reflectivityParam; 
 	var texture = gl.createTexture();
 	
+	// Getters
 	this.getTextureAttribute = {
 		get texture(){
 			return texture;

@@ -4,27 +4,13 @@ Boilerplate setup (and other articles): https://webglfundamentals.org/webgl/less
 Model view projection: https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_model_view_projection
 
 Rock texture: http://shadowh3.deviantart.com/art/Rock-73682101
-Pyramid vertices from: http://learningwebgl.com/blog/?p=370
-Water texture: http://www.textures.com/download/waterplain0031/55146?q=water
-Sphere code: https://github.com/mrdoob/three.js/blob/master/src/geometries/SphereGeometry.js
 Animated background knowledge: https://www.youtube.com/watch?v=HorbxXIYlCc
-Noise texture: http://www.continentesiete.com/blog/?tag=textures
+
 Terrain indices: http://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips
-(currently not used) Coal texture from: https://www.filterforge.com/filters/10680.html
-
-Lava: http://mysteriousdove.deviantart.com/art/Lava-Texture-2560-x-1440-498672313
-
-Website used to change perlin color: http://manytools.org/image/colorize-filter/
 
 
 A bunch from here: https://creativeherald.com/gallery/examples-of-scratch-textures/
 
 
 Obj loader: https://github.com/frenchtoast747/webgl-obj-loader
-Sphere code: https://github.com/mrdoob/three.js/blob/master/src/geometries/SphereGeometry.js
 
-Crate:
-http://free-texture-site.blogspot.co.uk/2010/10/free-wooden-crate-texture.html
-
-Cargo container:
-http://tf3dm.com/3d-model/shipping-container-36873.html
