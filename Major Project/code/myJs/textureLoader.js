@@ -13,6 +13,9 @@ var myPerlinTexture;
 var myParticleTexture;
 var mapTexture;
 
+
+var WATER_DUDV_MAP_TEXTURE;
+	
 var sandTexture;
 
 var playerTexture;
@@ -91,6 +94,8 @@ function TextureLoader(){
 		lavaTexture = new Texture('resources/lava.png', 1, 1);
 		
 		shopTexture = new Texture('resources/shop/shopImage.png', 10, 0);
+		
+		WATER_DUDV_MAP_TEXTURE = new Texture('resources/water/waterDUDV.png', 10, 0);
 	}
 	
 }
