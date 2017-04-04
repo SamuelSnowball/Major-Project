@@ -10,12 +10,13 @@ Sprint 7 4th - 11th March
 	Other tasks:
 
 		Cleanup code from last sprint, it was a bit rushed
-		Fix skybox bug with water
 		The bigger the rock, the lower it should spawn
 		Fix 2d rocks
 
 		Add stacked noise, then -15 it
 		So it isn't just a square hole
+
+		Make water quadrant smaller and position it correctly
 
 
 	Sprint retrospective:
