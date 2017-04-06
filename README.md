@@ -5,5 +5,6 @@ The project is being developed using the SCRUM methodology.
 
 A release version is published at the end of every sprint.
 
+Current scene:
 
-![](/screenshots/current/0.png?raw=true)
+![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/current/0.png)
