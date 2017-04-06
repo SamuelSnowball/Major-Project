@@ -6,4 +6,4 @@ The project is being developed using the SCRUM methodology.
 A release version is published at the end of every sprint.
 
 
-![](/Major Project/screenshots/current/0.png?raw=true)
+![](/screenshots/current/0.png?raw=true)
