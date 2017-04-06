@@ -9,6 +9,8 @@ Sprint 7 4th - 11th March
 		
 	Other tasks:
 
+		Add scene image to readme of github
+
 		Cleanup code from last sprint, it was a bit rushed
 		The bigger the rock, the lower it should spawn
 		Fix 2d rocks
