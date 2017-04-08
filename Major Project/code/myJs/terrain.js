@@ -140,11 +140,6 @@ function Terrain(){
 				createQuadrantUvs(x, z);
 				createQuadrantNormals();
 				
-				// Create rock data for the quadrant
-                // add to the translations not vertices
-				// gl.enableVertexAttribArray(instancingLocation);
-				// gl.disableVertexAttribArray(instancingLocation);
-				
 				// Then put data in VBOs, and bind those VBOs to VAO
 				setupQuadrantVertexBuffer();
 				setupQuadrantIndiciesBuffer();
@@ -256,8 +251,11 @@ function Terrain(){
 					
 										
 					// Water section
-					if(x > 150 && x < 300 && y > 150 && y < 300){
-						heightMap[x][y] = -15;
+					if(x > 200 && x < 250 && y > 200 && y < 250){
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 30;	
+						
+						heightMap[x][y] = - 5.5;
 					}
 					
 					

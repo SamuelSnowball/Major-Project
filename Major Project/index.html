@@ -8,7 +8,6 @@
 	<script src="libraries/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 </head>
 
-
 <body>
 
 <link rel="stylesheet" href="code/css/gui.css">
@@ -46,11 +45,8 @@
 <!-- Libraries -->
 <script src="libraries/m4.js"></script>
 <script src="libraries/ImprovedNoise.js"></script>
-
 <script src="libraries/webgl-obj-loader.js"></script>
-
 <script src="libraries/twgl-full.min.js"></script>
-
 
 <!-- WebGL setup files including shaders and program -->
 <script src="code/myJs/GLSetup.js"></script>
@@ -101,217 +97,6 @@ var skybox = new Skybox();
 var waterFrameBuffers = new WaterFrameBuffer();
 var waterSystem = new WaterSystem();
 
-/*
-Isn't rendering with scene texture atm
-Don't even have UV coordaintes atm
-*/
-	gl.enableVertexAttribArray(positionAttribLocation);
-	gl.enableVertexAttribArray(textureCoordLocation);
-	
-var squareVertexPositionBuffer = gl.createBuffer();;
-    gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
-var vertices = [
-         1.0,  1.0,  0.0,
-        -1.0,  1.0,  0.0,
-         1.0, -1.0,  0.0,
-        -1.0, -1.0,  0.0
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	
-var	squareUVBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer);
-var	uvs = [
-		0,0,
-		0,1,
-		1,0,
-		1,1
-	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-	
-function renderReflectionGUI(){
-
-	
-	gl.enableVertexAttribArray(positionAttribLocation);
-	gl.enableVertexAttribArray(textureCoordLocation);
-	
-	scale = m4.scaling(35, 35, 35);
-	rotateX = m4.xRotation(0);
-	rotateY = m4.yRotation(0);
-	rotateZ = m4.zRotation(-Math.PI / 2);
-	position = m4.translation(310, 15, 310);
-
-
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, reflectionTexture);
-	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-	
-	updateAttributesAndUniforms();
-
-
-	
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
-    gl.vertexAttribPointer(positionAttribLocation,3, gl.FLOAT, false, 0, 0);
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer);
-    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-	
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-	
-	gl.disableVertexAttribArray(positionAttribLocation);
-	gl.disableVertexAttribArray(textureCoordLocation);
-	
-}
-
-
-
-
-
-var squareVertexPositionBuffer2 = gl.createBuffer();;
-    gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
-var vertices2 = [
-         1.0,  1.0,  0.0,
-        -1.0,  1.0,  0.0,
-         1.0, -1.0,  0.0,
-        -1.0, -1.0,  0.0
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices2), gl.STATIC_DRAW);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	
-var	squareUVBuffer2 = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
-var	uvs2 = [
-		0,0,
-		0,1,
-		1,0,
-		1,1
-	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs2), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-function renderRefractionGUI(){
-	
-	gl.enableVertexAttribArray(positionAttribLocation);
-	gl.enableVertexAttribArray(textureCoordLocation);
-	
-	scale = m4.scaling(35, 35, 35);
-	rotateX = m4.xRotation(0);
-	rotateY = m4.yRotation(0);
-	rotateZ = m4.zRotation(-Math.PI / 2);
-	position = m4.translation(390, 15, 310);
-
-
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, refractionTexture);
-	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-	
-	updateAttributesAndUniforms();
-
-
-	
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
-    gl.vertexAttribPointer(positionAttribLocation,3, gl.FLOAT, false, 0, 0);
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
-    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-	
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-	
-	gl.disableVertexAttribArray(positionAttribLocation);
-	gl.disableVertexAttribArray(textureCoordLocation);	
-	
-}
-
-
-
-
-function renderToRefractionBuffer(){
-	gl.bindFramebuffer(gl.FRAMEBUFFER, refractionFrameBuffer);
-		// Want to render everything under the water, normal is pointing down
-		clipPlane = [0, -1, 0, -waterHeight]; // last param is water height
-		gl.clearColor(0.8, 0.8, 0.8, 0.7);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		gl.viewport(0, 0, 1024, 1024);
-			player.movePlayer();
-			player.assignPlayerQuadrant();
-			terrain.render(); 
-			rockGenerator.renderInstancedRocks();
-			particleSystem.render(); 
-			lander.render();
-			//waterSystem.render();
-			skybox.render(viewMatrix, projectionMatrix);
-	// Unbinds 
-	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-	gl.viewport(0, 0, window.innerWidth, window.innerHeight);
-}
-
-/*
-To create illusion of reflection texture
-Need to move camera under the water, before rendering the reflection texture
-
-The camera should move down by:
-	its original distance above the water * 2
-The pitch of the camera also needs to be inverted
-
-
-
-*/
-function renderToReflectionBuffer(){
-	
-	/*
-	Want to render scene to a texture (frame buffer), so bind it
-	Clear it
-	Render to the texture (frame buffer)
-	Then unbind it
-	
-	Then later on, we can render a square with that texture
-	
-	Make sure this gets rendered to something that the original scene doesn't render
-	*/
-	gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
-	
-		// Calculate distance we want to move camera down by
-		// This assumes water at 0
-
-		var distance = 2 * (player.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
-	
-		// Move down
-		cameraPosition[1] -= distance;
-		player.set.xRotation = player.get.xRotation * -1;
-		
-		//cameraMatrix[12] + Math.sin(-player.get.yRotation * cameraSpeed), 
-		//cameraMatrix[13] + Math.sin(-player.get.xRotation * cameraSpeed),
-		//cameraMatrix[14] + Math.cos(-player.get.yRotation * cameraSpeed),
-	
-		// Want to render everything above the waters surface, so normal as 0,1,0
-		// Horizontal plane, pointing upwards 
-		clipPlane = [0, 1, 0, -waterHeight]; // last param is water height
-		gl.clearColor(0.8, 0.8, 0.8, 0.7);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		gl.viewport(0, 0, 1024, 1024);
-			player.movePlayer();
-			player.assignPlayerQuadrant();
-			terrain.render(); 
-			rockGenerator.renderInstancedRocks();
-			particleSystem.render(); 
-			lander.render();
-			//waterSystem.render(viewMatrix, projectionMatrix);
-			skybox.render(viewMatrix, projectionMatrix);
-			
-		// Reset camera
-		cameraPosition[1] += distance;
-		player.set.xRotation = player.get.xRotation * -1;
-		//cameraMatrix[12] + Math.sin(player.get.yRotation * cameraSpeed), 
-		//cameraMatrix[13] + Math.sin(player.get.xRotation * cameraSpeed),
-		//cameraMatrix[14] + Math.cos(player.get.yRotation * cameraSpeed),
-
-	// Unbinds 
-	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-	gl.viewport(0, 0, window.innerWidth, window.innerHeight);
-}
-
 // For saving the game
 var gameTime = 0;
 var saveTime = 100;
@@ -320,6 +105,13 @@ var saveTime = 100;
 var fpsElement = document.getElementById("fps");
 var then = Date.now() / 1000;  // get time in seconds
 
+var cameraPosition;
+cameraPosition[0] = 315; ///////////////////////////////////////
+cameraPosition[1] = 6; 
+cameraPosition[2] = 315;
+
+
+var cameraMatrix = m4.identity();
 function render(){
 	var now = Date.now() / 1000;  // get time in seconds
     var elapsedTime = now - then;
@@ -327,11 +119,11 @@ function render(){
 	var fps = 1 / elapsedTime;
     fpsElement.innerText = fps.toFixed(0); 
 	
-	renderToReflectionBuffer();
-	renderToRefractionBuffer();
+	player.assignPlayerQuadrant();
 	
-	
-	
+	// Render the entire scene to each the reflection and refraction textures
+	waterSystem.renderToReflectionBuffer();
+	waterSystem.renderToRefractionBuffer();
 	
 	/*
 	Now render the scene as usual
@@ -339,18 +131,36 @@ function render(){
 	*/
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	// 0, 1, 0, 0 = clips off everything under 0
-	
 	// Cant disable clipPlane on some drivers, just set the plane really high
 	clipPlane = [0, 0, 0, 0];
 	
-	//console.log("Player X, Y, Z: " + Math.floor(player.get.x) + ", " + Math.floor(player.get.y) + ", " + Math.floor(player.get.z));
-	player.movePlayer();
-	player.assignPlayerQuadrant();
+	
+	//cameraPosition[1] += 0.1;
+	//cameraPosition[2] += 0.1;
+	
+	//cameraPosition += 0.5 * cameraTarget;
+	
+	cameraMatrix = m4.translate(cameraMatrix, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
 
-	// Don't change render order
-	// terrain render generates the renderIndices, 
-	// that are needed for rock rendering
+	
+	//camera target should add position as well
+	cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, UP_VECTOR);
+	viewMatrix = m4.inverse(cameraMatrix);
+	viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+	
+	// Stops it breaking....
+	currentTexture = mapTexture;
+	updateAttributesAndUniforms();	
+	
+
+	
+	
+
+	/*
+	Don't change render order
+	terrain render generates the renderIndices, 
+	that are needed for rock rendering
+	*/
 	terrain.render(); 
 	rockGenerator.renderInstancedRocks();
 	particleSystem.render(); 
@@ -358,22 +168,10 @@ function render(){
 	lander.render();
 	waterSystem.render(viewMatrix, projectionMatrix);
 	skybox.render(viewMatrix, projectionMatrix);
-
-	/*
-	Have now switched back to default frame buffer
-	The scene is now loaded in the FBO
-	Use that texture to render the square	
-	*/
-	//renderReflectionGUI();  
-	//renderRefractionGUI();
 	
 	gameTime++;
 	requestAnimationFrame(render);
 }
-
-
-
-
 
 /*
 This gets called when the user clicks to start the game
@@ -385,7 +183,6 @@ function setup(){
 	// Show GUIs
 	gui.showElements();	
 
-	
 	render();
 }
 

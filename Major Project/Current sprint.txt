@@ -9,17 +9,14 @@ Sprint 7 4th - 11th March
 		
 	Other tasks:
 
-		Add scene image to readme of github
-
-		Cleanup code from last sprint, it was a bit rushed
 		The bigger the rock, the lower it should spawn
 		Fix 2d rocks
 
-		Add stacked noise, then -15 it
-		So it isn't just a square hole
+		Water + reflect/ract renderng if toWaterVector < 100 etc
 
-		Make water quadrant smaller and position it correctly
-
+		Rename player to camera class
+		Initialze camera to identity
+		Fix rotation
 
 	Sprint retrospective:
 

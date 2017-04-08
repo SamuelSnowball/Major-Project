@@ -72,7 +72,7 @@ function WaterSystem(){
 			'refractTextureCoords = clamp(refractTextureCoords, 0.001, 0.999);',
 			
 			'reflectTextureCoords += totalDistortion;',
-			'reflectTextureCoords.x = clamp(reflectTextureCoords.x, 0.001, 0.999);',
+			'reflectTextureCoords.x = clamp(reflectTextureCoords.x, 0.001, 0.999);', // ??
 			'reflectTextureCoords.y = clamp(reflectTextureCoords.y, -0.999, -0.001);', // flipped because reflection
 			
 			'vec4 reflectColour = texture2D(reflectionTexture, vec2(reflectTextureCoords.s, reflectTextureCoords.t));',
@@ -119,36 +119,79 @@ function WaterSystem(){
 		var waterMoveFactorLocation = gl.getUniformLocation(waterProgram, 'moveFactor');
 	gl.useProgram(program);
 	
-	/*
-	I think projection contains model matrix as well, so not needed in shader
-	*/
-	function updateWaterAttributesAndUniforms(viewMatrix, projectionMatrix){
-		moveFactor += Date.now() * 0.000000000000003;
-		moveFactor %= 1; // loops when reaches 0
-		gl.uniform1f(waterMoveFactorLocation, moveFactor);
-	
-		// Dont know if needed
-		fullTransforms = m4.multiply(position, rotateZ);
-		fullTransforms = m4.multiply(fullTransforms, rotateY);
-		fullTransforms = m4.multiply(fullTransforms, rotateX);
-		fullTransforms = m4.multiply(fullTransforms, scale);
-	
-		gl.uniformMatrix4fv(waterModelLocation, false, new Float32Array(fullTransforms));
-		gl.uniformMatrix4fv(waterViewMatrixLocation, false, new Float32Array(viewMatrix));
-		gl.uniformMatrix4fv(waterProjectionLocation, false, new Float32Array(projectionMatrix));
+	this.renderToRefractionBuffer = function(){
+		gl.bindFramebuffer(gl.FRAMEBUFFER, refractionFrameBuffer);
+			// Want to render everything under the water, normal is pointing down
+			clipPlane = [0, -1, 0, -waterHeight]; // last param is water height
+			gl.clearColor(0.8, 0.8, 0.8, 0.7);
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			gl.viewport(0, 0, 1024, 1024);
+				terrain.render(); 
+				rockGenerator.renderInstancedRocks();
+				particleSystem.render(); 
+				lander.render();
+				skybox.render(viewMatrix, projectionMatrix);
+		// Unbinds 
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
 	}
-	
-	
+
+	/*
+	To create illusion of reflection texture
+	Need to move camera under the water, before rendering the reflection texture
+
+	The camera should move down by:
+		its original distance above the water * 2
+	The pitch of the camera also needs to be inverted
+	*/
+	this.renderToReflectionBuffer = function(){
+		
+		/*
+		Want to render scene to a texture (frame buffer), so bind it
+		Clear it
+		Render to the texture (frame buffer)
+		Then unbind it
+		
+		Then later on, we can render a square with that texture
+		
+		Make sure this gets rendered to something that the original scene doesn't render
+		*/
+		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
+		
+			// Calculate distance we want to move camera down by
+			var distance = 2 * (player.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
+		
+			// Move down
+			cameraPosition[1] -= distance;
+			player.set.xRotation = player.get.xRotation * -1;
+		
+			// Want to render everything above the waters surface, so normal as 0,1,0
+			// Horizontal plane, pointing upwards 
+			clipPlane = [0, 1, 0, -waterHeight]; // last param is water height
+			gl.clearColor(0.8, 0.8, 0.8, 0.7);
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			gl.viewport(0, 0, 1024, 1024);
+				terrain.render(); 
+				rockGenerator.renderInstancedRocks();
+				particleSystem.render(); 
+				lander.render();
+				skybox.render(viewMatrix, projectionMatrix);
+			// Reset camera
+			cameraPosition[1] += distance;
+			player.set.xRotation = player.get.xRotation * -1;
+		// Unbinds 
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+	}
 
 	var waterVertexPositionBuffer;
 	var waterVertices = [];
 	var moveFactor = 0;
 
-	gl.useProgram(waterProgram);
 	setup();
-	gl.useProgram(program);
 	
 	function setup(){
+		gl.useProgram(waterProgram);
 		waterVertexPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
 		// Setting x and z positions, y is set to 0 in vertex shader
@@ -162,21 +205,33 @@ function WaterSystem(){
 		];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.STATIC_DRAW);
 		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
-		
+		gl.useProgram(program);
 	}
+
+	function updateWaterAttributesAndUniforms(viewMatrix, projectionMatrix){
+		moveFactor += Date.now() * 0.000000000000003; // dont ask....
+		moveFactor %= 1; // loops when reaches 0
+		gl.uniform1f(waterMoveFactorLocation, moveFactor);
 	
+		// Don't know if needed
+		fullTransforms = m4.multiply(position, rotateZ);
+		fullTransforms = m4.multiply(fullTransforms, rotateY);
+		fullTransforms = m4.multiply(fullTransforms, rotateX);
+		fullTransforms = m4.multiply(fullTransforms, scale);
 	
-	
+		gl.uniformMatrix4fv(waterModelLocation, false, new Float32Array(fullTransforms));
+		gl.uniformMatrix4fv(waterViewMatrixLocation, false, new Float32Array(viewMatrix));
+		gl.uniformMatrix4fv(waterProjectionLocation, false, new Float32Array(projectionMatrix));
+	}
 	
 	this.render = function(viewMatrix, projectionMatrix){
 		gl.useProgram(waterProgram);
 		
-		scale = m4.scaling(75, 75, 75);
+		scale = m4.scaling(35, 35, 35);
 		rotateX = m4.xRotation(0);
 		rotateY = m4.yRotation(0);
 		rotateZ = m4.zRotation(0);
-		position = m4.translation(225, waterHeight, 225);
-		
+		position = m4.translation(230, waterHeight, 230);
 		
 		// Reflection texture sampled from unit 0
 		gl.activeTexture(gl.TEXTURE0);
@@ -193,18 +248,13 @@ function WaterSystem(){
 		gl.uniform1i(gl.getUniformLocation(waterProgram, "waterDUDVmapLocation"), 2);
 		gl.bindTexture(gl.TEXTURE_2D, WATER_DUDV_MAP_TEXTURE.getTextureAttribute.texture);	// CHANGE THIS TO DUDV TEXTURE		
 		
-		
-		
 		updateWaterAttributesAndUniforms(viewMatrix, projectionMatrix);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
 		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
-		
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 6);
-		//gl.drawArrays(gl.POINTS, 0, 4);
-
+		
 		gl.useProgram(program);
 	}
-	
 	
 }

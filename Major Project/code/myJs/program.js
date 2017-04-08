@@ -104,6 +104,12 @@ gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
 /*
 ### Camera ###
 */
+var yaw = -90;
+var pitch = 0;
+var lastX = window.innerWidth/2;
+var lastY = window.innerHeight/2;
+var sensitivity = 0.005;
+
 	var cameraSpeed = 0.003;
 
 	//Matrix for camera, move the camera in the world
