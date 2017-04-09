@@ -1,12 +1,9 @@
 
 /*
-Contains useful utility functions
+Contains useful functions
 */
 function Utility(){
 
-	/*
-	Returns random int between min and min
-	*/
 	this.randomIntBetween = function(min, max){
 		return Math.floor(Math.random() * (max-min+1) + min);
 	}
@@ -15,6 +12,10 @@ function Utility(){
 		return (Math.random() * (max-min+1) + min);
 	}
 	
+	// For camera
+	this.toRadians = function(angle) {
+		return angle * (Math.PI / 180);
+	}	
 		
 	/*
 	Retrieves the obj text from provided url

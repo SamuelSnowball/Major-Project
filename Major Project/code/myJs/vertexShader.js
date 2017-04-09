@@ -77,6 +77,7 @@ gl.shaderSource(vertexShader, [
 		// Do have the viewMatrix though, contains the negative camera position, so just inverse it
 		'toCameraVector = (inverseViewMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPostion.xyz;', 
 		
+		
 		// Fog
 		// We have vector of vertex from the camera, so get distance from length of the vector
 		'float distance = length(positionRelativeToCamera.xyz);',

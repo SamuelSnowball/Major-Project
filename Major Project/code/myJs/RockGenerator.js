@@ -136,22 +136,23 @@ function RockGenerator(){
 			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI/2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 			
-			var rockSize = Math.random() * 100;
+			var sizeOfRock = Math.random() * 100;
 			var scaleX;
-			if(rockSize > 95){
-				scaleX = utility.randomBetween(75, 100); // Large 5% chance
+			if(sizeOfRock > 95){ // Large rock 5% chance
+				scaleX = utility.randomBetween(75, 100); 
 			}
-			else if(rockSize > 75){
-				scaleX = utility.randomBetween(35, 50); // Medium 20% chance
+			else if(sizeOfRock > 75){ // Medium rock 20% chance
+				scaleX = utility.randomBetween(35, 50); 
 			}
-			else{
-				scaleX = utility.randomBetween(5, 15); // Small 75% chance
+			else{ // Small rock 75% chance
+				scaleX = utility.randomBetween(5, 15); 
 			}
 			
 			positionX = Math.floor(Math.random() * 128) + xMin;
 			savedXPositions.push(positionX);
 			savedXScales.push(scaleX);
 
+			// form this into a full matrix, times by rotation, take correct values?
 			data.push(
 				testTransform[0] * scaleX,	
 				testTransform[4], 
@@ -175,7 +176,7 @@ function RockGenerator(){
 		data = [];
 		for(var i=0; i<mesh.numInstances ; i++){
 			// yRotation rotates around the UP vector, so rotate rocks by yRotation matrix
-			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI/2 (360 degrees)
+			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI * 2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 			
 			var scaleY = (savedXScales[i] + savedZScales[i])/4;
@@ -186,7 +187,7 @@ function RockGenerator(){
 
 			data.push(
 				testTransform[1], 
-				testTransform[5] * scaleY, // Scale Y first
+				testTransform[5] * scaleY, 
 				testTransform[9], 
 				rockPosition  // y translation
 			); 
@@ -207,15 +208,16 @@ function RockGenerator(){
 		data = [];
 		for(var i=0; i<mesh.numInstances ; i++){
 			// yRotation rotates around the UP vector, so rotate rocks by yRotation matrix
-			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI/2 (360 degrees)
+			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI * 2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
 			
-			var scaleZ = savedXScales[i];// + Math.random() * 5;
+			var scaleZ = savedXScales[i];
 			savedZScales.push(scaleZ);
-			
+
 			positionZ = Math.floor(Math.random() * 128) + zMin;
 			
 			savedZPositions.push(positionZ);
+			
 			data.push(
 				testTransform[2], 
 				testTransform[6], 
@@ -235,6 +237,10 @@ function RockGenerator(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow4);
 		data = [];
 		for(var i=0; i<mesh.numInstances; i++){
+			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI * 2 (360 degrees)
+			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
+			
+			
 			data.push(
 				testTransform[3], 
 				testTransform[7], 
