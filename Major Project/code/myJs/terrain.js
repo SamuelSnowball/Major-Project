@@ -248,17 +248,7 @@ function Terrain(){
 						var stacked = stackNoise(x,y,8);
 						heightMap[x][y] = stacked * 30;	
 					}
-					
-										
-					// Water section
-					if(x > 200 && x < 250 && y > 200 && y < 250){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 30;	
-						
-						heightMap[x][y] = - 5.5;
-					}
-					
-	
+				
 					//var stacked = stackNoise(x,y,8);
 					//heightMap[x][y] = stacked * 30;	
 				//	heightMap[x][y] = - 5.5;

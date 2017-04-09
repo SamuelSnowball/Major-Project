@@ -134,20 +134,18 @@ function render(){
 	Don't change render order
 	terrain render generates the renderIndices, 
 	that are needed for rock rendering
+	
+	The skybox has to render last, or everything breaks
 	*/
 	terrain.render(); 
 	rockGenerator.renderInstancedRocks();
-	particleSystem.render(); 
+	//particleSystem.render(); 
 	collisionTester.testAllCollision();
 	lander.render();
+	
 	waterSystem.render();
-
+	skybox.render(viewMatrix, projectionMatrix);
 	
-	
-	//skybox.render(viewMatrix, projectionMatrix);
-	
-	//renderRefractionGUI();
-	//renderReflectionGUI();
 
 	
 	requestAnimationFrame(render);

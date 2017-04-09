@@ -52,7 +52,7 @@ function TextureLoader(){
 				  new Uint8Array([0, 0, 0, 255]));
 				  
 		// Map texture
-		mapTexture = new Texture("resources/terrain/floor/sand.png", 10, 0, true);
+		mapTexture = new Texture("resources/terrain/floor/sand.png", 10, 0);
 		
 		// Rock textures
 		rockTexture0 = new Texture('resources/rocks/0.png', 10, 0);
@@ -72,7 +72,7 @@ function TextureLoader(){
 	
 }
 
-function Texture(path, shineDamperParam, reflectivityParam, repeat){
+function Texture(path, shineDamperParam, reflectivityParam){
 
 	var shineDamper = shineDamperParam; 
 	var reflectivity = reflectivityParam; 
@@ -98,40 +98,31 @@ function Texture(path, shineDamperParam, reflectivityParam, repeat){
 
 	var image = new Image();
 	image.src = path;
-	image.onload = function (){handleTextureLoaded(image, texture, repeat);}	
+	image.onload = function (){handleTextureLoaded(image, texture);}	
 	
 	/*
 	This gets run after image is done loading
 	*/
-	function handleTextureLoaded(image, texture, repeat){
+	function handleTextureLoaded(image, texture){
 	
-		if(repeat){
-			gl.bindTexture(gl.TEXTURE_2D, texture);
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-			gl.generateMipmap(gl.TEXTURE_2D);
-			gl.bindTexture(gl.TEXTURE_2D, null);
-		}
-		else{
-			gl.bindTexture(gl.TEXTURE_2D, texture);
-			
-			// Writes image data to the texture
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-			
-			/*
-			Setup filtering, controls how image is filtered when scaling
-			Using linear filtering when scaling up
-			Using mipmap when scaling down
-			*/
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-			
-			gl.generateMipmap(gl.TEXTURE_2D);
-			
-			// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
-			gl.bindTexture(gl.TEXTURE_2D, null);
-		}
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		
+		// Writes image data to the texture
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+		
+		/*
+		Setup filtering, controls how image is filtered when scaling
+		Using linear filtering when scaling up
+		Using mipmap when scaling down
+		*/
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+		
+		gl.generateMipmap(gl.TEXTURE_2D);
+		
+		// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
+		gl.bindTexture(gl.TEXTURE_2D, null);
+		
 	}
 	
 }
