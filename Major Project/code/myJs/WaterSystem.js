@@ -388,7 +388,10 @@ function WaterSystem(){
 		
 		// Just position the light as if it matters
 		gl.uniform3fv(lightColourAttribLocation, lightColour);
-		gl.uniform3fv(lightPositionAttribLocation, [0, 200, 0]);
+		
+		//work out light position as hardcoded clipspace coordiantes, always the same
+		//like the cube texture coordinates
+		gl.uniform3fv(lightPositionAttribLocation, [4000, 500, 0]);
 		
 		//gl.uniform3fv(lightColourAttribLocation, lightColour);
 		//gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
