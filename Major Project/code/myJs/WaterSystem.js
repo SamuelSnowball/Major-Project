@@ -93,7 +93,7 @@ function WaterSystem(){
 		
 		// Out the texture coordinates from vertex shader
 		'varying vec2 textureCoords;',
-		'float tilingValue = 6.0;',
+		'float tilingValue = 10.0;',
 		
 		'varying vec4 clipSpace;', // Take in clip space in frag
 
