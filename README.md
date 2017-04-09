@@ -9,4 +9,4 @@ Current scene:
 
 ![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/current/0.png)
 
-![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/current/1.png)
+![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/current/2.png)
