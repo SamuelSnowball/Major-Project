@@ -100,15 +100,20 @@ function WaterSystem(){
 		'uniform mat4 projectionMatrix;',
 		'uniform mat4 viewMatrix;',
 		'uniform mat4 model;',
+		
+		// To calculate vector pointing from water, to camera
+		'uniform vec3 cameraPosition;',
+		// Output the vector to the camera position
+		'varying vec3 toCameraVector;',
 
 		'void main(void){',
-			//'vec4 worldPostion = model * vec4(waterPosition.x, 0.0, waterPosition.y, 1.0);', 
+			'vec4 worldPostion = model * vec4(waterPosition.x, 0.0, waterPosition.y, 1.0);',
 			//'vec4 positionRelativeToCamera = viewMatrix * worldPostion;',
 			// Output the clipSpace coordinates of current vertex
-			//'clipSpace = projectionMatrix * positionRelativeToCamera;',
-			'clipSpace = projectionMatrix * viewMatrix * model * vec4(waterPosition.x, 0.0, waterPosition.y, 1.0);',
+			'clipSpace = projectionMatrix * viewMatrix * worldPostion;',
 			'gl_Position = clipSpace;',
 			'textureCoords = vec2(   (waterPosition.x/2.0)  + 0.5,   (waterPosition.y/2.0)  + 0.5) * tilingValue;',
+			'toCameraVector = cameraPosition - worldPostion.xyz;',
 		'}'
 		
 	].join('\n'));
@@ -129,10 +134,11 @@ function WaterSystem(){
 		
 		// Water moving effect, offset for sampling dudv map
 		// Change the offset over time
-		//'uniform float moveFactor;',
-		
 		'float waveStrength = 0.01;',
 		'uniform float moveFactor;',
+		
+		// In from vertex
+		'varying vec3 toCameraVector;',
 
 		'void main(void){',
 			
@@ -162,10 +168,15 @@ function WaterSystem(){
 			'vec4 reflectColour = texture2D(reflectionTextureSampler, reflectTextureCoords);',
 			'vec4 refractColour = texture2D(refractionTextureSampler, refractTextureCoords);',
 			
+			// First normalize toCameraVector, as dot product requires it to be unit
+			'vec3 viewVector = normalize(toCameraVector);',
+			'float refractiveFactor = dot(viewVector, vec3(0.0, 1.0, 0.0));',
+			// Use this refractiveFactor to mix the colours, rather than 0.5
+			// Change how reflective the water is, raise the refractiveFactor to a number
+			// Higher the number = the more reflective
+			'refractiveFactor = pow(refractiveFactor, 1.0);',
 			
-			
-			
-			'gl_FragColor = mix(reflectColour, refractColour, 0.5);',
+			'gl_FragColor = mix(reflectColour, refractColour, refractiveFactor);',
 			'gl_FragColor = mix(gl_FragColor, vec4(0.0, 0.3, 0.7, 1.0), 0.2);',
 			//'gl_FragColor = texture2D(dudvMapSampler, vec2(theTxtCoords));',
 			
@@ -207,6 +218,8 @@ function WaterSystem(){
 
 		var waterPositionAttribLocation = gl.getAttribLocation(waterProgram, 'waterPosition');
 		gl.enableVertexAttribArray(waterPositionAttribLocation);
+		
+		var waterCameraPositionLocation = gl.getUniformLocation(waterProgram, 'cameraPosition');
 		
 		var waterViewMatrixLocation = gl.getUniformLocation(waterProgram, 'viewMatrix');
 		gl.uniformMatrix4fv(waterViewMatrixLocation, false, new Float32Array(viewMatrix));
@@ -326,6 +339,9 @@ function WaterSystem(){
 	}
 
 	function updateWaterAttributesAndUniforms(){
+	
+		// Load camera position
+		gl.uniform3fv(waterCameraPositionLocation, cameraPosition);
 	
 		moveFactor += Date.now() * 0.0000000000000009; // dont ask....
 		moveFactor %= 1; // loops when reaches 0
