@@ -15,12 +15,6 @@
 	F Key:
 		Moves camera down		
 */
-var prevX = 0;
-	var prevY = 0;	
-	
-		var currentRotateY = 0;
-	var currentRotateX = 0;
-	var rotateSpeed = 0.3;
 function Camera(){
 
 	var moveForward = false, 
@@ -29,6 +23,13 @@ function Camera(){
 		moveRight = false,
 		moveUp = false, 
 		moveDown = false;
+		
+	var prevX = 0;
+	var prevY = 0;	
+	
+	var currentRotateY = 0;
+	var currentRotateX = 0;
+	var rotateSpeed = 0.3;
 	
 	
 	var cameraSpeed = 0.5;
@@ -63,15 +64,6 @@ function Camera(){
 				prevY = currentYMovement;
 				pitch = -currentRotateX * rotateSpeed;
 				
-				console.log("current y mov: " + currentYMovement);
-				console.log("currentrotatex: " + currentRotateX);
-				console.log("prevy: " + prevY);
-				
-
-				//kEEP PITCH AT -8?
-			
-				//console.log("yaw: " + yaw);
-				
 				// Dont go over max or min
 				if(pitch > 85){
 					pitch = 85;
@@ -83,8 +75,6 @@ function Camera(){
 				// Should be in radians first
 				var pitchInRadians = utility.toRadians(pitch);
 				var yawInRadians = utility.toRadians(yaw);
-				
-				console.log("New y target: " + cameraTarget[1]);
 				
 				cameraTarget[0] = Math.cos(pitchInRadians) * Math.cos(yawInRadians);
 				cameraTarget[1] = Math.sin(pitchInRadians);
@@ -147,8 +137,6 @@ function Camera(){
 	
 	}	
 	
-	
-	
 	this.updateCamera = function(){
 			
 		if(moveForward){
@@ -184,8 +172,7 @@ function Camera(){
 		else{
 			// Don't care
 		}	
-	
-		
+
 		cameraMatrix = m4.translate(cameraMatrix, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
 
 		var cameraPositionPlusTarget = [];

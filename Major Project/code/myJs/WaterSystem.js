@@ -1,8 +1,82 @@
 
-
-var waterHeight = 0;
-
 function WaterSystem(){
+
+	var waterHeight = 0;
+
+	var reflectionFrameBuffer;	
+	var reflectionTexture;
+	var reflectionDepthBuffer;
+		
+	var refractionFrameBuffer;
+	var refractionTexture;
+	var refractionDepthBuffer;
+
+	/*
+	Frame buffer code
+	*/
+	var REFLECTION_WIDTH = 512;
+	var REFLECTION_HEIGHT = 512;
+	
+	var REFRACTION_WIDTH = 512;
+	var REFRACTION_HEIGHT = 512;
+	
+	setupReflectionFrameBuffer();
+	setupRefractionFrameBuffer();
+
+	function setupReflectionFrameBuffer(){
+		reflectionFrameBuffer = gl.createFramebuffer();
+		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
+		//draw_ext.drawBuffersWEBGL([draw_ext.COLOR_ATTACHMENT0_WEBGL]);
+		
+		
+		reflectionTexture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, reflectionTexture);
+		// null at the end of this means, we don't have any data to copy yeet
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, REFLECTION_WIDTH, REFLECTION_HEIGHT, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, reflectionTexture, 0);
+		
+		
+		reflectionDepthBuffer = gl.createRenderbuffer();
+		gl.bindRenderbuffer(gl.RENDERBUFFER, reflectionDepthBuffer);
+		gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, REFLECTION_WIDTH, REFLECTION_HEIGHT);
+		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, reflectionDepthBuffer);	
+
+		
+		
+		// Reset buffers to default
+		gl.bindTexture(gl.TEXTURE_2D, null);
+		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+	}
+
+	function setupRefractionFrameBuffer(){
+		refractionFrameBuffer = gl.createFramebuffer();
+		gl.bindFramebuffer(gl.FRAMEBUFFER, refractionFrameBuffer);
+		
+		refractionTexture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, refractionTexture);
+		// null at the end of this means, we don't have any data to copy yeet
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, REFRACTION_WIDTH, REFRACTION_HEIGHT, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, refractionTexture, 0);
+		
+
+		refractionDepthBuffer = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, refractionDepthBuffer);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, REFRACTION_WIDTH, REFRACTION_HEIGHT, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, refractionDepthBuffer, 0);
+		
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+	}
+	
+	
 	
 	// Need shaders as well
 	var waterVertexShader = gl.createShader(gl.VERTEX_SHADER);
@@ -146,8 +220,6 @@ function WaterSystem(){
 		its original distance above the water * 2
 	The pitch of the camera also needs to be inverted
 	*/
-	var gameTime = 0;
-	var debugTime = 200;
 	this.renderToReflectionBuffer = function(){
 	
 		/*
@@ -161,41 +233,9 @@ function WaterSystem(){
 		Make sure this gets rendered to something that the original scene doesn't render
 		*/
 		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
-		
-		/*
-		THE DISTANCE/PITCH IS DOING NOTHING
-		*/
-		
-		
+
 			// Calculate distance we want to move camera down by
-			
-			//pitch -= 500;
-			
-			//horrible, to move camera down, pass in param to move all render objects.... up?
-			// set bool here,
-			//in updateAttributesanduniforms,
-			// do if bool, then cameraMatrix -= distance, (make it global or something)
-			
-			//but how to fix pitch? i think thin matrixs first doesn't reset to 0,
-			// so need something to store a value from 0->180 or something
-			//and make sure it actually gets used, try hardcoding it first to see if gets angled down
-		
-		
-			// for the pitch, use currentRotateX
-			// save it
-			// make it like -30 or 30
-			// draw all
-			//then restore it
-			//if that works, then work it out properly each frame
-			
-			
-			/*
-			Can change camera position for distance!
-			Now just need to inverse the pitch
-				Try inverrse camear target
-			*/
-			
-			//debugger;
+			// And invert pitch
 			var distance = 2 * (cameraPosition[1] + waterHeight); // + ing, because water is negative, so --5 and breaks
 			cameraPosition[1] -= distance;
 			cameraTarget[1] = -cameraTarget[1];
@@ -212,20 +252,17 @@ function WaterSystem(){
 				rockGenerator.renderInstancedRocks();
 				particleSystem.render(); 
 				lander.render();
-				
 				//skybox.render(viewMatrix, projectionMatrix);
+				
 			// Reset camera
 			cameraTarget[1] = -cameraTarget[1];
 			camera.updateCamera();			
-			
 			cameraPosition[1] += distance;
 			camera.updateCamera();
 			
 		// Unbinds 
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
-		
-		gameTime ++;
 	}
 
 	var waterVertexPositionBuffer;
@@ -273,10 +310,7 @@ function WaterSystem(){
 	*/
 	this.render = function(){
 		gl.useProgram(waterProgram);
-		
-		//console.log("pitch: " + pitch);
-		//console.log("yaw: " + yaw);
-		
+
 		scale = m4.scaling(35, 35, 35);
 		rotateX = m4.xRotation(0);
 		rotateY = m4.yRotation(0);

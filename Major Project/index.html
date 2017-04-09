@@ -62,12 +62,15 @@
 <script src="code/myJs/GUI.js"></script>
 <script src="code/myJs/LoadingScreen.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
+
+
 <script src="code/myJs/WaterSystem.js"></script>
+
 <script src="code/myJs/Sound.js"></script>
 <script src="code/myJs/Lander.js"></script>
 <script src="code/myJs/Utility.js"></script>
 <script src="code/myJs/Skybox.js"></script>
-<script src="code/myJs/WaterFrameBuffer.js"></script>
+
 <script src="code/myJs/Camera.js"></script>
 <script src="code/myJs/PointerLockControls.js"></script>
 
@@ -94,126 +97,12 @@ var lander = new Lander();
 var gui = new GUI();
 var skybox = new Skybox();
 
-var waterFrameBuffers = new WaterFrameBuffer();
 var waterSystem = new WaterSystem();
 
 // Taken
 var fpsElement = document.getElementById("fps");
 var then = Date.now() / 1000;  // get time in seconds
 var cameraMatrix = m4.identity();
-
-
-
-
-
-
-
-
-var squareVertexPositionBuffer = gl.createBuffer();;
-    gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
-var vertices = [
-         1.0,  1.0,  0.0,
-        -1.0,  1.0,  0.0,
-         1.0, -1.0,  0.0,
-        -1.0, -1.0,  0.0
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	
-var	squareUVBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer);
-var	uvs = [
-		0,0,
-		0,1,
-		1,0,
-		1,1
-	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-	
-function renderReflectionGUI(){
-	
-	gl.enableVertexAttribArray(positionAttribLocation);
-	gl.enableVertexAttribArray(textureCoordLocation);
-	
-	scale = m4.scaling(10, 10, 10);
-	rotateX = m4.xRotation(0);
-	rotateY = m4.yRotation(0);
-	rotateZ = m4.zRotation(Math.PI / 2); //-Math.PI / 2
-	position = m4.translation(250, 15, 250);
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, reflectionTexture);
-	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-	
-	updateAttributesAndUniforms();
-	
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
-    gl.vertexAttribPointer(positionAttribLocation,3, gl.FLOAT, false, 0, 0);
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer);
-    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-	
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-	
-	
-}
-var squareVertexPositionBuffer2 = gl.createBuffer();;
-    gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
-var vertices2 = [
-         1.0,  1.0,  0.0,
-        -1.0,  1.0,  0.0,
-         1.0, -1.0,  0.0,
-        -1.0, -1.0,  0.0
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices2), gl.STATIC_DRAW);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	
-var	squareUVBuffer2 = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
-var	uvs2 = [
-		0,0,
-		0,1,
-		1,0,
-		1,1
-	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs2), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-function renderRefractionGUI(){
-	
-	gl.enableVertexAttribArray(positionAttribLocation);
-	gl.enableVertexAttribArray(textureCoordLocation);
-	
-	scale = m4.scaling(10, 10, 10);
-	rotateX = m4.xRotation(0);
-	rotateY = m4.yRotation(0);
-	rotateZ = m4.zRotation(Math.PI / 2); //-Math.PI / 2
-	position = m4.translation(275, 15, 250);
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, refractionTexture);
-	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-	
-	updateAttributesAndUniforms();
-	
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
-    gl.vertexAttribPointer(positionAttribLocation,3, gl.FLOAT, false, 0, 0);
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
-    gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-	
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-	
-}
-
-
-
-
-
-
-
-
 
 
 function render(){
