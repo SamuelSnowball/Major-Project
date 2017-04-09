@@ -9,7 +9,7 @@ function Terrain(){
 	var quadrantColumnSize = 128;
 	
 	// How many map quadrants, each having 128*128 vertices each
-	// If you update these, make sure to update them in player assign quadrant method
+	// If you update these, make sure to update them in camera assign quadrant method
 	var numberQuadrantRows = 4; 
 	var numberQuadrantColumns = 4; 
 	
@@ -72,7 +72,7 @@ function Terrain(){
 
 	/*
 	The collision class needs to find a heightMap value, given a X and Z,
-	so it can move the player to the nearest vertex height.
+	so it can move the camera to the nearest vertex height.
 	
 	But heightMap is private, so create a getter and setter method to do this.
 	This will not actually change any heightMap values, just finds the value at a index.
@@ -258,7 +258,10 @@ function Terrain(){
 						heightMap[x][y] = - 5.5;
 					}
 					
-					
+	
+					//var stacked = stackNoise(x,y,8);
+					//heightMap[x][y] = stacked * 30;	
+				//	heightMap[x][y] = - 5.5;
 					
 
 				}
@@ -392,7 +395,7 @@ function Terrain(){
 			
 			// 0 -> 1 UV each quadrant ?
 			// means all quadrants have same texture?
-			// or, base the texture on player quadrant
+			// or, base the texture on camera quadrant
 			// requires if check in render loop
 
 			// How much to increment UV coordinates by each loop
@@ -569,9 +572,9 @@ function Terrain(){
 		Find out what indices the corner and edge quadrants are at
 		Add theses indices to cornerIndices and all edgeIndices arrays
 			
-		If player in corner we have 4 indices to process and render
-		If player in edge we have 6 indices to process and render
-		If player in regular cell we have 9 indices to process and render
+		If camera in corner we have 4 indices to process and render
+		If camera in edge we have 6 indices to process and render
+		If camera in regular cell we have 9 indices to process and render
 		
 		How to calculate if on edge cell, corner cell or normal cell?
 			Base it off numberQuadrantRows * numberQuadrantColumns
@@ -641,38 +644,38 @@ function Terrain(){
 		/*
 		Private
 		
-		Player is in a corner, create indices appropriately
+		camera is in a corner, create indices appropriately
 		
 		Need to check what corner they're in to calculate renderIndices properly
 		4 different indices orders, depending on what corner they're in!	
 		*/
 		function setupIndicesCornerCells(){
-			if(player.get.quadrant === cornerIndices[0]){
+			if(camera.get.quadrant === cornerIndices[0]){
 				// Top left
 				renderIndices.push(
-					player.get.quadrant, player.get.quadrant+numberQuadrantRows, 
-					player.get.quadrant+1, player.get.quadrant+numberQuadrantRows+1
+					camera.get.quadrant, camera.get.quadrant+numberQuadrantRows, 
+					camera.get.quadrant+1, camera.get.quadrant+numberQuadrantRows+1
 				);
 			}
-			else if(player.get.quadrant === cornerIndices[1]){
+			else if(camera.get.quadrant === cornerIndices[1]){
 				// Bottom right
 				renderIndices.push(
-					player.get.quadrant-numberQuadrantRows-1, player.get.quadrant-1, 
-					player.get.quadrant-numberQuadrantRows, player.get.quadrant 				
+					camera.get.quadrant-numberQuadrantRows-1, camera.get.quadrant-1, 
+					camera.get.quadrant-numberQuadrantRows, camera.get.quadrant 				
 				);			
 			}
-			else if(player.get.quadrant === cornerIndices[2]){
+			else if(camera.get.quadrant === cornerIndices[2]){
 				// Bottom left
 				renderIndices.push(
-					player.get.quadrant-1, player.get.quadrant+numberQuadrantRows-1, 
-					player.get.quadrant, player.get.quadrant+numberQuadrantRows					
+					camera.get.quadrant-1, camera.get.quadrant+numberQuadrantRows-1, 
+					camera.get.quadrant, camera.get.quadrant+numberQuadrantRows					
 				);			
 			}
-			else if(player.get.quadrant === cornerIndices[3]){
+			else if(camera.get.quadrant === cornerIndices[3]){
 				// Top right
 				renderIndices.push(
-					player.get.quadrant-numberQuadrantRows, player.get.quadrant, 
-					player.get.quadrant-numberQuadrantRows+1, player.get.quadrant+1				
+					camera.get.quadrant-numberQuadrantRows, camera.get.quadrant, 
+					camera.get.quadrant-numberQuadrantRows+1, camera.get.quadrant+1				
 				);			
 			}
 			else{
@@ -683,43 +686,43 @@ function Terrain(){
 		/*
 		All private
 		
-		Player is on the map edges (boundaries), render correct cells
+		camera is on the map edges (boundaries), render correct cells
 		*/
 		function setupIndicesTopEdgeCells(){
-			if(topEdgeIndices.includes(player.get.quadrant)){
-				// Player on top row
+			if(topEdgeIndices.includes(camera.get.quadrant)){
+				// camera on top row
 				renderIndices.push(
-					player.get.quadrant-numberQuadrantRows, player.get.quadrant, player.get.quadrant+numberQuadrantRows,	
-					player.get.quadrant-numberQuadrantRows+1, player.get.quadrant+1, player.get.quadrant+numberQuadrantRows+1
+					camera.get.quadrant-numberQuadrantRows, camera.get.quadrant, camera.get.quadrant+numberQuadrantRows,	
+					camera.get.quadrant-numberQuadrantRows+1, camera.get.quadrant+1, camera.get.quadrant+numberQuadrantRows+1
 				);	
 			}
 		}
 		function setupIndicesBottomEdgeCells(){
-			if(bottomEdgeIndices.includes(player.get.quadrant)){
-				// Player on bottom row
+			if(bottomEdgeIndices.includes(camera.get.quadrant)){
+				// camera on bottom row
 				renderIndices.push(
-					player.get.quadrant-numberQuadrantRows-1, player.get.quadrant-1, player.get.quadrant+numberQuadrantRows-1,
-					player.get.quadrant-numberQuadrantRows, player.get.quadrant, player.get.quadrant+numberQuadrantRows
+					camera.get.quadrant-numberQuadrantRows-1, camera.get.quadrant-1, camera.get.quadrant+numberQuadrantRows-1,
+					camera.get.quadrant-numberQuadrantRows, camera.get.quadrant, camera.get.quadrant+numberQuadrantRows
 				);	
 			}		
 		}
 		function setupIndicesLeftEdgeCells(){
-			if(leftEdgeIndices.includes(player.get.quadrant)){
-				// Player on left row
+			if(leftEdgeIndices.includes(camera.get.quadrant)){
+				// camera on left row
 				renderIndices.push(
-					player.get.quadrant-1, player.get.quadrant+numberQuadrantRows-1, 
-					player.get.quadrant,  player.get.quadrant+numberQuadrantRows,
-					player.get.quadrant+1, player.get.quadrant+numberQuadrantRows+1
+					camera.get.quadrant-1, camera.get.quadrant+numberQuadrantRows-1, 
+					camera.get.quadrant,  camera.get.quadrant+numberQuadrantRows,
+					camera.get.quadrant+1, camera.get.quadrant+numberQuadrantRows+1
 				);	
 			}
 		}
 		function setupIndicesRightEdgeCells(){
-			if(rightEdgeIndices.includes(player.get.quadrant)){
-				// Player on right row
+			if(rightEdgeIndices.includes(camera.get.quadrant)){
+				// camera on right row
 				renderIndices.push(
-					player.get.quadrant-numberQuadrantRows-1, player.get.quadrant-1, 
-					player.get.quadrant-numberQuadrantRows, player.get.quadrant, 
-					player.get.quadrant-numberQuadrantRows+1, player.get.quadrant+1
+					camera.get.quadrant-numberQuadrantRows-1, camera.get.quadrant-1, 
+					camera.get.quadrant-numberQuadrantRows, camera.get.quadrant, 
+					camera.get.quadrant-numberQuadrantRows+1, camera.get.quadrant+1
 				);	
 			}
 		}
@@ -732,13 +735,13 @@ function Terrain(){
 		function setupIndices3x3Cells(){
 			renderIndices.push(
 				// Top left quadrant 							Top centre quadrant			Top right quadrant
-				player.get.quadrant-(numberQuadrantRows)-1, 	player.get.quadrant-1, 		player.get.quadrant+(numberQuadrantRows)-1, 
+				camera.get.quadrant-(numberQuadrantRows)-1, 	camera.get.quadrant-1, 		camera.get.quadrant+(numberQuadrantRows)-1, 
 				
-				// Centre left quadrant							Player quadrant				Centre right quadrant
-				player.get.quadrant-(numberQuadrantRows), 		player.get.quadrant, 		player.get.quadrant+(numberQuadrantRows),
+				// Centre left quadrant							camera quadrant				Centre right quadrant
+				camera.get.quadrant-(numberQuadrantRows), 		camera.get.quadrant, 		camera.get.quadrant+(numberQuadrantRows),
 				
 				// Bottom left quadrant							Bottom centre quadrant		Bottom right quadrant
-				player.get.quadrant-(numberQuadrantRows)+1, 	player.get.quadrant+1, 		player.get.quadrant+(numberQuadrantRows)+1
+				camera.get.quadrant-(numberQuadrantRows)+1, 	camera.get.quadrant+1, 		camera.get.quadrant+(numberQuadrantRows)+1
 			);
 		}
 		
@@ -771,6 +774,7 @@ function Terrain(){
 		rotateX = m4.xRotation(0);
 		rotateY = m4.yRotation(0);
 		rotateZ = m4.zRotation(0);
+		
 		position = m4.translation(0, 0, 0);
 		
 		// Times matrices together
@@ -789,19 +793,19 @@ function Terrain(){
 		//		else render 3x3 // just sets the standard 9 indices
 		
 		// Work out what data we should process and render
-		if(cornerIndices.includes(player.get.quadrant)){
+		if(cornerIndices.includes(camera.get.quadrant)){
 			setupIndicesCornerCells();
 		}
-		else if(topEdgeIndices.includes(player.get.quadrant)){
+		else if(topEdgeIndices.includes(camera.get.quadrant)){
 			setupIndicesTopEdgeCells();
 		}
-		else if(bottomEdgeIndices.includes(player.get.quadrant)){
+		else if(bottomEdgeIndices.includes(camera.get.quadrant)){
 			setupIndicesBottomEdgeCells();
 		}
-		else if(leftEdgeIndices.includes(player.get.quadrant)){
+		else if(leftEdgeIndices.includes(camera.get.quadrant)){
 			setupIndicesLeftEdgeCells();
 		}
-		else if(rightEdgeIndices.includes(player.get.quadrant)){
+		else if(rightEdgeIndices.includes(camera.get.quadrant)){
 			setupIndicesRightEdgeCells();
 		}
 		else{
@@ -811,7 +815,7 @@ function Terrain(){
 		/*
 		4 (corner) -> 9 (regular cell) draw calls, one for each quadrant
 		
-		Process and render the current player quadrant and the surrounding cells (3x3 total)
+		Process and render the current camera quadrant and the surrounding cells (3x3 total)
 		*/
 		for(var i=0; i<renderIndices.length; i++){
 			

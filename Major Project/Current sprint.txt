@@ -16,7 +16,33 @@ Sprint 7 4th - 11th March
 
 		Rename player to camera class
 		Initialze camera to identity
-		Fix rotation
+		
+		Set yaw/pitch properly in watersystem
+		In camera setupUsermovement,
+			have to add cameraTarget values
+			individually?
+
+	Commented out collision tester in main render scene
+	Have commented out distortion, adding on 0 atm
+	disabled fog for reflect/refract?
+
+	His reflection texture is upside down, mine isnt
+		Can just rotate water quad to fix?
+		Cant rotate water quad, because
+			reflection + refraction need diff rotations
+	Or rotate the textures..
+
+	Texture rotation or pitch/yaw is problem
+
+	SKybox breaks everything
+		
+	The reflection is moving releative to the player,
+	it shouldnt
+	When player moves forward, the reflection also does
+
+
+	Try and stop the reflection moving
+
 
 	Sprint retrospective:
 

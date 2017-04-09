@@ -42,8 +42,8 @@ function CollisionTester(){
 		
 		// Retrieve the players current x and z position, 
 		// Use these values to find the height we should set for them
-		tempPlayerX = player.get.x;
-		tempPlayerZ = player.get.z;
+		tempPlayerX = cameraPosition[0];
+		tempPlayerZ = cameraPosition[2];
 		
 		floorTemporaryPlayerCoordinates();
 		var nearestHeight = findNearestTerrainVertex();
@@ -51,8 +51,8 @@ function CollisionTester(){
 		/*
 		If player is beneath the floor, push them back up
 		*/
-		if(player.get.y < nearestHeight){
-			player.set.y = nearestHeight;
+		if(cameraPosition[1] < nearestHeight){
+			cameraPosition[1] = nearestHeight;
 		}
 		
 		
@@ -113,11 +113,11 @@ function CollisionTester(){
 		Then player has collided moving backward, so move the player forwards
 	*/
 	function pushPlayer(direction){
-		player.add.x = direction * (cameraPosition[0] - cameraTarget[0]) * 5;
-		player.add.z = direction * (cameraPosition[2] - cameraTarget[2]) * 5;
-		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(player.get.z); 
-		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(player.get.x);
-		player.add.y = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.4;
+		cameraPosition[0] += direction * (cameraPosition[0] - cameraTarget[0]) * 5;
+		cameraPosition[2] += direction * (cameraPosition[2] - cameraTarget[2]) * 5;
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(cameraPosition[2]); 
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(cameraPosition[0]);
+		cameraPosition[1] += terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.4;
 	}
 	
 	/*

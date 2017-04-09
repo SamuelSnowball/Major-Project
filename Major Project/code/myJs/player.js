@@ -10,10 +10,7 @@ function Player(x, y, z){
 	var xRotation = 0;
 	var yRotation = 0;
 
-	var quadrant; // Current section of the map they're in
-	
-	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
-	var numberQuadrantColumns = terrain.get.getNumberQuadrantColumns;
+
 	
 	var playerVertices = [];
 	var playerUvs = [];
@@ -24,25 +21,6 @@ function Player(x, y, z){
 	var playerUvsBuffer;
 	var playerIndicesBuffer;
 	var playerNormalsBuffer;	
-	
-	/*
-	Handles user input and changes the 4 movement variables
-	The movement variables are used in the player class
-
-	2 Arrow keys:
-		Forward (up key)
-		Back (down key)
-		
-	W Key:
-		Moves camera up
-		
-	S Key:
-		Moves camera down
-	*/
-	var moveUp = false, 
-		moveDown = false, 
-		moveForward = false, 
-		moveBack = false;	
 	
 	// Getters
 	this.get = {
@@ -58,9 +36,7 @@ function Player(x, y, z){
 		get speed(){
 			return movementSpeed;
 		},
-		get quadrant(){
-			return quadrant;
-		},
+
 		get movingForward(){
 			return moveForward;
 		},
@@ -106,40 +82,7 @@ function Player(x, y, z){
 		}
 	}
 	
-	// Constructor
-	setupPlayerMovement();
-		
-	function setupPlayerMovement(){
-		document.addEventListener('keydown', function(event){
-			if(event.keyCode == 38){
-				moveForward = true;
-			}
-			if(event.keyCode == 40){
-				moveBack = true;
-			}
-			if(event.keyCode == 87){
-				moveUp = true;
-			}
-			if(event.keyCode == 83){
-				moveDown = true;
-			}
-		});
-		
-		document.addEventListener('keyup', function(event){
-			if(event.keyCode == 38){
-				moveForward = false;
-			}
-			if(event.keyCode == 40){
-				moveBack = false;
-			}
-			if(event.keyCode == 87){
-				moveUp = false;
-			}
-			if(event.keyCode == 83){
-				moveDown = false;
-			}
-		});
-	}
+
 	
 	
 	/*
@@ -230,28 +173,5 @@ function Player(x, y, z){
 		updateAttributesAndUniforms();
 	}	
 	
-	/*
-	Work out what quadrant the player is in
-	So can process and render what's in view of the player
-	*/
-	this.assignPlayerQuadrant = function(){
-	
-		// Need count variable because quadrant is a single number, cant work it out with the 2 loops properly
-		var count = 0;
-		
-		// r and c to avoid messing with player x and y
-		for(var r=0; r<numberQuadrantRows; r++){
-		
-			for(var c=0; c<numberQuadrantColumns; c++){
-				
-				if(z > (c * 128) && z < (c + 1) * 128 && 
-					x > (r * 128) && x < (r+1) * 128 ){
-					
-					quadrant = count;
-				}			
-				count ++;
-			}
-		}
-	}
 	
 }

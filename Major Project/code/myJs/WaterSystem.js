@@ -1,6 +1,6 @@
 
 
-var waterHeight = -5;
+var waterHeight = 0;
 
 function WaterSystem(){
 	
@@ -11,7 +11,7 @@ function WaterSystem(){
 		
 		// Out the texture coordinates from vertex shader
 		'varying vec2 textureCoords;',
-		'float tilingValue = 10.0;',
+		'float tilingValue = 1.0;',
 		
 		'varying vec4 clipSpace;', // Take in clip space in frag
 
@@ -66,7 +66,7 @@ function WaterSystem(){
 			// Sample it again, and move it in completely different direction, realistic
 			'vec2 distortion2 = (texture2D(dudvMap, vec2(-textureCoords.x + moveFactor, textureCoords.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;',
 			// Add together
-			'vec2 totalDistortion = distortion1 + distortion2;',
+			'vec2 totalDistortion = vec2(0.0, 0.0);',//distortion1 + distortion2;',
 			
 			'refractTextureCoords += totalDistortion;',
 			'refractTextureCoords = clamp(refractTextureCoords, 0.001, 0.999);',
@@ -120,20 +120,22 @@ function WaterSystem(){
 	gl.useProgram(program);
 	
 	this.renderToRefractionBuffer = function(){
+
 		gl.bindFramebuffer(gl.FRAMEBUFFER, refractionFrameBuffer);
 			// Want to render everything under the water, normal is pointing down
 			clipPlane = [0, -1, 0, -waterHeight]; // last param is water height
 			gl.clearColor(0.8, 0.8, 0.8, 0.7);
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-			gl.viewport(0, 0, 1024, 1024);
+			gl.viewport(0, 0, 512, 512);
 				terrain.render(); 
 				rockGenerator.renderInstancedRocks();
 				particleSystem.render(); 
 				lander.render();
-				skybox.render(viewMatrix, projectionMatrix);
+				//skybox.render(viewMatrix, projectionMatrix);
 		// Unbinds 
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+
 	}
 
 	/*
@@ -144,8 +146,10 @@ function WaterSystem(){
 		its original distance above the water * 2
 	The pitch of the camera also needs to be inverted
 	*/
+	var gameTime = 0;
+	var debugTime = 200;
 	this.renderToReflectionBuffer = function(){
-		
+	
 		/*
 		Want to render scene to a texture (frame buffer), so bind it
 		Clear it
@@ -158,30 +162,70 @@ function WaterSystem(){
 		*/
 		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
 		
+		/*
+		THE DISTANCE/PITCH IS DOING NOTHING
+		*/
+		
+		
 			// Calculate distance we want to move camera down by
-			var distance = 2 * (player.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
+			
+			//pitch -= 500;
+			
+			//horrible, to move camera down, pass in param to move all render objects.... up?
+			// set bool here,
+			//in updateAttributesanduniforms,
+			// do if bool, then cameraMatrix -= distance, (make it global or something)
+			
+			//but how to fix pitch? i think thin matrixs first doesn't reset to 0,
+			// so need something to store a value from 0->180 or something
+			//and make sure it actually gets used, try hardcoding it first to see if gets angled down
 		
-			// Move down
+		
+			// for the pitch, use currentRotateX
+			// save it
+			// make it like -30 or 30
+			// draw all
+			//then restore it
+			//if that works, then work it out properly each frame
+			
+			
+			/*
+			Can change camera position for distance!
+			Now just need to inverse the pitch
+				Try inverrse camear target
+			*/
+			
+			//debugger;
+			var distance = 2 * (cameraPosition[1] + waterHeight); // + ing, because water is negative, so --5 and breaks
 			cameraPosition[1] -= distance;
-			player.set.xRotation = player.get.xRotation * -1;
-		
+			cameraTarget[1] = -cameraTarget[1];
+			currentTexture = mapTexture;
+			camera.updateCamera();
+			
 			// Want to render everything above the waters surface, so normal as 0,1,0
 			// Horizontal plane, pointing upwards 
 			clipPlane = [0, 1, 0, -waterHeight]; // last param is water height
 			gl.clearColor(0.8, 0.8, 0.8, 0.7);
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-			gl.viewport(0, 0, 1024, 1024);
+			gl.viewport(0, 0, 512, 512);
 				terrain.render(); 
 				rockGenerator.renderInstancedRocks();
 				particleSystem.render(); 
 				lander.render();
-				skybox.render(viewMatrix, projectionMatrix);
+				
+				//skybox.render(viewMatrix, projectionMatrix);
 			// Reset camera
+			cameraTarget[1] = -cameraTarget[1];
+			camera.updateCamera();			
+			
 			cameraPosition[1] += distance;
-			player.set.xRotation = player.get.xRotation * -1;
+			camera.updateCamera();
+			
 		// Unbinds 
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+		
+		gameTime ++;
 	}
 
 	var waterVertexPositionBuffer;
@@ -208,12 +252,12 @@ function WaterSystem(){
 		gl.useProgram(program);
 	}
 
-	function updateWaterAttributesAndUniforms(viewMatrix, projectionMatrix){
+	function updateWaterAttributesAndUniforms(){
+	
 		moveFactor += Date.now() * 0.000000000000003; // dont ask....
 		moveFactor %= 1; // loops when reaches 0
 		gl.uniform1f(waterMoveFactorLocation, moveFactor);
-	
-		// Don't know if needed
+		
 		fullTransforms = m4.multiply(position, rotateZ);
 		fullTransforms = m4.multiply(fullTransforms, rotateY);
 		fullTransforms = m4.multiply(fullTransforms, rotateX);
@@ -224,8 +268,14 @@ function WaterSystem(){
 		gl.uniformMatrix4fv(waterProjectionLocation, false, new Float32Array(projectionMatrix));
 	}
 	
-	this.render = function(viewMatrix, projectionMatrix){
+	/*
+	Its rotating around the camera, but should instead rotate around the world origin?
+	*/
+	this.render = function(){
 		gl.useProgram(waterProgram);
+		
+		//console.log("pitch: " + pitch);
+		//console.log("yaw: " + yaw);
 		
 		scale = m4.scaling(35, 35, 35);
 		rotateX = m4.xRotation(0);
@@ -248,7 +298,7 @@ function WaterSystem(){
 		gl.uniform1i(gl.getUniformLocation(waterProgram, "waterDUDVmapLocation"), 2);
 		gl.bindTexture(gl.TEXTURE_2D, WATER_DUDV_MAP_TEXTURE.getTextureAttribute.texture);	// CHANGE THIS TO DUDV TEXTURE		
 		
-		updateWaterAttributesAndUniforms(viewMatrix, projectionMatrix);
+		updateWaterAttributesAndUniforms();
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
 		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);

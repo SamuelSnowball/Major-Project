@@ -9,11 +9,11 @@ var refractionDepthBuffer;
 	
 function WaterFrameBuffer(){
 
-	var REFLECTION_WIDTH = 1024;
-	var REFLECTION_HEIGHT = 1024;
+	var REFLECTION_WIDTH = 512;
+	var REFLECTION_HEIGHT = 512;
 	
-	var REFRACTION_WIDTH = 1024;
-	var REFRACTION_HEIGHT = 1024;
+	var REFRACTION_WIDTH = 512;
+	var REFRACTION_HEIGHT = 512;
 	
 	
 	setupReflectionFrameBuffer();
@@ -61,16 +61,16 @@ function WaterFrameBuffer(){
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, refractionTexture, 0);
 		
+
 		refractionDepthBuffer = gl.createTexture();
 		gl.bindTexture(gl.TEXTURE_2D, refractionDepthBuffer);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, REFRACTION_WIDTH, REFRACTION_HEIGHT, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, refractionDepthBuffer, 0);
-
+		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
 	}
-
 	
 }
