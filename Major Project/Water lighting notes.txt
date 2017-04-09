@@ -1,0 +1,27 @@
+Water lighting
+
+The water normals are all 0,1,0 because water is a flat
+quad. 
+
+Use fake, rotated proper-look-a-like normals, even
+though the water is flat
+
+Generate these fake normals from the normal map,
+to indicate the normal at different points on the
+surface
+
+Sample the R,G,B from the map, into the normal X,Y,Z
+
+The normal map is mostly blue colour, because
+blue represents the UP axis. Therefore swap the
+Y axis with blue (r,b,B). Red and green match to X, Z
+
+Can never have negative colour, therefore X,Y,Z 
+normal would never be negative. But dont want this
+So use a conversion to convert to between -1 and 1
+rather than between 0 and 1
+
+The normal mapped water in screenshots, is
+a representation of how I'm calculating the normals.
+Taking the point, and using it to calculate the normal
+

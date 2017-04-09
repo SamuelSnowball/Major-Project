@@ -21,6 +21,7 @@ var currentTexture;
 var myParticleTexture;
 var mapTexture;
 var WATER_DUDV_MAP_TEXTURE;
+var WATER_NORMAL_MAP_TEXTURE;
 var landerTexture;
 
 /*
@@ -66,8 +67,9 @@ function TextureLoader(){
 		// Lander texture
 		landerTexture = new Texture('resources/lander/lander.png', 10, 0);
 		
-		// Water dudv texture
+		// Water dudv + normal texture
 		WATER_DUDV_MAP_TEXTURE = new Texture('resources/water/waterDUDV.png', 10, 5);
+		WATER_NORMAL_MAP_TEXTURE = new Texture('resources/water/waterNormalMap.png', 10, 5);
 	}
 	
 }

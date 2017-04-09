@@ -105,6 +105,10 @@ function WaterSystem(){
 		'uniform vec3 cameraPosition;',
 		// Output the vector to the camera position
 		'varying vec3 toCameraVector;',
+		
+		// Lighting stuff
+		'uniform vec3 lightPosition;',
+		'varying vec3 fromLightToWaterVector;',
 
 		'void main(void){',
 			'vec4 worldPostion = model * vec4(waterPosition.x, 0.0, waterPosition.y, 1.0);',
@@ -114,6 +118,7 @@ function WaterSystem(){
 			'gl_Position = clipSpace;',
 			'textureCoords = vec2(   (waterPosition.x/2.0)  + 0.5,   (waterPosition.y/2.0)  + 0.5) * tilingValue;',
 			'toCameraVector = cameraPosition - worldPostion.xyz;',
+			'fromLightToWaterVector = worldPostion.xyz - lightPosition;',
 		'}'
 		
 	].join('\n'));
@@ -131,6 +136,7 @@ function WaterSystem(){
 		'uniform sampler2D reflectionTextureSampler;',
 		'uniform sampler2D refractionTextureSampler;',
 		'uniform sampler2D dudvMapSampler;',
+		'uniform sampler2D normalMapSampler;',
 		
 		// Water moving effect, offset for sampling dudv map
 		// Change the offset over time
@@ -139,6 +145,12 @@ function WaterSystem(){
 		
 		// In from vertex
 		'varying vec3 toCameraVector;',
+		
+		// Lighting info
+		'uniform vec3 lightColour;',
+		'varying vec3 fromLightToWaterVector;',
+		'float shineDamper = 20.0;', // Could load from shader, for user interaction, cba for now
+		'float reflectivity = 0.6;',
 
 		'void main(void){',
 			
@@ -149,12 +161,17 @@ function WaterSystem(){
 			'vec2 refractTextureCoords = vec2(ndc.x, ndc.y);',
 			'vec2 reflectTextureCoords = vec2(ndc.x, -ndc.y);', // negative because reflection
 			
+			// Samples dudv map once, then uses then as distortedTexCoords, which is used to sample dudv map again
+			// can also use to sample the normal map
+			'vec2 distortedTexCoords = texture2D(dudvMapSampler, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg*0.1;',
+			'distortedTexCoords = textureCoords + vec2(distortedTexCoords.x, distortedTexCoords.y+moveFactor);',
+			'vec2 totalDistortion = (texture2D(dudvMapSampler, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength;',
 			
-			'vec2 distortion1 = (texture2D(dudvMapSampler, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg * 2.0 - 1.0) * waveStrength;',
+			//'vec2 distortion1 = (texture2D(dudvMapSampler, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg * 2.0 - 1.0) * waveStrength;',
 			// Sample it again, and move it in completely different direction, realistic
-			'vec2 distortion2 = (texture2D(dudvMapSampler, vec2(-textureCoords.x + moveFactor, textureCoords.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;',
+			//'vec2 distortion2 = (texture2D(dudvMapSampler, vec2(-textureCoords.x + moveFactor, textureCoords.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;',
 			// Add together
-			'vec2 totalDistortion = distortion1 + distortion2;',
+			//'vec2 totalDistortion = distortion1 + distortion2;',
 			
 			'refractTextureCoords += totalDistortion;',
 			'refractTextureCoords = clamp(refractTextureCoords, 0.001, 0.999);',
@@ -176,9 +193,22 @@ function WaterSystem(){
 			// Higher the number = the more reflective
 			'refractiveFactor = pow(refractiveFactor, 1.0);',
 			
+			// Sample normal map, sampling at distortedTexCoords, as used for dudv
+			'vec4 normalMapCoords = texture2D(normalMapSampler, distortedTexCoords);',
+			// Extract the normal, from the normal map colour
+			'vec3 normal = vec3(normalMapCoords.r * 2.0 - 1.0, normalMapCoords.b, normalMapCoords.g * 2.0 - 1.0);',
+			// normalize to make unit vector
+			'normal = normalize(normal);',
+			
+			
+			'vec3 reflectedLight = reflect(normalize(fromLightToWaterVector), normal);',
+			'float specular = max(dot(reflectedLight, viewVector), 0.0);',
+			'specular = pow(specular, shineDamper);',
+			'vec3 specularHighlights = lightColour * specular * reflectivity;',
+			
 			'gl_FragColor = mix(reflectColour, refractColour, refractiveFactor);',
-			'gl_FragColor = mix(gl_FragColor, vec4(0.0, 0.3, 0.7, 1.0), 0.2);',
-			//'gl_FragColor = texture2D(dudvMapSampler, vec2(theTxtCoords));',
+			'gl_FragColor = mix(gl_FragColor, vec4(0.0, 0.3, 0.7, 1.0), 0.2) + vec4(specularHighlights, 0.0);',
+			
 			
 			/*
 			// Sample dudv map
@@ -230,7 +260,12 @@ function WaterSystem(){
 		var waterModelLocation = gl.getUniformLocation(waterProgram, 'model');
 		gl.uniformMatrix4fv(waterModelLocation, false, new Float32Array(fullTransforms));
 		
+		//lightPosition, lightColour
+		var lightPositionAttribLocation = gl.getUniformLocation(waterProgram, 'lightPosition');
+		gl.enableVertexAttribArray(lightPositionAttribLocation);
 		
+		var lightColourAttribLocation = gl.getUniformLocation(waterProgram, 'lightColour');
+		gl.enableVertexAttribArray(lightColourAttribLocation);
 		
 		var waterMoveFactorLocation = gl.getUniformLocation(waterProgram, 'moveFactor');
 	gl.useProgram(program);
@@ -342,6 +377,25 @@ function WaterSystem(){
 	
 		// Load camera position
 		gl.uniform3fv(waterCameraPositionLocation, cameraPosition);
+		
+		/*
+		Remember u dont have a light position.. just a direction?
+		Remove the position stuff
+		
+		But could add a sun, set that as position, effort
+		*/
+		// Load lighting info
+		
+		// Just position the light as if it matters
+		gl.uniform3fv(lightColourAttribLocation, lightColour);
+		gl.uniform3fv(lightPositionAttribLocation, [0, 200, 0]);
+		
+		//gl.uniform3fv(lightColourAttribLocation, lightColour);
+		//gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
+		//gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
+	
+	
+	
 	
 		moveFactor += Date.now() * 0.0000000000000009; // dont ask....
 		moveFactor %= 1; // loops when reaches 0
@@ -390,6 +444,11 @@ function WaterSystem(){
 		gl.activeTexture(gl.TEXTURE2); 
 		gl.uniform1i(gl.getUniformLocation(waterProgram, "dudvMapSampler"), 2);
 		gl.bindTexture(gl.TEXTURE_2D, WATER_DUDV_MAP_TEXTURE.getTextureAttribute.texture);			
+
+		// normal map sampled from unit 3
+		gl.activeTexture(gl.TEXTURE3);
+		gl.uniform1i(gl.getUniformLocation(waterProgram, "normalMapSampler"), 3);
+		gl.bindTexture(gl.TEXTURE_2D, WATER_NORMAL_MAP_TEXTURE.getTextureAttribute.texture);			
 
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
