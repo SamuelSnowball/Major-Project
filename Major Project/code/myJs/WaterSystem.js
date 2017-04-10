@@ -118,6 +118,9 @@ function WaterSystem(){
 			'gl_Position = clipSpace;',
 			'textureCoords = vec2(   (waterPosition.x/2.0)  + 0.5,   (waterPosition.y/2.0)  + 0.5) * tilingValue;',
 			'toCameraVector = cameraPosition - worldPostion.xyz;',
+			
+			// Light direction needs to change as well, fromLightToWaterVector is the correct vector, so it doesnt
+			//'vec3 hardcodedLightPosition = vec4(-1, 0.7, -1);',
 			'fromLightToWaterVector = worldPostion.xyz - lightPosition;',
 		'}'
 		
@@ -208,31 +211,6 @@ function WaterSystem(){
 			
 			'gl_FragColor = mix(reflectColour, refractColour, refractiveFactor);',
 			'gl_FragColor = mix(gl_FragColor, vec4(0.0, 0.3, 0.7, 1.0), 0.2) + vec4(specularHighlights, 0.0);',
-			
-			
-			/*
-			// Sample dudv map
-			'vec2 distortion1 = (texture2D(dudvMapSampler, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg * 2.0 - 1.0) * waveStrength;',
-			// Sample it again, and move it in completely different direction, realistic
-			'vec2 distortion2 = (texture2D(dudvMapSampler, vec2(-textureCoords.x + moveFactor, textureCoords.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;',
-			// Add together
-			'vec2 totalDistortion = distortion1 + distortion2;',
-			
-			'refractTextureCoords += totalDistortion;',
-			'refractTextureCoords = clamp(refractTextureCoords, 0.001, 0.999);',
-			
-			'reflectTextureCoords += totalDistortion;',
-			'reflectTextureCoords.x = clamp(reflectTextureCoords.x, 0.001, 0.999);', // ??
-			'reflectTextureCoords.y = clamp(reflectTextureCoords.y, -0.999, -0.001);', // flipped because reflection
-			
-			'vec4 reflectColour = texture2D(reflectionTexture, vec2(reflectTextureCoords.s, reflectTextureCoords.t));',
-			'vec4 refractColour = texture2D(refractionTexture, vec2(refractTextureCoords.s, refractTextureCoords.t));',
-			
-			// Mix factor 0.5, mix them equally
-			'gl_FragColor = mix(reflectColour, refractColour, 0.5);',
-			// Add blue tint to water colour, add 0.2 of it
-			'gl_FragColor = mix(gl_FragColor, vec4(0.0, 0.3, 0.7, 1.0), 0.2);',
-			*/
 		'}'
 	].join('\n'));
 	gl.compileShader(waterFragmentShader);
@@ -388,7 +366,17 @@ function WaterSystem(){
 		
 		// Just position the light as if it matters
 		gl.uniform3fv(lightColourAttribLocation, lightColour);
-		gl.uniform3fv(lightPositionAttribLocation, [0, 200, 0]);
+		
+		//work out light position as hardcoded clipspace coordiantes, always the same
+		//like the cube texture coordinates
+		
+		// or base off of player position?
+		// lightPosition.x = cameraPosition[0] + 512?
+		
+		var lightX = cameraPosition[0] + 512;
+		var lightY = cameraPosition[1] + 25;
+		var lightZ = cameraPosition[2] - 512;
+		gl.uniform3fv(lightPositionAttribLocation, [lightX, lightY, lightZ]);
 		
 		//gl.uniform3fv(lightColourAttribLocation, lightColour);
 		//gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
