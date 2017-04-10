@@ -11,7 +11,21 @@ Sprint 8 (10th - 17th April)
 
 	Other tasks:
 
+		Start unit testing
+			Test that buffers aren't null and contain values?
+			Test that vertices/indices are in correct proportion
+
+			/*
+			Terrain,
+				test VAOs
+				test there are correct x amount of values in vertices etc
+				check vertices/indices ratio
+				test setters/getters of terrain
+				test heightmap array of correct size
+			*/
+
 		Start the report!
+		Use the blackboard template
 		Outline main sections and what gonna discuss in each
 
 		The bigger the rock, the lower it should spawn

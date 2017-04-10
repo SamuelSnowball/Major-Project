@@ -173,7 +173,6 @@ function Terrain(){
 			for(var i=0; i<terrainRows; i++){
 				heightMap[i] = new Array(terrainColumns).fill(0);
 			}
-			
 		}
 		
 		/*
