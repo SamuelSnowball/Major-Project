@@ -5,15 +5,22 @@
 Things left to add to the project: (Estimation time in hours, 10 priority is highest)
 
 	Features left to implement:
-		
-		Water/Lava					(time: 45h) (priority: 6)
 
-		Small 'sandstorms'/ dust devils			(time: 10h) (priority: 5)
+		Meteor showers					(time: 08h) (priority: 6)
+			Some smoke particle effect on collision + rock stays
+			Rock rotates coming down, particles behind it
+			Could have a toggle for meteor shower
+
+		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 5)
+			Just simple particles
+
+		Add user interaction, 				(time: 10h) (priority: 5)
+			changing light position
+			water strength etc
+
+		Small 'sandstorms'/ dust devils			(time: 10h) (priority: 4)
 			Only on sand regions
 			If player in range
-
-		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 6)
-			Just simple particles
 		
 		Scene home screen 				(time: 04h) (priority: 3)
 
@@ -23,17 +30,11 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 
 		Add ambient audio, water audio near water
 
-		Meteor showers					(time: 08h) (priority: 3)
-			Some smoke particle effect on collision + rock stays
-			Rock rotates coming down, particles behind it
-			Could have a toggle for meteor shower
-
 		Popup GUI showing current info of feature 	(time: 10h) (priority: 2)
 			Transparent background, gas, rock
 
 		Day/night cycles				(time: 05h) (priority: 1)
 		Extra texture effects, bump mapping etc		(time: 40h) (priority: 1)
-		Set different colours for ambient, specular     (time: 02h) (priority: 1)
 
 	Documentation to write:
 		Overall design	
@@ -47,6 +48,7 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Terrain + rendering efficiency			(time: 30h) (priority: 10)
 		Rocks, instance rendered (objs)			(time: 20h) (priority: 8)
 		Skybox						(time: 10h) (priority: 7)
+		Water						(time: 45h) (priority: 6)
 		Texturing terrain 				(time: 10h) (priority: 5)
 		Fog						(time: 06h) (priority: 4)
 		
@@ -776,7 +778,7 @@ Sprint 5 (20th - 27th March) - Changed project direction to 'realism' rather tha
 	
 	
 
-Sprint 6: 27th march - 3rd april 
+Sprint 6 (27th march - 3rd april) 
 
 	Tackling tasks from product backlog (wont complete water this sprint):
 
@@ -822,3 +824,35 @@ Sprint 6: 27th march - 3rd april
 
 		The water is not finished, and wasn't even possible to complete within a sprint, however
 		the foundations are there.
+
+
+
+Sprint 7 (3rd - 10th April)
+
+	Tackling tasks from product backlog:
+		
+		Finish water
+		
+	Other tasks:
+
+		The bigger the rock, the lower it should spawn
+		Fix 2d rocks bug
+
+	Sprint retrospective:
+
+		Horrible amounts of time spent debugging and fixing webgl errors, 
+		30+ hours fixing bugs.
+		The other time was spent adding new content.
+
+		Still couldn't fix the '2d' rocks bug
+
+		Changed skybox
+		Finished water, added fesnel effect, specular lighting
+
+	Notes:
+		FPS is hit and miss, sometimes 20, sometimes 60.
+		I think its because of the rocks and their textures being changed betweeen
+		draw calls, it changes the buffer state which is an expensive operation.
+		I can also decrease the rock count in each quadrant to improve FPS.
+
+	

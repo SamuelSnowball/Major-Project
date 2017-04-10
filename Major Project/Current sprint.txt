@@ -1,36 +1,38 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Sprint 7 4th - 11th March
+Sprint 8 (10th - 17th April)
+	
 
 	Tackling tasks from product backlog:
 		
-		Finish water
-		
+		Add asteroids
+		Add gas from craters
+
 	Other tasks:
 
+		Start the report!
+		Outline main sections and what gonna discuss in each
+
 		The bigger the rock, the lower it should spawn
-		Fix 2d rocks
+		Fix 2d rocks bug
+		Perhaps lower rock numbers for efficiency
 
-		Water + reflect/ract renderng if toWaterVector < 100 etc
+	Sprint plan:
+		
+		Asteroids will:
+			Spawn in range of the user so they can see it
+			Rotate and have particle effects behind them
+			On collision will have more particle effects
+			Rock will stay on floor afterwards
 
+		Particles will 'eminate?' from the rocks centre position
+		Particles will just be a straight line animating
 
-	Commented out collision tester in main render scene
-	Have commented out distortion, adding on 0 atm
-
-	Add more water patches, define vertices + connect them
-	can render as 1 call
-
-	Particle system commented out
-
-	Asteroids!
+		Gas:
+			Need some sort of crater, perhaps reuse old crater code
+			Then just have simple particle effects
 
 
 	Sprint retrospective:
-
-		
-	Possible problems:
-		Position of camera when rendering reflection
-		If remove tiling, then horrible distortion on sides of screen
-			In water tutorial 5, he mentions distortion
 
