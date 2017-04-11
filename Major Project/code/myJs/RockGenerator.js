@@ -12,7 +12,7 @@ Rock objs used and edited from (Public domain):
 function RockGenerator(){
 
 	// OBJ text file
-	var rock21 = utility.httpGet("resources/rocks/rockObjs/obj/21.txt");
+	var rockObjTextFile = utility.httpGet("resources/rocks/rockObjs/obj/21.txt");
 	
 	// ### Start of variables needed for matrices and translations ### //
 	
@@ -75,7 +75,7 @@ function RockGenerator(){
 	function setupInstancedRockBuffers(x, z){
 		
 		// Reset the mesh, need to attach new attributes
-		mesh = new OBJ.Mesh(rock21);
+		mesh = new OBJ.Mesh(rockObjTextFile);
 		OBJ.initMeshBuffers(gl, mesh);
 		// Assign random number of rocks to the quadrant
 		mesh.numInstances = Math.floor(Math.random() * 512); 

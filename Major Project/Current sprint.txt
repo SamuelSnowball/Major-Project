@@ -17,6 +17,13 @@ Sprint 8 (10th - 17th April)
 		Some sort of design
 			Class diagram
 				Add constructor as well!, methods need parameters?
+				Add arrays []
+				Add parameters
+			Organize main boxes properly
+
+		Helen question, what about javascript class diagrma
+			everything is a variable, but having all 'vars' in class diagram is a bit weird
+			instead have, vec3, even though it is just a variable?
 
 		Start unit testing
 			Test that buffers aren't null and contain values?

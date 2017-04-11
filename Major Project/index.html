@@ -51,6 +51,7 @@
 <!-- WebGL setup files including shaders and program -->
 <script src="code/myJs/GLSetup.js"></script>
 <script src="code/myJs/TextureLoader.js"></script>
+<script src="code/myJs/Texture.js"></script>
 <script src="code/myJs/VertexShader.js"></script>
 <script src="code/myJs/FragmentShader.js"></script>
 <script src="code/myJs/Program.js"></script>
@@ -94,7 +95,6 @@ var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 
 var sound = new Sound();
-var lander = new Lander();
 var gui = new GUI();
 var skybox = new Skybox();
 
@@ -143,7 +143,6 @@ function render(){
 	
 	particleSystem.render(); 
 	collisionTester.testAllCollision();
-	lander.render();
 	
 	waterSystem.render();
 	skybox.render(viewMatrix, projectionMatrix);

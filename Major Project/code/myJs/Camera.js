@@ -39,11 +39,7 @@ function Camera(){
 		0,
 		0,
 	];
-	
-//########//########//########//########
-	
-	
-	
+
 	var moveForward = false, 
 		moveBack = false,
 		moveLeft = false,

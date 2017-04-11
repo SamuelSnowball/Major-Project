@@ -17,10 +17,6 @@ function Terrain(){
 	var terrainRows = numberQuadrantRows * quadrantRowSize;
 	var terrainColumns = numberQuadrantColumns * quadrantColumnSize;
 	
-	// Needed in createQuadrantVertices, what position to start generating quadrant vertices from
-	var savedX = 0;
-	var savedZ = 0;
-	
 	// Contains all quadrant VAO objects, each VAO contains a quadrants: vertices, normals, uvs and indices
 	var terrainVAOs = [];
 	
