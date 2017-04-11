@@ -258,8 +258,6 @@ function WaterSystem(){
 			gl.viewport(0, 0, 512, 512);
 				terrain.render(); 
 				rockGenerator.renderInstancedRocks();
-				//particleSystem.render(); 
-				lander.render();
 				skybox.render(viewMatrix, projectionMatrix);
 		// Unbinds 
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -305,8 +303,6 @@ function WaterSystem(){
 			gl.viewport(0, 0, 512, 512);
 				terrain.render(); 
 				rockGenerator.renderInstancedRocks();
-				//particleSystem.render(); 
-				lander.render();
 				skybox.render(viewMatrix, projectionMatrix);
 				
 			// Reset camera
@@ -390,8 +386,8 @@ function WaterSystem(){
 		gl.useProgram(waterProgram);
 		gl.enableVertexAttribArray(waterPositionAttribLocation);
 
-		var xScale = 256;
-		var zScale = 256;
+		var xScale = 1024;
+		var zScale = 1024;
 		
 		scale = m4.scaling(xScale, 1, zScale);
 		rotateX = m4.xRotation(0);

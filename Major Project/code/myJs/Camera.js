@@ -89,6 +89,13 @@ function Camera(){
 		},		
 		get cameraTarget(){
 			return cameraTarget;
+		},
+		
+		get movingForward(){
+			return moveForward;
+		},
+		get movingBackward(){
+			return moveBack;
 		}
 	}
 	
@@ -219,20 +226,24 @@ function Camera(){
 			cameraPosition[2] -= cameraTarget[2] * cameraSpeed;
 		}
 		else if(moveLeft){
+		/*
 			var cross = m4.cross(cameraTarget, [0, 1, 0]);
 			var normalized = m4.normalize(cross);
 			
 			cameraPosition[0] -= normalized[0] * cameraSpeed;
 			cameraPosition[1] -= normalized[1] * cameraSpeed;
 			cameraPosition[2] -= normalized[2] * cameraSpeed;
+			*/
 		}
 		else if(moveRight){
+		/*
 			var cross = m4.cross(cameraTarget, [0, 1, 0]);
 			var normalized = m4.normalize(cross);
 			
 			cameraPosition[0] += normalized[0] * cameraSpeed;
 			cameraPosition[1] += normalized[1] * cameraSpeed;
 			cameraPosition[2] += normalized[2] * cameraSpeed;
+			*/
 		}
 		else if(moveUp){
 			cameraPosition[1] += cameraSpeed;

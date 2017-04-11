@@ -9,10 +9,16 @@ Sprint 8 (10th - 17th April)
 		Add asteroids
 		Add gas from craters
 
-		Possible update to water (moving the vertices!):
-			https://threejs.org/examples/?q=particle#canvas_particles_waves
+	Helen quesitons:
+		What think about class diagram, using ints over vars for readability etc
 
+		
 	Other tasks:
+
+		Collision boundary testing,
+			Why not just use if statements and camera.set.x -= 1;
+			Currently breakas with strafing
+			Could disable left/right
 
 		Some sort of design
 			Class diagram

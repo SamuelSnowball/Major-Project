@@ -25,7 +25,7 @@ function CollisionTester(){
 	*/
 	this.testAllCollision = function(){
 		setCameraHeight();
-		//testCameraMapBoundaries();
+		testCameraMapBoundaries();
 	}
 	
 	/*
@@ -113,11 +113,11 @@ function CollisionTester(){
 		Then player has collided moving backward, so move the player forwards
 	*/
 	function pushPlayer(direction){
-		camera.set.x = camera.get.x +  direction * (camera.get.x - camera.get.targetX) * 5;
-		camera.set.z = camera.get.z +  direction * (camera.get.z - camera.get.targetZ) * 5;
-		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(camera.get.z); 
-		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(camera.get.x);
-		camera.set.y = camera.get.y + terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.4;
+		camera.set.x = camera.get.x +  direction * ( - camera.get.targetX) * 5;
+		camera.set.z = camera.get.z +  direction * ( - camera.get.targetZ) * 5;
+		//terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(camera.get.z); 
+		//terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(camera.get.x);
+		//camera.set.y = camera.get.y + terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.4;
 	}
 	
 	/*
@@ -130,10 +130,10 @@ function CollisionTester(){
 	function movePlayerForwardOrBackward(rockCollision, cornerX, cornerZ){
 	
 		// If they collided whilst moving forward, push them back etc
-		if(player.get.movingForward === true){	
+		if(camera.get.movingForward === true){	
 			pushPlayer(1);
 		}
-		else if(player.get.movingBackward === true){
+		else if(camera.get.movingBackward === true){
 			pushPlayer(-1);
 		}
 		else{
