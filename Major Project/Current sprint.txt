@@ -9,7 +9,14 @@ Sprint 8 (10th - 17th April)
 		Add asteroids
 		Add gas from craters
 
+		Possible update to water (moving the vertices!):
+			https://threejs.org/examples/?q=particle#canvas_particles_waves
+
 	Other tasks:
+
+		Some sort of design
+			Class diagram
+				Add constructor as well!, methods need parameters?
 
 		Start unit testing
 			Test that buffers aren't null and contain values?
@@ -34,6 +41,19 @@ Sprint 8 (10th - 17th April)
 
 	Sprint plan:
 		
+		Gas:
+			Need some sort of crater, perhaps reuse old crater code
+			Then just have simple particle effects
+
+			Can use one translation matrix for all?
+			Therefore don't have to remake matrices, 
+			just update with a singular translation matrix
+
+			Update of particles:
+			https://processing.org/examples/smokeparticlesystem.html
+
+			Will use gas particle effects for the meteor particle trails
+
 		Asteroids will:
 			Spawn in range of the user so they can see it
 			Rotate and have particle effects behind them
@@ -43,10 +63,12 @@ Sprint 8 (10th - 17th April)
 		Particles will 'eminate?' from the rocks centre position
 		Particles will just be a straight line animating
 
-		Gas:
-			Need some sort of crater, perhaps reuse old crater code
-			Then just have simple particle effects
+		Asteroid generator class
+			randomly wait until generate a new one
+			Need a low poly asteroid OBJ
 
 
 	Sprint retrospective:
+
+		Fixed rock spawn height
 

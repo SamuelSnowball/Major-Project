@@ -65,7 +65,7 @@ function Terrain(){
 		get getQuadrantRowSize(){
 			return quadrantRowSize;
 		},
-		get renderIndices(){
+		get getRenderIndices(){
 			return renderIndices; // rocks needs these
 		}
 	};
@@ -284,7 +284,6 @@ function Terrain(){
 		Now create the terrain vertices having x, y, z values 
 		Where y is the value from the heightMap we made.
 		*/
-		var savedX = 0, savedZ = 0;
 		function createQuadrantVertices(vaoXPosition, vaoZPosition){
 		
 		

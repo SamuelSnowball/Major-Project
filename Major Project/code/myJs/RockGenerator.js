@@ -184,6 +184,10 @@ function RockGenerator(){
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = savedZPositions[i]; // Reversed
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = savedXPositions[i]; // Reversed
 			var rockPosition = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
+			
+			// The bigger the rock, the lower it should spawn in the ground
+			// Otherwise big rocks will stick off edges, looks weird
+			rockPosition -= savedXScales[i]/40;
 
 			data.push(
 				testTransform[1], 
@@ -269,9 +273,9 @@ function RockGenerator(){
 		gl.enableVertexAttribArray(instancingLocation1);
 		gl.enableVertexAttribArray(instancingLocation2);
 		gl.enableVertexAttribArray(instancingLocation3);
-
+	
 		// The indices to render, see terrain.render for comments
-		var renderIndices = terrain.get.renderIndices;
+		var renderIndices = terrain.get.getRenderIndices;
 
 		// 9 Draw calls, 1 per visible quadrant
 		for(var i=0; i<renderIndices.length; i++){
@@ -343,7 +347,6 @@ function RockGenerator(){
 		gl.disableVertexAttribArray(instancingLocation1);
 		gl.disableVertexAttribArray(instancingLocation2);
 		gl.disableVertexAttribArray(instancingLocation3);
-		
 	}
 	
 }

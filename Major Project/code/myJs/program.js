@@ -6,7 +6,12 @@ This file currently handles:
 	
 	Global definition of matrices and camera matrix info
 	
-	The updateAttributesAndUniforms to pull values from global matrices, and update the shader values
+	The updateAttributesAndUniforms function to pull values from global matrices and values,
+	to update the shader values
+*/
+
+/*
+Program creation, attaching shaders, linking, printing errors
 */
 var program = gl.createProgram();
 gl.attachShader(program, vertexShader);
@@ -15,7 +20,9 @@ gl.linkProgram(program);
 console.log("Link status: " + gl.getProgramInfoLog(program));
 gl.useProgram(program); 
 
-// Global variables to change and load into shaders
+/*
+Global variables to change and load into shaders
+*/
 var clipPlane = [0, 0, 0, 0];
 var skyColour = [0.8, 0.5, 0.5, 0.7];
 var lightColour = [1, 1, 1];
@@ -23,9 +30,61 @@ var useFog = true;
 var useInstancing = false;
 
 /*
-Get location of variables in shaders
-Enable them so can use them
+Camera matrices
 */
+var UP_VECTOR = [0, 1, 0];
+// Matrix for camera, move the camera in the world, then inverse and move world around camera
+var cameraMatrix = m4.lookAt( [5,5,5], [0.5, 0.5, 0.5], UP_VECTOR );
+// View matrix for camera, inverse everything, so that the camera is the origin
+var viewMatrix = m4.inverse(cameraMatrix);
+
+/*
+Translation matrices and fullTransforms
+*/
+var scale = m4.scaling(0, 0, 0);
+var rotateX = m4.xRotation(0);
+var rotateY = m4.yRotation(0);
+var rotateZ = m4.zRotation(0);
+var position = m4.translation(0, 0, 0);
+
+var fullTransforms = m4.identity();
+
+/*
+Projection variables and the matrix
+*/
+var fovInRadians = Math.PI * 0.3;	
+var aspectRatio = window.innerWidth / window.innerHeight;
+var zNear = 0.1;
+var zFar = 512;
+
+//Projection matrix turns world coordinates to clipspace
+var projectionMatrix = 	m4.perspective(
+	fovInRadians,
+	aspectRatio,
+	zNear,
+	zFar
+);
+
+/*
+Get location of variables in shaders, so we can send data to shaders
+Enable them if needed
+*/
+
+// Model, passing in fullTransforms
+var modelLocation = gl.getUniformLocation(program, 'model');
+gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
+
+// View matrix
+var viewMatrixLocation = gl.getUniformLocation(program, 'viewMatrix');
+gl.uniformMatrix4fv(viewMatrixLocation, false, new Float32Array(viewMatrix));
+
+// Inverse view matrix
+var inverseViewMatrixLocation = gl.getUniformLocation(program, 'inverseViewMatrix');
+gl.uniformMatrix4fv(inverseViewMatrixLocation, false, new Float32Array(m4.inverse(viewMatrix)));
+
+// Projection
+var projectionLocation = gl.getUniformLocation(program, 'projection');
+gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
 
 // Vertices
 var positionAttribLocation = gl.getAttribLocation(program, 'position');
@@ -58,7 +117,7 @@ gl.enableVertexAttribArray(reflectivityAttribLocation);
 var reverseLightDirectionLocation = gl.getUniformLocation(program, 'reverseLightDirection');
 gl.enableVertexAttribArray(reverseLightDirectionLocation);
 
-// Specular
+// Lighting direction
 var lightDirectionLocation = gl.getUniformLocation(program, 'lightDirection');
 gl.enableVertexAttribArray(lightDirectionLocation);
 
@@ -79,76 +138,12 @@ var instancingLocation1 = gl.getAttribLocation(program, "instanceMatrixRow1");
 var instancingLocation2 = gl.getAttribLocation(program, "instanceMatrixRow2");
 var instancingLocation3 = gl.getAttribLocation(program, "instanceMatrixRow3");
 
+// Clipping planes for water rendering
 var clipPlaneLocation = gl.getUniformLocation(program, 'clipPlane');
 gl.enableVertexAttribArray(clipPlaneLocation);	
 
 /*
-#################
-	Matrices
-#################
-*/
-var scale = m4.scaling(0, 0, 0);
-var rotateX = m4.xRotation(0);
-var rotateY = m4.yRotation(0);
-var rotateZ = m4.zRotation(0);
-var position = m4.translation(0, 0, 0);
-
-var fullTransforms = m4.multiply(position, rotateZ);
-	fullTransforms = m4.multiply(fullTransforms, rotateY);
-	fullTransforms = m4.multiply(fullTransforms, rotateX);
-	fullTransforms = m4.multiply(fullTransforms, scale);
-
-var modelLocation = gl.getUniformLocation(program, 'model');
-gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
-
-/*
-### Camera ###
-*/
-var yaw = -90;
-var pitch = -90;
-var lastX = window.innerWidth/2;
-var lastY = window.innerHeight/2;
-var sensitivity = 0.005;
-
-	var cameraSpeed = 0.003;
-
-	//Matrix for camera, move the camera in the world
-	var cameraMatrix = m4.translate(m4.identity(), 250, 5, 250);
-	
-	//Cameras position from matrix
-	var cameraPosition = [
-		cameraMatrix[12],
-		cameraMatrix[13],
-		cameraMatrix[14]
-	];
-
-	//Actual usage in index file, but definition needed here
-	var cameraTarget = [
-		0,
-		0,
-		0,
-	];
-
-	var UP_VECTOR = [0, 1, 0];
-
-	//Compute camera matrix
-	var cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, UP_VECTOR);
-
-	//View matrix for camera, inverse everything, so that the camera is the origin
-	var viewMatrix = m4.inverse(cameraMatrix);
-
-	var viewMatrixLocation = gl.getUniformLocation(program, 'viewMatrix');
-	gl.uniformMatrix4fv(viewMatrixLocation, false, new Float32Array(viewMatrix));
-
-	//Inverse view matrix
-	var inverseViewMatrixLocation = gl.getUniformLocation(program, 'inverseViewMatrix');
-	gl.uniformMatrix4fv(inverseViewMatrixLocation, false, new Float32Array(m4.inverse(viewMatrix)));
-/*
-### End camera ###
-*/
-
-/*
-Loads global variables and matrices into shader every frame
+Loads global variables and matrices into shaders every frame
 */
 function updateAttributesAndUniforms(){
 
@@ -182,25 +177,7 @@ function updateAttributesAndUniforms(){
 	gl.uniform4fv(clipPlaneLocation, clipPlane);
 }
 
-/*
-#################
-	Projection
-#################
-*/
-var fovInRadians = Math.PI * 0.3;	
-var aspectRatio = window.innerWidth / window.innerHeight;
-var zNear = 0.1;
-var zFar = 512;
 
-//Projection matrix turns world coordinates to clipspace
-var projectionMatrix = 	m4.perspective(
-	fovInRadians,
-	aspectRatio,
-	zNear,
-	zFar
-);
 
-var projectionLocation = gl.getUniformLocation(program, 'projection');
-var gl = this.gl;
-gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
+
 

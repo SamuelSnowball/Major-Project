@@ -11,8 +11,8 @@ function CollisionTester(){
 	var quadrantRowSize = terrain.get.getQuadrantRowSize;
 				
 	// Used to find the nearest terrain vertex height to the player
-	var tempPlayerX = 0;
-	var tempPlayerZ = 0;
+	var tempCameraX = 0;
+	var tempCameraZ = 0;
 	
 	// The positions of the map boundary corners, need to stop player going outside of them
 	var mapTopLeftCornerVector = [quadrantRowSize, 0, quadrantRowSize];
@@ -24,26 +24,26 @@ function CollisionTester(){
 	Called from render(), tests all collision
 	*/
 	this.testAllCollision = function(){
-		setPlayerHeight();
-		//testPlayerMapBoundaries();
+		setCameraHeight();
+		//testCameraMapBoundaries();
 	}
 	
 	/*
-	Moves the player when traversing over terrain.
+	Moves the camera when traversing over terrain.
 
-	Uses the players current X and Z position to find what terrain vertex they're nearest to.
-	The players height then gets assigned to the nearest terrain vertex.
+	Uses the camera current X and Z position to find what terrain vertex they're nearest to.
+	The camera height then gets assigned to the nearest terrain vertex.
 	*/
-	function setPlayerHeight(){
+	function setCameraHeight(){
 		if(useFog === false){
 			// Player is viewing minimap, don't set their height
 			return;
 		}
 		
-		// Retrieve the players current x and z position, 
+		// Retrieve the camera current x and z position, 
 		// Use these values to find the height we should set for them
-		tempPlayerX = cameraPosition[0];
-		tempPlayerZ = cameraPosition[2];
+		tempCameraX = camera.get.x;
+		tempCameraZ = camera.get.z;
 		
 		floorTemporaryPlayerCoordinates();
 		var nearestHeight = findNearestTerrainVertex();
@@ -51,8 +51,8 @@ function CollisionTester(){
 		/*
 		If player is beneath the floor, push them back up
 		*/
-		if(cameraPosition[1] < nearestHeight){
-			cameraPosition[1] = nearestHeight;
+		if(camera.get.y < nearestHeight){
+			camera.set.y = nearestHeight;
 		}
 		
 		
@@ -64,16 +64,16 @@ function CollisionTester(){
 	as array indexes must be a integer.
 	*/
 	function floorTemporaryPlayerCoordinates(){
-		if(tempPlayerX / terrain.scale < 0.5){
-			tempPlayerX = Math.floor(tempPlayerX);
+		if(tempCameraX / terrain.scale < 0.5){
+			tempCameraX = Math.floor(tempCameraX);
 		}else{
-			tempPlayerX = Math.ceil(tempPlayerX);
+			tempCameraX = Math.ceil(tempCameraX);
 		}
 		
-		if(tempPlayerZ / terrain.scale < 0.5){
-			tempPlayerZ = Math.floor(tempPlayerZ);
+		if(tempCameraZ / terrain.scale < 0.5){
+			tempCameraZ = Math.floor(tempCameraZ);
 		}else{
-			tempPlayerZ = Math.ceil(tempPlayerZ);
+			tempCameraZ = Math.ceil(tempCameraZ);
 		}	
 	}
 
@@ -90,9 +90,9 @@ function CollisionTester(){
 	function findNearestTerrainVertex(){
 		var nearestHeight;
 		
-		if(tempPlayerX > 0){ 
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = tempPlayerZ; 
-			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = tempPlayerX;
+		if(tempCameraX > 0){ 
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = tempCameraZ; 
+			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = tempCameraX;
 			nearestHeight = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
 		}
 		else{
@@ -113,11 +113,11 @@ function CollisionTester(){
 		Then player has collided moving backward, so move the player forwards
 	*/
 	function pushPlayer(direction){
-		cameraPosition[0] += direction * (cameraPosition[0] - cameraTarget[0]) * 5;
-		cameraPosition[2] += direction * (cameraPosition[2] - cameraTarget[2]) * 5;
-		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(cameraPosition[2]); 
-		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(cameraPosition[0]);
-		cameraPosition[1] += terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.4;
+		camera.set.x = camera.get.x +  direction * (camera.get.x - camera.get.targetX) * 5;
+		camera.set.z = camera.get.z +  direction * (camera.get.z - camera.get.targetZ) * 5;
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(camera.get.z); 
+		terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(camera.get.x);
+		camera.set.y = camera.get.y + terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.4;
 	}
 	
 	/*
@@ -145,25 +145,25 @@ function CollisionTester(){
 	/*
 	Tests if player is going out of map boundaries, moves them back if so
 	*/
-	function testPlayerMapBoundaries(){
+	function testCameraMapBoundaries(){
 
-		// Test if player at corners, move them back if so
-		testPlayerCornerCollision(mapBottomLeftCornerVector);
-		testPlayerCornerCollision(mapBottomRightCornerVector);
-		testPlayerCornerCollision(mapTopLeftCornerVector);
-		testPlayerCornerCollision(mapTopRightCornerVector);
+		// Test if camera at corners, move them back if so
+		testCameraCornerCollision(mapBottomLeftCornerVector);
+		testCameraCornerCollision(mapBottomRightCornerVector);
+		testCameraCornerCollision(mapTopLeftCornerVector);
+		testCameraCornerCollision(mapTopRightCornerVector);
 		
 		// Test if nearly at collision boundary and show gui if they are
-		if(player.get.x < terrainRows/numberQuadrantRows + 10 && player.get.z < terrainRows - 10){
+		if(camera.get.x < terrainRows/numberQuadrantRows + 10 && camera.get.z < terrainRows - 10){
 			gui.showMapCollision();
 		}
-		else if(player.get.x > terrainRows-quadrantRowSize - 10 && player.get.z < terrainRows - 10){
+		else if(camera.get.x > terrainRows-quadrantRowSize - 10 && camera.get.z < terrainRows - 10){
 			gui.showMapCollision();
 		}
-		else if(player.get.z < terrainRows/numberQuadrantRows + 10 && player.get.x < terrainRows - 10){
+		else if(camera.get.z < terrainRows/numberQuadrantRows + 10 && camera.get.x < terrainRows - 10){
 			gui.showMapCollision();
 		}
-		else if(player.get.z > terrainRows-quadrantRowSize - 10 && player.get.x < terrainRows - 10){
+		else if(camera.get.z > terrainRows-quadrantRowSize - 10 && camera.get.x < terrainRows - 10){
 			gui.showMapCollision();
 		}
 		else{
@@ -173,16 +173,16 @@ function CollisionTester(){
 		/*
 		Stop them going out of section
 		*/
-		if(player.get.x < terrainRows/numberQuadrantRows && player.get.z < terrainRows){
+		if(camera.get.x < terrainRows/numberQuadrantRows && camera.get.z < terrainRows){
 			movePlayerForwardOrBackward(false);
 		}
-		else if(player.get.x > terrainRows-quadrantRowSize && player.get.z < terrainRows){
+		else if(camera.get.x > terrainRows-quadrantRowSize && camera.get.z < terrainRows){
 			movePlayerForwardOrBackward(false);
 		}
-		else if(player.get.z < terrainRows/numberQuadrantRows && player.get.x < terrainRows){
+		else if(camera.get.z < terrainRows/numberQuadrantRows && camera.get.x < terrainRows){
 			movePlayerForwardOrBackward(false);
 		}
-		else if(player.get.z > terrainRows-quadrantRowSize && player.get.x < terrainRows){
+		else if(camera.get.z > terrainRows-quadrantRowSize && camera.get.x < terrainRows){
 			movePlayerForwardOrBackward(false);
 		}
 		else{
@@ -192,12 +192,12 @@ function CollisionTester(){
 	}
 	
 	/*
-	Test if player is near a corner, and move them back if so
+	Test if camera is near a corner, and move them back if so
 	
-	Parameter cornerVector, the corner vector to test player vector against
+	Parameter cornerVector, the corner vector to test camera vector against
 	*/
-	function testPlayerCornerCollision(cornerVector){
-		var playerVector = [player.get.x, player.get.y, player.get.z];
+	function testCameraCornerCollision(cornerVector){
+		var playerVector = [camera.get.x, camera.get.y, camera.get.z];
 		
 		var distanceToCorner = Math.sqrt( 
 			Math.pow( (playerVector[0] - cornerVector[0]), 2) +
@@ -206,24 +206,22 @@ function CollisionTester(){
 		);
 
 		if(distanceToCorner < 10){	
-			// Move the player different direction based on the corner they hit
+			// Move the camera different direction based on the corner they hit
 			if(cornerVector[0] === 128 && cornerVector[2] === 128){
-				player.set.x = player.get.x + 5;
-				player.set.z = player.get.z + 5;
+				camera.set.x = camera.get.x + 5;
+				camera.set.z = camera.get.z + 5;
 			}
 			else if(cornerVector[0] === 896 && cornerVector[2] === 128){
-				console.log("corner1");
-				player.set.x = player.get.x - 5;
-				player.set.z = player.get.z + 5;
+				camera.set.x = camera.get.x - 5;
+				camera.set.z = camera.get.z + 5;
 			}
 			else if(cornerVector[0] === 128 && cornerVector[2] === 896){
-				console.log("corner2");
-				player.set.x = player.get.x + 5;
-				player.set.z = player.get.z - 5;
+				camera.set.x = camera.get.x + 5;
+				camera.set.z = camera.get.z - 5;
 			}
 			else if(cornerVector[0] === 896 && cornerVector[2] === 896){
-				player.set.x = player.get.x - 5;
-				player.set.z = player.get.z - 5;
+				camera.set.x = camera.get.x - 5;
+				camera.set.z = camera.get.z - 5;
 			}
 		}		
 	}

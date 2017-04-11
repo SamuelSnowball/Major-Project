@@ -291,9 +291,9 @@ function WaterSystem(){
 
 			// Calculate distance we want to move camera down by
 			// And invert pitch
-			var distance = 2 * (cameraPosition[1] + waterHeight); // + ing, because water is negative, so --5 and breaks
-			cameraPosition[1] -= distance;
-			cameraTarget[1] = -cameraTarget[1];
+			var distance = 2 * (camera.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
+			camera.set.y = camera.get.y - distance;
+			camera.set.targetY = -camera.get.targetY;
 			currentTexture = mapTexture;
 			camera.updateCamera();
 			
@@ -310,9 +310,9 @@ function WaterSystem(){
 				skybox.render(viewMatrix, projectionMatrix);
 				
 			// Reset camera
-			cameraTarget[1] = -cameraTarget[1];
+			camera.set.targetY = -camera.get.targetY;
 			camera.updateCamera();			
-			cameraPosition[1] += distance;
+			camera.set.y = camera.get.y + distance;
 			camera.updateCamera();
 			
 		// Unbinds 
@@ -354,36 +354,20 @@ function WaterSystem(){
 	function updateWaterAttributesAndUniforms(){
 	
 		// Load camera position
-		gl.uniform3fv(waterCameraPositionLocation, cameraPosition);
+		gl.uniform3fv(waterCameraPositionLocation, camera.get.position);
 		
-		/*
-		Remember u dont have a light position.. just a direction?
-		Remove the position stuff
-		
-		But could add a sun, set that as position, effort
-		*/
 		// Load lighting info
-		
-		// Just position the light as if it matters
 		gl.uniform3fv(lightColourAttribLocation, lightColour);
 		
-		//work out light position as hardcoded clipspace coordiantes, always the same
-		//like the cube texture coordinates
-		
-		// or base off of player position?
-		// lightPosition.x = cameraPosition[0] + 512?
-		
-		var lightX = cameraPosition[0] + 512;
-		var lightY = cameraPosition[1] + 25;
-		var lightZ = cameraPosition[2] - 512;
+		//work out light position based off of player position
+		var lightX = camera.get.x + 512;
+		var lightY = camera.get.y + 25;
+		var lightZ = camera.get.z - 512;
 		gl.uniform3fv(lightPositionAttribLocation, [lightX, lightY, lightZ]);
 		
 		//gl.uniform3fv(lightColourAttribLocation, lightColour);
 		//gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
 		//gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
-	
-	
-	
 	
 		moveFactor += Date.now() * 0.0000000000000009; // dont ask....
 		moveFactor %= 1; // loops when reaches 0
@@ -417,7 +401,6 @@ function WaterSystem(){
 		
 		updateWaterAttributesAndUniforms();
 		
-		
 		// Reflection texture sampled from unit 0
 		gl.activeTexture(gl.TEXTURE0);
 		gl.uniform1i(gl.getUniformLocation(waterProgram, "reflectionTextureSampler"), 0);
@@ -442,9 +425,7 @@ function WaterSystem(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
 		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 6);
-		
-		
-		
+
 		gl.useProgram(program);
 	}
 	

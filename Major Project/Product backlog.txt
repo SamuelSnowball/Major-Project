@@ -6,13 +6,15 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 
 	Features left to implement:
 
+		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 5)
+			Just simple particles
+			Doing this before meteors, because the gas particle effects 
+			will be needed for the meteros.
+
 		Meteor showers					(time: 08h) (priority: 6)
 			Some smoke particle effect on collision + rock stays
 			Rock rotates coming down, particles behind it
 			Could have a toggle for meteor shower
-
-		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 5)
-			Just simple particles
 
 		Add user interaction, 				(time: 10h) (priority: 5)
 			changing light position

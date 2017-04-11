@@ -81,12 +81,13 @@ var perlin = new ImprovedNoise();
 
 var utility = new Utility();
 var controls = new PointerLockControls();
-var camera = new Camera();
+
 
 var textureLoader = new TextureLoader();
 var loadingScreen = new LoadingScreen();
 
 var terrain = new Terrain();
+var camera = new Camera();
 var rockGenerator = new RockGenerator();
 
 var collisionTester = new CollisionTester();
@@ -111,14 +112,14 @@ function render(){
     then = now;
 	var fps = 1 / elapsedTime;
     fpsElement.innerText = fps.toFixed(0); 
-		
+
 	camera.assignCameraQuadrant();
 
 	// Render the entire scene to each the reflection and refraction textures
 	// (2x FULL scene render calls)
 	waterSystem.renderToReflectionBuffer();
 	waterSystem.renderToRefractionBuffer();
-	
+
 	/*
 	Now render the scene as usual
 	We've already switched back to the default frame buffer
@@ -129,9 +130,7 @@ function render(){
 	clipPlane = [0, 0, 0, 0];
 	
 	camera.updateCamera();
-	
-	//console.log("X: " + cameraPosition[0], ", Z: " + cameraPosition[2]);
-	
+
 	/*
 	Don't change render order
 	terrain render generates the renderIndices, 
@@ -141,13 +140,15 @@ function render(){
 	*/
 	terrain.render(); 
 	rockGenerator.renderInstancedRocks();
-	//particleSystem.render(); 
+	
+	particleSystem.render(); 
 	collisionTester.testAllCollision();
 	lander.render();
 	
 	waterSystem.render();
 	skybox.render(viewMatrix, projectionMatrix);
 	
+
 
 	
 	requestAnimationFrame(render);

@@ -61,7 +61,7 @@ gl.shaderSource(vertexShader, [
 		'vec4 positionRelativeToCamera = viewMatrix * worldPostion;',
 		
 		// Particles
-		'gl_PointSize = 5.0;',
+		'gl_PointSize = 25.0;',
 		
 		// Set the final output vertex position
 		'gl_Position = projection * positionRelativeToCamera;',
