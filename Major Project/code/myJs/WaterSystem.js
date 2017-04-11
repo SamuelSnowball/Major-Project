@@ -34,8 +34,15 @@ function WaterSystem(){
 	var REFRACTION_WIDTH = 512;
 	var REFRACTION_HEIGHT = 512;
 	
+	var waterVertexPositionBuffer;
+	var waterVertices = [];
+	var waterUVBuffer;
+	var moveFactor = 0;
+	
+	// Constructor
 	setupReflectionFrameBuffer();
 	setupRefractionFrameBuffer();
+	setup();
 
 	function setupReflectionFrameBuffer(){
 		reflectionFrameBuffer = gl.createFramebuffer();
@@ -84,9 +91,6 @@ function WaterSystem(){
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
 	}
 	
-	
-	
-	// Need shaders as well
 	var waterVertexShader = gl.createShader(gl.VERTEX_SHADER);
 	gl.shaderSource(waterVertexShader, [
 		'attribute vec2 waterPosition;',
@@ -183,8 +187,6 @@ function WaterSystem(){
 			'reflectTextureCoords.x = clamp(reflectTextureCoords.x, 0.001, 0.999);', // ??
 			'reflectTextureCoords.y = clamp(reflectTextureCoords.y, -0.999, -0.001);', // flipped because reflection
 			
-			
-			
 			'vec4 reflectColour = texture2D(reflectionTextureSampler, reflectTextureCoords);',
 			'vec4 refractColour = texture2D(refractionTextureSampler, refractTextureCoords);',
 			
@@ -223,7 +225,6 @@ function WaterSystem(){
 	console.log("waterProgram status: " + gl.getProgramInfoLog(waterProgram));
 
 	gl.useProgram(waterProgram);
-
 		var waterPositionAttribLocation = gl.getAttribLocation(waterProgram, 'waterPosition');
 		gl.enableVertexAttribArray(waterPositionAttribLocation);
 		
@@ -237,8 +238,7 @@ function WaterSystem(){
 		
 		var waterModelLocation = gl.getUniformLocation(waterProgram, 'model');
 		gl.uniformMatrix4fv(waterModelLocation, false, new Float32Array(fullTransforms));
-		
-		//lightPosition, lightColour
+
 		var lightPositionAttribLocation = gl.getUniformLocation(waterProgram, 'lightPosition');
 		gl.enableVertexAttribArray(lightPositionAttribLocation);
 		
@@ -315,23 +315,13 @@ function WaterSystem(){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
 	}
-
-	var waterVertexPositionBuffer;
-	var waterVertices = [];
-	var moveFactor = 0;
-
-	var waterUVBuffer;
-	
-	setup();
 	
 	function setup(){
 		gl.useProgram(waterProgram);
 		waterVertexPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
-		// Setting x and z positions, y is set to 0 in vertex shader
+		// Setting x and z positions only, y is set to 0 in vertex shader
 		waterVertices = [
-					// uv coordinates
-					
 			-1, -1, //0, 0
 			-1, 1,  //0, 1
 			1, -1,  //1, 0
@@ -341,29 +331,22 @@ function WaterSystem(){
 		];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.DYNAMIC_DRAW);
 		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
-		
 
-		
 		gl.useProgram(program);
 	}
 
 	function updateWaterAttributesAndUniforms(){
-	
 		// Load camera position
 		gl.uniform3fv(waterCameraPositionLocation, camera.get.position);
 		
 		// Load lighting info
 		gl.uniform3fv(lightColourAttribLocation, lightColour);
 		
-		//work out light position based off of player position
+		// Work out light position based off of player position
 		var lightX = camera.get.x + 512;
 		var lightY = camera.get.y + 25;
 		var lightZ = camera.get.z - 512;
 		gl.uniform3fv(lightPositionAttribLocation, [lightX, lightY, lightZ]);
-		
-		//gl.uniform3fv(lightColourAttribLocation, lightColour);
-		//gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
-		//gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
 	
 		moveFactor += Date.now() * 0.0000000000000009; // dont ask....
 		moveFactor %= 1; // loops when reaches 0

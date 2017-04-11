@@ -12,7 +12,6 @@
 
 <link rel="stylesheet" href="code/css/gui.css">
 
-<div id="banner"><p>Mars Scene in WebGL</p></div>
 <div>fps: <span id="fps"></span></div>
 
 <!-- GL Canvas -->
@@ -48,7 +47,7 @@
 <script src="libraries/webgl-obj-loader.js"></script>
 <script src="libraries/twgl-full.min.js"></script>
 
-<!-- WebGL setup files including shaders and program -->
+<!-- WebGL setup files including main shaders and program -->
 <script src="code/myJs/GLSetup.js"></script>
 <script src="code/myJs/TextureLoader.js"></script>
 <script src="code/myJs/Texture.js"></script>
@@ -63,15 +62,11 @@
 <script src="code/myJs/GUI.js"></script>
 <script src="code/myJs/LoadingScreen.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
-
-
 <script src="code/myJs/WaterSystem.js"></script>
-
 <script src="code/myJs/Sound.js"></script>
 <script src="code/myJs/Lander.js"></script>
 <script src="code/myJs/Utility.js"></script>
 <script src="code/myJs/Skybox.js"></script>
-
 <script src="code/myJs/Camera.js"></script>
 <script src="code/myJs/PointerLockControls.js"></script>
 
@@ -82,7 +77,6 @@ var perlin = new ImprovedNoise();
 
 var utility = new Utility();
 var controls = new PointerLockControls();
-
 
 var textureLoader = new TextureLoader();
 var loadingScreen = new LoadingScreen();
@@ -111,6 +105,7 @@ function render(){
 	var fps = 1 / elapsedTime;
     fpsElement.innerText = fps.toFixed(0); 
 
+	// Work out what quadrant we're in, so we know what to render
 	camera.assignCameraQuadrant();
 
 	// Render the entire scene to each the reflection and refraction textures
@@ -139,15 +134,12 @@ function render(){
 	terrain.render(); 
 	rockGenerator.renderInstancedRocks();
 	
-	particleSystem.render(); 
+	//particleSystem.render(); 
 	collisionTester.testAllCollision();
 	
 	waterSystem.render();
 	skybox.render(viewMatrix, projectionMatrix);
-	
 
-
-	
 	requestAnimationFrame(render);
 }
 

@@ -8,17 +8,16 @@ Sprint 8 (10th - 17th April)
 		
 		Add asteroids
 		Add gas from craters
-
-	Helen quesitons:
-		What think about class diagram, using ints over vars for readability etc
-
 		
 	Other tasks:
 
-		Collision boundary testing,
-			Why not just use if statements and camera.set.x -= 1;
-			Currently breakas with strafing
-			Could disable left/right
+		Menu to invert controls?
+
+		When pointer not locked. show menu, else game is playing
+		Menu, controlgroup jquery ui
+		Home screen images, fade between how your project progressed!
+			Could have it in small portion of window?
+		Scene loading bar
 
 		Some sort of design
 			Class diagram
