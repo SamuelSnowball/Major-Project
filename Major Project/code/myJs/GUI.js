@@ -3,13 +3,20 @@ This file creates and displays the GUI elements of the game
 */
 function GUI(){
 
-	$(function(){
+	$( function() {
 		$("#menu").menu();
 		$( "#outOfBoundsID" ).progressbar({
 			closeOnEscape: false,
 			draggable: false
 		})
 
+	$( function() {
+		$( ".controlgroup" ).controlgroup()
+		$( ".controlgroup-vertical" ).controlgroup({
+		  "direction": "vertical"
+		});
+	  } );
+		
 	}); //end jquery func
 	
 	this.showElements = function(){

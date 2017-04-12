@@ -10,12 +10,11 @@
 
 <body>
 
-<link rel="stylesheet" href="code/css/gui.css">
-
 <div>fps: <span id="fps"></span></div>
 
 <!-- GL Canvas -->
-<canvas id="canvas" class="canvasClass"></canvas>
+
+<canvas id="canvas"></canvas>
 
 <div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
 
@@ -41,6 +40,27 @@
 </ul>
 <!-- End Menu -->
 
+
+<!-- Main menu-->
+<div class="widget">
+
+    <div class="controlgroup-vertical">
+	
+		<button id="explore_mars_button">Explore Mars</button>
+	
+		<select>
+			<option>Controls</option>
+			<option>Midsize car</option>
+		</select>
+		<button id="book">Sound</button>
+		<button id="book">About</button>
+	  
+	  
+    </div>
+
+</div>
+
+
 <!-- Libraries -->
 <script src="libraries/m4.js"></script>
 <script src="libraries/ImprovedNoise.js"></script>
@@ -55,12 +75,11 @@
 <script src="code/myJs/FragmentShader.js"></script>
 <script src="code/myJs/Program.js"></script>
 
-<!-- Game files -->
+<!-- Project files -->
 <script src="code/myJs/CollisionTester.js"></script>
 <script src="code/myJs/Terrain.js"></script>
 <script src="code/myJs/RockGenerator.js"></script>
 <script src="code/myJs/GUI.js"></script>
-<script src="code/myJs/LoadingScreen.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
 <script src="code/myJs/WaterSystem.js"></script>
 <script src="code/myJs/Sound.js"></script>
@@ -79,7 +98,6 @@ var utility = new Utility();
 var controls = new PointerLockControls();
 
 var textureLoader = new TextureLoader();
-var loadingScreen = new LoadingScreen();
 
 var terrain = new Terrain();
 var camera = new Camera();
@@ -113,10 +131,9 @@ function render(){
 	waterSystem.renderToReflectionBuffer();
 	waterSystem.renderToRefractionBuffer();
 
-	/*
-	Now render the scene as usual
-	We've already switched back to the default frame buffer
-	*/
+	
+	//Now render the scene as usual
+	//We've already switched back to the default frame buffer
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	// Cant disable clipPlane on some drivers, just set to 0
@@ -124,13 +141,10 @@ function render(){
 	
 	camera.updateCamera();
 
-	/*
-	Don't change render order
-	terrain render generates the renderIndices, 
-	that are needed for rock rendering
-	
-	The skybox has to render last, or everything breaks
-	*/
+	//Don't change render order
+	//terrain render generates the renderIndices, 
+	//that are needed for rock rendering
+	//The skybox has to render last, or everything breaks
 	terrain.render(); 
 	rockGenerator.renderInstancedRocks();
 	
@@ -143,12 +157,9 @@ function render(){
 	requestAnimationFrame(render);
 }
 
-/*
-This gets called when the user clicks to start the game
-*/
+// This gets called when the user clicks to start the game
 function setup(){
-	gameRunning = true;
-	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
+	gameRunning = true;	
 
 	// Show GUIs
 	gui.showElements();	

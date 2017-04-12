@@ -132,8 +132,10 @@ function Camera(){
 	function setupMouseMove(){
 		canvas.addEventListener('mousemove', function(e){
 			if(controls.get.isLocked === true){
+				document.body.style.backgroundImage = "url('')";
+				
 				var currentXMovement = e.movementX;
-				currentRotateY += currentXMovement + prevX;//e.movementX;
+				currentRotateY += currentXMovement + prevX;
 				prevX = currentXMovement;
 				yaw = currentRotateY * rotateSpeed;
 				
@@ -159,7 +161,10 @@ function Camera(){
 				cameraTarget[2] = Math.cos(pitchInRadians) * Math.sin(yawInRadians);
 
 				m4.normalize(cameraTarget);
-			}		
+			}
+			else{
+				// Show Menu
+			}
 		});		
 	}
 		

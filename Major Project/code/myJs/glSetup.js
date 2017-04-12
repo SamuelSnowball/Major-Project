@@ -1,15 +1,14 @@
 /*
-This file is needed to load this code, before the projection + matrices code uses it.
+This code is needed before the projection + matrices code use it.
 Without this file being included before matrices.js and projection.js, a undefined gl is thrown
-*/
 
+Also loads in extension libraries for WebGL
+*/
 var canvas = document.getElementById('canvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var gl = canvas.getContext('webgl');
 gl.enable(gl.DEPTH_TEST);
-gl.clearColor(0.1, 0.1, 0.1, 0);
-gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 /*
 Load extension libraries, not in WebGL version 1 by default
