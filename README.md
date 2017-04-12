@@ -1,7 +1,7 @@
 # Major-Project
 My final year project, a prehistoric Mars scene created with WebGL and JavaScript.
 
-The scene demonstrates how Mars would've looked in its Noachian period (around 4 billion years ago). Essentially it was so I could add water. 
+The scene demonstrates how Mars would've looked around 2-4 billion years ago. 
 
 The project is being developed using the SCRUM methodology.
 
