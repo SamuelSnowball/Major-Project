@@ -10,62 +10,18 @@
 
 <body>
 
-<div>fps: <span id="fps"></span></div>
-
 <!-- GL Canvas -->
-
 <canvas id="canvas"></canvas>
 
 <div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
-
-<!-- Menu at top left -->
-<ul id="menu" style="visibility: hidden">
-	<li>
-		<div>Menu</div> <!-- Once clicked others should show -->
-		<ul>
-			<li><div>Help</div>
-				<ul>
-					<li><div>Press P to prospect</div></li>
-				</ul>
-			</li>
-			<li><div>Sound</div></li>
-			<li><div>Controls</div>
-				<ul>
-					<li><div>Invert controls</div></li>
-				</ul>		
-			</li>
-			<li><div>About</div></li>
-		</ul>
-	</li>	
-</ul>
-<!-- End Menu -->
-
-
-<!-- Main menu-->
-<div class="widget">
-
-    <div class="controlgroup-vertical">
-	
-		<button id="explore_mars_button">Explore Mars</button>
-	
-		<select>
-			<option>Controls</option>
-			<option>Midsize car</option>
-		</select>
-		<button id="book">Sound</button>
-		<button id="book">About</button>
-	  
-	  
-    </div>
-
-</div>
-
 
 <!-- Libraries -->
 <script src="libraries/m4.js"></script>
 <script src="libraries/ImprovedNoise.js"></script>
 <script src="libraries/webgl-obj-loader.js"></script>
 <script src="libraries/twgl-full.min.js"></script>
+<script src="libraries/dat.gui.min.js"></script>
+<script src="libraries/stats.min.js"></script>
 
 <!-- WebGL setup files including main shaders and program -->
 <script src="code/myJs/GLSetup.js"></script>
@@ -79,15 +35,15 @@
 <script src="code/myJs/CollisionTester.js"></script>
 <script src="code/myJs/Terrain.js"></script>
 <script src="code/myJs/RockGenerator.js"></script>
-<script src="code/myJs/GUI.js"></script>
+<script src="code/myJs/PointerLockControls.js"></script>
+<script src="code/myJs/MyGUI.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
 <script src="code/myJs/WaterSystem.js"></script>
 <script src="code/myJs/Sound.js"></script>
-<script src="code/myJs/Lander.js"></script>
 <script src="code/myJs/Utility.js"></script>
 <script src="code/myJs/Skybox.js"></script>
 <script src="code/myJs/Camera.js"></script>
-<script src="code/myJs/PointerLockControls.js"></script>
+
 
 <script>
 
@@ -107,21 +63,23 @@ var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 
 var sound = new Sound();
-var gui = new GUI();
+var myGUI = new MyGUI();
 var skybox = new Skybox();
 
 var waterSystem = new WaterSystem();
 
-// Taken
-var fpsElement = document.getElementById("fps");
-var then = Date.now() / 1000;  // get time in seconds
+/*
+For FPS and memory, the library:
+https://github.com/mrdoob/stats.js/
+
+You can click on the FPS counter to change its setting
+*/
+var fpsViewer = new Stats();
+fpsViewer.showPanel( 0 ); // 0: fps
+document.body.appendChild( fpsViewer.dom );
 
 function render(){
-	var now = Date.now() / 1000;  // get time in seconds
-    var elapsedTime = now - then;
-    then = now;
-	var fps = 1 / elapsedTime;
-    fpsElement.innerText = fps.toFixed(0); 
+	fpsViewer.begin();
 
 	// Work out what quadrant we're in, so we know what to render
 	camera.assignCameraQuadrant();
@@ -131,6 +89,7 @@ function render(){
 	waterSystem.renderToReflectionBuffer();
 	waterSystem.renderToRefractionBuffer();
 
+	console.log(ui_noise_scale);
 	
 	//Now render the scene as usual
 	//We've already switched back to the default frame buffer
@@ -154,6 +113,7 @@ function render(){
 	waterSystem.render();
 	skybox.render(viewMatrix, projectionMatrix);
 
+	fpsViewer.end();
 	requestAnimationFrame(render);
 }
 
@@ -162,10 +122,18 @@ function setup(){
 	gameRunning = true;	
 
 	// Show GUIs
-	gui.showElements();	
+	//myGUI.
+	
+	currentTexture = mapTexture;
+	updateAttributesAndUniforms();
+	camera.updateCamera();
 
 	render();
 }
+
+// Call this when starts scene, locks pointer + isRunning false
+// Because it needs to load world properties
+setup();
 
 </script>
 

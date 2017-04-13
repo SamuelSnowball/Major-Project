@@ -10,6 +10,34 @@ Sprint 8 (10th - 17th April)
 		Add gas from craters
 		
 	Other tasks:
+		
+		JUST USE THREE.JS MENU SYSTEM
+
+		WHY DO I EVEN NEED POINTER LOCK VARIABLE????????
+
+		Have so can update the world without reload, collapsable ui
+
+		Wait till jquery lodaded, then make all UI visilbe,
+			So default the HTML uis as hidden
+
+		Load up water strength to shader, otherwise ui cant change it		
+
+		Define variables in css, base all sizes off it, /4 /8 etc. 
+		Need if checks on values pulled from UI,
+		Min = 500,
+		Max = 200, etc, or negatives, or that the max value cant be exceeded
+	
+		Need perlin seed
+		Need Sound
+		Fix falling through the floor
+
+		Need menu system
+		
+		Need Compass
+		FPS counter
+			
+
+		Could have hold I for information, controls etc
 
 		Menu to invert controls?
 

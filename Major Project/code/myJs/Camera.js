@@ -35,9 +35,9 @@ function Camera(){
 
 	//Actual usage in index file, but definition needed here
 	var cameraTarget = [
-		0,
-		0,
-		0,
+		0.1,
+		0.1,
+		0.1,
 	];
 
 	var moveForward = false, 
@@ -47,11 +47,11 @@ function Camera(){
 		moveUp = false, 
 		moveDown = false;
 		
-	var prevX = 0;
-	var prevY = 0;	
+	var prevX = 0.1;
+	var prevY = 0.1;	
 	
-	var currentRotateY = 0;
-	var currentRotateX = 0;
+	var currentRotateY = 0.1;
+	var currentRotateX = 0.1;
 	var rotateSpeed = 0.3;
 	var cameraSpeed = 0.5;
 	
@@ -131,7 +131,6 @@ function Camera(){
 	*/
 	function setupMouseMove(){
 		canvas.addEventListener('mousemove', function(e){
-			if(controls.get.isLocked === true){
 				document.body.style.backgroundImage = "url('')";
 				
 				var currentXMovement = e.movementX;
@@ -161,10 +160,6 @@ function Camera(){
 				cameraTarget[2] = Math.cos(pitchInRadians) * Math.sin(yawInRadians);
 
 				m4.normalize(cameraTarget);
-			}
-			else{
-				// Show Menu
-			}
 		});		
 	}
 		

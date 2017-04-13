@@ -153,21 +153,21 @@ function CollisionTester(){
 		testCameraCornerCollision(mapTopLeftCornerVector);
 		testCameraCornerCollision(mapTopRightCornerVector);
 		
-		// Test if nearly at collision boundary and show gui if they are
+		// Test if nearly at collision boundary and show myGUI if they are
 		if(camera.get.x < terrainRows/numberQuadrantRows + 10 && camera.get.z < terrainRows - 10){
-			gui.showMapCollision();
+			myGUI.showMapCollision();
 		}
 		else if(camera.get.x > terrainRows-quadrantRowSize - 10 && camera.get.z < terrainRows - 10){
-			gui.showMapCollision();
+			myGUI.showMapCollision();
 		}
 		else if(camera.get.z < terrainRows/numberQuadrantRows + 10 && camera.get.x < terrainRows - 10){
-			gui.showMapCollision();
+			myGUI.showMapCollision();
 		}
 		else if(camera.get.z > terrainRows-quadrantRowSize - 10 && camera.get.x < terrainRows - 10){
-			gui.showMapCollision();
+			myGUI.showMapCollision();
 		}
 		else{
-			gui.hideMapCollision();
+			myGUI.hideMapCollision();
 		}
 		
 		/*
