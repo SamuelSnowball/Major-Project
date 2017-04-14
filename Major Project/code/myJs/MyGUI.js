@@ -60,6 +60,10 @@ function MyGUI(){
 			requestId = undefined;
 			ui_noise_scale = systemOptions['Terrain_noise_scale'];
 			terrain = new Terrain();
+			// Also need to remake rocks
+			ui_min_rocks = systemOptions['Min_rocks_per_section'];
+			ui_max_rocks = systemOptions['Max_rocks_per_section'];
+			rockGenerator = new RockGenerator();
 			render();
 		});
 		systemGUI.add(systemOptions, "Terrain_noise_octaves", 4, 12).onFinishChange(function(){
@@ -68,6 +72,10 @@ function MyGUI(){
 			requestId = undefined;
 			ui_noise_octaves = systemOptions['Terrain_noise_octaves'];
 			terrain = new Terrain();
+			// Also need to remake rocks
+			ui_min_rocks = systemOptions['Min_rocks_per_section'];
+			ui_max_rocks = systemOptions['Max_rocks_per_section'];
+			rockGenerator = new RockGenerator();
 			render();
 		});
 			
