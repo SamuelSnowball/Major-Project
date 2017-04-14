@@ -11,29 +11,15 @@ Sprint 8 (10th - 17th April)
 		
 	Other tasks:
 		
-		When looking at floor/or cieling mouse is horrible, add cap values
-
+		Controls menu, GUI
+			With invert button
 		Wait until textures loaded until run setup
-		Rock heights need to be recalculated when terrain noise changes
 		Load up water strength to shader, otherwise ui cant change it		
-
 		Need perlin seed
 		Need Sound
 		Fix falling through the floor
-
-		Need Compass
+		Need Compass/map
 			
-
-		Could have hold I for information, controls etc
-
-		Menu to invert controls?
-
-		When pointer not locked. show menu, else game is playing
-		Menu, controlgroup jquery ui
-		Home screen images, fade between how your project progressed!
-			Could have it in small portion of window?
-		Scene loading bar
-
 		Some sort of design
 			Class diagram
 				Add constructor as well!, methods need parameters?
@@ -61,10 +47,6 @@ Sprint 8 (10th - 17th April)
 		Start the report!
 		Use the blackboard template
 		Outline main sections and what gonna discuss in each
-
-		The bigger the rock, the lower it should spawn
-		Fix 2d rocks bug
-		Perhaps lower rock numbers for efficiency
 
 	Sprint plan:
 		

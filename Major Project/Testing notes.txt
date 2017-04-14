@@ -1,0 +1,48 @@
+To see if browser supports at least webgl v1
+http://webglreport.com/?v=1
+But im adding some extension libraries, so needs to support webgl v2 as well
+http://webglreport.com/?v=2
+
+All of the webgl testing tools are only for webgl v1 without extensions, so cant use them
+
+UI testing, and unit testing, should be ok
+
+Things I can test:
+	
+	JavaScript tests: terrainTester, rocktester etc
+		User input and changing values, restarting scene etc
+		That buffers get created properly, arent null
+		Testing when you move mouse, it moves scene
+			Stops going out of range
+		Correct amount of vertices/indices ratio
+
+
+	Test table:
+		Test collision works
+
+	Notes/screenshots:
+		The link above,
+		Cross browser, firefox/chrome testing
+		that all features of the scene work
+
+
+	WebGL console errors
+
+	Memory usage
+		See how rocks affect this etc
+	FPS tests
+		see how rocks effect this etc
+
+Testing rendering output is infeasible
+
+	Checking rendering results on hardware is just not realisitc, some sort of
+	drivers would have to be written for this
+
+	Also even if I did this, results would be different on 
+	different computers/drivers so would fail
+
+All I can test is the data I give to WebGL, not how its displayed,
+unless you can write your own implementation of the webgl api, to see all the calls
+'mocking framework'
+
+

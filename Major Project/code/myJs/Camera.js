@@ -90,6 +90,12 @@ function Camera(){
 		},
 		get movingBackward(){
 			return moveBack;
+		},
+		get movingUp(){
+			return moveUp;
+		},
+		get movingDown(){
+			return moveDown;
 		}
 	}
 	
@@ -137,12 +143,14 @@ function Camera(){
 				prevY = currentYMovement;
 				pitch = -currentRotateX * rotateSpeed;
 				
-				// Dont go over max or min
+				// Stops the camera sticking to the bottom/top of scene
 				if(pitch > 70){
 					pitch = 70;
+					currentRotateX = -240;
 				}
 				if(pitch < -70){
 					pitch = -70;
+					currentRotateX = 240;
 				}
 				
 				// Should be in radians first
@@ -195,6 +203,7 @@ function Camera(){
 	
 	}	
 	
+	// Why not have this in other function?
 	this.updateCamera = function(){
 
 		if(moveForward){

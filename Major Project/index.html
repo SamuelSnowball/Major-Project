@@ -114,6 +114,8 @@ function render(){
 	waterSystem.render();
 	skybox.render(viewMatrix, projectionMatrix);
 
+	
+	
 	fpsViewer.end();
 	animationFrameID = requestAnimationFrame(render);
 }
@@ -134,6 +136,7 @@ function setup(){
 
 // Call this when starts scene, locks pointer + isRunning false
 // Because it needs to load world properties
+// Its giving texture error, becauase scene must render to reflection textures first?
 setup();
 
 </script>

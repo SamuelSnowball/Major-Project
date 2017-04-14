@@ -79,7 +79,6 @@ function RockGenerator(){
 		OBJ.initMeshBuffers(gl, mesh);
 		// Pull min/max numbers of rocks from GUI
 		mesh.numInstances = utility.randomIntBetween(myGUI.get.ui_min_rocks, myGUI.get.ui_max_rocks);
-		console.log("num rocks: " + mesh.numInstances);
 		// Give rocks in this quadrant random texture
 		mesh.texture = rockTextures[Math.floor(Math.random() * 5) + 0]; 
 
