@@ -36,19 +36,21 @@
 <script src="code/myJs/Terrain.js"></script>
 <script src="code/myJs/RockGenerator.js"></script>
 <script src="code/myJs/PointerLockControls.js"></script>
-<script src="code/myJs/MyGUI.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
 <script src="code/myJs/WaterSystem.js"></script>
 <script src="code/myJs/Sound.js"></script>
 <script src="code/myJs/Utility.js"></script>
 <script src="code/myJs/Skybox.js"></script>
 <script src="code/myJs/Camera.js"></script>
+<script src="code/myJs/MyGUI.js"></script>
 
 
 <script>
 
 var gameRunning = false;
 var perlin = new ImprovedNoise();
+
+var myGUI = new MyGUI();
 
 var utility = new Utility();
 var controls = new PointerLockControls();
@@ -63,7 +65,6 @@ var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 
 var sound = new Sound();
-var myGUI = new MyGUI();
 var skybox = new Skybox();
 
 var waterSystem = new WaterSystem();
@@ -78,6 +79,8 @@ var fpsViewer = new Stats();
 fpsViewer.showPanel( 0 ); // 0: fps
 document.body.appendChild( fpsViewer.dom );
 
+var animationFrameID;
+
 function render(){
 	fpsViewer.begin();
 
@@ -88,8 +91,6 @@ function render(){
 	// (2x FULL scene render calls)
 	waterSystem.renderToReflectionBuffer();
 	waterSystem.renderToRefractionBuffer();
-
-	console.log(ui_noise_scale);
 	
 	//Now render the scene as usual
 	//We've already switched back to the default frame buffer
@@ -114,7 +115,7 @@ function render(){
 	skybox.render(viewMatrix, projectionMatrix);
 
 	fpsViewer.end();
-	requestAnimationFrame(render);
+	animationFrameID = requestAnimationFrame(render);
 }
 
 // This gets called when the user clicks to start the game

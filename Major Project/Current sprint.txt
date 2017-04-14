@@ -11,30 +11,17 @@ Sprint 8 (10th - 17th April)
 		
 	Other tasks:
 		
-		JUST USE THREE.JS MENU SYSTEM
+		When looking at floor/or cieling mouse is horrible, add cap values
 
-		WHY DO I EVEN NEED POINTER LOCK VARIABLE????????
-
-		Have so can update the world without reload, collapsable ui
-
-		Wait till jquery lodaded, then make all UI visilbe,
-			So default the HTML uis as hidden
-
+		Wait until textures loaded until run setup
+		Rock heights need to be recalculated when terrain noise changes
 		Load up water strength to shader, otherwise ui cant change it		
 
-		Define variables in css, base all sizes off it, /4 /8 etc. 
-		Need if checks on values pulled from UI,
-		Min = 500,
-		Max = 200, etc, or negatives, or that the max value cant be exceeded
-	
 		Need perlin seed
 		Need Sound
 		Fix falling through the floor
 
-		Need menu system
-		
 		Need Compass
-		FPS counter
 			
 
 		Could have hold I for information, controls etc
@@ -112,3 +99,5 @@ Sprint 8 (10th - 17th April)
 
 		Fixed rock spawn height
 
+		Added FPS counter
+		Added menu system from library

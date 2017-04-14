@@ -206,46 +206,9 @@ function Terrain(){
 			//Does for entire map
 			for(var x=0; x<terrainRows; x++){
 				for(var y=0; y<terrainRows; y++){
-					// Left row out of bounds section
-					
-					// sand texture = single noise, no stacked
-					// cliffs etc?
-					
-					// Map boundaries
-					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;					
-					}
-					// Right row out of bounds section
-					else if(x > terrainRows-quadrantRowSize && y < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;	
-					}
-					else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;						
-					}
-					else if(y > terrainRows-quadrantRowSize && x < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;						
-					}
-					
-					//Have 8 sections?
-					// Currently, half and half
-					if(x > terrainRows/numberQuadrantRows && 
-						x < terrainRows/2 &&
-						y < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 15;	
-					}
-					else{
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 30;	
-					}
-				
-				// Set all to one size, remove above statements
-					var stacked = stackNoise(x,y,8);
-					heightMap[x][y] = stacked * 50;	
+					// Retrieve octaves and scale values from GUI
+					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
+					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;	
 
 				}
 				xOff = 0;

@@ -3,13 +3,9 @@
 		
 	W Key:
 		Moves camera up
-	A Key:
-		Moves camera left		
 	S Key:
 		Moves camera down	
-	D Key:
-		Moves camera right
-	
+
 	R Key:
 		Moves camera up
 	F Key:
@@ -42,8 +38,6 @@ function Camera(){
 
 	var moveForward = false, 
 		moveBack = false,
-		moveLeft = false,
-		moveRight = false,
 		moveUp = false, 
 		moveDown = false;
 		
@@ -144,11 +138,11 @@ function Camera(){
 				pitch = -currentRotateX * rotateSpeed;
 				
 				// Dont go over max or min
-				if(pitch > 85){
-					pitch = 85;
+				if(pitch > 70){
+					pitch = 70;
 				}
-				if(pitch < -85){
-					pitch = -85;
+				if(pitch < -70){
+					pitch = -70;
 				}
 				
 				// Should be in radians first
@@ -174,13 +168,6 @@ function Camera(){
 			if(event.keyCode == 83){
 				moveBack = true;
 			}
-
-			if(event.keyCode == 65){
-				moveLeft = true;
-			}
-			if(event.keyCode == 68){
-				moveRight = true;
-			}
 			
 			if(event.keyCode == 82){
 				moveUp = true; 
@@ -196,13 +183,6 @@ function Camera(){
 			}
 			if(event.keyCode == 83){
 				moveBack = false;
-			}
-
-			if(event.keyCode == 65){
-				moveLeft = false;
-			}
-			if(event.keyCode == 68){
-				moveRight = false;
 			}
 			
 			if(event.keyCode == 82){
@@ -224,26 +204,6 @@ function Camera(){
 		else if(moveBack){
 			cameraPosition[0] -= cameraTarget[0] * cameraSpeed;
 			cameraPosition[2] -= cameraTarget[2] * cameraSpeed;
-		}
-		else if(moveLeft){
-		/*
-			var cross = m4.cross(cameraTarget, [0, 1, 0]);
-			var normalized = m4.normalize(cross);
-			
-			cameraPosition[0] -= normalized[0] * cameraSpeed;
-			cameraPosition[1] -= normalized[1] * cameraSpeed;
-			cameraPosition[2] -= normalized[2] * cameraSpeed;
-			*/
-		}
-		else if(moveRight){
-		/*
-			var cross = m4.cross(cameraTarget, [0, 1, 0]);
-			var normalized = m4.normalize(cross);
-			
-			cameraPosition[0] += normalized[0] * cameraSpeed;
-			cameraPosition[1] += normalized[1] * cameraSpeed;
-			cameraPosition[2] += normalized[2] * cameraSpeed;
-			*/
 		}
 		else if(moveUp){
 			cameraPosition[1] += cameraSpeed;
