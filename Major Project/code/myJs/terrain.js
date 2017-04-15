@@ -949,13 +949,12 @@ function Terrain(){
 	}
 	
 	/*
-	Tests the index arrays, 
-	Makes sure the cornerIndices contains corners
+	Don't have unit tests for terrain section rendering,
+	Because I took screen-shots when building the algorithm
+	Showing that it works
 	
-	Should refactor into 2d array
+	This is a graphical element I can test
 	*/
-	function test_setupVaoIndices(){
-		
-	}
+
 	
 }
