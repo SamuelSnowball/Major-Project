@@ -341,9 +341,6 @@ function Terrain(){
 		
 		Creates the quadrants UV coordinates
 		*/
-		//could get passed the start position of the creatVertices function
-		//creatVertices could return the position it started at, pass into this one
-		//use that start position / terrainSize to get?
 		function createQuadrantUvs(x, z){
 		
 			// Reset current UVs
@@ -946,7 +943,7 @@ function Terrain(){
 				console.error("In buildAllTerrainData: terrainVAOs not created properly");
 			}
 		}		
-	}
+	} 
 	
 	/*
 	Don't have unit tests for terrain section rendering,
@@ -956,5 +953,4 @@ function Terrain(){
 	This is a graphical element I can test
 	*/
 
-	
 }
