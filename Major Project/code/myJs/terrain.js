@@ -135,11 +135,20 @@ function Terrain(){
 				createQuadrantUvs(x, z);
 				createQuadrantNormals();
 				
+				// @Test
+				if(useTests) test_createQuadrantVertices();
+				if(useTests) test_createQuadrantIndices();
+				if(useTests) test_createQuadrantUvs();
+				if(useTests) test_createQuadrantNormals();
+				
 				// Then put data in VBOs, and bind those VBOs to VAO
 				setupQuadrantVertexBuffer();
 				setupQuadrantIndiciesBuffer();
 				setupQuadrantUvBuffer();
 				setupQuadrantNormalBuffer();
+				
+				// @Test
+				if(useTests) test_setupQuadrantBuffers();
 				
 				// Add current VAO to terrainVAOs array, this saves our data in the VAO
 				terrainVAOs.push(tempVAO);
@@ -149,10 +158,7 @@ function Terrain(){
 		// @Test
 		if(useTests) test_terrainVAOs();
 	}
-	
-	
-	
-	
+
 	/*
 	####################################
 	heightMap creation and filling below
@@ -324,9 +330,6 @@ function Terrain(){
 			
 			// Need to save the length of the vertices for rendering, because the actual vertices get reset
 			quadrantFloorVerticesLength = quadrantVertices.length;
-			
-			// @Test
-			if(useTests) test_createQuadrantVertices();
 		}
 		
 
@@ -351,9 +354,6 @@ function Terrain(){
 				}
 				quadrantIndices[i++] = (r + 1) * quadrantColumnSize  + (quadrantColumnSize- 1);
 			}
-			
-			// @Test
-			if(useTests) test_createQuadrantIndices();
 		}
 
 		/*
@@ -388,8 +388,6 @@ function Terrain(){
 				xUV = 0;
 				yUV += incrementSize;
 			}
-			
-			if(useTests) test_createQuadrantUvs();
 		}
 		
 		/*
@@ -413,9 +411,6 @@ function Terrain(){
 				quadrantNormals.push(1); // y
 				quadrantNormals.push(1); // z
 			}
-			
-			// @Test
-			if(useTests) test_createQuadrantNormals();
 		}
 	
 	/*
@@ -441,9 +436,6 @@ function Terrain(){
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantVertexBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantVertices), gl.DYNAMIC_DRAW);
 			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
-			
-			// @Test
-			if(useTests) test_setupQuadrantVertexBuffer();
 		}
 		
 		/*
@@ -455,9 +447,6 @@ function Terrain(){
 			quadrantIndicesBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, quadrantIndicesBuffer);
 			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(quadrantIndices), gl.DYNAMIC_DRAW);		
-			
-			// @Test
-			if(useTests) test_setupQuadrantIndiciesBuffer();
 		}
 		
 		/*
@@ -474,9 +463,6 @@ function Terrain(){
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantUvBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantUvs), gl.DYNAMIC_DRAW);
 			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
-			
-			// @Test
-			if(useTests) test_setupQuadrantUvBuffer();
 		}
 		
 		/*
@@ -486,10 +472,7 @@ function Terrain(){
 			quadrantNormalBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantNormalBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantNormals), gl.DYNAMIC_DRAW);
-			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
-
-			// @Test
-			if(useTests) test_setupQuadrantNormalBuffer();			
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);				
 		}
 		
 	/*
@@ -782,7 +765,7 @@ function Terrain(){
 	*/
 	
 	/*
-	Test 2D array is of correct size
+	Test 2D heightMap array is of correct size
 	*/
 	function test_createHeightMap(){
 		if(heightMap.length === quadrantRowSize * numberQuadrantRows && 
@@ -821,17 +804,9 @@ function Terrain(){
 	quadrantVertices.length = number of x, y, z values in current section
 	*/
 	function test_createQuadrantVertices(){
-		// 3 * 128 * 128
 		var expected_number_vertices = 3 * (quadrantRowSize * quadrantColumnSize);
-		
-		if(quadrantVertices.length === expected_number_vertices){
-			// correct number of quadrantVertices
-		}
-		else{
-			console.error("In createQuadrantVertices: quadrantVertices length didn't match");
-			console.error("Expected length: " + expected_number_vertices);
-			console.error("Actual length: " + quadrantVertices.length);
-		}
+		var actual_number_vertices = quadrantVertices.length
+		test_quadrantData("vertices", expected_number_vertices, actual_number_vertices);
 	}
 	
 	/*
@@ -841,17 +816,9 @@ function Terrain(){
 		Divide quadrantVertices by 3 to get the amount of vertices, not x, y, z values
 	*/
 	function test_createQuadrantIndices(){
-	
 		var expected_indices_length = (quadrantVertices.length/3) * 2;
-	
-		if(quadrantIndices.length ===  expected_indices_length){
-			// Correct number of indices
-		}
-		else{
-			console.error("In createQuadrantIndices: quadrantIndices length didn't match");
-			console.error("Expected length: " + expected_indices_length);
-			console.error("Actual length: " + quadrantIndices.length);
-		}
+		var actual_indices_length = quadrantIndices.length;
+		test_quadrantData("indices", expected_indices_length, actual_indices_length);
 	}
 	
 	/*
@@ -862,44 +829,32 @@ function Terrain(){
 	*/
 	function test_createQuadrantUvs(){
 		var expected_uvs_length = (quadrantVertices.length/3) * 2;
-		
-		if(quadrantUvs.length === expected_uvs_length){
-			// Correct number UVs
-		}
-		else{
-			console.error("In createQuadrantIndices: quadrantUvs length didn't match");
-			console.error("Expected length: " + expected_uvs_length);
-			console.error("Actual length: " + quadrantUvs.length);
-		}
+		var actual_uvs_length = quadrantUvs.length;
+		test_quadrantData("uvs", expected_uvs_length, actual_uvs_length);
 	}
 	
 	/*
 	Test correct amount of quadrant normals
-	Each vertex should have a normal (x,y,z)
+	Normals should be equal to number of quadrantVertices
 	*/
 	function test_createQuadrantNormals(){
 		var expected_normals_length = quadrantVertices.length;
-		
-		if(quadrantNormals.length === expected_normals_length){
-			// Correct amount of normals
-		}
-		else{
-			console.error("In createQuadrantNormals: quadrantNormals length didn't match");
-			console.error("Expected length: " + expected_normals_length);
-			console.error("Actual length: " + quadrantNormals.length);
-		}
+		var actual_normals_length = quadrantNormals.length;
+		test_quadrantData("normals", expected_normals_length, actual_normals_length);
 	}
 	
 	/*
-	Function to test length of quadrants (vertices/normals/UVs/indices)
+	Tests length of the quadrants (vertices/normals/UVs/indices)
 	
 	Parameters:
-		attribute: which of the (vertices/normals/UVs/indices) are being tested
+		attribute: which of the quadrants (vertices/normals/UVs/indices) are being tested
+		expectedLength
+		actualLength
 	*/
 	function test_quadrantData(attribute, expectedLength, actualLength){
 
 		if(expectedLength === actualLength){
-			// correct number, of one of (vertices/normals/UVs/indices)
+			// correct number of (vertices/normals/UVs/indices)
 		}
 		else{
 			console.error("In " + attribute + " length didn't match");
@@ -911,49 +866,17 @@ function Terrain(){
 	/*
 	Test the quadrantVertexBuffer is a WebGL buffer object (VBO)
 	*/
-	function test_setupQuadrantVertexBuffer(){
-		if(quadrantVertexBuffer instanceof WebGLBuffer){
-			// The quadrantVertexBuffer was created properly
-		}
-		else{
-			console.error("In setupQuadrantVertexBuffer: quadrantVertexBuffer wasn't created properly");
-		}
+	function test_setupQuadrantBuffers(){
+		test_isWebGLBuffer("vertex buffer", quadrantVertexBuffer);
+		test_isWebGLBuffer("indices buffer", quadrantIndicesBuffer);
+		test_isWebGLBuffer("UV buffer", quadrantUvBuffer);
+		test_isWebGLBuffer("normal buffer", quadrantNormalBuffer);
 	}
-
-	/*
-	Test the quadrantIndicesBuffer is a WebGL buffer object (VBO)
-	*/	
-	function test_setupQuadrantIndiciesBuffer(){
-		if(quadrantIndicesBuffer instanceof WebGLBuffer){
-			// The quadrantIndicesBuffer was created properly
+	
+	function test_isWebGLBuffer(bufferName, buffer){
+		if(!buffer instanceof WebGLBuffer){
+			console.error("In isWebGLBuffer, quadrant: " + bufferName + ", is not a WebGLBuffer object");
 		}
-		else{
-			console.error("In setupQuadrantIndicesBuffer: quadrantIndicesBuffer wasn't created properly");
-		}		
-	}
-
-	/*
-	Test the quadrantUvBuffer is a WebGL buffer object (VBO)
-	*/		
-	function test_setupQuadrantUvBuffer(){
-		if(quadrantUvBuffer instanceof WebGLBuffer){
-			// The quadrantUvBuffer was created properly
-		}
-		else{
-			console.error("In setupQuadrantUvBuffer: quadrantUvBuffer wasn't created properly");
-		}			
-	}
-
-	/*
-	Test the quadrantNormalBuffer is a WebGL buffer object (VBO)
-	*/		
-	function test_setupQuadrantNormalBuffer(){
-		if(quadrantNormalBuffer instanceof WebGLBuffer){
-			// The quadrantNormalBuffer was created properly
-		}
-		else{
-			console.error("In setupQuadrantNormalBuffer: quadrantNormalBuffer wasn't created properly");
-		}				
 	}
 	
 	/*
@@ -972,10 +895,8 @@ function Terrain(){
 	
 	/*
 	Don't have unit tests for terrain section rendering,
-	Because I took screen-shots when building the algorithm
-	Showing that it works
-	
-	This is a graphical element I can test
+	Because I took screen shots when building the algorithm,
+	showing that it works
 	*/
 
 }
