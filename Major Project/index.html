@@ -4,8 +4,16 @@
 	<title>Mars Scene in WebGL</title>
 	<link rel="stylesheet" href="code/css/gui.css">
 	<link rel="stylesheet" href="libraries/jquery-ui-1.12.1.custom/jquery-ui.css">
+	
+	<!-- Libraries -->
 	<script src="libraries/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 	<script src="libraries/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+	<script src="libraries/m4.js"></script>
+	<script src="libraries/ImprovedNoise.js"></script>
+	<script src="libraries/webgl-obj-loader.js"></script>
+	<script src="libraries/twgl-full.min.js"></script>
+	<script src="libraries/dat.gui.min.js"></script>
+	<script src="libraries/stats.min.js"></script>
 </head>
 
 <body>
@@ -14,14 +22,6 @@
 <canvas id="canvas"></canvas>
 
 <div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
-
-<!-- Libraries -->
-<script src="libraries/m4.js"></script>
-<script src="libraries/ImprovedNoise.js"></script>
-<script src="libraries/webgl-obj-loader.js"></script>
-<script src="libraries/twgl-full.min.js"></script>
-<script src="libraries/dat.gui.min.js"></script>
-<script src="libraries/stats.min.js"></script>
 
 <!-- WebGL setup files including main shaders and program -->
 <script src="code/myJs/GLSetup.js"></script>
@@ -44,8 +44,9 @@
 <script src="code/myJs/Camera.js"></script>
 <script src="code/myJs/MyGUI.js"></script>
 
-
 <script>
+
+var useTests = true; // change this to enable/disable testing
 
 var gameRunning = false;
 var perlin = new ImprovedNoise();

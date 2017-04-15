@@ -168,6 +168,9 @@ function Terrain(){
 			for(var i=0; i<terrainRows; i++){
 				heightMap[i] = new Array(terrainColumns).fill(0);
 			}
+			
+			// @TEST
+			if(useTests) test_createHeightMap();
 		}
 		
 		/*
@@ -198,6 +201,7 @@ function Terrain(){
 		Fills the 2D HeightMap with initial values
 		*/
 		function fillHeightMap(){
+			var error = false;
 			var xOff = 0;
 			var yOff = 0;
 			var offsetIncrement;
@@ -209,7 +213,9 @@ function Terrain(){
 					// Retrieve octaves and scale values from GUI
 					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
 					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;	
-
+					
+					// @TEST
+					if(useTests) test_fillHeightMap(heightMap[x][y]);
 				}
 				xOff = 0;
 				yOff += offsetIncrement;
@@ -294,7 +300,11 @@ function Terrain(){
 				terrainZ += 1; // Increment Z
 			}
 			
+			// Need to save the length of the vertices for rendering, because the actual vertices get reset
 			quadrantFloorVerticesLength = quadrantVertices.length;
+			
+			// @TEST
+			if(useTests) test_createQuadrantVertices();
 		}
 		
 
@@ -783,4 +793,71 @@ function Terrain(){
 		}
 	}
 	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
+	
+	/*
+	Test 2D array is of correct size
+	*/
+	function test_createHeightMap(){
+		if(heightMap.length === quadrantRowSize * numberQuadrantRows && 
+			heightMap[0].length === quadrantColumnSize * numberQuadrantColumns){
+			// It's correct size
+		}
+		else{
+			console.error("In createHeightMap: HeightMap was not of the correct size.");
+			console.error("Expected row size: " + quadrantRowSize * numberQuadrantRows + ", column size: " + quadrantColumnSize * numberQuadrantColumns);
+			console.error("Actual row size: " + heightMap.length + ", column size: " + heightMap[0].length);
+		}
+	}
+	
+	/*
+	Test if the current heightMap value is a number
+	*/
+	function test_fillHeightMap(value){
+		if(isNaN(value)){
+			console.error("In fillHeightMap function: One or more of the heightMap values wasn't a number");
+		}
+		else{
+			// Value is ok
+		}
+	}
+	
+	/*
+	Testing buildAllTerrainData
+	
+	createQuadrantVertices(x, z);
+	createQuadrantIndices();
+	createQuadrantUvs(x, z);
+	createQuadrantNormals();
+	
+	// Then put data in VBOs, and bind those VBOs to VAO
+	setupQuadrantVertexBuffer();
+	setupQuadrantIndiciesBuffer();
+	setupQuadrantUvBuffer();
+	setupQuadrantNormalBuffer();
+	*/
+	
+	/*
+	Test the correct amount of quadrant vertices where created
+		quadrantRowSize = number of vertices per row (128)
+		quadrantColumnSize = number of vertices per column (128)
+	Times these by 3, because each vertex has x, y, z
+		
+	quadrantVertices.length = number of x, y, z values in current section
+	*/
+	function test_createQuadrantVertices(){
+		// 3 * 128 * 128
+		var expected_number_vertices = 3 * (quadrantRowSize * quadrantColumnSize);
+		
+		if(quadrantVertices.length === expected_number_vertices){
+			// correct number of quadrantVertices
+		}
+		else{
+			console.error("In createQuadrantVertices: quadrantVertices length didn't match");
+			console.error("Expected length: " + expected_number_vertices);
+			console.error("Actual length: " + quadrantVertices.length);
+		}
+	}
 }
