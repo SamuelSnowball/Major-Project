@@ -146,6 +146,8 @@ function Terrain(){
 				vao_ext.bindVertexArrayOES(null); 
 			}
 		}
+		// @Test
+		if(useTests) test_terrainVAOs();
 	}
 	
 	
@@ -169,7 +171,7 @@ function Terrain(){
 				heightMap[i] = new Array(terrainColumns).fill(0);
 			}
 			
-			// @TEST
+			// @Test
 			if(useTests) test_createHeightMap();
 		}
 		
@@ -214,7 +216,7 @@ function Terrain(){
 					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
 					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;	
 					
-					// @TEST
+					// @Test
 					if(useTests) test_fillHeightMap(heightMap[x][y]);
 				}
 				xOff = 0;
@@ -303,7 +305,7 @@ function Terrain(){
 			// Need to save the length of the vertices for rendering, because the actual vertices get reset
 			quadrantFloorVerticesLength = quadrantVertices.length;
 			
-			// @TEST
+			// @Test
 			if(useTests) test_createQuadrantVertices();
 		}
 		
@@ -329,6 +331,9 @@ function Terrain(){
 				}
 				quadrantIndices[i++] = (r + 1) * quadrantColumnSize  + (quadrantColumnSize- 1);
 			}
+			
+			// @Test
+			if(useTests) test_createQuadrantIndices();
 		}
 
 		/*
@@ -366,6 +371,8 @@ function Terrain(){
 				xUV = 0;
 				yUV += incrementSize;
 			}
+			
+			if(useTests) test_createQuadrantUvs();
 		}
 		
 		/*
@@ -385,65 +392,13 @@ function Terrain(){
 			This loop can start from 0, because our vertices also get reset.
 			*/
 			for(var i=0; i<quadrantVertices.length; i+=3){
-				//Get 1st point (3 vertices), 2nd point(3 vertices), 3rd (3 vertices)(under) point
-				
-				//Top left vertex
-				var vertex0x = quadrantVertices[i];
-				var vertex0y = quadrantVertices[i+1];
-				var vertex0z = quadrantVertices[i+2];
-				
-				//Top right vertex
-				var vertex1x = quadrantVertices[i+3];
-				var vertex1y = quadrantVertices[i+4];
-				var vertex1z = quadrantVertices[i+5];
-				
-				/*
-				Vertex under top left vertex
-					Its the current row times the current column!
-					They both dont exist, just add a single value
-					i + value 
-					i + 1 + value
-					try value as 1024, would push current value exactly 1 row down
-					times 3, because 3 vertices, rows isnt 100% correct, as its a 1d array, with an x,y,z each
-				*/
-				var vertex2x = quadrantVertices[i + (quadrantRowSize*3)];
-				var vertex2y = quadrantVertices[(i + 1) + (quadrantRowSize*3)];
-				var vertex2z = quadrantVertices[(i + 2) + (quadrantRowSize*3)];
-				
-				// Now work out vector0, might be wrong direction
-				var vector0x = vertex1x - vertex0x;
-				var vector0y = vertex1y - vertex0y;
-				var vector0z = vertex1z - vertex0z;
-				var vector0 = [vector0x, vector0y, vector0z];
-				
-				// Now work out vector1, might be wrong direction
-				var vector1x = vertex2x - vertex0x;
-				var vector1y = vertex2y - vertex0y;
-				var vector1z = vertex2z - vertex0z;
-				var vector1 = [vector1x, vector1y, vector1z];
-
-				// Need to normalize vectors
-				vector0 = m4.normalize(vector0);
-				vector1 = m4.normalize(vector1);
-				
-				// Now cross product between vector0 and vector1
-				// vector0 * vector1, might be wrong way around,
-				// Also the vectors could've been calculated wrong way around
-				var normal = m4.cross(vector1, vector0);
-				
-				/*
-				Set all normals to 1,
-				Can't notice a difference,
-				Was causing the bug with black lines
-				
-				normals[0]
-				normals[1]
-				normals[2]
-				*/
-				quadrantNormals.push(1); //x
-				quadrantNormals.push(1); //y
-				quadrantNormals.push(1); //z
+				quadrantNormals.push(1); // x
+				quadrantNormals.push(1); // y
+				quadrantNormals.push(1); // z
 			}
+			
+			// @Test
+			if(useTests) test_createQuadrantNormals();
 		}
 	
 	/*
@@ -469,6 +424,9 @@ function Terrain(){
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantVertexBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantVertices), gl.DYNAMIC_DRAW);
 			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
+			
+			// @Test
+			if(useTests) test_setupQuadrantVertexBuffer();
 		}
 		
 		/*
@@ -480,6 +438,9 @@ function Terrain(){
 			quadrantIndicesBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, quadrantIndicesBuffer);
 			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(quadrantIndices), gl.DYNAMIC_DRAW);		
+			
+			// @Test
+			if(useTests) test_setupQuadrantIndiciesBuffer();
 		}
 		
 		/*
@@ -496,6 +457,9 @@ function Terrain(){
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantUvBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantUvs), gl.DYNAMIC_DRAW);
 			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+			
+			// @Test
+			if(useTests) test_setupQuadrantUvBuffer();
 		}
 		
 		/*
@@ -505,7 +469,10 @@ function Terrain(){
 			quadrantNormalBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantNormalBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantNormals), gl.DYNAMIC_DRAW);
-			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);			
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);		
+
+			// @Test
+			if(useTests) test_setupQuadrantNormalBuffer();			
 		}
 		
 	/*
@@ -594,6 +561,8 @@ function Terrain(){
 					rightEdgeIndices.push(e);
 				}
 			}		
+			// @Test
+			if(useTests) test_setupVaoIndices();
 		}
 		
 		/*
@@ -860,4 +829,133 @@ function Terrain(){
 			console.error("Actual length: " + quadrantVertices.length);
 		}
 	}
+	
+	/*
+	Test the correct amount of quadrant indices where created
+	
+	Each quadrant should have double the number of indices to vertices
+		Divide quadrantVertices by 3 to get the amount of vertices, not x, y, z values
+	*/
+	function test_createQuadrantIndices(){
+	
+		var expected_indices_length = (quadrantVertices.length/3) * 2;
+	
+		if(quadrantIndices.length ===  expected_indices_length){
+			// Correct number of indices
+		}
+		else{
+			console.error("In createQuadrantIndices: quadrantIndices length didn't match");
+			console.error("Expected length: " + expected_indices_length);
+			console.error("Actual length: " + quadrantIndices.length);
+		}
+	}
+	
+	/*
+	Test correct amount of UV coordinates
+	
+	For each vertex, there should be 2 UV coordinates
+		Divide quadrantVertices by 3 to get the amount of vertices, not x, y, z values
+	*/
+	function test_createQuadrantUvs(){
+		var expected_uvs_length = (quadrantVertices.length/3) * 2;
+		
+		if(quadrantUvs.length === expected_uvs_length){
+			// Correct number UVs
+		}
+		else{
+			console.error("In createQuadrantIndices: quadrantUvs length didn't match");
+			console.error("Expected length: " + expected_uvs_length);
+			console.error("Actual length: " + quadrantUvs.length);
+		}
+	}
+	
+	/*
+	Test correct amount of quadrant normals
+	Each vertex should have a normal (x,y,z)
+	*/
+	function test_createQuadrantNormals(){
+		var expected_normals_length = quadrantVertices.length;
+		
+		if(quadrantNormals.length === expected_normals_length){
+			// Correct amount of normals
+		}
+		else{
+			console.error("In createQuadrantNormals: quadrantNormals length didn't match");
+			console.error("Expected length: " + expected_normals_length);
+			console.error("Actual length: " + quadrantNormals.length);
+		}
+	}
+	
+	/*
+	Test the quadrantVertexBuffer is a WebGL buffer object (VBO)
+	*/
+	function test_setupQuadrantVertexBuffer(){
+		if(quadrantVertexBuffer instanceof WebGLBuffer){
+			// The quadrantVertexBuffer was created properly
+		}
+		else{
+			console.error("In setupQuadrantVertexBuffer: quadrantVertexBuffer wasn't created properly");
+		}
+	}
+
+	/*
+	Test the quadrantIndicesBuffer is a WebGL buffer object (VBO)
+	*/	
+	function test_setupQuadrantIndiciesBuffer(){
+		if(quadrantIndicesBuffer instanceof WebGLBuffer){
+			// The quadrantIndicesBuffer was created properly
+		}
+		else{
+			console.error("In setupQuadrantIndicesBuffer: quadrantIndicesBuffer wasn't created properly");
+		}		
+	}
+
+	/*
+	Test the quadrantUvBuffer is a WebGL buffer object (VBO)
+	*/		
+	function test_setupQuadrantUvBuffer(){
+		if(quadrantUvBuffer instanceof WebGLBuffer){
+			// The quadrantUvBuffer was created properly
+		}
+		else{
+			console.error("In setupQuadrantUvBuffer: quadrantUvBuffer wasn't created properly");
+		}			
+	}
+
+	/*
+	Test the quadrantNormalBuffer is a WebGL buffer object (VBO)
+	*/		
+	function test_setupQuadrantNormalBuffer(){
+		if(quadrantNormalBuffer instanceof WebGLBuffer){
+			// The quadrantNormalBuffer was created properly
+		}
+		else{
+			console.error("In setupQuadrantNormalBuffer: quadrantNormalBuffer wasn't created properly");
+		}				
+	}
+	
+	/*
+	Make sure the terrainVAOs array was filled with WebGLVertexArrayObjectOES objects properly
+	*/
+	function test_terrainVAOs(){
+		for(var i=0; i<numberQuadrantRows * numberQuadrantColumns; i++){
+			if(vao_ext.isVertexArrayOES(terrainVAOs[i])){
+				// Its ok
+			}
+			else{
+				console.error("In buildAllTerrainData: terrainVAOs not created properly");
+			}
+		}		
+	}
+	
+	/*
+	Tests the index arrays, 
+	Makes sure the cornerIndices contains corners
+	
+	Should refactor into 2d array
+	*/
+	function test_setupVaoIndices(){
+		
+	}
+	
 }
