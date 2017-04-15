@@ -212,9 +212,29 @@ function Terrain(){
 			//Does for entire map
 			for(var x=0; x<terrainRows; x++){
 				for(var y=0; y<terrainRows; y++){
+				
 					// Retrieve octaves and scale values from GUI
 					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
 					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;	
+					
+					// Map boundaries
+					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 150;					
+					}
+					// Right row out of bounds section
+					else if(x > terrainRows-quadrantRowSize && y < terrainRows){
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 150;	
+					}
+					else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 150;						
+					}
+					else if(y > terrainRows-quadrantRowSize && x < terrainRows){
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 150;						
+					}
 					
 					// @Test
 					if(useTests) test_fillHeightMap(heightMap[x][y]);
@@ -558,8 +578,6 @@ function Terrain(){
 					rightEdgeIndices.push(e);
 				}
 			}		
-			// @Test
-			if(useTests) test_setupVaoIndices();
 		}
 		
 		/*
@@ -792,17 +810,6 @@ function Terrain(){
 	
 	/*
 	Testing buildAllTerrainData
-	
-	createQuadrantVertices(x, z);
-	createQuadrantIndices();
-	createQuadrantUvs(x, z);
-	createQuadrantNormals();
-	
-	// Then put data in VBOs, and bind those VBOs to VAO
-	setupQuadrantVertexBuffer();
-	setupQuadrantIndiciesBuffer();
-	setupQuadrantUvBuffer();
-	setupQuadrantNormalBuffer();
 	*/
 	
 	/*
@@ -881,6 +888,24 @@ function Terrain(){
 			console.error("Expected length: " + expected_normals_length);
 			console.error("Actual length: " + quadrantNormals.length);
 		}
+	}
+	
+	/*
+	Function to test length of quadrants (vertices/normals/UVs/indices)
+	
+	Parameters:
+		attribute: which of the (vertices/normals/UVs/indices) are being tested
+	*/
+	function test_quadrantData(attribute, expectedLength, actualLength){
+
+		if(expectedLength === actualLength){
+			// correct number, of one of (vertices/normals/UVs/indices)
+		}
+		else{
+			console.error("In " + attribute + " length didn't match");
+			console.error("Expected length: " + expectedLength);
+			console.error("Actual length: " + actualLength);
+		}		
 	}
 	
 	/*

@@ -11,6 +11,10 @@ Sprint 8 (10th - 17th April)
 		
 	Other tasks:
 		
+		Add a max height to camera
+			Hate how you can fly up and see the world boundaries
+			Awkward with higher terrain scale
+
 		Controls menu, GUI
 			With invert button
 		Wait until textures loaded until run setup

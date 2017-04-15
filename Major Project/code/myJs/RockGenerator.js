@@ -112,10 +112,21 @@ function RockGenerator(){
 		
 		Keep this order! Need to generate X and Z first, to set Y height
 		*/		
-		generateMatricesForTransformRow1(xMin, zMin);
-		generateMatricesForTransformRow3(xMin, zMin);
-		generateMatricesForTransformRow2(xMin, zMin);
-		generateMatricesForTransformRow4(xMin, zMin);
+		generateMatricesForTransformRow1(xMin);
+		// @Test
+		if(useTests) test_matricesForTransformRow(1);
+		
+		generateMatricesForTransformRow3(zMin);
+		// @Test
+		if(useTests) test_matricesForTransformRow(3);
+		
+		generateMatricesForTransformRow2();
+		// @Test
+		if(useTests) test_matricesForTransformRow(2);
+		
+		generateMatricesForTransformRow4();
+		// @Test
+		if(useTests) test_matricesForTransformRow(4);
 		
 		// The full matrix translations for the rock are now built
 		// Push to buffersArray
@@ -127,7 +138,7 @@ function RockGenerator(){
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 1st column of the matrix translation
 	*/
-	function generateMatricesForTransformRow1(xMin, zMin){
+	function generateMatricesForTransformRow1(xMin){
 		// Bind buffer, create all data, then buffer data
 		// Then do the next row
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow1);
@@ -168,7 +179,7 @@ function RockGenerator(){
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 2nd column of the matrix translation
 	*/
-	function generateMatricesForTransformRow2(xMin, zMin){
+	function generateMatricesForTransformRow2(){
 		/*
 		Y
 		*/
@@ -204,7 +215,7 @@ function RockGenerator(){
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 3rd column of the matrix translation
 	*/
-	function generateMatricesForTransformRow3(xMin, zMin){
+	function generateMatricesForTransformRow3(zMin){
 		/*
 		Z
 		*/
@@ -237,7 +248,7 @@ function RockGenerator(){
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 4th column of the matrix translation
 	*/	
-	function generateMatricesForTransformRow4(xMin, zMin){
+	function generateMatricesForTransformRow4(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow4);
 		data = [];
 		for(var i=0; i<mesh.numInstances; i++){
@@ -347,6 +358,41 @@ function RockGenerator(){
 		gl.disableVertexAttribArray(instancingLocation1);
 		gl.disableVertexAttribArray(instancingLocation2);
 		gl.disableVertexAttribArray(instancingLocation3);
+	}
+	
+	/*
+	Tests below
+	*/
+		
+	/*
+	Test column 1 of matrix applied to the rock instance at a time, 
+	Test mesh.numInstances is correct length
+	The data array contains values for the one column only, at a time
+	
+	Parameter: the column it was called for, to print correct error message
+	
+	(First time being called, uses this column)
+	[0, x, x, x]
+	 4, x, x, x]
+	 8, x, x, x]
+	 12 x, x, x]
+	*/
+	function test_matricesForTransformRow(column){
+		var error = false;
+		
+		if(mesh.numInstances !== data.length/4){
+			console.error("In generateMatricesForTransformRow" + column +": mesh.numInstances wasn't correct length");
+		}
+	
+		for(var i=0; i<mesh.numInstances; i++){
+			if(isNaN(data[i])){
+				error = true; // report an error when done
+			}
+		}	
+			
+		if(error){
+			console.error("In generateMatricesForTransformRow" + column + ": one or more matrix value was NaN");
+		}
 	}
 	
 }
