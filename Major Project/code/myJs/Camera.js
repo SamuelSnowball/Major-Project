@@ -3,13 +3,9 @@
 		
 	W Key:
 		Moves camera up
-	A Key:
-		Moves camera left		
 	S Key:
 		Moves camera down	
-	D Key:
-		Moves camera right
-	
+
 	R Key:
 		Moves camera up
 	F Key:
@@ -17,32 +13,111 @@
 */
 function Camera(){
 
+	var yaw = -90;
+	var pitch = -90;
+	
+	var lastX = window.innerWidth/2;
+	var lastY = window.innerHeight/2;
+
+	// Cameras spawn position
+	var cameraPosition = [
+		250,
+		5,
+		250
+	];
+
+	//Actual usage in index file, but definition needed here
+	var cameraTarget = [
+		0.1,
+		0.1,
+		0.1,
+	];
+
 	var moveForward = false, 
 		moveBack = false,
-		moveLeft = false,
-		moveRight = false,
 		moveUp = false, 
 		moveDown = false;
 		
-	var prevX = 0;
-	var prevY = 0;	
+	var prevX = 0.1;
+	var prevY = 0.1;	
 	
-	var currentRotateY = 0;
-	var currentRotateX = 0;
-	var rotateSpeed = 0.3;
-	
-	
+	var currentRotateY = 0.1;
+	var currentRotateX = 0.1;
+	var rotateSpeed = 0.08;
 	var cameraSpeed = 0.5;
-	var quadrant; // Current section of the map they're in
+	
+	var quadrant = 0; // Current section of the map they're in
+	
+	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
+	var numberQuadrantColumns = terrain.get.getNumberQuadrantColumns;
+	
 	this.get = {
 		get quadrant(){
 			return quadrant;
 		},
+		
+		get position(){
+			return cameraPosition;
+		},
+		get x(){
+			return cameraPosition[0];
+		},
+		get y(){
+			return cameraPosition[1];
+		},
+		get z(){
+			return cameraPosition[2];
+		},		
+		
+		get targetX(){
+			return cameraTarget[0];
+		},
+		get targetY(){
+			return cameraTarget[1];
+		},
+		get targetZ(){
+			return cameraTarget[2];
+		},		
+		get cameraTarget(){
+			return cameraTarget;
+		},
+		
+		get movingForward(){
+			return moveForward;
+		},
+		get movingBackward(){
+			return moveBack;
+		},
+		get movingUp(){
+			return moveUp;
+		},
+		get movingDown(){
+			return moveDown;
+		}
+	}
+	
+	this.set = {
+		set x(xParam){
+			cameraPosition[0] = xParam;
+		},
+		set y(yParam){
+			cameraPosition[1] = yParam;
+		},
+		set z(zParam){
+			cameraPosition[2] = zParam;
+		},		
+		
+		set targetX(x){
+			cameraTarget[0] = x;
+		},
+		set targetY(y){
+			cameraTarget[1] = y;
+		},
+		set targetZ(z){
+			cameraTarget[2] = z;
+		},		
 	}
 		
-	var numberQuadrantRows = 4;//terrain.get.getNumberQuadrantRows;
-	var numberQuadrantColumns = 4;//terrain.get.getNumberQuadrantColumns;
-	
 	// Constructor
 	setupMouseMove();
 	setupUserMovement();
@@ -53,9 +128,10 @@ function Camera(){
 	*/
 	function setupMouseMove(){
 		canvas.addEventListener('mousemove', function(e){
-			if(controls.get.isLocked === true){
+				document.body.style.backgroundImage = "url('')";
+				
 				var currentXMovement = e.movementX;
-				currentRotateY += currentXMovement + prevX;//e.movementX;
+				currentRotateY += currentXMovement + prevX;
 				prevX = currentXMovement;
 				yaw = currentRotateY * rotateSpeed;
 				
@@ -64,24 +140,25 @@ function Camera(){
 				prevY = currentYMovement;
 				pitch = -currentRotateX * rotateSpeed;
 				
-				// Dont go over max or min
-				if(pitch > 85){
-					pitch = 85;
+				// Stops the camera sticking to the bottom/top of scene
+				if(pitch > 70){
+					pitch = 70;
+					currentRotateX = -850;
 				}
-				if(pitch < -85){
-					pitch = -85;
+				if(pitch < -70){
+					pitch = -70;
+					currentRotateX = 850;
 				}
 				
 				// Should be in radians first
 				var pitchInRadians = utility.toRadians(pitch);
 				var yawInRadians = utility.toRadians(yaw);
-				
+
 				cameraTarget[0] = Math.cos(pitchInRadians) * Math.cos(yawInRadians);
 				cameraTarget[1] = Math.sin(pitchInRadians);
 				cameraTarget[2] = Math.cos(pitchInRadians) * Math.sin(yawInRadians);
-				
+
 				m4.normalize(cameraTarget);
-			}		
 		});		
 	}
 		
@@ -95,13 +172,6 @@ function Camera(){
 			}
 			if(event.keyCode == 83){
 				moveBack = true;
-			}
-
-			if(event.keyCode == 65){
-				moveLeft = true;
-			}
-			if(event.keyCode == 68){
-				moveRight = true;
 			}
 			
 			if(event.keyCode == 82){
@@ -119,13 +189,6 @@ function Camera(){
 			if(event.keyCode == 83){
 				moveBack = false;
 			}
-
-			if(event.keyCode == 65){
-				moveLeft = false;
-			}
-			if(event.keyCode == 68){
-				moveRight = false;
-			}
 			
 			if(event.keyCode == 82){
 				moveUp = false;
@@ -137,8 +200,9 @@ function Camera(){
 	
 	}	
 	
+	// Why not have this in other function?
 	this.updateCamera = function(){
-			
+
 		if(moveForward){
 			cameraPosition[0] += cameraTarget[0] * cameraSpeed;
 			cameraPosition[2] += cameraTarget[2] * cameraSpeed;
@@ -146,22 +210,6 @@ function Camera(){
 		else if(moveBack){
 			cameraPosition[0] -= cameraTarget[0] * cameraSpeed;
 			cameraPosition[2] -= cameraTarget[2] * cameraSpeed;
-		}
-		else if(moveLeft){
-			var cross = m4.cross(cameraTarget, [0, 1, 0]);
-			var normalized = m4.normalize(cross);
-			
-			cameraPosition[0] -= normalized[0] * cameraSpeed;
-			cameraPosition[1] -= normalized[1] * cameraSpeed;
-			cameraPosition[2] -= normalized[2] * cameraSpeed;
-		}
-		else if(moveRight){
-			var cross = m4.cross(cameraTarget, [0, 1, 0]);
-			var normalized = m4.normalize(cross);
-			
-			cameraPosition[0] += normalized[0] * cameraSpeed;
-			cameraPosition[1] += normalized[1] * cameraSpeed;
-			cameraPosition[2] += normalized[2] * cameraSpeed;
 		}
 		else if(moveUp){
 			cameraPosition[1] += cameraSpeed;
@@ -180,6 +228,7 @@ function Camera(){
 		cameraPositionPlusTarget[1] = cameraPosition[1] + cameraTarget[1];
 		cameraPositionPlusTarget[2] = cameraPosition[2] + cameraTarget[2];
 		
+		// with view matrix, inverse everything, so that the camera is the origin
 		cameraMatrix = m4.lookAt(cameraPosition, cameraPositionPlusTarget, UP_VECTOR);
 		viewMatrix = m4.inverse(cameraMatrix);
 		viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);

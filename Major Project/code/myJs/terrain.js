@@ -9,17 +9,12 @@ function Terrain(){
 	var quadrantColumnSize = 128;
 	
 	// How many map quadrants, each having 128*128 vertices each
-	// If you update these, make sure to update them in camera assign quadrant method
-	var numberQuadrantRows = 4; 
-	var numberQuadrantColumns = 4; 
+	var numberQuadrantRows = 8; 
+	var numberQuadrantColumns = 8; 
 	
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;
 	var terrainColumns = numberQuadrantColumns * quadrantColumnSize;
-	
-	// Needed in createQuadrantVertices, what position to start generating quadrant vertices from
-	var savedX = 0;
-	var savedZ = 0;
 	
 	// Contains all quadrant VAO objects, each VAO contains a quadrants: vertices, normals, uvs and indices
 	var terrainVAOs = [];
@@ -65,7 +60,7 @@ function Terrain(){
 		get getQuadrantRowSize(){
 			return quadrantRowSize;
 		},
-		get renderIndices(){
+		get getRenderIndices(){
 			return renderIndices; // rocks needs these
 		}
 	};
@@ -140,22 +135,30 @@ function Terrain(){
 				createQuadrantUvs(x, z);
 				createQuadrantNormals();
 				
+				// @Test
+				if(useTests) test_createQuadrantVertices();
+				if(useTests) test_createQuadrantIndices();
+				if(useTests) test_createQuadrantUvs();
+				if(useTests) test_createQuadrantNormals();
+				
 				// Then put data in VBOs, and bind those VBOs to VAO
 				setupQuadrantVertexBuffer();
 				setupQuadrantIndiciesBuffer();
 				setupQuadrantUvBuffer();
 				setupQuadrantNormalBuffer();
 				
+				// @Test
+				if(useTests) test_setupQuadrantBuffers();
+				
 				// Add current VAO to terrainVAOs array, this saves our data in the VAO
 				terrainVAOs.push(tempVAO);
 				vao_ext.bindVertexArrayOES(null); 
 			}
 		}
+		// @Test
+		if(useTests) test_terrainVAOs();
 	}
-	
-	
-	
-	
+
 	/*
 	####################################
 	heightMap creation and filling below
@@ -174,6 +177,8 @@ function Terrain(){
 				heightMap[i] = new Array(terrainColumns).fill(0);
 			}
 			
+			// @Test
+			if(useTests) test_createHeightMap();
 		}
 		
 		/*
@@ -204,6 +209,7 @@ function Terrain(){
 		Fills the 2D HeightMap with initial values
 		*/
 		function fillHeightMap(){
+			var error = false;
 			var xOff = 0;
 			var yOff = 0;
 			var offsetIncrement;
@@ -212,48 +218,13 @@ function Terrain(){
 			//Does for entire map
 			for(var x=0; x<terrainRows; x++){
 				for(var y=0; y<terrainRows; y++){
-					// Left row out of bounds section
-					
-					// sand texture = single noise, no stacked
-					// cliffs etc?
-					
-					// Map boundaries
-					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;					
-					}
-					// Right row out of bounds section
-					else if(x > terrainRows-quadrantRowSize && y < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;	
-					}
-					else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;						
-					}
-					else if(y > terrainRows-quadrantRowSize && x < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;						
-					}
-					
-					//Have 8 sections?
-					// Currently, half and half
-					if(x > terrainRows/numberQuadrantRows && 
-						x < terrainRows/2 &&
-						y < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 15;	
-					}
-					else{
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 30;	
-					}
 				
-					//var stacked = stackNoise(x,y,8);
-					//heightMap[x][y] = stacked * 30;	
-				//	heightMap[x][y] = - 5.5;
+					// Retrieve octaves and scale values from GUI
+					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
+					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;	
 					
-
+					// @Test
+					if(useTests) test_fillHeightMap(heightMap[x][y]);
 				}
 				xOff = 0;
 				yOff += offsetIncrement;
@@ -285,7 +256,6 @@ function Terrain(){
 		Now create the terrain vertices having x, y, z values 
 		Where y is the value from the heightMap we made.
 		*/
-		var savedX = 0, savedZ = 0;
 		function createQuadrantVertices(vaoXPosition, vaoZPosition){
 		
 		
@@ -311,21 +281,7 @@ function Terrain(){
 			var terrainX = vaoXPosition * (quadrantRowSize-1);
 			var terrainZ = vaoZPosition * (quadrantColumnSize-1);
 			var startX = terrainX; // To reset the terrainX
-			
-			/*
-			These if statements fixes bug of vertices doing:
-				0->127, then 128->256 (which also broke heightMap, as it went from 0->255)
-			It now does
-				0->127, then 127->254
-			*/
-			if(vaoXPosition > 0){
-				//terrainX -=vaoXPosition;
-				//startX -= vaoXPosition;
-			}
-			if(vaoZPosition > 0){
-				//terrainZ -= vaoZPosition; 
-			}
-			
+
 			// Always make quadrantRowSize * quadColumnSize (128*128) number of vertices
 			for(var x = 0; x < quadrantRowSize; x++){
 				for(var z = 0; z < quadrantColumnSize; z++){
@@ -339,6 +295,7 @@ function Terrain(){
 				terrainZ += 1; // Increment Z
 			}
 			
+			// Need to save the length of the vertices for rendering, because the actual vertices get reset
 			quadrantFloorVerticesLength = quadrantVertices.length;
 		}
 		
@@ -371,9 +328,6 @@ function Terrain(){
 		
 		Creates the quadrants UV coordinates
 		*/
-		//could get passed the start position of the creatVertices function
-		//creatVertices could return the position it started at, pass into this one
-		//use that start position / terrainSize to get?
 		function createQuadrantUvs(x, z){
 		
 			// Reset current UVs
@@ -420,64 +374,9 @@ function Terrain(){
 			This loop can start from 0, because our vertices also get reset.
 			*/
 			for(var i=0; i<quadrantVertices.length; i+=3){
-				//Get 1st point (3 vertices), 2nd point(3 vertices), 3rd (3 vertices)(under) point
-				
-				//Top left vertex
-				var vertex0x = quadrantVertices[i];
-				var vertex0y = quadrantVertices[i+1];
-				var vertex0z = quadrantVertices[i+2];
-				
-				//Top right vertex
-				var vertex1x = quadrantVertices[i+3];
-				var vertex1y = quadrantVertices[i+4];
-				var vertex1z = quadrantVertices[i+5];
-				
-				/*
-				Vertex under top left vertex
-					Its the current row times the current column!
-					They both dont exist, just add a single value
-					i + value 
-					i + 1 + value
-					try value as 1024, would push current value exactly 1 row down
-					times 3, because 3 vertices, rows isnt 100% correct, as its a 1d array, with an x,y,z each
-				*/
-				var vertex2x = quadrantVertices[i + (quadrantRowSize*3)];
-				var vertex2y = quadrantVertices[(i + 1) + (quadrantRowSize*3)];
-				var vertex2z = quadrantVertices[(i + 2) + (quadrantRowSize*3)];
-				
-				// Now work out vector0, might be wrong direction
-				var vector0x = vertex1x - vertex0x;
-				var vector0y = vertex1y - vertex0y;
-				var vector0z = vertex1z - vertex0z;
-				var vector0 = [vector0x, vector0y, vector0z];
-				
-				// Now work out vector1, might be wrong direction
-				var vector1x = vertex2x - vertex0x;
-				var vector1y = vertex2y - vertex0y;
-				var vector1z = vertex2z - vertex0z;
-				var vector1 = [vector1x, vector1y, vector1z];
-
-				// Need to normalize vectors
-				vector0 = m4.normalize(vector0);
-				vector1 = m4.normalize(vector1);
-				
-				// Now cross product between vector0 and vector1
-				// vector0 * vector1, might be wrong way around,
-				// Also the vectors could've been calculated wrong way around
-				var normal = m4.cross(vector1, vector0);
-				
-				/*
-				Set all normals to 1,
-				Can't notice a difference,
-				Was causing the bug with black lines
-				
-				normals[0]
-				normals[1]
-				normals[2]
-				*/
-				quadrantNormals.push(1); //x
-				quadrantNormals.push(1); //y
-				quadrantNormals.push(1); //z
+				quadrantNormals.push(1); // x
+				quadrantNormals.push(1); // y
+				quadrantNormals.push(1); // z
 			}
 		}
 	
@@ -540,7 +439,7 @@ function Terrain(){
 			quadrantNormalBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantNormalBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantNormals), gl.DYNAMIC_DRAW);
-			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);			
+			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);				
 		}
 		
 	/*
@@ -828,4 +727,142 @@ function Terrain(){
 		}
 	}
 	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
+	
+	/*
+	Test 2D heightMap array is of correct size
+	*/
+	function test_createHeightMap(){
+		if(heightMap.length === quadrantRowSize * numberQuadrantRows && 
+			heightMap[0].length === quadrantColumnSize * numberQuadrantColumns){
+			// It's correct size
+		}
+		else{
+			console.error("In createHeightMap: HeightMap was not of the correct size.");
+			console.error("Expected row size: " + quadrantRowSize * numberQuadrantRows + ", column size: " + quadrantColumnSize * numberQuadrantColumns);
+			console.error("Actual row size: " + heightMap.length + ", column size: " + heightMap[0].length);
+		}
+	}
+	
+	/*
+	Test if the current heightMap value is a number
+	*/
+	function test_fillHeightMap(value){
+		if(isNaN(value)){
+			console.error("In fillHeightMap function: One or more of the heightMap values wasn't a number");
+		}
+		else{
+			// Value is ok
+		}
+	}
+	
+	/*
+	Testing buildAllTerrainData
+	*/
+	
+	/*
+	Test the correct amount of quadrant vertices where created
+		quadrantRowSize = number of vertices per row (128)
+		quadrantColumnSize = number of vertices per column (128)
+	Times these by 3, because each vertex has x, y, z
+		
+	quadrantVertices.length = number of x, y, z values in current section
+	*/
+	function test_createQuadrantVertices(){
+		var expected_number_vertices = 3 * (quadrantRowSize * quadrantColumnSize);
+		var actual_number_vertices = quadrantVertices.length
+		test_quadrantData("vertices", expected_number_vertices, actual_number_vertices);
+	}
+	
+	/*
+	Test the correct amount of quadrant indices where created
+	
+	Each quadrant should have double the number of indices to vertices
+		Divide quadrantVertices by 3 to get the amount of vertices, not x, y, z values
+	*/
+	function test_createQuadrantIndices(){
+		var expected_indices_length = (quadrantVertices.length/3) * 2;
+		var actual_indices_length = quadrantIndices.length;
+		test_quadrantData("indices", expected_indices_length, actual_indices_length);
+	}
+	
+	/*
+	Test correct amount of UV coordinates
+	
+	For each vertex, there should be 2 UV coordinates
+		Divide quadrantVertices by 3 to get the amount of vertices, not x, y, z values
+	*/
+	function test_createQuadrantUvs(){
+		var expected_uvs_length = (quadrantVertices.length/3) * 2;
+		var actual_uvs_length = quadrantUvs.length;
+		test_quadrantData("uvs", expected_uvs_length, actual_uvs_length);
+	}
+	
+	/*
+	Test correct amount of quadrant normals
+	Normals should be equal to number of quadrantVertices
+	*/
+	function test_createQuadrantNormals(){
+		var expected_normals_length = quadrantVertices.length;
+		var actual_normals_length = quadrantNormals.length;
+		test_quadrantData("normals", expected_normals_length, actual_normals_length);
+	}
+	
+	/*
+	Tests length of the quadrants (vertices/normals/UVs/indices)
+	
+	Parameters:
+		attribute: which of the quadrants (vertices/normals/UVs/indices) are being tested
+		expectedLength
+		actualLength
+	*/
+	function test_quadrantData(attribute, expectedLength, actualLength){
+
+		if(expectedLength === actualLength){
+			// correct number of (vertices/normals/UVs/indices)
+		}
+		else{
+			console.error("In " + attribute + " length didn't match");
+			console.error("Expected length: " + expectedLength);
+			console.error("Actual length: " + actualLength);
+		}		
+	}
+	
+	/*
+	Test the quadrantVertexBuffer is a WebGL buffer object (VBO)
+	*/
+	function test_setupQuadrantBuffers(){
+		test_isWebGLBuffer("vertex buffer", quadrantVertexBuffer);
+		test_isWebGLBuffer("indices buffer", quadrantIndicesBuffer);
+		test_isWebGLBuffer("UV buffer", quadrantUvBuffer);
+		test_isWebGLBuffer("normal buffer", quadrantNormalBuffer);
+	}
+	
+	function test_isWebGLBuffer(bufferName, buffer){
+		if(!buffer instanceof WebGLBuffer){
+			console.error("In isWebGLBuffer, quadrant: " + bufferName + ", is not a WebGLBuffer object");
+		}
+	}
+	
+	/*
+	Make sure the terrainVAOs array was filled with WebGLVertexArrayObjectOES objects properly
+	*/
+	function test_terrainVAOs(){
+		for(var i=0; i<numberQuadrantRows * numberQuadrantColumns; i++){
+			if(vao_ext.isVertexArrayOES(terrainVAOs[i])){
+				// Its ok
+			}
+			else{
+				console.error("In buildAllTerrainData: terrainVAOs not created properly");
+			}
+		}		
+	} 
+	
+	/*
+	Don't have unit tests for terrain section rendering,
+	Because I took screen shots when building the algorithm, showing that it works
+	*/
+
 }

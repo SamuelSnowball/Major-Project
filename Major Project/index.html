@@ -4,114 +4,88 @@
 	<title>Mars Scene in WebGL</title>
 	<link rel="stylesheet" href="code/css/gui.css">
 	<link rel="stylesheet" href="libraries/jquery-ui-1.12.1.custom/jquery-ui.css">
+	
+	<!-- Libraries -->
 	<script src="libraries/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 	<script src="libraries/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+	<script src="libraries/m4.js"></script>
+	<script src="libraries/ImprovedNoise.js"></script>
+	<script src="libraries/webgl-obj-loader.js"></script>
+	<script src="libraries/twgl-full.min.js"></script>
+	<script src="libraries/dat.gui.min.js"></script>
+	<script src="libraries/stats.min.js"></script>
 </head>
 
 <body>
 
-<link rel="stylesheet" href="code/css/gui.css">
-
-<div id="banner"><p>Mars Scene in WebGL</p></div>
-<div>fps: <span id="fps"></span></div>
-
 <!-- GL Canvas -->
-<canvas id="canvas" class="canvasClass"></canvas>
+<canvas id="canvas"></canvas>
 
 <div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
 
-<!-- Menu at top left -->
-<ul id="menu" style="visibility: hidden">
-	<li>
-		<div>Menu</div> <!-- Once clicked others should show -->
-		<ul>
-			<li><div>Help</div>
-				<ul>
-					<li><div>Press P to prospect</div></li>
-				</ul>
-			</li>
-			<li><div>Sound</div></li>
-			<li><div>Controls</div>
-				<ul>
-					<li><div>Invert controls</div></li>
-				</ul>		
-			</li>
-			<li><div>About</div></li>
-		</ul>
-	</li>	
-</ul>
-<!-- End Menu -->
-
-<!-- Libraries -->
-<script src="libraries/m4.js"></script>
-<script src="libraries/ImprovedNoise.js"></script>
-<script src="libraries/webgl-obj-loader.js"></script>
-<script src="libraries/twgl-full.min.js"></script>
-
-<!-- WebGL setup files including shaders and program -->
+<!-- WebGL setup files including main shaders and program -->
 <script src="code/myJs/GLSetup.js"></script>
 <script src="code/myJs/TextureLoader.js"></script>
+<script src="code/myJs/Texture.js"></script>
 <script src="code/myJs/VertexShader.js"></script>
 <script src="code/myJs/FragmentShader.js"></script>
 <script src="code/myJs/Program.js"></script>
 
-<!-- Game files -->
+<!-- Project files -->
 <script src="code/myJs/CollisionTester.js"></script>
 <script src="code/myJs/Terrain.js"></script>
 <script src="code/myJs/RockGenerator.js"></script>
-<script src="code/myJs/GUI.js"></script>
-<script src="code/myJs/LoadingScreen.js"></script>
+<script src="code/myJs/PointerLockControls.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
-
-
 <script src="code/myJs/WaterSystem.js"></script>
-
 <script src="code/myJs/Sound.js"></script>
-<script src="code/myJs/Lander.js"></script>
 <script src="code/myJs/Utility.js"></script>
 <script src="code/myJs/Skybox.js"></script>
-
 <script src="code/myJs/Camera.js"></script>
-<script src="code/myJs/PointerLockControls.js"></script>
+<script src="code/myJs/MyGUI.js"></script>
 
 <script>
+
+var useTests = true; // change this to enable/disable testing
 
 var gameRunning = false;
 var perlin = new ImprovedNoise();
 
+var myGUI = new MyGUI();
+
 var utility = new Utility();
 var controls = new PointerLockControls();
-var camera = new Camera();
 
 var textureLoader = new TextureLoader();
-var loadingScreen = new LoadingScreen();
 
 var terrain = new Terrain();
+var camera = new Camera();
 var rockGenerator = new RockGenerator();
 
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 
 var sound = new Sound();
-var lander = new Lander();
-var gui = new GUI();
-var skybox = new Skybox();
 
 var waterSystem = new WaterSystem();
+var skybox = new Skybox();
 
-// Taken
-var fpsElement = document.getElementById("fps");
-var then = Date.now() / 1000;  // get time in seconds
-var cameraMatrix = m4.identity();
+/*
+For FPS and memory, the library:
+https://github.com/mrdoob/stats.js/
 
+You can click on the FPS counter to change its setting
+*/
+var fpsViewer = new Stats();
+fpsViewer.showPanel( 0 ); // 0: fps
+document.body.appendChild( fpsViewer.dom );
 
+var animationFrameID;
+ 
 function render(){
-	var now = Date.now() / 1000;  // get time in seconds
-    var elapsedTime = now - then;
-    then = now;
-	var fps = 1 / elapsedTime;
-    fpsElement.innerText = fps.toFixed(0); 
-		
+	fpsViewer.begin();
+
+	// Work out what quadrant we're in, so we know what to render
 	camera.assignCameraQuadrant();
 
 	// Render the entire scene to each the reflection and refraction textures
@@ -119,55 +93,53 @@ function render(){
 	waterSystem.renderToReflectionBuffer();
 	waterSystem.renderToRefractionBuffer();
 	
-	/*
-	Now render the scene as usual
-	We've already switched back to the default frame buffer
-	*/
+	//Now render the scene as usual
+	//We've already switched back to the default frame buffer
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	// Cant disable clipPlane on some drivers, just set to 0
 	clipPlane = [0, 0, 0, 0];
 	
 	camera.updateCamera();
-	
-	//console.log("X: " + cameraPosition[0], ", Z: " + cameraPosition[2]);
-	
-	/*
-	Don't change render order
-	terrain render generates the renderIndices, 
-	that are needed for rock rendering
-	
-	The skybox has to render last, or everything breaks
-	*/
+
+	//Don't change render order
+	//terrain render generates the renderIndices, 
+	//that are needed for rock rendering
+	//The skybox has to render last, or everything breaks
 	terrain.render(); 
 	rockGenerator.renderInstancedRocks();
+	
 	//particleSystem.render(); 
 	collisionTester.testAllCollision();
-	lander.render();
 	
 	waterSystem.render();
 	skybox.render(viewMatrix, projectionMatrix);
-	
 
-	
-	requestAnimationFrame(render);
+	fpsViewer.end();
+	animationFrameID = requestAnimationFrame(render);
 }
 
-/*
-This gets called when the user clicks to start the game
-*/
 function setup(){
-	gameRunning = true;
-	clearInterval(loadingScreen.animateBackground); //LoadingScreen.js
+	gameRunning = true;	
 
-	// Show GUIs
-	gui.showElements();	
+	currentTexture = mapTexture;
+	updateAttributesAndUniforms();
+	camera.updateCamera();
 
 	render();
 }
 
-</script>
+/*
+Waits 1 second before starting the scene,
+This allows textures to load, avoiding WebGL texture errors
+*/
+setTimeout(
+	function(){
+		setup();  
+	}, 1000
+);
 
+</script>
 
 </body>
 </html>

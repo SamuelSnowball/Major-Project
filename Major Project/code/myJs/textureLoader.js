@@ -35,23 +35,21 @@ var rockTexture4;
 var rockTexture5;
 var rockTextures = [];
 
-/*
-Other textures
-*/
-var waterTexture;
-var lavaTexture;
+var skybox_texture = 0;
+var skybox_night_texture = 0;
 
 function TextureLoader(){
 
+	// Constructor
 	loadTextures();
 	
 	function loadTextures(){
+	
+		skybox_texture = loadCubeMap(false);
+		skybox_night_texture = loadCubeMap(true);
 				  
-		myParticleTexture = new Texture("", 0, 0);
-		gl.bindTexture(gl.TEXTURE_2D, myParticleTexture.getTextureAttribute.texture);		
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([0, 0, 0, 255]));
-				  
+		myParticleTexture = new Texture("resources/particles/smoke.png", 10, 0);
+		
 		// Map texture
 		mapTexture = new Texture("resources/terrain/floor/sand.png", 10, 0);
 		
@@ -70,61 +68,58 @@ function TextureLoader(){
 		// Water dudv + normal texture
 		WATER_DUDV_MAP_TEXTURE = new Texture('resources/water/waterDUDV.png', 10, 5);
 		WATER_NORMAL_MAP_TEXTURE = new Texture('resources/water/waterNormalMap.png', 10, 5);
+		
+		allTexturesLoaded = true;
 	}
 	
-}
-
-function Texture(path, shineDamperParam, reflectivityParam){
-
-	var shineDamper = shineDamperParam; 
-	var reflectivity = reflectivityParam; 
-	var texture = gl.createTexture();
-	
-	// Getters
-	this.getTextureAttribute = {
-		get texture(){
-			return texture;
-		},
-		get shineDamper(){
-			return shineDamper; 
-		},
-		get reflectivity(){
-			return reflectivity;
+	/**
+	 * @param true/false, if we should load the night skybox, or the day skybox
+	 */
+	function loadCubeMap(loadNightSkybox) {
+		var texture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+		
+		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		
+		var faces = [];
+		
+		if(loadNightSkybox === false){
+			faces = [
+				["resources/skybox/right.png", gl.TEXTURE_CUBE_MAP_POSITIVE_X],
+				["resources/skybox/left.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_X],
+				["resources/skybox/top.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Y],
+				["resources/skybox/bottom.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Y],
+				["resources/skybox/back.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Z],
+				["resources/skybox/front.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Z]
+			];
 		}
-	}
-	
-	// The below lines 2/3 fix bug of texture not showing
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-				  new Uint8Array([0, 0, 0, 255])); 
+		else{
+			faces = [
+				["resources/skybox/nightRight.png", gl.TEXTURE_CUBE_MAP_POSITIVE_X],
+				["resources/skybox/nightLeft.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_X],
+				["resources/skybox/nightTop.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Y],
+				["resources/skybox/nightBottom.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Y],
+				["resources/skybox/nightBack.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Z],
+				["resources/skybox/nightFront.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Z]
+			];			
+		}
+		
+		for (var i = 0; i < faces.length; i++) {
+			var face = faces[i][1];
+			var image = new Image();
+			image.onload = function(texture, face, image) {
+				return function() {
+					gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+					gl.texImage2D(face, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+				}
+			} (texture, face, image);
+			image.src = faces[i][0];
+		}
 
-	var image = new Image();
-	image.src = path;
-	image.onload = function (){handleTextureLoaded(image, texture);}	
-	
-	/*
-	This gets run after image is done loading
-	*/
-	function handleTextureLoaded(image, texture){
-	
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		
-		// Writes image data to the texture
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-		
-		/*
-		Setup filtering, controls how image is filtered when scaling
-		Using linear filtering when scaling up
-		Using mipmap when scaling down
-		*/
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-		
-		gl.generateMipmap(gl.TEXTURE_2D);
-		
-		// Ok, we're done manipulating the texture, bind null to gl.TEXTURE_2D
-		gl.bindTexture(gl.TEXTURE_2D, null);
-		
+		return texture;
 	}
 	
 }

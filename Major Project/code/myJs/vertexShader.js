@@ -40,7 +40,7 @@ gl.shaderSource(vertexShader, [
 	// Fog, pass to fragment shader
 	'varying float visibility;',
 	'const float density = 0.01;', 
-	'const float gradient = 3.5;',
+	'const float gradient = 10.5;', //3.5
 	
 	'void main(){',
 	
@@ -61,7 +61,7 @@ gl.shaderSource(vertexShader, [
 		'vec4 positionRelativeToCamera = viewMatrix * worldPostion;',
 		
 		// Particles
-		'gl_PointSize = 5.0;',
+		'gl_PointSize = 25.0;',
 		
 		// Set the final output vertex position
 		'gl_Position = projection * positionRelativeToCamera;',

@@ -12,13 +12,12 @@ Rock objs used and edited from (Public domain):
 function RockGenerator(){
 
 	// OBJ text file
-	var rock21 = utility.httpGet("resources/rocks/rockObjs/obj/21.txt");
+	var rockObjTextFile = utility.httpGet("resources/rocks/rockObjs/obj/21.txt");
 	
 	// ### Start of variables needed for matrices and translations ### //
 	
 		// Translations
 		var translations = [];
-		var translationBuffer;
 		var buffers;
 		
 		// The mesh containing the rock data, we draw from this loads of times
@@ -75,10 +74,10 @@ function RockGenerator(){
 	function setupInstancedRockBuffers(x, z){
 		
 		// Reset the mesh, need to attach new attributes
-		mesh = new OBJ.Mesh(rock21);
+		mesh = new OBJ.Mesh(rockObjTextFile);
 		OBJ.initMeshBuffers(gl, mesh);
-		// Assign random number of rocks to the quadrant
-		mesh.numInstances = Math.floor(Math.random() * 512); 
+		// Pull min/max numbers of rocks from GUI
+		mesh.numInstances = utility.randomIntBetween(myGUI.get.ui_min_rocks, myGUI.get.ui_max_rocks);
 		// Give rocks in this quadrant random texture
 		mesh.texture = rockTextures[Math.floor(Math.random() * 5) + 0]; 
 
@@ -112,10 +111,21 @@ function RockGenerator(){
 		
 		Keep this order! Need to generate X and Z first, to set Y height
 		*/		
-		generateMatricesForTransformRow1(xMin, zMin);
-		generateMatricesForTransformRow3(xMin, zMin);
-		generateMatricesForTransformRow2(xMin, zMin);
-		generateMatricesForTransformRow4(xMin, zMin);
+		generateMatricesForTransformRow1(xMin);
+		// @Test
+		if(useTests) test_matricesForTransformRow(1);
+		
+		generateMatricesForTransformRow3(zMin);
+		// @Test
+		if(useTests) test_matricesForTransformRow(3);
+		
+		generateMatricesForTransformRow2();
+		// @Test
+		if(useTests) test_matricesForTransformRow(2);
+		
+		generateMatricesForTransformRow4();
+		// @Test
+		if(useTests) test_matricesForTransformRow(4);
 		
 		// The full matrix translations for the rock are now built
 		// Push to buffersArray
@@ -127,7 +137,7 @@ function RockGenerator(){
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 1st column of the matrix translation
 	*/
-	function generateMatricesForTransformRow1(xMin, zMin){
+	function generateMatricesForTransformRow1(xMin){
 		// Bind buffer, create all data, then buffer data
 		// Then do the next row
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow1);
@@ -168,7 +178,7 @@ function RockGenerator(){
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 2nd column of the matrix translation
 	*/
-	function generateMatricesForTransformRow2(xMin, zMin){
+	function generateMatricesForTransformRow2(){
 		/*
 		Y
 		*/
@@ -184,6 +194,10 @@ function RockGenerator(){
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapX = savedZPositions[i]; // Reversed
 			terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = savedXPositions[i]; // Reversed
 			var rockPosition = terrain.heightMapValueAtIndex.getTemporaryHeightMapValue;
+			
+			// The bigger the rock, the lower it should spawn in the ground
+			// Otherwise big rocks will stick off edges, looks weird
+			rockPosition -= savedXScales[i]/40;
 
 			data.push(
 				testTransform[1], 
@@ -200,7 +214,7 @@ function RockGenerator(){
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 3rd column of the matrix translation
 	*/
-	function generateMatricesForTransformRow3(xMin, zMin){
+	function generateMatricesForTransformRow3(zMin){
 		/*
 		Z
 		*/
@@ -233,7 +247,7 @@ function RockGenerator(){
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 4th column of the matrix translation
 	*/	
-	function generateMatricesForTransformRow4(xMin, zMin){
+	function generateMatricesForTransformRow4(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow4);
 		data = [];
 		for(var i=0; i<mesh.numInstances; i++){
@@ -260,6 +274,16 @@ function RockGenerator(){
 	*/
 	this.renderInstancedRocks = function(){
 
+		// Reset matrices
+		scale = m4.scaling(1, 1, 1);
+		rotateX = m4.xRotation(0);
+		rotateY = m4.yRotation(0);
+		rotateZ = m4.zRotation(0);
+		position = m4.translation(0, 0, 0);
+		
+		// Times matrices together
+		updateAttributesAndUniforms();
+		
 		// Yes, want to use instancing
 		// This will build the 4x4 matrix from the 1x4 matrix rows passed into the shader
 		useInstancing = true;
@@ -269,9 +293,9 @@ function RockGenerator(){
 		gl.enableVertexAttribArray(instancingLocation1);
 		gl.enableVertexAttribArray(instancingLocation2);
 		gl.enableVertexAttribArray(instancingLocation3);
-
+	
 		// The indices to render, see terrain.render for comments
-		var renderIndices = terrain.get.renderIndices;
+		var renderIndices = terrain.get.getRenderIndices;
 
 		// 9 Draw calls, 1 per visible quadrant
 		for(var i=0; i<renderIndices.length; i++){
@@ -343,7 +367,41 @@ function RockGenerator(){
 		gl.disableVertexAttribArray(instancingLocation1);
 		gl.disableVertexAttribArray(instancingLocation2);
 		gl.disableVertexAttribArray(instancingLocation3);
+	}
+	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
 		
+	/*
+	Test column 1 of matrix applied to the rock instance at a time, 
+	Test mesh.numInstances is correct length
+	The data array contains values for the one column only, at a time
+	
+	Parameter: the column it was called for, to print correct error message
+	
+	(First time being called, uses this column)
+	[0, x, x, x]
+	 4, x, x, x]
+	 8, x, x, x]
+	 12 x, x, x]
+	*/
+	function test_matricesForTransformRow(column){
+		var error = false;
+		
+		if(mesh.numInstances !== data.length/4){
+			console.error("In generateMatricesForTransformRow" + column +": mesh.numInstances wasn't correct length");
+		}
+	
+		for(var i=0; i<mesh.numInstances; i++){
+			if(isNaN(data[i])){
+				error = true; // report an error when done
+			}
+		}	
+			
+		if(error){
+			console.error("In generateMatricesForTransformRow" + column + ": one or more matrix value was NaN");
+		}
 	}
 	
 }

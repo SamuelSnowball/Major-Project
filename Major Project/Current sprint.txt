@@ -1,38 +1,18 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Sprint 8 (10th - 17th April)
-	
+Sprint 9 (17th - 24th April)
 
 	Tackling tasks from product backlog:
-		
-		Add asteroids
-		Add gas from craters
+	
+		Update documentation, class diagram
+		Properly start report
 
-	Other tasks:
+	Minor tasks:
 
-		Start the report!
-		Outline main sections and what gonna discuss in each
-
-		The bigger the rock, the lower it should spawn
-		Fix 2d rocks bug
-		Perhaps lower rock numbers for efficiency
-
-	Sprint plan:
-		
-		Asteroids will:
-			Spawn in range of the user so they can see it
-			Rotate and have particle effects behind them
-			On collision will have more particle effects
-			Rock will stay on floor afterwards
-
-		Particles will 'eminate?' from the rocks centre position
-		Particles will just be a straight line animating
-
-		Gas:
-			Need some sort of crater, perhaps reuse old crater code
-			Then just have simple particle effects
-
-
-	Sprint retrospective:
-
+		New perlin seed each time
+			Could mimic this by selecting scale + small random number
+			scale = 15.0014
+			then scale = 15.0019 etc
+		Ambient water
+		Map/compass

@@ -6,64 +6,6 @@ html, body {
 	margin: 0px;
 }
 
-#banner{
-	width: 200px;
-	height: 200px;
-	margin: auto;
-}
-
-.ui-dialog.ui-widget-content { opacity: 0.5; background: black;}
-
-#menu{
-	position: absolute;
-	left: 20%;
-	top: 0%;
-}
-
-.ui-progressbar-value{
-	background: #0080ff;
-}
-
-#xpBarID{
-	position: absolute;
-	left: 78%;
-	top: 0%;
-	width: 300px;
-	height: 40px;
-}
-
-#healthBarID{
-	position: absolute;
-	left: 78%;
-	top: 7%;
-	width: 300px;
-	height: 40px;
-}
-
-#prospectingBarID{
-	position: absolute;
-	left: 35%;
-	top: 40%;
-	width: 300px;
-	height: 40px;
-}
-
-#inventoryBarID{
-	position: absolute;
-	left: 35%;
-	top: 50%;
-	width: 300px;
-	height: 40px;
-}
-
-#depositOreID{
-	position: absolute;
-	left: 35%;
-	top: 40%;
-	width: 300px;
-	height: 40px;
-}
-
 #outOfBoundsID{
 	position: absolute;
 	left: 35%;
@@ -71,12 +13,3 @@ html, body {
 	width: 300px;
 	height: 40px;
 }
-
-#mainOverlay{
-	position: absolute;
-	left: 34%;
-	top: 60%;
-	width: 66%;
-	height: 40%;
-}
-

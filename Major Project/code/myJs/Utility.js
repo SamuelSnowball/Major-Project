@@ -5,7 +5,12 @@ Contains useful functions
 function Utility(){
 
 	this.randomIntBetween = function(min, max){
-		return Math.floor(Math.random() * (max-min+1) + min);
+		if(min > max){
+			return 0;
+		}
+		else{
+			return Math.floor(Math.random() * (max-min+1) + min);
+		}
 	}
 	
 	this.randomBetween = function(min, max){
