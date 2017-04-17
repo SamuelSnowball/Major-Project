@@ -9,8 +9,8 @@ function Terrain(){
 	var quadrantColumnSize = 128;
 	
 	// How many map quadrants, each having 128*128 vertices each
-	var numberQuadrantRows = 4; 
-	var numberQuadrantColumns = 4; 
+	var numberQuadrantRows = 8; 
+	var numberQuadrantColumns = 8; 
 	
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;
@@ -222,27 +222,6 @@ function Terrain(){
 					// Retrieve octaves and scale values from GUI
 					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
 					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;	
-					
-					/*
-					// Map boundaries
-					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;					
-					}
-					// Right row out of bounds section
-					else if(x > terrainRows-quadrantRowSize && y < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;	
-					}
-					else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;						
-					}
-					else if(y > terrainRows-quadrantRowSize && x < terrainRows){
-						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 50;						
-					}
-					*/
 					
 					// @Test
 					if(useTests) test_fillHeightMap(heightMap[x][y]);

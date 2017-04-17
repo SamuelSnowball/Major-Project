@@ -158,7 +158,7 @@ function WaterSystem(){
 		
 		// Water moving effect, offset for sampling dudv map
 		// Change the offset over time
-		'float waveStrength = 0.01;',
+		'uniform float waveStrength;',
 		'uniform float moveFactor;',
 		
 		// In from vertex
@@ -253,6 +253,8 @@ function WaterSystem(){
 		var waterMoveFactorLocation = gl.getUniformLocation(waterProgram, 'moveFactor');
 		
 		var waterReflectivityLocation = gl.getUniformLocation(waterProgram, 'reflectivity');
+		
+		var waterWaveStrengthLocation = gl.getUniformLocation(waterProgram, 'waveStrength');
 		
 	gl.useProgram(program);
 	
@@ -404,6 +406,9 @@ function WaterSystem(){
 		
 		// Pass in waterReflectivity to shader
 		gl.uniform1f(waterReflectivityLocation, waterReflectivity);
+		
+		// Pass in wave strength, get it from the GUI
+		gl.uniform1f(waterWaveStrengthLocation, myGUI.get.ui_water_strength);
 		
 		fullTransforms = m4.multiply(position, rotateZ);
 		fullTransforms = m4.multiply(fullTransforms, rotateY);

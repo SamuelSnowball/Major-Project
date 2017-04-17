@@ -35,10 +35,6 @@ function CollisionTester(){
 	The camera height then gets assigned to the nearest terrain vertex.
 	*/
 	function setCameraHeight(){
-		if(useFog === false){
-			// Player is viewing minimap, don't set their height
-			return;
-		}
 		
 		// Retrieve the camera current x and z position, 
 		// Use these values to find the height we should set for them
@@ -55,7 +51,12 @@ function CollisionTester(){
 			camera.set.y = nearestHeight;
 		}
 		
-		
+		/*
+		Don't allow player higher than 20
+		*/
+		if(camera.get.y > 20){
+			camera.set.y = 20;
+		}
 	}
 
 	/*
@@ -115,9 +116,6 @@ function CollisionTester(){
 	function pushPlayer(direction){
 		camera.set.x = camera.get.x +  direction * ( - camera.get.targetX) * 5;
 		camera.set.z = camera.get.z +  direction * ( - camera.get.targetZ) * 5;
-		//terrain.heightMapValueAtIndex.setTemporaryHeightMapX = Math.floor(camera.get.z); 
-		//terrain.heightMapValueAtIndex.setTemporaryHeightMapZ = Math.floor(camera.get.x);
-		//camera.set.y = camera.get.y + terrain.heightMapValueAtIndex.getTemporaryHeightMapValue + 0.4;
 	}
 	
 	/*
@@ -153,7 +151,7 @@ function CollisionTester(){
 		testCameraCornerCollision(mapTopLeftCornerVector);
 		testCameraCornerCollision(mapTopRightCornerVector);
 		
-		// Test if nearly at collision boundary and show myGUI if they are
+		// Test if nearly at collision boundary and show the collision gui if they are
 		if(camera.get.x < terrainRows/numberQuadrantRows + 10 && camera.get.z < terrainRows - 10){
 			myGUI.showMapCollision();
 		}

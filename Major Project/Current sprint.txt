@@ -1,81 +1,18 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Sprint 8 (10th - 17th April)
-	
+Sprint 9 (17th - 24th April)
 
 	Tackling tasks from product backlog:
-		
-	Tested:
-		RockGenerator
-		Terrain
-		
-	Other tasks:
-		
-		Add a max height to camera
-			Hate how you can fly up and see the world boundaries
-			Awkward with higher terrain scale
+	
+		Update documentation, class diagram
+		Properly start report
 
-		Controls menu, GUI
-			With invert button
-		Wait until textures loaded until run setup
-		Load up water strength to shader, otherwise ui cant change it		
-		Need perlin seed
-		Need Sound
-		Fix falling through the floor
-		Need Compass/map
-			
-		Some sort of design
-			Class diagram
-				Add constructor as well!, methods need parameters?
-				Add arrays []
-				Add parameters
-			Organize main boxes properly
+	Minor tasks:
 
-		Helen question, what about javascript class diagrma
-			everything is a variable, but having all 'vars' in class diagram is a bit weird
-			instead have, vec3, even though it is just a variable?
-
-		Start unit testing
-			Test that buffers aren't null and contain values?
-			Test that vertices/indices are in correct proportion
-
-		Start the report!
-		Use the blackboard template
-		Outline main sections and what gonna discuss in each
-
-	Sprint plan:
-		
-		Gas:
-			Need some sort of crater, perhaps reuse old crater code
-			Then just have simple particle effects
-
-			Can use one translation matrix for all?
-			Therefore don't have to remake matrices, 
-			just update with a singular translation matrix
-
-			Update of particles:
-			https://processing.org/examples/smokeparticlesystem.html
-
-			Will use gas particle effects for the meteor particle trails
-
-		Asteroids will:
-			Spawn in range of the user so they can see it
-			Rotate and have particle effects behind them
-			On collision will have more particle effects
-			Rock will stay on floor afterwards
-
-		Particles will 'eminate?' from the rocks centre position
-		Particles will just be a straight line animating
-
-		Asteroid generator class
-			randomly wait until generate a new one
-			Need a low poly asteroid OBJ
-
-
-	Sprint retrospective:
-
-		Fixed rock spawn height
-
-		Added FPS counter
-		Added menu system from library
+		New perlin seed each time
+			Could mimic this by selecting scale + small random number
+			scale = 15.0014
+			then scale = 15.0019 etc
+		Ambient water
+		Map/compass

@@ -1,6 +1,6 @@
 
 /*
-This file creates and displays the GUI elements of the game, using the library:
+This file creates and displays the GUI elements of the scene, using the library:
 https://github.com/dataarts/dat.gui
 */
 
@@ -9,12 +9,12 @@ function MyGUI(){
 	/*
 	UI values
 	*/
-	var ui_noise_scale = 50;
+	var ui_noise_scale = 25;
 	var ui_noise_octaves = 8;
 	var ui_min_rocks = 512;
 	var ui_max_rocks = 1024;
-	var ui_water_strength = $("#water_horizontal_spinner").val();
-
+	var ui_water_strength = 0.01;
+	
 	this.get = {
 		get ui_noise_scale(){
 			return ui_noise_scale;
@@ -28,23 +28,25 @@ function MyGUI(){
 		get ui_max_rocks(){
 			return ui_max_rocks;
 		},		
+		get ui_water_strength(){
+			return ui_water_strength;
+		}
 	}
 
 	var systemGUI = new dat.GUI();
 	systemGUI.width = 420;
 	systemGUI.domElement.id = 'systemGUI';
-	
 
 	/*
 	Values on left are values on the left of the GUI
 	*/
 	var systemOptions = {
 		Title: "Mars Scene Interaction",
-		Terrain_noise_scale: 50,
+		Terrain_noise_scale: 25,
 		Terrain_noise_octaves: 8,
 		Min_rocks_per_section: 512,
 		Max_rocks_per_section: 1024,
-		Water_strength: 0
+		Water_strength: 0.01,
 	};
 	
 	// Constructor
@@ -53,8 +55,7 @@ function MyGUI(){
 	function setupSystemGUI(){
 		// Add items on the left of the systemOptions
 		systemGUI.add(systemOptions, "Title");
-		
-		systemGUI.add(systemOptions, "Terrain_noise_scale", 0, 150).onFinishChange(function(){
+		systemGUI.add(systemOptions, "Terrain_noise_scale", 1, 50).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
 			window.cancelAnimationFrame(animationFrameID);
 			requestId = undefined;
@@ -78,7 +79,6 @@ function MyGUI(){
 			rockGenerator = new RockGenerator();
 			render();
 		});
-			
 		systemGUI.add(systemOptions, "Min_rocks_per_section", 0, 2048).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
 			window.cancelAnimationFrame(animationFrameID);
@@ -95,7 +95,9 @@ function MyGUI(){
 			rockGenerator = new RockGenerator();
 			render();
 		});
-		systemGUI.add(systemOptions, "Water_strength");
+		systemGUI.add(systemOptions, "Water_strength", 0.001, 0.5).onFinishChange(function(){
+			ui_water_strength = systemOptions['Water_strength'];
+		});
 	}
 	
 

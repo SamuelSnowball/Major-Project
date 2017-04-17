@@ -5,6 +5,19 @@
 Things left to add to the project: (Estimation time in hours, 10 priority is highest)
 
 	Features left to implement:
+		
+		Add ambient audio, water audio near water	(time: 01h) (priority: 1)
+		None other that are important. Focusing on testing & documentation.
+
+	Extra features:
+
+		Small 'sandstorms'/ dust devils			(time: 10h) (priority: 4)
+			Only on sand regions
+			If player in range
+
+		Scene home screen 				(time: 04h) (priority: 3)
+
+		Scene loading bar				(time: 01h) (priority: 3)
 
 		Gas coming from craters, use OBJs for craters?	(time: 10h) (priority: 5)
 			Just simple particles
@@ -16,26 +29,9 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 			Rock rotates coming down, particles behind it
 			Could have a toggle for meteor shower
 
-		Add user interaction, 				(time: 10h) (priority: 5)
-			changing light position
-			water strength etc
-
-		Small 'sandstorms'/ dust devils			(time: 10h) (priority: 4)
-			Only on sand regions
-			If player in range
-		
-		Scene home screen 				(time: 04h) (priority: 3)
-
-		Scene loading bar				(time: 01h) (priority: 3)
-
-	Extra features:
-
-		Add ambient audio, water audio near water
-
 		Popup GUI showing current info of feature 	(time: 10h) (priority: 2)
 			Transparent background, gas, rock
 
-		Day/night cycles				(time: 05h) (priority: 1)
 		Extra texture effects, bump mapping etc		(time: 40h) (priority: 1)
 
 	Documentation to write:
@@ -53,7 +49,8 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Water						(time: 45h) (priority: 6)
 		Texturing terrain 				(time: 10h) (priority: 5)
 		Fog						(time: 06h) (priority: 4)
-		
+		Day/night cycles				(time: 05h) (priority: 1)
+		Add user interaction, 				(time: 06h) (priority: 5)
 
 
 Terrain notes:
@@ -65,16 +62,6 @@ Rendering efficiency
 	Fixing this could mean 50% more vertices allowed
 	
 Add a release version after each sprint as well
-
-Water notes:
-	First fix original water, on GPU
-	Need to generate the water first, then edit the heightmap
-	because you have the spawn and end points of the water
-
-	random placement of water
-		would it occupy the whole cell?
-		would be better to just have parts of it
-
 
 /////////////////////////////////////////////////////////////////////
 ####################### BEFORE STARTING SCRUM #######################
@@ -858,3 +845,97 @@ Sprint 7 (3rd - 10th April)
 		I can also decrease the rock count in each quadrant to improve FPS.
 
 	
+
+Sprint 8 (10th - 17th April)
+
+	Tackling tasks from product backlog:
+
+		Add craters with gas!
+		Add particles
+		
+	Tested:
+		RockGenerator
+		Terrain
+		
+	Other tasks:
+		
+		Add a max height to camera
+			Hate how you can fly up and see the world boundaries
+			Awkward with higher terrain scale
+
+		Controls menu, GUI
+			With invert button
+		Wait until textures loaded until run setup
+		Load up water strength to shader, otherwise ui cant change it		
+		Need perlin seed
+		Need Sound
+		Fix falling through the floor
+		Need Compass/map
+			
+		Some sort of design
+			Class diagram
+				Add constructor as well!, methods need parameters?
+				Add arrays []
+				Add parameters
+			Organize main boxes properly
+
+		Helen question, what about javascript class diagrma
+			everything is a variable, but having all 'vars' in class diagram is a bit weird
+			instead have, vec3, even though it is just a variable?
+
+		Start unit testing
+			Test that buffers aren't null and contain values?
+			Test that vertices/indices are in correct proportion
+
+		Start the report!
+		Use the blackboard template
+		Outline main sections and what gonna discuss in each
+
+	Sprint plan:
+		
+		Gas:
+			Need some sort of crater, perhaps reuse old crater code
+			Then just have simple particle effects
+
+			Can use one translation matrix for all?
+			Therefore don't have to remake matrices, 
+			just update with a singular translation matrix
+
+			Update of particles:
+			https://processing.org/examples/smokeparticlesystem.html
+
+			Will use gas particle effects for the meteor particle trails
+
+		Asteroids will:
+			Spawn in range of the user so they can see it
+			Rotate and have particle effects behind them
+			On collision will have more particle effects
+			Rock will stay on floor afterwards
+
+		Particles will 'eminate?' from the rocks centre position
+		Particles will just be a straight line animating
+
+		Asteroid generator class
+			randomly wait until generate a new one
+			Need a low poly asteroid OBJ
+
+	Sprint retrospective:
+		
+		Didn't add either asteroids or particles, not enough time
+		Realized I need to stop adding time consuming new features!
+		Focusing on documentation, testing and adding small bits
+
+	Added:
+		-Terrain unit tests
+		-Rock generator unit tests
+		-Better collision
+			-Added max height of 20
+		-Update on class diagram
+		-Day/night cycle
+			-Water loses specular in night
+			-Fog colour changes
+			-Skybox also rotates
+		-User interaction
+			-Can change terrain size
+			-Can change water strength
+		-Slower camera rotation

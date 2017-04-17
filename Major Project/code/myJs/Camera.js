@@ -18,10 +18,7 @@ function Camera(){
 	
 	var lastX = window.innerWidth/2;
 	var lastY = window.innerHeight/2;
-	
-	var sensitivity = 0.005;
-	var cameraSpeed = 0.003;
-	
+
 	// Cameras spawn position
 	var cameraPosition = [
 		250,
@@ -46,7 +43,7 @@ function Camera(){
 	
 	var currentRotateY = 0.1;
 	var currentRotateX = 0.1;
-	var rotateSpeed = 0.3;
+	var rotateSpeed = 0.08;
 	var cameraSpeed = 0.5;
 	
 	var quadrant = 0; // Current section of the map they're in
@@ -146,11 +143,11 @@ function Camera(){
 				// Stops the camera sticking to the bottom/top of scene
 				if(pitch > 70){
 					pitch = 70;
-					currentRotateX = -240;
+					currentRotateX = -850;
 				}
 				if(pitch < -70){
 					pitch = -70;
-					currentRotateX = 240;
+					currentRotateX = 850;
 				}
 				
 				// Should be in radians first

@@ -67,7 +67,6 @@ var particleSystem = new ParticleSystem();
 
 var sound = new Sound();
 
-
 var waterSystem = new WaterSystem();
 var skybox = new Skybox();
 
@@ -82,7 +81,7 @@ fpsViewer.showPanel( 0 ); // 0: fps
 document.body.appendChild( fpsViewer.dom );
 
 var animationFrameID;
-
+ 
 function render(){
 	fpsViewer.begin();
 
@@ -116,19 +115,13 @@ function render(){
 	waterSystem.render();
 	skybox.render(viewMatrix, projectionMatrix);
 
-	
-	
 	fpsViewer.end();
 	animationFrameID = requestAnimationFrame(render);
 }
 
-// This gets called when the user clicks to start the game
 function setup(){
 	gameRunning = true;	
 
-	// Show GUIs
-	//myGUI.
-	
 	currentTexture = mapTexture;
 	updateAttributesAndUniforms();
 	camera.updateCamera();
@@ -136,13 +129,17 @@ function setup(){
 	render();
 }
 
-// Call this when starts scene, locks pointer + isRunning false
-// Because it needs to load world properties
-// Its giving texture error, becauase scene must render to reflection textures first?
-setup();
+/*
+Waits 1 second before starting the scene,
+This allows textures to load, avoiding WebGL texture errors
+*/
+setTimeout(
+	function(){
+		setup();  
+	}, 1000
+);
 
 </script>
-
 
 </body>
 </html>
