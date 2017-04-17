@@ -40,7 +40,7 @@ gl.shaderSource(vertexShader, [
 	// Fog, pass to fragment shader
 	'varying float visibility;',
 	'const float density = 0.01;', 
-	'const float gradient = 3.5;',
+	'const float gradient = 10.5;', //3.5
 	
 	'void main(){',
 	

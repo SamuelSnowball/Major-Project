@@ -223,24 +223,26 @@ function Terrain(){
 					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
 					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;	
 					
+					/*
 					// Map boundaries
 					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
 						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 150;					
+						heightMap[x][y] = stacked * 50;					
 					}
 					// Right row out of bounds section
 					else if(x > terrainRows-quadrantRowSize && y < terrainRows){
 						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 150;	
+						heightMap[x][y] = stacked * 50;	
 					}
 					else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
 						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 150;						
+						heightMap[x][y] = stacked * 50;						
 					}
 					else if(y > terrainRows-quadrantRowSize && x < terrainRows){
 						var stacked = stackNoise(x,y,8);
-						heightMap[x][y] = stacked * 150;						
+						heightMap[x][y] = stacked * 50;						
 					}
+					*/
 					
 					// @Test
 					if(useTests) test_fillHeightMap(heightMap[x][y]);
@@ -300,21 +302,7 @@ function Terrain(){
 			var terrainX = vaoXPosition * (quadrantRowSize-1);
 			var terrainZ = vaoZPosition * (quadrantColumnSize-1);
 			var startX = terrainX; // To reset the terrainX
-			
-			/*
-			These if statements fixes bug of vertices doing:
-				0->127, then 128->256 (which also broke heightMap, as it went from 0->255)
-			It now does
-				0->127, then 127->254
-			*/
-			if(vaoXPosition > 0){
-				//terrainX -=vaoXPosition;
-				//startX -= vaoXPosition;
-			}
-			if(vaoZPosition > 0){
-				//terrainZ -= vaoZPosition; 
-			}
-			
+
 			// Always make quadrantRowSize * quadColumnSize (128*128) number of vertices
 			for(var x = 0; x < quadrantRowSize; x++){
 				for(var z = 0; z < quadrantColumnSize; z++){
@@ -895,8 +883,7 @@ function Terrain(){
 	
 	/*
 	Don't have unit tests for terrain section rendering,
-	Because I took screen shots when building the algorithm,
-	showing that it works
+	Because I took screen shots when building the algorithm, showing that it works
 	*/
 
 }

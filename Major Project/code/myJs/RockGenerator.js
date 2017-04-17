@@ -18,7 +18,6 @@ function RockGenerator(){
 	
 		// Translations
 		var translations = [];
-		var translationBuffer;
 		var buffers;
 		
 		// The mesh containing the rock data, we draw from this loads of times
@@ -275,6 +274,16 @@ function RockGenerator(){
 	*/
 	this.renderInstancedRocks = function(){
 
+		// Reset matrices
+		scale = m4.scaling(1, 1, 1);
+		rotateX = m4.xRotation(0);
+		rotateY = m4.yRotation(0);
+		rotateZ = m4.zRotation(0);
+		position = m4.translation(0, 0, 0);
+		
+		// Times matrices together
+		updateAttributesAndUniforms();
+		
 		// Yes, want to use instancing
 		// This will build the 4x4 matrix from the 1x4 matrix rows passed into the shader
 		useInstancing = true;
@@ -361,7 +370,7 @@ function RockGenerator(){
 	}
 	
 	/*
-	Tests below
+	TESTING FUNCTIONS BELOW
 	*/
 		
 	/*

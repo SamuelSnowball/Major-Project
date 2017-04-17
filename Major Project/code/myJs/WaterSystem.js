@@ -335,6 +335,7 @@ function WaterSystem(){
 		gl.useProgram(program);
 	}
 
+	var lightX = 512, lightZ = 512;
 	function updateWaterAttributesAndUniforms(){
 		// Load camera position
 		gl.uniform3fv(waterCameraPositionLocation, camera.get.position);
@@ -342,11 +343,79 @@ function WaterSystem(){
 		// Load lighting info
 		gl.uniform3fv(lightColourAttribLocation, lightColour);
 		
-		// Work out light position based off of player position
-		var lightX = camera.get.x + 512;
+		
+		
+		
+		//lightx,y,z as a translatin matrix, apply a Y rotation matrix to it
+		/*
+		var lightPosition = m4.identity();
+		m4.translate(lightPosition, camera.get.x, camera.get.y + 25, camera.get.z, lightPosition);
+		debugger;
+		angle = skybox.get.currentRotation;
+		
+		// Rotate the lightPosition matrix, by this angle, store in lightPosition matrix
+		m4.yRotate(lightPosition, angle, lightPosition);
+		*/
+		/*
+		Light position starts at camera.get.x + 512, camera.get.z + 512
+		Have this as the position matrix
+		
+		rotate around camera.get.x, 1, camera.get.z, or actually do [0,1,0]
+		
+		Build the rotation matrix, based on skybox.get.currentRotation
+		multiply the position vector by the rotation matrix somehow
+		*/
+		
+		// Times vector by rotation, not return a mat4
+		var rotationMatrix = [];
+		m4.yRotation(-skybox.get.currentRotation + (-Math.PI /4 - Math.PI / 4), rotationMatrix);
+
+		
+		//vec3 position * components of rotationMatrix, make vec4 to x by mat4
+		var lightPosition = [
+			camera.get.x + 512, 
+			camera.get.y + 25, 
+			camera.get.z + 512,
+			0
+		];
+		
+		
+		var finalPosition = [0, 0, 0, 0];
+		
+		// row/column could be reversed
+		finalPosition[0] =  rotationMatrix[0] * lightPosition[0] +
+							rotationMatrix[1] * lightPosition[1] + 
+							rotationMatrix[2] * lightPosition[2] +
+							rotationMatrix[3] * lightPosition[3];
+						
+		finalPosition[1] =  rotationMatrix[4] * lightPosition[0] +
+							rotationMatrix[5] * lightPosition[1] + 
+							rotationMatrix[6] * lightPosition[2] + 
+							rotationMatrix[7] * lightPosition[3];
+
+		finalPosition[2] =  rotationMatrix[8] * lightPosition[0] +
+							rotationMatrix[9] * lightPosition[1] + 
+							rotationMatrix[10] * lightPosition[2] +	
+							rotationMatrix[11] * lightPosition[3];
+
+		finalPosition[3] =  rotationMatrix[12] * lightPosition[0] +
+							rotationMatrix[13] * lightPosition[1] + 
+							rotationMatrix[14] * lightPosition[2] +	
+							rotationMatrix[15] * lightPosition[3];						
+				
+		
+		
+		/*
+		// Work out light position based off of player position + its currentRotation
+		var lightX = camera.get.x * Date.now()*0.0000000000003; //camera.get.targetX + skybox.get.currentRotation;//camera.get.x + 512;
 		var lightY = camera.get.y + 25;
-		var lightZ = camera.get.z - 512;
-		gl.uniform3fv(lightPositionAttribLocation, [lightX, lightY, lightZ]);
+		var lightZ = camera.get.z * Date.now()*0.0000000000003; //camera.get.targetZ + skybox.get.currentRotation;//camera.get.z - 512;
+		//cameraTarget[0] + currentRotation ?
+		console.log("light x: " + lightX);
+		console.log("light z: " + lightZ);
+		*/
+		
+		gl.uniform3fv(lightPositionAttribLocation, [finalPosition[0], finalPosition[1], finalPosition[2]] );
 	
 		moveFactor += Date.now() * 0.0000000000000009; // dont ask....
 		moveFactor %= 1; // loops when reaches 0
@@ -369,8 +438,12 @@ function WaterSystem(){
 		gl.useProgram(waterProgram);
 		gl.enableVertexAttribArray(waterPositionAttribLocation);
 
-		var xScale = 1024;
-		var zScale = 1024;
+		// Base water size off the map size
+		var xScale = terrain.get.getNumberQuadrantRows * terrain.get.getQuadrantRowSize;
+		var zScale = terrain.get.getNumberQuadrantColumns * terrain.get.getQuadrantRowSize;
+		
+		// Keep scale at 384 max,
+		// Position the water around the player, 
 		
 		scale = m4.scaling(xScale, 1, zScale);
 		rotateX = m4.xRotation(0);
@@ -400,7 +473,6 @@ function WaterSystem(){
 		gl.uniform1i(gl.getUniformLocation(waterProgram, "normalMapSampler"), 3);
 		gl.bindTexture(gl.TEXTURE_2D, WATER_NORMAL_MAP_TEXTURE.getTextureAttribute.texture);			
 
-		
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
 		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 6);

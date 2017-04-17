@@ -112,6 +112,16 @@ function Skybox(){
 		gl.enableVertexAttribArray(skyboxFogColourLocation);
 	gl.useProgram(program);
 	
+	
+	var rotationSpeed = 10; // 1 degrees
+	var currentRotation = 0;
+	
+	this.get = {
+		get currentRotation(){
+			return currentRotation;
+		}
+	};
+	
 	var SIZE = 256;
 	
 	var skybox_vertices_buffer = gl.createBuffer();
@@ -169,6 +179,12 @@ function Skybox(){
 		viewMatrix[12] = 0;
 		viewMatrix[13] = 0;
 		viewMatrix[14] = 0;
+
+		// Increase skybox rotation
+		currentRotation += rotationSpeed * Date.now() * 0.00000000000000009;
+		
+		// Rotate viewMatrix by angle, and store in viewMatrix
+		m4.yRotate(viewMatrix, currentRotation, viewMatrix);
 		
 		gl.uniform4fv(skyboxFogColourLocation, skyColour);
 		gl.uniformMatrix4fv(skyboxViewMatrixLocation, false, new Float32Array(viewMatrix));
@@ -177,9 +193,17 @@ function Skybox(){
 	
 	this.render = function(viewMatrix, projectionMatrix){
 		gl.useProgram(skyboxProgram);
+		
+		// Reset matrices
+		scale = m4.scaling(1, 1, 1);
+		rotateX = m4.xRotation(0);
+		rotateY = m4.yRotation(0);
+		rotateZ = m4.zRotation(0);
+		position = m4.translation(0, 0, 0);
 
+		// Times matrices together
 		updateSkyboxAttributesAndUniforms(viewMatrix, projectionMatrix);
-	
+
 		gl.activeTexture(gl.TEXTURE0);
 		gl.uniform1i(gl.getUniformLocation(skyboxProgram, "skyboxTextureCoords"), 0);
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, skybox_texture);

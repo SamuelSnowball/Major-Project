@@ -99,9 +99,9 @@ function CollisionTester(){
 			nearestHeight = 0;
 		}
 
-		// Return the nearest vertex height, +1, otherwise the player would be in the floor
+		// Return the nearest vertex height, +4, otherwise the player would be in the floor
 		// We want the player hovering and moving just over the terrain, not inside of it.
-		return nearestHeight + 1;
+		return nearestHeight + 4;
 	}
 	
 	/*

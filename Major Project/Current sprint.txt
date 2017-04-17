@@ -6,8 +6,9 @@ Sprint 8 (10th - 17th April)
 
 	Tackling tasks from product backlog:
 		
-		Add asteroids
-		Add gas from craters
+	Tested:
+		RockGenerator
+		Terrain
 		
 	Other tasks:
 		
@@ -38,15 +39,6 @@ Sprint 8 (10th - 17th April)
 		Start unit testing
 			Test that buffers aren't null and contain values?
 			Test that vertices/indices are in correct proportion
-
-			/*
-			Terrain,
-				test VAOs
-				test there are correct x amount of values in vertices etc
-				check vertices/indices ratio
-				test setters/getters of terrain
-				test heightmap array of correct size
-			*/
 
 		Start the report!
 		Use the blackboard template
