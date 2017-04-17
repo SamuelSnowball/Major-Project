@@ -15,8 +15,6 @@ The file includes code for:
 */
 function WaterSystem(){
 
-	var waterHeight = 0;
-
 	/*
 	Frame buffer code
 	*/
@@ -36,21 +34,38 @@ function WaterSystem(){
 	
 	var waterVertexPositionBuffer;
 	var waterVertices = [];
-	var waterUVBuffer;
 	var moveFactor = 0;
+	
+	var waterHeight = 0;
+	var waterReflectivity = 0.0;
+	var waterReflectivityIncrement = 0.001; // how fast to increment/decrement the waterReflectivity based on time of day
 	
 	// Constructor
 	setupReflectionFrameBuffer();
 	setupRefractionFrameBuffer();
-	setup();
+	setupWaterQuad();
 
+	this.get = {
+		get waterReflectivity(){
+			return waterReflectivity;
+		},
+		get waterReflectivityIncrement(){
+			return waterReflectivityIncrement;
+		}
+	};
+	this.set = {
+		set waterReflectivity(x){
+			waterReflectivity = x;
+		}
+	};
+	
 	function setupReflectionFrameBuffer(){
 		reflectionFrameBuffer = gl.createFramebuffer();
 		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
 
 		reflectionTexture = gl.createTexture();
 		gl.bindTexture(gl.TEXTURE_2D, reflectionTexture);
-		// null at the end of this means, we don't have any data to copy yeet
+		// null at the end of this means, we don't have any data to copy yet
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, REFLECTION_WIDTH, REFLECTION_HEIGHT, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -74,7 +89,7 @@ function WaterSystem(){
 		
 		refractionTexture = gl.createTexture();
 		gl.bindTexture(gl.TEXTURE_2D, refractionTexture);
-		// null at the end of this means, we don't have any data to copy yeet
+		// null at the end of this means, we don't have any data to copy yet
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, REFRACTION_WIDTH, REFRACTION_HEIGHT, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -116,15 +131,11 @@ function WaterSystem(){
 
 		'void main(void){',
 			'vec4 worldPostion = model * vec4(waterPosition.x, 0.0, waterPosition.y, 1.0);',
-			//'vec4 positionRelativeToCamera = viewMatrix * worldPostion;',
 			// Output the clipSpace coordinates of current vertex
 			'clipSpace = projectionMatrix * viewMatrix * worldPostion;',
 			'gl_Position = clipSpace;',
 			'textureCoords = vec2(   (waterPosition.x/2.0)  + 0.5,   (waterPosition.y/2.0)  + 0.5) * tilingValue;',
 			'toCameraVector = cameraPosition - worldPostion.xyz;',
-			
-			// Light direction needs to change as well, fromLightToWaterVector is the correct vector, so it doesnt
-			//'vec3 hardcodedLightPosition = vec4(-1, 0.7, -1);',
 			'fromLightToWaterVector = worldPostion.xyz - lightPosition;',
 		'}'
 		
@@ -139,7 +150,7 @@ function WaterSystem(){
 		'varying vec2 textureCoords;',
 		'varying vec4 clipSpace;',
 		
-		// Want to sample the reflectionTexture and refractionTexture
+		// Want to sample the: reflectionTexture, refractionTexture, dudvMap, normalMap
 		'uniform sampler2D reflectionTextureSampler;',
 		'uniform sampler2D refractionTextureSampler;',
 		'uniform sampler2D dudvMapSampler;',
@@ -156,8 +167,8 @@ function WaterSystem(){
 		// Lighting info
 		'uniform vec3 lightColour;',
 		'varying vec3 fromLightToWaterVector;',
-		'float shineDamper = 20.0;', // Could load from shader, for user interaction, cba for now
-		'float reflectivity = 0.6;',
+		'float shineDamper = 20.0;', 
+		'uniform float reflectivity;',
 
 		'void main(void){',
 			
@@ -174,17 +185,12 @@ function WaterSystem(){
 			'distortedTexCoords = textureCoords + vec2(distortedTexCoords.x, distortedTexCoords.y+moveFactor);',
 			'vec2 totalDistortion = (texture2D(dudvMapSampler, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength;',
 			
-			//'vec2 distortion1 = (texture2D(dudvMapSampler, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg * 2.0 - 1.0) * waveStrength;',
-			// Sample it again, and move it in completely different direction, realistic
-			//'vec2 distortion2 = (texture2D(dudvMapSampler, vec2(-textureCoords.x + moveFactor, textureCoords.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;',
-			// Add together
-			//'vec2 totalDistortion = distortion1 + distortion2;',
-			
+			// Add distortion onto the texture coordinates
 			'refractTextureCoords += totalDistortion;',
 			'refractTextureCoords = clamp(refractTextureCoords, 0.001, 0.999);',
 			
 			'reflectTextureCoords += totalDistortion;',
-			'reflectTextureCoords.x = clamp(reflectTextureCoords.x, 0.001, 0.999);', // ??
+			'reflectTextureCoords.x = clamp(reflectTextureCoords.x, 0.001, 0.999);', 
 			'reflectTextureCoords.y = clamp(reflectTextureCoords.y, -0.999, -0.001);', // flipped because reflection
 			
 			'vec4 reflectColour = texture2D(reflectionTextureSampler, reflectTextureCoords);',
@@ -204,7 +210,6 @@ function WaterSystem(){
 			'vec3 normal = vec3(normalMapCoords.r * 2.0 - 1.0, normalMapCoords.b, normalMapCoords.g * 2.0 - 1.0);',
 			// normalize to make unit vector
 			'normal = normalize(normal);',
-			
 			
 			'vec3 reflectedLight = reflect(normalize(fromLightToWaterVector), normal);',
 			'float specular = max(dot(reflectedLight, viewVector), 0.0);',
@@ -246,6 +251,9 @@ function WaterSystem(){
 		gl.enableVertexAttribArray(lightColourAttribLocation);
 		
 		var waterMoveFactorLocation = gl.getUniformLocation(waterProgram, 'moveFactor');
+		
+		var waterReflectivityLocation = gl.getUniformLocation(waterProgram, 'reflectivity');
+		
 	gl.useProgram(program);
 	
 	this.renderToRefractionBuffer = function(){
@@ -316,18 +324,24 @@ function WaterSystem(){
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
 	}
 	
-	function setup(){
+	/*
+	Builds the water quad
+	*/
+	function setupWaterQuad(){
 		gl.useProgram(waterProgram);
+		
 		waterVertexPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
-		// Setting x and z positions only, y is set to 0 in vertex shader
+		
+		// Setting x and z positions of water only
+		// The y position is set to 0 in vertex shader
 		waterVertices = [
-			-1, -1, //0, 0
-			-1, 1,  //0, 1
-			1, -1,  //1, 0
-			1, -1,  //1, 0
-			-1, 1,  //0, 1
-			1, 1    //1, 1
+			-1, -1,
+			-1,  1, 
+			 1, -1, 
+			 1, -1, 
+			-1,  1, 
+			 1,  1   
 		];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.DYNAMIC_DRAW);
 		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
@@ -335,43 +349,20 @@ function WaterSystem(){
 		gl.useProgram(program);
 	}
 
-	var lightX = 512, lightZ = 512;
 	function updateWaterAttributesAndUniforms(){
-		// Load camera position
+	
+		// Pass in camera position
 		gl.uniform3fv(waterCameraPositionLocation, camera.get.position);
 		
-		// Load lighting info
+		// Pass in lighting colour
 		gl.uniform3fv(lightColourAttribLocation, lightColour);
 		
 		
-		
-		
-		//lightx,y,z as a translatin matrix, apply a Y rotation matrix to it
-		/*
-		var lightPosition = m4.identity();
-		m4.translate(lightPosition, camera.get.x, camera.get.y + 25, camera.get.z, lightPosition);
-		debugger;
-		angle = skybox.get.currentRotation;
-		
-		// Rotate the lightPosition matrix, by this angle, store in lightPosition matrix
-		m4.yRotate(lightPosition, angle, lightPosition);
-		*/
-		/*
-		Light position starts at camera.get.x + 512, camera.get.z + 512
-		Have this as the position matrix
-		
-		rotate around camera.get.x, 1, camera.get.z, or actually do [0,1,0]
-		
-		Build the rotation matrix, based on skybox.get.currentRotation
-		multiply the position vector by the rotation matrix somehow
-		*/
-		
-		// Times vector by rotation, not return a mat4
+		// The rotation matrix to apply to the suns position
 		var rotationMatrix = [];
 		m4.yRotation(-skybox.get.currentRotation + (-Math.PI /4 - Math.PI / 4), rotationMatrix);
-
 		
-		//vec3 position * components of rotationMatrix, make vec4 to x by mat4
+		// The original position of the sun
 		var lightPosition = [
 			camera.get.x + 512, 
 			camera.get.y + 25, 
@@ -379,47 +370,40 @@ function WaterSystem(){
 			0
 		];
 		
+		var finalSunPosition = [0, 0, 0, 0];
 		
-		var finalPosition = [0, 0, 0, 0];
-		
-		// row/column could be reversed
-		finalPosition[0] =  rotationMatrix[0] * lightPosition[0] +
-							rotationMatrix[1] * lightPosition[1] + 
-							rotationMatrix[2] * lightPosition[2] +
-							rotationMatrix[3] * lightPosition[3];
+		// Times the lightPosition vector by rotation matrix,
+		// to reposition the sun as the skybox rotates
+		finalSunPosition[0] = rotationMatrix[0] * lightPosition[0] +
+							  rotationMatrix[1] * lightPosition[1] + 
+							  rotationMatrix[2] * lightPosition[2] +
+							  rotationMatrix[3] * lightPosition[3];
 						
-		finalPosition[1] =  rotationMatrix[4] * lightPosition[0] +
-							rotationMatrix[5] * lightPosition[1] + 
-							rotationMatrix[6] * lightPosition[2] + 
-							rotationMatrix[7] * lightPosition[3];
+		finalSunPosition[1] = rotationMatrix[4] * lightPosition[0] +
+							  rotationMatrix[5] * lightPosition[1] + 
+							  rotationMatrix[6] * lightPosition[2] + 
+							  rotationMatrix[7] * lightPosition[3];
 
-		finalPosition[2] =  rotationMatrix[8] * lightPosition[0] +
-							rotationMatrix[9] * lightPosition[1] + 
-							rotationMatrix[10] * lightPosition[2] +	
-							rotationMatrix[11] * lightPosition[3];
+		finalSunPosition[2] = rotationMatrix[8] * lightPosition[0] +
+							  rotationMatrix[9] * lightPosition[1] + 
+							  rotationMatrix[10] * lightPosition[2] +	
+							  rotationMatrix[11] * lightPosition[3];
 
-		finalPosition[3] =  rotationMatrix[12] * lightPosition[0] +
-							rotationMatrix[13] * lightPosition[1] + 
-							rotationMatrix[14] * lightPosition[2] +	
-							rotationMatrix[15] * lightPosition[3];						
-				
+		finalSunPosition[3] = rotationMatrix[12] * lightPosition[0] +
+							  rotationMatrix[13] * lightPosition[1] + 
+							  rotationMatrix[14] * lightPosition[2] +	
+							  rotationMatrix[15] * lightPosition[3];						
 		
-		
-		/*
-		// Work out light position based off of player position + its currentRotation
-		var lightX = camera.get.x * Date.now()*0.0000000000003; //camera.get.targetX + skybox.get.currentRotation;//camera.get.x + 512;
-		var lightY = camera.get.y + 25;
-		var lightZ = camera.get.z * Date.now()*0.0000000000003; //camera.get.targetZ + skybox.get.currentRotation;//camera.get.z - 512;
-		//cameraTarget[0] + currentRotation ?
-		console.log("light x: " + lightX);
-		console.log("light z: " + lightZ);
-		*/
-		
-		gl.uniform3fv(lightPositionAttribLocation, [finalPosition[0], finalPosition[1], finalPosition[2]] );
+		// Pass in the final sun position
+		gl.uniform3fv(lightPositionAttribLocation, [finalSunPosition[0], finalSunPosition[1], finalSunPosition[2]] );
 	
+		// Pass in how much the water should move
 		moveFactor += Date.now() * 0.0000000000000009; // dont ask....
 		moveFactor %= 1; // loops when reaches 0
 		gl.uniform1f(waterMoveFactorLocation, moveFactor);
+		
+		// Pass in waterReflectivity to shader
+		gl.uniform1f(waterReflectivityLocation, waterReflectivity);
 		
 		fullTransforms = m4.multiply(position, rotateZ);
 		fullTransforms = m4.multiply(fullTransforms, rotateY);

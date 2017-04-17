@@ -1,7 +1,25 @@
 
 function Skybox(){
 
-	var skybox_texture = loadCubeMap();
+	var skybox_texture = loadCubeMap(false);
+	var skybox_night_texture = loadCubeMap(true);
+	
+	var rotationSpeed = 1; // 1 degree per frame
+	var currentRotation = 0;
+	var blendFactor = 0; // for blending of the 2 skybox textures
+	var time = 0; // time of day
+	var timeIncrement = 0.001;
+	
+	var skyColourIncrement = 0.001; // how quickly the fog increases/decreases based on time of day
+	
+	this.get = {
+		get currentRotation(){
+			return currentRotation;
+		},
+		get currentTime(){
+			return time;
+		}
+	};
 	
 	var skyboxVertexShader = gl.createShader(gl.VERTEX_SHADER);
 	gl.shaderSource(skyboxVertexShader, [
@@ -30,6 +48,9 @@ function Skybox(){
 		'varying vec3 skyboxTextureCoords;',
 
 		'uniform samplerCube cubeMap;',
+		'uniform samplerCube cubeMap2;', // for night
+		'uniform float blendFactor;', // how much of each skybox texture to render
+		// 0 = just render first texture, 1 = just second 
 
 		'vec3 texture(samplerCube sampler, vec3 c){',
 			'return textureCube(sampler, c).rgb;',
@@ -42,12 +63,13 @@ function Skybox(){
 		
 		'void main(void){',
 			'vec3 sample = texture(cubeMap, skyboxTextureCoords);',
-			//'sample = vec4(sample, 1.0);',
+			'vec3 sample2 = texture(cubeMap2, skyboxTextureCoords);',
+			'vec3 finalSkyboxMixColour = mix(sample, sample2, blendFactor);',
 			
 			'float factor = (skyboxTextureCoords.y - lowerLimit) / (upperLimit - lowerLimit);',
 			'factor = clamp(factor, 0.0, 1.0);',
 			
-			'gl_FragColor = mix(skyColour, vec4(sample, 1.0), factor);',
+			'gl_FragColor = mix(skyColour, vec4(finalSkyboxMixColour, 1.0), factor);',
 		'}'
 		
 	].join('\n'));
@@ -61,7 +83,10 @@ function Skybox(){
 	console.log("skyboxProgram status: " + gl.getProgramInfoLog(skyboxProgram));
 	gl.useProgram(skyboxProgram); //allowed to be here? or at bottom
 
-	function loadCubeMap() {
+	/**
+	 * @param true/false, if we should load the night skybox, or the day skybox
+	 */
+	function loadCubeMap(loadNightSkybox) {
 		var texture = gl.createTexture();
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 		
@@ -70,14 +95,28 @@ function Skybox(){
 		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 		
-		var faces = [
-			["resources/skybox/right.png", gl.TEXTURE_CUBE_MAP_POSITIVE_X],
-			["resources/skybox/left.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_X],
-			["resources/skybox/top.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Y],
-			["resources/skybox/bottom.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Y],
-			["resources/skybox/back.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Z],
-			["resources/skybox/front.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Z]
-		];
+		var faces = [];
+		
+		if(loadNightSkybox === false){
+			faces = [
+				["resources/skybox/right.png", gl.TEXTURE_CUBE_MAP_POSITIVE_X],
+				["resources/skybox/left.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_X],
+				["resources/skybox/top.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Y],
+				["resources/skybox/bottom.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Y],
+				["resources/skybox/back.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Z],
+				["resources/skybox/front.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Z]
+			];
+		}
+		else{
+			faces = [
+				["resources/skybox/nightRight.png", gl.TEXTURE_CUBE_MAP_POSITIVE_X],
+				["resources/skybox/nightLeft.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_X],
+				["resources/skybox/nightTop.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Y],
+				["resources/skybox/nightBottom.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Y],
+				["resources/skybox/nightBack.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Z],
+				["resources/skybox/nightFront.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Z]
+			];			
+		}
 		
 		for (var i = 0; i < faces.length; i++) {
 			var face = faces[i][1];
@@ -85,7 +124,6 @@ function Skybox(){
 			image.onload = function(texture, face, image) {
 				return function() {
 					gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
-					//gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
 					gl.texImage2D(face, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 				}
 			} (texture, face, image);
@@ -110,17 +148,92 @@ function Skybox(){
 		
 		var skyboxFogColourLocation = gl.getUniformLocation(skyboxProgram, 'skyColour');
 		gl.enableVertexAttribArray(skyboxFogColourLocation);
+		
+		// Skybox blending uniforms
+		var skyboxBlendFactorLocation = gl.getUniformLocation(skyboxProgram, 'blendFactor');
+		
 	gl.useProgram(program);
 	
-	
-	var rotationSpeed = 10; // 1 degrees
-	var currentRotation = 0;
-	
-	this.get = {
-		get currentRotation(){
-			return currentRotation;
+	function updateDay(){
+		
+		//0.00000000000003 bit slow
+		//0.0000000000003 bit fast
+		time += Date.now()*0.0000000000003;
+		//console.log("Time is: " + time);
+		
+		if(time > 2400){
+			time = 0;
 		}
-	};
+		
+		/*
+		Base the blend factor on time of day
+			blendFactor = 1, fully night
+			blendFactor = 0, fully day
+	
+		Fog/Sky colours:
+			White [1, 1, 1, 1]
+			Black [0, 0, 0, 1]
+
+		Set waterReflectivity based on time of day
+		*/
+		var waterReflectivityIncrement = waterSystem.get.waterReflectivityIncrement;
+		
+		if(time > 1800 && time < 2400){
+			// Start blending to night (1)
+			blendFactor += timeIncrement;
+			if(blendFactor > 1){
+				blendFactor = 1;
+			}
+			// Make fog darker
+			skyColour[0] -= skyColourIncrement;
+			skyColour[1] -= skyColourIncrement;
+			skyColour[2] -= skyColourIncrement;
+			
+			// Decrease waterReflectivity, then stop it going below 0
+			waterSystem.set.waterReflectivity = waterSystem.get.waterReflectivity - waterReflectivityIncrement;
+			if(waterSystem.get.waterReflectivity < 0){
+				waterSystem.set.waterReflectivity = 0;
+			}
+		}
+		else if(time > 0 && time < 0600){
+			// Keep at night (1)
+			blendFactor = 1;
+			// Keep fog black
+			skyColour[0] = 0;
+			skyColour[1] = 0;
+			skyColour[2] = 0;
+			
+			waterSystem.set.waterReflectivity = 0;
+		}
+		else if(time > 0600 && time < 1200){
+			// Start blending to day (0)
+			blendFactor -= timeIncrement;
+			if(blendFactor < 0){
+				blendFactor = 0;
+			}
+			// Blend fog to white
+			skyColour[0] += skyColourIncrement;
+			skyColour[1] += skyColourIncrement;
+			skyColour[2] += skyColourIncrement;
+			
+			// Increase waterReflectivity, stop it going over 1
+			waterSystem.set.waterReflectivity = waterSystem.get.waterReflectivity + waterReflectivityIncrement;
+			if(waterSystem.get.waterReflectivity > 1){
+				waterSystem.set.waterReflectivity = 1;
+			}
+		}
+		else if(time > 1200 && time < 1800){
+			// Keep at day (0) 
+			blendFactor = 0;
+			// Keep fog white
+			skyColour[0] = 1;
+			skyColour[1] = 1;
+			skyColour[2] = 1;
+			
+			// Keep waterReflectivity at its maximum value
+			waterSystem.set.waterReflectivity = 1;
+		}
+	}
 	
 	var SIZE = 256;
 	
@@ -172,7 +285,10 @@ function Skybox(){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(skybox_vertices), gl.STATIC_DRAW);
 	gl.vertexAttribPointer(skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 	
-	function updateSkyboxAttributesAndUniforms(viewMatrix, projectionMatrix){
+	/*
+	
+	*/
+	function updateSkyboxAttributesAndUniforms( ){
 		// Remove the translation from the view matrix
 		// So the skybox doesn't move in relation to the camera
 		// Stays at max clip space coordinates
@@ -185,6 +301,11 @@ function Skybox(){
 		
 		// Rotate viewMatrix by angle, and store in viewMatrix
 		m4.yRotate(viewMatrix, currentRotation, viewMatrix);
+		
+		// Load blend factor, waterReflectivity, skyColour
+		updateDay();
+		
+		gl.uniform1f(skyboxBlendFactorLocation, blendFactor);
 		
 		gl.uniform4fv(skyboxFogColourLocation, skyColour);
 		gl.uniformMatrix4fv(skyboxViewMatrixLocation, false, new Float32Array(viewMatrix));
@@ -202,11 +323,17 @@ function Skybox(){
 		position = m4.translation(0, 0, 0);
 
 		// Times matrices together
-		updateSkyboxAttributesAndUniforms(viewMatrix, projectionMatrix);
+		updateSkyboxAttributesAndUniforms();
 
+		// CubeMap1 Sample from unit 0
 		gl.activeTexture(gl.TEXTURE0);
-		gl.uniform1i(gl.getUniformLocation(skyboxProgram, "skyboxTextureCoords"), 0);
+		gl.uniform1i(gl.getUniformLocation(skyboxProgram, "cubeMap"), 0);
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, skybox_texture);
+		
+		// CubeMap2 Sample from unit 1
+		gl.activeTexture(gl.TEXTURE1);
+		gl.uniform1i(gl.getUniformLocation(skyboxProgram, "cubeMap2"), 1);
+		gl.bindTexture(gl.TEXTURE_CUBE_MAP, skybox_night_texture);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, skybox_vertices_buffer);
 		gl.vertexAttribPointer(skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);

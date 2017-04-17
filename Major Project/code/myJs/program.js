@@ -24,7 +24,7 @@ gl.useProgram(program);
 Global variables to change and load into shaders
 */
 var clipPlane = [0, 0, 0, 0];
-var skyColour = [0.8, 0.5, 0.5, 0.7];
+var skyColour = [0.0, 0.0, 0.0, 1.0]; //0.8, 0.5, 0.5, 0.7
 var lightColour = [1, 1, 1];
 var useFog = true;
 var useInstancing = false;
