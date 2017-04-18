@@ -11,6 +11,12 @@ var gl = canvas.getContext('webgl');
 gl.enable(gl.DEPTH_TEST);
 
 /*
+Load the GUI canvas for minimap
+*/
+var gui_canvas = document.getElementById('GUIcanvas');
+var gui_context = gui_canvas.getContext('2d');
+
+/*
 Load extension libraries, not in WebGL version 1 by default
 */
 

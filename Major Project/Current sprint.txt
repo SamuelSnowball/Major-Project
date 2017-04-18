@@ -8,11 +8,18 @@ Sprint 9 (17th - 24th April)
 		Update documentation, class diagram
 		Properly start report
 
+		Map/compass
+			Render with opengl, probably easier
+			Dont apply view matrix to it?
+			Somehow always have infront of camera
+		
+
 	Minor tasks:
 
 		New perlin seed each time
 			Could mimic this by selecting scale + small random number
 			scale = 15.0014
 			then scale = 15.0019 etc
-		Ambient water
-		Map/compass
+		Ambient water audio
+			Need mute section?
+		

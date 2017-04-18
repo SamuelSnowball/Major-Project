@@ -9,8 +9,8 @@ function Terrain(){
 	var quadrantColumnSize = 128;
 	
 	// How many map quadrants, each having 128*128 vertices each
-	var numberQuadrantRows = 8; 
-	var numberQuadrantColumns = 8; 
+	var numberQuadrantRows = 4; 
+	var numberQuadrantColumns = 4; 
 	
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;

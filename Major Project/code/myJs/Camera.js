@@ -19,14 +19,15 @@ function Camera(){
 	var lastX = window.innerWidth/2;
 	var lastY = window.innerHeight/2;
 
-	// Cameras spawn position
+	// Camera position, initialize to centre of map
+	// the + 1 fixes a bug of only 1 quadrant rendering to begin with
 	var cameraPosition = [
-		250,
+		(terrain.get.getTerrainRows / 2) + 1,
 		5,
-		250
+		(terrain.get.getTerrainRows / 2) + 1
 	];
 
-	//Actual usage in index file, but definition needed here
+	// Where the camera is looking
 	var cameraTarget = [
 		0.1,
 		0.1,
