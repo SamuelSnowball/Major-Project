@@ -32,6 +32,10 @@ gl.shaderSource(fragmentShader, [
 	'uniform vec4 skyColour;',
 	'uniform bool useFog;',
 	
+	// Blending for map boundary
+	'uniform float alpha;',
+	'uniform bool useAlpha;',
+	
 	'void main(){',
 		// Normalize vectors to ensure size 1, so vector size doesn't affect .product
 		// Directional
@@ -83,6 +87,11 @@ gl.shaderSource(fragmentShader, [
 		// Fog, mix the skyColour and colour of the object
 		// mixing skyColour with gl_FragColor is that right?
 		'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
+		
+		'if(useAlpha){',
+			'gl_FragColor[3] = gl_FragColor[3] * alpha;',
+		'}',
+		//IF use blending, then do it, else dont// fragCOlour[4] = ALPHA OR osmethinf
 
 	'}'
 ].join('\n'));

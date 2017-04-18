@@ -45,6 +45,7 @@
 <script src="code/myJs/Skybox.js"></script>
 <script src="code/myJs/Camera.js"></script>
 <script src="code/myJs/MyGUI.js"></script>
+<script src="code/myJs/Minimap.js"></script>
 
 <script>
 
@@ -71,6 +72,7 @@ var sound = new Sound();
 
 var waterSystem = new WaterSystem();
 var skybox = new Skybox();
+var minimap = new Minimap();
 
 /*
 For FPS and memory, the library:
@@ -83,31 +85,104 @@ fpsViewer.showPanel( 0 ); // 0: fps
 document.body.appendChild( fpsViewer.dom );
 
 var animationFrameID;
+
+var alphaLocation = gl.getUniformLocation(program, 'alpha');
+var useAlphaLocation = gl.getUniformLocation(program, 'useAlpha');
+ 
+function renderCube(){
+	
+	var vertices = [
+	   -1, 1, 0, // top left, 
+	   -1, -1, 0, // bottom left 
+	   1, -1, 0, // bottom right
+	   1, 1, 0 // top right
+	];
+
+
+	var positions = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	var positionAttribLocation = gl.getAttribLocation(program, 'position');
+	gl.enableVertexAttribArray(positionAttribLocation);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+		
+	/*
+	Elements
+	*/
+	var indices = [3,2,1,3,1,0]; 
+	var elements = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+	
+	
+	
+	var uvs = [
+	   0.0, 1.0,
+	    0.0, 1.0,
+		 0.0, 1.0,
+		  0.0, 1.0
+	];
+
+	var uvsBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
+	gl.enableVertexAttribArray(textureCoordLocation);
+	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+	
+		gl.activeTexture(gl.TEXTURE0);
+		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+		gl.bindTexture(gl.TEXTURE_2D, rockTexture0.getTextureAttribute.texture);
+	
+			scale = m4.scaling(20, 20, 20);
+		rotateX = m4.xRotation(Date.now()*0.0003);
+		rotateY = m4.yRotation(Date.now()*0.0003);
+		rotateZ = m4.zRotation(Date.now()*0.0003);
+		
+		position = m4.translation(256, 5, 256);
+		
+	updateAttributesAndUniforms();
+	
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);
+	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
+	
+	gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);	
+		
+		
+}
  
 function render(){
 	fpsViewer.begin();
 
 	// Work out what quadrant we're in, so we know what to render
 	camera.assignCameraQuadrant();
-
-	// Render the entire scene to each the reflection and refraction textures
+	
+	// Render the scene to each the reflection and refraction textures
 	// (2x FULL scene render calls)
 	waterSystem.renderToReflectionBuffer();
 	waterSystem.renderToRefractionBuffer();
 	
-	//Now render the scene as usual
-	//We've already switched back to the default frame buffer
+	// Now render the scene as usual
+	// We've already switched back to the default frame buffer
 	gl.clearColor(0.8, 0.8, 0.8, 0.7);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	// Cant disable clipPlane on some drivers, just set to 0
+	// Cant disable clipPlane on some drivers, just set to 0, for water
 	clipPlane = [0, 0, 0, 0];
 	
 	camera.updateCamera();
 
-	//Don't change render order
-	//terrain render generates the renderIndices, 
-	//that are needed for rock rendering
-	//The skybox has to render last, or everything breaks
+	/*
+	Don't change render order
+	Terrain render generates the renderIndices, 
+	that are needed for rock rendering
+	The skybox has to render last, or everything breaks
+	*/
 	terrain.render(); 
 	rockGenerator.renderInstancedRocks();
 	
@@ -115,9 +190,23 @@ function render(){
 	collisionTester.testAllCollision();
 	
 	waterSystem.render();
+	
+	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+	gl.enable(gl.BLEND);
+	gl.disable(gl.DEPTH_TEST);
+	
+	gl.uniform1f(alphaLocation, 0.8);
+	gl.uniform1i(useAlphaLocation, true);
+	
+	renderCube();
+	
+	gl.disable(gl.BLEND);
+	gl.enable(gl.DEPTH_TEST);
+	gl.uniform1i(useAlphaLocation, false);	
+	
 	skybox.render(viewMatrix, projectionMatrix);
-
-	renderMinimap();
+	
+	minimap.render();
 	fpsViewer.end();
 	animationFrameID = requestAnimationFrame(render);
 }
@@ -131,117 +220,6 @@ function setup(){
 
 	render();
 }
-
-/*
-The problem is its based on top left of blue rectangle or something
-	Would work if it was a small point
-	
-	The coordinates are mapped, now just add collision as usual,
-	copy from terrain code
-*/
-var canvas_width = 58; // the CSS makes canvas way too big, the canvas is just blank so cant see it
-var canvas_height = 58; // it looks smaller, cos only rendering a square to 50,50 - so set these as the height
-
-// Map the map size to the width of the canvas
-// Max map size = the actual size, or the accessible size, so -256 each
-var gui_canvas_min = 0;
-var gui_canvas_max = canvas_width;
-
-var map_min = 0;
-var map_max = terrain.get.getTerrainRows;
-
-/*
-Example for 4x4 map
-	getTerrainRows = 512;
-	getNumberQuadrantRows = 4;
-	
-	So the boundary value = 512/4 = 128
-
-It will always be 128 with the formula!
-
-Now need to map it to canvas size
-*/
-var canvas_boundary_unmapped = terrain.get.getTerrainRows / terrain.get.getNumberQuadrantRows;
-console.log("canvas_boundary_unmapped: " + canvas_boundary_unmapped);
-var canvas_boundary_mapped = (canvas_boundary_unmapped - 0) / (terrain.get.getTerrainRows - 0) * (gui_canvas_max - gui_canvas_min) + gui_canvas_min;
-console.log("canvas_boundary_mapped: " + canvas_boundary_mapped);
-
-function renderMinimap(){
-
-
-
-	var canvasX = (camera.get.x - map_min) / (map_max - map_min) * (gui_canvas_max - gui_canvas_min) + gui_canvas_min;
-	var canvasZ = (camera.get.z - map_min) / (map_max - map_min) * (gui_canvas_max - gui_canvas_min) + gui_canvas_min;
-
-	// Only need to check right and bottom side !! 
-	// the regular collsion stops it going off left/top and it looks correct, due to top left
-	if(canvasX > gui_canvas_max - canvas_boundary_mapped - 3){
-		canvasX -= 1;
-		console.log("ya");
-	}
-	
-	// Player on minimap has width and height of 5
-	// Its mapped to 0->50
-	// So, its always 128, which is getTerrainRows/numberQuadrants or something
-	// so use getTerrainRows/numberQuadrants to work out 0->50 boundaries? 
-	//just need it once
-
-	
-	//gui_context.fillStyle = 'rgb(0,0,0)'; // Black background
-	gui_context.clearRect(0, 0, canvas_width, canvas_height); // Fills background
-	gui_context.fillStyle = 'rgb(0,0,255)'; // Blue square
-	gui_context.fillRect(canvasX, canvasZ, 5, 5); // Fills square
-	
-	
-		renderMinimapGrid();
-}
-
-var grid_rows = terrain.get.getNumberQuadrantRows;
-
-/*
-rows/columns always the same
-*/
-function renderMinimapGrid(){
-
-	var line_width = canvas_width;
-	
-	var grid_start_x = 0;
-	var grid_start_y = 0;
-	
-	var grid_end_x = canvas_width;
-	var grid_end_y = 0;	
-
-	for(var y=0; y<grid_rows+1; y++){
-		gui_context.beginPath();
-		gui_context.moveTo(grid_start_x, grid_start_y);
-		gui_context.lineTo(grid_end_x, grid_end_y);
-		gui_context.lineWidth = 1;
-		gui_context.strokeStyle = 'rgb(47, 161, 214)';
-		gui_context.stroke();
-	
-		grid_start_y += canvas_boundary_mapped;
-		grid_end_y += canvas_boundary_mapped;
-	}
-
-	// Reset values
-	grid_start_y = 0;
-	grid_end_y = canvas_width;
-	grid_end_x = 0;
-	
-	for(var x=0; x<grid_rows+1; x++){
-		gui_context.beginPath();
-		gui_context.moveTo(grid_start_x, grid_start_y);
-		gui_context.lineTo(grid_end_x, grid_end_y);
-		gui_context.lineWidth = 1;
-		gui_context.strokeStyle = 'rgb(47, 161, 214)';
-		gui_context.stroke();
-	
-		grid_start_x += canvas_boundary_mapped;
-		grid_end_x += canvas_boundary_mapped;
-	}
-
-}
-
 
 /*
 Waits 1 second before starting the scene,

@@ -9,12 +9,17 @@ Sprint 9 (17th - 24th April)
 		Properly start report
 
 		Map/compass
-			Render with opengl, probably easier
-			Dont apply view matrix to it?
-			Somehow always have infront of camera
+			Need to mark the unreachable cells
+
+		Some sort of invisible barrier
+			Therefore no rotation needed
 		
 
 	Minor tasks:
+
+		Water reflection doesn't look right
+		See whats taking up render time! 
+		Try set rock textures to 1, see differnece
 
 		New perlin seed each time
 			Could mimic this by selecting scale + small random number
