@@ -88,10 +88,10 @@ gl.shaderSource(fragmentShader, [
 		// mixing skyColour with gl_FragColor is that right?
 		'gl_FragColor = mix(skyColour, gl_FragColor, visibility);',
 		
+		// Makes the terrain borders transparent
 		'if(useAlpha){',
 			'gl_FragColor[3] = gl_FragColor[3] * alpha;',
 		'}',
-		//IF use blending, then do it, else dont// fragCOlour[4] = ALPHA OR osmethinf
 
 	'}'
 ].join('\n'));

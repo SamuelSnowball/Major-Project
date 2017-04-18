@@ -53,29 +53,22 @@ var useTests = true; // change this to enable/disable testing
 
 var gameRunning = false;
 var perlin = new ImprovedNoise();
-
 var myGUI = new MyGUI();
-
 var utility = new Utility();
 var controls = new PointerLockControls();
-
 var textureLoader = new TextureLoader();
-
 var terrain = new Terrain();
 var camera = new Camera();
 var rockGenerator = new RockGenerator();
-
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
-
 var sound = new Sound();
-
 var waterSystem = new WaterSystem();
 var skybox = new Skybox();
 var minimap = new Minimap();
 
 /*
-For FPS and memory, the library:
+For FPS and memory, uses the library (MIT):
 https://github.com/mrdoob/stats.js/
 
 You can click on the FPS counter to change its setting
@@ -84,11 +77,13 @@ var fpsViewer = new Stats();
 fpsViewer.showPanel( 0 ); // 0: fps
 document.body.appendChild( fpsViewer.dom );
 
+// Needed to stop/start the scene rendering,
+// when the user changes terrain properties via UI
 var animationFrameID;
+
 
 var alphaLocation = gl.getUniformLocation(program, 'alpha');
 var useAlphaLocation = gl.getUniformLocation(program, 'useAlpha');
- 
 function renderCube(){
 	
 	var vertices = [
@@ -97,7 +92,6 @@ function renderCube(){
 	   1, -1, 0, // bottom right
 	   1, 1, 0 // top right
 	];
-
 
 	var positions = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
@@ -114,13 +108,11 @@ function renderCube(){
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
 	
-	
-	
 	var uvs = [
-	   0.0, 1.0,
 	    0.0, 1.0,
-		 0.0, 1.0,
-		  0.0, 1.0
+		0.0, 1.0,
+		0.0, 1.0,
+		0.0, 1.0
 	];
 
 	var uvsBuffer = gl.createBuffer();
@@ -128,24 +120,21 @@ function renderCube(){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
 	gl.enableVertexAttribArray(textureCoordLocation);
 	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
-	
-		gl.activeTexture(gl.TEXTURE0);
-		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-		gl.bindTexture(gl.TEXTURE_2D, rockTexture0.getTextureAttribute.texture);
-	
-			scale = m4.scaling(20, 20, 20);
-		rotateX = m4.xRotation(Date.now()*0.0003);
-		rotateY = m4.yRotation(Date.now()*0.0003);
-		rotateZ = m4.zRotation(Date.now()*0.0003);
 		
-		position = m4.translation(256, 5, 256);
+	position = m4.translation(256, 5, 256);	
+	scale = m4.scaling(20, 20, 20);
+	rotateX = m4.xRotation(Date.now()*0.0003);
+	rotateY = m4.yRotation(Date.now()*0.0003);
+	rotateZ = m4.zRotation(Date.now()*0.0003);
 		
 	updateAttributesAndUniforms();
-	
+
+	gl.activeTexture(gl.TEXTURE0);
+	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+	gl.bindTexture(gl.TEXTURE_2D, rockTexture0.getTextureAttribute.texture);	
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
 	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);
 	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
@@ -153,8 +142,6 @@ function renderCube(){
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
 	
 	gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);	
-		
-		
 }
  
 function render(){
@@ -222,13 +209,13 @@ function setup(){
 }
 
 /*
-Waits 1 second before starting the scene,
+Waits x seconds before starting the scene,
 This allows textures to load, avoiding WebGL texture errors
 */
 setTimeout(
 	function(){
 		setup();  
-	}, 1000
+	}, 2000
 );
 
 </script>
