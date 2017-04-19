@@ -85,6 +85,8 @@ var animationFrameID;
 var alphaLocation = gl.getUniformLocation(program, 'alpha');
 var useAlphaLocation = gl.getUniformLocation(program, 'useAlpha');
 function renderCube(){
+
+	
 	
 	var vertices = [
 	   -1, 1, 0, // top left, 
@@ -120,12 +122,13 @@ function renderCube(){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
 	gl.enableVertexAttribArray(textureCoordLocation);
 	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
-		
-	position = m4.translation(256, 5, 256);	
-	scale = m4.scaling(20, 20, 20);
-	rotateX = m4.xRotation(Date.now()*0.0003);
-	rotateY = m4.yRotation(Date.now()*0.0003);
-	rotateZ = m4.zRotation(Date.now()*0.0003);
+	
+	// Change to position slightly after the boundary
+	position = m4.translation(128, 0, 128);	
+	rotateX = m4.xRotation(0);
+	rotateY = m4.yRotation(0);
+	rotateZ = m4.zRotation(0);	
+	scale = m4.scaling(terrain.get.getTerrainRows, 20, terrain.get.getTerrainRows);
 		
 	updateAttributesAndUniforms();
 
@@ -177,18 +180,18 @@ function render(){
 	collisionTester.testAllCollision();
 	
 	waterSystem.render();
-	
+
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 	gl.enable(gl.BLEND);
-	gl.disable(gl.DEPTH_TEST);
+	//gl.disable(gl.DEPTH_TEST);
 	
-	gl.uniform1f(alphaLocation, 0.8);
+	gl.uniform1f(alphaLocation, 0.4);
 	gl.uniform1i(useAlphaLocation, true);
 	
 	renderCube();
 	
 	gl.disable(gl.BLEND);
-	gl.enable(gl.DEPTH_TEST);
+	//gl.enable(gl.DEPTH_TEST);
 	gl.uniform1i(useAlphaLocation, false);	
 	
 	skybox.render();
