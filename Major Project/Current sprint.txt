@@ -10,6 +10,11 @@ Sprint 9 (17th - 24th April)
 
 		Map/compass
 			Need to mark the unreachable cells
+			Fix barrier in night time
+			Add to 4 corners
+
+			Fix lengths of barrier
+			Fix barrier coming in/out of view
 
 		Some sort of invisible barrier
 			Therefore no rotation needed

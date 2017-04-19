@@ -80,72 +80,6 @@ document.body.appendChild( fpsViewer.dom );
 // Needed to stop/start the scene rendering,
 // when the user changes terrain properties via UI
 var animationFrameID;
-
-
-var alphaLocation = gl.getUniformLocation(program, 'alpha');
-var useAlphaLocation = gl.getUniformLocation(program, 'useAlpha');
-function renderCube(){
-
-	
-	
-	var vertices = [
-	   -1, 1, 0, // top left, 
-	   -1, -1, 0, // bottom left 
-	   1, -1, 0, // bottom right
-	   1, 1, 0 // top right
-	];
-
-	var positions = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	var positionAttribLocation = gl.getAttribLocation(program, 'position');
-	gl.enableVertexAttribArray(positionAttribLocation);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-		
-	/*
-	Elements
-	*/
-	var indices = [3,2,1,3,1,0]; 
-	var elements = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-	
-	var uvs = [
-	    0.0, 1.0,
-		0.0, 1.0,
-		0.0, 1.0,
-		0.0, 1.0
-	];
-
-	var uvsBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
-	gl.enableVertexAttribArray(textureCoordLocation);
-	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
-	
-	// Change to position slightly after the boundary
-	position = m4.translation(128, 0, 128);	
-	rotateX = m4.xRotation(0);
-	rotateY = m4.yRotation(0);
-	rotateZ = m4.zRotation(0);	
-	scale = m4.scaling(terrain.get.getTerrainRows, 20, terrain.get.getTerrainRows);
-		
-	updateAttributesAndUniforms();
-
-	gl.activeTexture(gl.TEXTURE0);
-	gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
-	gl.bindTexture(gl.TEXTURE_2D, rockTexture0.getTextureAttribute.texture);	
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);
-	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
-	
-	gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);	
-}
  
 function render(){
 	fpsViewer.begin();
@@ -181,19 +115,11 @@ function render(){
 	
 	waterSystem.render();
 
-	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-	gl.enable(gl.BLEND);
-	//gl.disable(gl.DEPTH_TEST);
+
 	
-	gl.uniform1f(alphaLocation, 0.4);
-	gl.uniform1i(useAlphaLocation, true);
+	terrain.renderMapBoundaries();
 	
-	renderCube();
-	
-	gl.disable(gl.BLEND);
-	//gl.enable(gl.DEPTH_TEST);
-	gl.uniform1i(useAlphaLocation, false);	
-	
+
 	skybox.render();
 	
 	minimap.render();

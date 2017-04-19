@@ -22,7 +22,8 @@ var myParticleTexture;
 var mapTexture;
 var WATER_DUDV_MAP_TEXTURE;
 var WATER_NORMAL_MAP_TEXTURE;
-var landerTexture;
+var borderTexture;
+
 
 /*
 Rock textures
@@ -45,6 +46,11 @@ function TextureLoader(){
 	
 	function loadTextures(){
 	
+		borderTexture = new Texture("", 10, 0);
+		gl.bindTexture(gl.TEXTURE_2D, borderTexture.getTextureAttribute.texture);		
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+				  new Uint8Array([255, 0, 0, 255]));
+	
 		skybox_texture = loadCubeMap(false);
 		skybox_night_texture = loadCubeMap(true);
 				  
@@ -62,9 +68,6 @@ function TextureLoader(){
 		rockTexture5 = new Texture('resources/rocks/5.png', 10, 0);
 		rockTextures.push(rockTexture0, rockTexture1, rockTexture2, rockTexture3, rockTexture4, rockTexture5);
 
-		// Lander texture
-		landerTexture = new Texture('resources/lander/lander.png', 10, 0);
-		
 		// Water dudv + normal texture
 		WATER_DUDV_MAP_TEXTURE = new Texture('resources/water/waterDUDV.png', 10, 5);
 		WATER_NORMAL_MAP_TEXTURE = new Texture('resources/water/waterNormalMap.png', 10, 5);

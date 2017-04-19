@@ -221,7 +221,26 @@ function Terrain(){
 				
 					// Retrieve octaves and scale values from GUI
 					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
-					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;	
+					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;
+
+					// Set terrain outside map boundaries as high
+					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 50;					
+					}
+					// Right row out of bounds section
+					else if(x > terrainRows-quadrantRowSize && y < terrainRows){
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 50;	
+					}
+					else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 50;						
+					}
+					else if(y > terrainRows-quadrantRowSize && x < terrainRows){
+						var stacked = stackNoise(x,y,8);
+						heightMap[x][y] = stacked * 50;						
+					}					
 					
 					// @Test
 					if(useTests) test_fillHeightMap(heightMap[x][y]);
@@ -725,6 +744,168 @@ function Terrain(){
 			); 
 			vao_ext.bindVertexArrayOES(null); 
 		}
+	}
+	
+	
+	this.renderMapBoundaries = function(){
+
+var alphaLocation = gl.getUniformLocation(program, 'alpha');
+var useAlphaLocation = gl.getUniformLocation(program, 'useAlpha');
+
+	var mapBoundaryVertices = [
+	   -1, 1, 0, // top left, 
+	   -1, -1, 0, // bottom left 
+	   1, -1, 0, // bottom right
+	   1, 1, 0 // top right
+	];
+
+	var positions = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, positions);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mapBoundaryVertices), gl.STATIC_DRAW);
+	var positionAttribLocation = gl.getAttribLocation(program, 'position');
+	gl.enableVertexAttribArray(positionAttribLocation);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+		
+	/*
+	Elements
+	*/
+	var indices = [3,2,1,3,1,0]; 
+	var elements = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+	
+	var uvs = [
+	    0.0, 0.0,
+		0.0, 1.0,
+		1.0, 1.0,
+		1.0, 0.0
+	];
+
+	
+	var uvsBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.DYNAMIC_DRAW);
+	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+	
+	if(skybox.get.currentTime < 0600 || skybox.get.currentTime > 2000){
+		// Render different boundaries, annyoing bug, use black squares
+		for(var i=0; i<4; i++){
+			var spawnX = 0, spawnZ = 0;
+			
+			if(i === 0){
+				// Top boundary
+				spawnX = 0;
+				spawnZ = terrain.get.getQuadrantRowSize-4;
+				scale = m4.scaling(terrain.get.getTerrainRows, 10, 1);
+			}
+			else if(i === 1){
+				// Bottom boundary
+				spawnX = 0;
+				spawnZ = terrain.get.getTerrainRows - terrain.get.getQuadrantRowSize+4;
+				scale = m4.scaling(terrain.get.getTerrainRows, 10, 1);
+			}
+			else if(i === 2){
+				// Left boundary
+				spawnZ = 0;
+				spawnX = terrain.get.getQuadrantRowSize-4;
+				rotateY = m4.yRotation(Math.PI / 2);
+				scale = m4.scaling(terrain.get.getTerrainRows, 10, 1); // z scale does nothing
+			}
+			else if(i === 3){
+				// Right boundary
+				spawnZ = 0;
+				spawnX =  terrain.get.getTerrainRows - terrain.get.getQuadrantRowSize+4;
+				rotateY = m4.yRotation(Math.PI / 2);
+				scale = m4.scaling(terrain.get.getTerrainRows, 10, 1); // z scale does nothing
+			}
+		
+			position = m4.translation(spawnX, 0, spawnZ);	
+			rotateX = m4.xRotation(0);
+			rotateZ = m4.zRotation(0);	
+	
+			updateAttributesAndUniforms();
+
+			currentTexture = WATER_DUDV_MAP_TEXTURE;
+			gl.activeTexture(gl.TEXTURE0);
+			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+			gl.bindTexture(gl.TEXTURE_2D, WATER_DUDV_MAP_TEXTURE.getTextureAttribute.texture);
+
+			
+			gl.bindBuffer(gl.ARRAY_BUFFER, positions);
+			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+			
+			gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);
+			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
+			
+			gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);	
+		}
+	}
+	else{
+		gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+		gl.enable(gl.BLEND);
+		
+		
+		// Map 0->1 to 0 to 2400
+		gl.uniform1f(alphaLocation, 0.4);
+		gl.uniform1i(useAlphaLocation, true);
+	
+		// Positions and draws the transparent map boundaries
+		for(var i=0; i<4; i++){
+		
+			var spawnX = 0, spawnZ = 0;
+			
+			if(i === 0){
+				// Top boundary
+				spawnX = 0;
+				spawnZ = terrain.get.getQuadrantRowSize-4;
+				scale = m4.scaling(terrain.get.getTerrainRows, 10, 1);
+			}
+			else if(i === 1){
+				// Bottom boundary
+				spawnX = 0;
+				spawnZ = terrain.get.getTerrainRows - terrain.get.getQuadrantRowSize+4;
+				scale = m4.scaling(terrain.get.getTerrainRows, 10, 1);
+			}
+			else if(i === 2){
+				// Left boundary
+				spawnZ = 0;
+				spawnX = terrain.get.getQuadrantRowSize-4;
+				rotateY = m4.yRotation(Math.PI / 2);
+				scale = m4.scaling(terrain.get.getTerrainRows, 10, 1); // z scale does nothing
+			}
+			else if(i === 3){
+				// Right boundary
+				spawnZ = 0;
+				spawnX =  terrain.get.getTerrainRows - terrain.get.getQuadrantRowSize+4;
+				rotateY = m4.yRotation(Math.PI / 2);
+				scale = m4.scaling(terrain.get.getTerrainRows, 10, 1); // z scale does nothing
+			}
+		
+			position = m4.translation(spawnX, 0, spawnZ);	
+			rotateX = m4.xRotation(0);
+			rotateZ = m4.zRotation(0);	
+
+			updateAttributesAndUniforms();
+
+
+
+			gl.bindBuffer(gl.ARRAY_BUFFER, positions);
+			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+			
+		//	gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);
+		//	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
+			
+			gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);	
+	
+		}
+					gl.disable(gl.BLEND);
+			gl.uniform1i(useAlphaLocation, false);
+	}
+
 	}
 	
 	/*
