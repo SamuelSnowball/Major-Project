@@ -16,14 +16,19 @@ Sprint 9 (17th - 24th April)
 Look at structure of final report for guidance
 
 Report questions:
+
 Can say game engines where an option? but applied with opengl
 I'm using I, my, alot, this right?
 
 Midway through the project i changed direction, in the analysis should I still be saying
 my plans for making a game? or mention at the start I changed project direction and describe 
 the scene instead.
+
 Midway through the project i also realized webgl has few advanced tutorials/docuemntation
 where should I mention this?
+
+How to reference books?
+include a copy of what it says?
 
 	Minor tasks:
 
