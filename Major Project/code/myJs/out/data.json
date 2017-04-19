@@ -1,6 +1,15 @@
 {
     "project": {},
     "files": {
+        "Camera.js": {
+            "name": "Camera.js",
+            "modules": {},
+            "classes": {
+                "Camera": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "Terrain.js": {
             "name": "Terrain.js",
             "modules": {},
@@ -27,6 +36,18 @@
     },
     "modules": {},
     "classes": {
+        "Camera": {
+            "name": "Camera",
+            "shortname": "Camera",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "Camera.js",
+            "line": 2,
+            "description": "Handles user input and changes the 4 movement variables\n\t\nW Key:\n\tMoves camera up\nS Key:\n\tMoves camera down\t\n\nR Key:\n\tMoves camera up\nF Key:\n\tMoves camera down"
+        },
         "WATTTTTTT": {
             "name": "WATTTTTTT",
             "shortname": "WATTTTTTT",
@@ -43,6 +64,247 @@
     },
     "elements": {},
     "classitems": [
+        {
+            "file": "Camera.js",
+            "line": 59,
+            "itemtype": "method",
+            "name": "get.quadrant",
+            "return": {
+                "description": "the cameras current quadrant",
+                "type": "Int"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 67,
+            "itemtype": "method",
+            "name": "get.position",
+            "return": {
+                "description": "the cameras current position",
+                "type": "Vec3"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 75,
+            "itemtype": "method",
+            "name": "get.x",
+            "return": {
+                "description": "the cameras current x position",
+                "type": "Float"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 83,
+            "itemtype": "method",
+            "name": "get.y",
+            "return": {
+                "description": "the cameras current y position",
+                "type": "Float"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 91,
+            "itemtype": "method",
+            "name": "get.z",
+            "return": {
+                "description": "the cameras current z position",
+                "type": "Float"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 99,
+            "itemtype": "method",
+            "name": "get.targetX",
+            "return": {
+                "description": "the cameras current x viewing target",
+                "type": "Float"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 107,
+            "itemtype": "method",
+            "name": "get.targetY",
+            "return": {
+                "description": "the cameras current y viewing target",
+                "type": "Float"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 115,
+            "itemtype": "method",
+            "name": "get.targetZ",
+            "return": {
+                "description": "the cameras current z viewing target",
+                "type": "Float"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 123,
+            "itemtype": "method",
+            "name": "get.cameraTarget",
+            "return": {
+                "description": "the cameras current viewing target",
+                "type": "Vec3"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 131,
+            "itemtype": "method",
+            "name": "get.movingForward",
+            "return": {
+                "description": "is the player moving forward? true/false",
+                "type": "Bool"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 139,
+            "itemtype": "method",
+            "name": "get.movingBackward",
+            "return": {
+                "description": "is the player moving backward? true/false",
+                "type": "Bool"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 147,
+            "itemtype": "method",
+            "name": "get.movingUp",
+            "return": {
+                "description": "is the player moving up? true/false",
+                "type": "Bool"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 155,
+            "itemtype": "method",
+            "name": "get.movingDown",
+            "return": {
+                "description": "is the player moving down? true/false",
+                "type": "Bool"
+            },
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 165,
+            "itemtype": "method",
+            "name": "set.x",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "x position to set the camera at",
+                    "type": "Float"
+                }
+            ],
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 173,
+            "itemtype": "method",
+            "name": "set.y",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "y position to set the camera at",
+                    "type": "Float"
+                }
+            ],
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 181,
+            "itemtype": "method",
+            "name": "set.z",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "z position to set the camera at",
+                    "type": "Float"
+                }
+            ],
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 189,
+            "itemtype": "method",
+            "name": "set.targetX",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "x position to set the camera target at",
+                    "type": "Float"
+                }
+            ],
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 197,
+            "itemtype": "method",
+            "name": "set.targetY",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "y position to set the camera target at",
+                    "type": "Float"
+                }
+            ],
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 205,
+            "itemtype": "method",
+            "name": "set.targetZ",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "z position to set the camera target at",
+                    "type": "Float"
+                }
+            ],
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 214,
+            "is_constructor": 1,
+            "class": "Camera"
+        },
+        {
+            "file": "Camera.js",
+            "line": 220,
+            "description": "Adds mouse moved event listener, \nChanges cameraTarget based on user rotation",
+            "itemtype": "method",
+            "name": "setupMouseMove",
+            "class": "Camera"
+        },
         {
             "file": "Terrain.js",
             "line": 912,
@@ -62,6 +324,10 @@
         }
     ],
     "warnings": [
+        {
+            "message": "Missing item type",
+            "line": " Camera.js:214"
+        },
         {
             "message": "Missing item type\nTesting buildAllTerrainData",
             "line": " Terrain.js:912"
