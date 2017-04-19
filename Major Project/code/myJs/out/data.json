@@ -1,0 +1,74 @@
+{
+    "project": {},
+    "files": {
+        "Terrain.js": {
+            "name": "Terrain.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "TextureLoader.js": {
+            "name": "TextureLoader.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "stuff.js": {
+            "name": "stuff.js",
+            "modules": {},
+            "classes": {
+                "WATTTTTTT": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "WATTTTTTT": {
+            "name": "WATTTTTTT",
+            "shortname": "WATTTTTTT",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "stuff.js",
+            "line": 1,
+            "description": "TEST FILE",
+            "is_constructor": 1
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "Terrain.js",
+            "line": 912,
+            "description": "Testing buildAllTerrainData",
+            "class": "WATTTTTTT"
+        },
+        {
+            "file": "TextureLoader.js",
+            "line": 78,
+            "params": [
+                {
+                    "name": "true/false,",
+                    "description": "if we should load the night skybox, or the day skybox"
+                }
+            ],
+            "class": "WATTTTTTT"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nTesting buildAllTerrainData",
+            "line": " Terrain.js:912"
+        },
+        {
+            "message": "Missing item type",
+            "line": " TextureLoader.js:78"
+        }
+    ]
+}

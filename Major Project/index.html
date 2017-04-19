@@ -80,8 +80,33 @@ document.body.appendChild( fpsViewer.dom );
 // Needed to stop/start the scene rendering,
 // when the user changes terrain properties via UI
 var animationFrameID;
- 
+
+/*
+Code from: https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+*/
+function resize(canvas) {
+	// Lookup the size the browser is displaying the canvas.
+	var displayWidth  = canvas.clientWidth;
+	var displayHeight = canvas.clientHeight;
+
+	// Check if the canvas is not the same size.
+	if (canvas.width  != displayWidth ||
+		canvas.height != displayHeight) {
+		// Make the canvas the same size
+		canvas.width  = displayWidth;
+		canvas.height = displayHeight;
+	}
+}
+
+/**
+ * Hi this should appear on a webpage!
+ * 
+ * 
+*/
 function render(){
+	resize(gl.canvas);
+	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+	
 	fpsViewer.begin();
 
 	// Work out what quadrant we're in, so we know what to render
