@@ -194,8 +194,8 @@ function Skybox(){
 		}
 	}
 	
+	gl.useProgram(skyboxProgram);
 	var SIZE = 256;
-	
 	var skybox_vertices_buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, skybox_vertices_buffer);
 	var skybox_vertices = [        
@@ -243,6 +243,7 @@ function Skybox(){
 	];
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(skybox_vertices), gl.STATIC_DRAW);
 	gl.vertexAttribPointer(skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	gl.useProgram(program);
 	
 	/*
 	
@@ -271,7 +272,7 @@ function Skybox(){
 		gl.uniformMatrix4fv(skyboxProjectionLocation, false, new Float32Array(projectionMatrix));
 	}
 	
-	this.render = function(viewMatrix, projectionMatrix){
+	this.render = function(){
 		gl.useProgram(skyboxProgram);
 		
 		// Reset matrices

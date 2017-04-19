@@ -14,37 +14,34 @@ function RockGenerator(){
 	// OBJ text file
 	var rockObjTextFile = utility.httpGet("resources/rocks/rockObjs/obj/21.txt");
 	
-	// ### Start of variables needed for matrices and translations ### //
+	// Translations
+	var translations = [];
+	var buffers;
 	
-		// Translations
-		var translations = [];
-		var buffers;
-		
-		// The mesh containing the rock data, we draw from this loads of times
-		var mesh; 
-		
-		// The matrix that is going to be updated and stored.
-		var testTransform = m4.translation(0,0,0);
-		var testYRotation = m4.yRotation(Math.random());
-		
-		var meshArray = [];
-		var buffersArray = [];
-		
-		// Temporary matrix column data for the rock matrices
-		var data = [];
-		
-		// Need to find and set the height of the rock, at the generated X,Z position
-		// So need to save all generated X and Z positions
-		var savedXPositions = [];
-		var savedZPositions = [];
-		
-		// Use the length of the rock (say, x) to calculate its width
-		// Use scaleX and scaleZ to set the rocks height
-		var savedXScales = [];
-		var savedZScales = [];
-		
-	// ### End of variables needed for matrices and translations ### //
+	// The mesh containing the rock data, we draw from this loads of times
+	var mesh; 
 	
+	// The matrix that is going to be updated and stored.
+	var testTransform = m4.translation(0,0,0);
+	var testYRotation = m4.yRotation(Math.random());
+	
+	var meshArray = [];
+	var buffersArray = [];
+	
+	// Temporary matrix column data for the rock matrices
+	var data = [];
+	
+	// Need to find and set the height of the rock, at the generated X,Z position
+	// So need to save all generated X and Z positions
+	var savedXPositions = [];
+	var savedZPositions = [];
+	
+	// Use the length of the rock (say, x) to calculate its width
+	// Use scaleX and scaleZ to set the rocks height
+	// The bigger the rock, the lower it should spawn
+	var savedXScales = [];
+	var savedZScales = [];
+
 	// Constructor
 	buildAllRockData();
 	
@@ -79,7 +76,7 @@ function RockGenerator(){
 		// Pull min/max numbers of rocks from GUI
 		mesh.numInstances = utility.randomIntBetween(myGUI.get.ui_min_rocks, myGUI.get.ui_max_rocks);
 		// Give rocks in this quadrant random texture
-		mesh.texture = rockTextures[Math.floor(Math.random() * 5) + 0]; 
+		mesh.texture = rockTextures[ 0]; 
 
 		// Reset previous buffers, ready for new translations
 		buffers = twgl.createBuffersFromArrays(gl, {
@@ -299,7 +296,7 @@ function RockGenerator(){
 
 		// 9 Draw calls, 1 per visible quadrant
 		for(var i=0; i<renderIndices.length; i++){
-		
+
 			// Get the rocks texture
 			currentTexture = meshArray[renderIndices[i]].texture;
 			gl.activeTexture(gl.TEXTURE0);

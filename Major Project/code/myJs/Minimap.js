@@ -37,9 +37,6 @@ function Minimap(){
 	// Size of user on minimap
 	var user_width = 5;
 	var user_height = 5;
-	
-	// For working out how many grid_rows to draw
-	var grid_rows = terrain.get.getNumberQuadrantRows;
 
 	/*
 	Maps the user position in the world, to the position on the canvas
@@ -60,6 +57,15 @@ function Minimap(){
 	The below code draws the blue lines across the minimap
 	*/	
 	function renderGrid(){
+	
+		// For working out how many grid_rows to draw
+		// Since it can be updated via UI, needs to be checked
+		// Should update once via UI, getter/setter
+		var grid_rows = terrain.get.getNumberQuadrantRows;
+		map_max = terrain.get.getTerrainRows;
+		canvas_boundary_unmapped = terrain.get.getTerrainRows / terrain.get.getNumberQuadrantRows;
+		canvas_boundary_mapped = (canvas_boundary_unmapped - 0) / (terrain.get.getTerrainRows - 0) * (gui_canvas_max - gui_canvas_min) + gui_canvas_min;
+	
 		var grid_start_x = 0;
 		var grid_start_y = 0;
 		

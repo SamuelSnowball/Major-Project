@@ -61,7 +61,7 @@ var terrain = new Terrain();
 var camera = new Camera();
 var rockGenerator = new RockGenerator();
 var collisionTester = new CollisionTester();
-var particleSystem = new ParticleSystem();
+//var particleSystem = new ParticleSystem();
 var sound = new Sound();
 var waterSystem = new WaterSystem();
 var skybox = new Skybox();
@@ -191,7 +191,7 @@ function render(){
 	gl.enable(gl.DEPTH_TEST);
 	gl.uniform1i(useAlphaLocation, false);	
 	
-	skybox.render(viewMatrix, projectionMatrix);
+	skybox.render();
 	
 	minimap.render();
 	fpsViewer.end();

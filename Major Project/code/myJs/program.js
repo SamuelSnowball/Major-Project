@@ -133,6 +133,7 @@ gl.enableVertexAttribArray(useFogLocation);
 var useInstancingLocation = gl.getUniformLocation(program, 'useInstancing');
 gl.enableVertexAttribArray(useInstancingLocation);	
 
+// The 4 vec4s which are combined in the shader to give a matrix4
 var instancingLocation0 = gl.getAttribLocation(program, "instanceMatrixRow0");
 var instancingLocation1 = gl.getAttribLocation(program, "instanceMatrixRow1");
 var instancingLocation2 = gl.getAttribLocation(program, "instanceMatrixRow2");
@@ -176,8 +177,3 @@ function updateAttributesAndUniforms(){
 	// Clip plane
 	gl.uniform4fv(clipPlaneLocation, clipPlane);
 }
-
-
-
-
-
