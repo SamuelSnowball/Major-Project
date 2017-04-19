@@ -108,6 +108,8 @@ function render(){
 	The skybox has to render last, or everything breaks
 	*/
 	terrain.render(); 
+	terrain.renderMapBoundaries();
+	
 	rockGenerator.renderInstancedRocks();
 	
 	//particleSystem.render(); 
@@ -117,7 +119,7 @@ function render(){
 
 
 	
-	terrain.renderMapBoundaries();
+	
 	
 
 	skybox.render();

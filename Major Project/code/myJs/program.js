@@ -143,6 +143,10 @@ var instancingLocation3 = gl.getAttribLocation(program, "instanceMatrixRow3");
 var clipPlaneLocation = gl.getUniformLocation(program, 'clipPlane');
 gl.enableVertexAttribArray(clipPlaneLocation);	
 
+// For blending of the map boundaries
+var alphaLocation = gl.getUniformLocation(program, 'alpha');
+var useAlphaLocation = gl.getUniformLocation(program, 'useAlpha');
+
 /*
 Loads global variables and matrices into shaders every frame
 */
