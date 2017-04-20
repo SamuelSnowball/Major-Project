@@ -13,9 +13,24 @@ Sprint 9 (17th - 24th April)
 			Fix lengths of barrier
 			Fix barrier coming in/out of view
 
+Fix param comment on:
+	Camera
+	WaterSystem
+	RockGenerator
+	MyGUI
+	Terrain
+	Minimap
+	CollisionTester
+
 Look at structure of final report for guidance
 
 Report questions:
+
+Say what sections you have in the background reading and analysis etc,
+	Ask her whether or not they should go there 
+
+	1.1 Background I have sections
+		OpenGL, blah blah
 
 Can say game engines where an option? but applied with opengl
 I'm using I, my, alot, this right?
