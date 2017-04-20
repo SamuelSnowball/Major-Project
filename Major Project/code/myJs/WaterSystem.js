@@ -42,7 +42,9 @@ function WaterSystem(){
 	var waterReflectivity = 0.0;
 	var waterReflectivityIncrement = 0.001; // how fast to increment/decrement the waterReflectivity based on time of day
 	
-	// Constructor
+	/**
+	@constructor
+	*/
 	setupReflectionFrameBuffer();
 	setupRefractionFrameBuffer();
 	setupWaterQuad();
@@ -265,6 +267,7 @@ function WaterSystem(){
 	console.log("waterProgram status: " + gl.getProgramInfoLog(waterProgram));
 
 	gl.useProgram(waterProgram);
+	
 		var waterPositionAttribLocation = gl.getAttribLocation(waterProgram, 'waterPosition');
 		gl.enableVertexAttribArray(waterPositionAttribLocation);
 		
@@ -326,22 +329,19 @@ function WaterSystem(){
 		its original distance above the water * 2
 	The pitch of the camera also needs to be inverted
 	
+	Want to render scene to a texture (frame buffer), so bind it
+	Clear it
+	Render to the texture (frame buffer)
+	Then unbind it
+		
+	Then later on, we can render a square with that texture
+		
+	Make sure this gets rendered to something that the original scene doesn't render
+	
 	@method renderToReflectionBuffer
 	*/
 	this.renderToReflectionBuffer = function(){
-	
-		/*
-		Want to render scene to a texture (frame buffer), so bind it
-		Clear it
-		Render to the texture (frame buffer)
-		Then unbind it
-		
-		Then later on, we can render a square with that texture
-		
-		Make sure this gets rendered to something that the original scene doesn't render
-		*/
 		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
-
 			// Calculate distance we want to move camera down by
 			// And invert pitch
 			var distance = 2 * (camera.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
