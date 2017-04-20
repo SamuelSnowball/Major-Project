@@ -13,7 +13,7 @@ function MyGUI(){
 	/*
 	UI values
 	*/
-	var ui_terrain_size = 8;
+	var ui_terrain_size = 4;
 	var ui_noise_scale = 25;
 	var ui_noise_octaves = 8;
 	var ui_min_rocks = 512;
@@ -46,7 +46,7 @@ function MyGUI(){
 	*/
 	var systemOptions = {
 		Title: "Mars Scene Interaction",
-		Terrain_size: 8,
+		Terrain_size: 4,
 		Terrain_noise_scale: 25,
 		Terrain_noise_octaves: 8,
 		Min_rocks_per_section: 512,

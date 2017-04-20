@@ -30,9 +30,11 @@ where should I mention this?
 How to reference books?
 include a copy of what it says?
 
+
+
 	Minor tasks:
 
-		Water reflection doesn't look right
+		Water reflection doesn't look right when moving up/down
 		See whats taking up render time! 
 		Try set rock textures to 1, see differnece
 

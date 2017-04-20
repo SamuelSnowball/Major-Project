@@ -196,7 +196,8 @@ function Terrain(){
 			var noiseTotal = 0;
 			
 			for(var i=0; i<numOctaves; i++){
-				v += perlin.noise(x * amplitude, y * amplitude, x * amplitude) * frequency;
+				// https://github.com/josephg/noisejs
+				v += noise.perlin2(x * amplitude, y * amplitude, x * amplitude) * frequency;
 				noiseTotal += frequency;
 				amplitude *= 0.5;
 				frequency *= 2.0;
@@ -217,30 +218,33 @@ function Terrain(){
 			var offsetIncrement;
 			var scale;
 			
+			// https://github.com/josephg/noisejs
+			noise.seed(Math.random());
+			
 			//Does for entire map
 			for(var x=0; x<terrainRows; x++){
 				for(var y=0; y<terrainRows; y++){
 				
 					// Retrieve octaves and scale values from GUI
 					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
-					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;
+					heightMap[x][y] = stacked * (myGUI.get.ui_noise_scale);
 
 					// Set terrain outside map boundaries as high
 					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
-						var stacked = stackNoise(x,y,8);
+						var stacked = stackNoise(x, y ,8);
 						heightMap[x][y] = stacked * 50;					
 					}
 					// Right row out of bounds section
 					else if(x > terrainRows-quadrantRowSize && y < terrainRows){
-						var stacked = stackNoise(x,y,8);
+						var stacked = stackNoise(x, y ,8);
 						heightMap[x][y] = stacked * 50;	
 					}
 					else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
-						var stacked = stackNoise(x,y,8);
+						var stacked = stackNoise(x, y ,8);
 						heightMap[x][y] = stacked * 50;						
 					}
 					else if(y > terrainRows-quadrantRowSize && x < terrainRows){
-						var stacked = stackNoise(x,y,8);
+						var stacked = stackNoise(x, y ,8);
 						heightMap[x][y] = stacked * 50;						
 					}					
 					

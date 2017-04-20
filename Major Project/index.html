@@ -9,7 +9,7 @@
 	<script src="libraries/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 	<script src="libraries/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 	<script src="libraries/m4.js"></script>
-	<script src="libraries/ImprovedNoise.js"></script>
+	<script src="libraries/perlin.js"></script>
 	<script src="libraries/webgl-obj-loader.js"></script>
 	<script src="libraries/twgl-full.min.js"></script>
 	<script src="libraries/dat.gui.min.js"></script>
@@ -50,9 +50,8 @@
 <script>
 
 var useTests = true; // change this to enable/disable testing
-
 var gameRunning = false;
-var perlin = new ImprovedNoise();
+
 var myGUI = new MyGUI();
 var utility = new Utility();
 var controls = new PointerLockControls();
@@ -125,6 +124,8 @@ function render(){
 	clipPlane = [0, 0, 0, 0];
 	
 	camera.updateCamera();
+	
+	
 
 	/*
 	Don't change render order
@@ -133,7 +134,7 @@ function render(){
 	The skybox has to render last, or everything breaks
 	*/
 	terrain.render(); 
-	terrain.renderMapBoundaries();
+	
 	
 	rockGenerator.renderInstancedRocks();
 	
@@ -145,7 +146,7 @@ function render(){
 
 	
 	
-	
+	terrain.renderMapBoundaries();
 
 	skybox.render();
 	
