@@ -1,17 +1,19 @@
 
-/*
-The file includes code for:
-	Reflection frame buffer / texture
-	Refraction frame buffer / texture
-	
-	WaterVertexShader
-	WaterFragmentShader
-	Creating and linking shaders into the water program
-	
-	Rendering the scene to the reflection and refraction textures
-	Applying those textures to a water quad
-	
-	And finally rendering the water quad
+/**
+ * The file includes code for:
+ * 
+ * Creation of reflection frame buffer and its texture 
+ * Creation of refraction frame buffer and its texture
+ * 
+ * WaterVertexShader
+ * WaterFragmentShader
+ * Creating and linking shaders into the water program
+ * 
+ * Rendering the scene to the reflection and refraction textures and applying those textures to a water quad
+ * 
+ * And finally rendering the water quad
+ * 
+ * @class WaterSystem
 */
 function WaterSystem(){
 
@@ -40,25 +42,48 @@ function WaterSystem(){
 	var waterReflectivity = 0.0;
 	var waterReflectivityIncrement = 0.001; // how fast to increment/decrement the waterReflectivity based on time of day
 	
-	// Constructor
+	/**
+	@constructor
+	*/
 	setupReflectionFrameBuffer();
 	setupRefractionFrameBuffer();
 	setupWaterQuad();
-
+	
 	this.get = {
+		/**
+		@method get.waterReflectivity
+		@return {float} the waters reflectivity
+		*/
 		get waterReflectivity(){
 			return waterReflectivity;
 		},
+		
+		/**
+		@method get.waterReflectivityIncrement
+		@return {float} how fast the waterReflectivity changes from day/night
+		*/
 		get waterReflectivityIncrement(){
 			return waterReflectivityIncrement;
 		}
 	};
+	
 	this.set = {
+		/**
+		@method set.waterReflectivity
+		@param {flaot} the reflectivity to set
+		*/
 		set waterReflectivity(x){
 			waterReflectivity = x;
 		}
 	};
 	
+	/**
+	Sets up the reflectionFrameBuffer
+	Creates the reflectionTexture
+	Creates the reflectionDepthBuffer
+	
+	@method setupReflectionFrameBuffer
+	*/
 	function setupReflectionFrameBuffer(){
 		reflectionFrameBuffer = gl.createFramebuffer();
 		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
@@ -81,8 +106,18 @@ function WaterSystem(){
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+		
+		// @Test
+		if(useTests) test_setupReflectionFrameBuffer();
 	}
 
+	/**
+	Sets up the refractionFrameBuffer.
+	Creates the refractionTexture
+	Creates the refractionDepthBuffer
+	
+	@method setupRefractionFrameBuffer
+	*/
 	function setupRefractionFrameBuffer(){
 		refractionFrameBuffer = gl.createFramebuffer();
 		gl.bindFramebuffer(gl.FRAMEBUFFER, refractionFrameBuffer);
@@ -104,6 +139,9 @@ function WaterSystem(){
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+		
+		// @Test
+		if(useTests) test_setupRefractionFrameBuffer();		
 	}
 	
 	var waterVertexShader = gl.createShader(gl.VERTEX_SHADER);
@@ -230,6 +268,7 @@ function WaterSystem(){
 	console.log("waterProgram status: " + gl.getProgramInfoLog(waterProgram));
 
 	gl.useProgram(waterProgram);
+	
 		var waterPositionAttribLocation = gl.getAttribLocation(waterProgram, 'waterPosition');
 		gl.enableVertexAttribArray(waterPositionAttribLocation);
 		
@@ -256,10 +295,17 @@ function WaterSystem(){
 		
 		var waterWaveStrengthLocation = gl.getUniformLocation(waterProgram, 'waveStrength');
 		
+		// @Test
+		if(useTests) test_waterShaderLocationVariables();
+		
 	gl.useProgram(program);
 	
+	/**
+	Renders everything under the water height to the refractionFrameBuffer
+	
+	@method renderToRefractionBuffer
+	*/
 	this.renderToRefractionBuffer = function(){
-
 		gl.bindFramebuffer(gl.FRAMEBUFFER, refractionFrameBuffer);
 			// Want to render everything under the water, normal is pointing down
 			clipPlane = [0, -1, 0, -waterHeight]; // last param is water height
@@ -269,34 +315,34 @@ function WaterSystem(){
 				terrain.render(); 
 				rockGenerator.renderInstancedRocks();
 				skybox.render(viewMatrix, projectionMatrix);
-		// Unbinds 
+		// Unbinds, reset viewport
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
-
 	}
 
-	/*
+	/**
+	Renders the scene to the reflectionFrameBuffer
+	
 	To create illusion of reflection texture
 	Need to move camera under the water, before rendering the reflection texture
 
 	The camera should move down by:
 		its original distance above the water * 2
 	The pitch of the camera also needs to be inverted
+	
+	Want to render scene to a texture (frame buffer), so bind it
+	Clear it
+	Render to the texture (frame buffer)
+	Then unbind it
+		
+	Then later on, we can render a square with that texture
+		
+	Make sure this gets rendered to something that the original scene doesn't render
+	
+	@method renderToReflectionBuffer
 	*/
 	this.renderToReflectionBuffer = function(){
-	
-		/*
-		Want to render scene to a texture (frame buffer), so bind it
-		Clear it
-		Render to the texture (frame buffer)
-		Then unbind it
-		
-		Then later on, we can render a square with that texture
-		
-		Make sure this gets rendered to something that the original scene doesn't render
-		*/
 		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
-
 			// Calculate distance we want to move camera down by
 			// And invert pitch
 			var distance = 2 * (camera.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
@@ -326,8 +372,10 @@ function WaterSystem(){
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
 	}
 	
-	/*
+	/**
 	Builds the water quad
+	
+	@method setupWaterQuad
 	*/
 	function setupWaterQuad(){
 		gl.useProgram(waterProgram);
@@ -351,6 +399,21 @@ function WaterSystem(){
 		gl.useProgram(program);
 	}
 
+	/**
+	Loads in variables into the water shader:
+		cameraPosition
+		lightColour
+		lightPosition
+		moveFactor
+		waterReflectivity
+		waterWaveStrength
+		fullTransforms,
+		view & projectionMatrix
+		
+	This method also calculates and moves the sun position, to match the rotating skybox
+	
+	@method updateWaterAttributesAndUniforms
+	*/
 	function updateWaterAttributesAndUniforms(){
 	
 		// Pass in camera position
@@ -358,7 +421,6 @@ function WaterSystem(){
 		
 		// Pass in lighting colour
 		gl.uniform3fv(lightColourAttribLocation, lightColour);
-		
 		
 		// The rotation matrix to apply to the suns position
 		var rotationMatrix = [];
@@ -420,8 +482,14 @@ function WaterSystem(){
 		gl.uniformMatrix4fv(waterProjectionLocation, false, new Float32Array(projectionMatrix));
 	}
 	
-	/*
-	Maybe it needs its own set of matrices?
+	/**
+	Renders the water quad with the textures sampled from the:
+		reflectionFrameBuffer, 
+		refractionFrameBuffer,
+		waterDudvMap
+		waterNormalMap
+		
+	@method render
 	*/
 	this.render = function(){
 		gl.useProgram(waterProgram);
@@ -467,6 +535,82 @@ function WaterSystem(){
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 6);
 
 		gl.useProgram(program);
+	}
+	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
+	
+	/**
+	Test the water reflection frame buffer is an WebGLFrameBuffer object
+	
+	@method test_setupReflectionFrameBuffer
+	*/
+	function test_setupReflectionFrameBuffer(){
+		if(gl.isFramebuffer(reflectionFrameBuffer)){
+			 // It's a valid frame buffer object
+		}else{
+			console.error("Testing water reflection frame buffer, its not a FBO!: " + reflectionFrameBuffer);
+		}
+	}
+	
+	/**
+	Test the water refraction frame buffer is an WebGLFrameBuffer object
+	
+	@method test_setupRefractionFrameBuffer
+	*/
+	function test_setupRefractionFrameBuffer(){
+		if(gl.isFramebuffer(refractionFrameBuffer)){
+			 // It's a valid frame buffer object
+		}else{
+			console.error("Testing water refraction frame buffer, its not a FBO!: " + refractionFrameBuffer);
+		}
+	}
+	
+	/**
+	Checks the location variables from the shaders are valid
+	Check the attribute locations are ints,
+	And check the uniform locations are WebGLUniformLocation objects
+	
+	@method test_waterShaderLocationVariables
+	*/
+	function test_waterShaderLocationVariables(){
+		test_isNaN("waterPositionAttribLocation", waterPositionAttribLocation);
+		test_isWebGLUniformLocation("waterCameraPositionLocation", waterCameraPositionLocation);
+		test_isWebGLUniformLocation("waterViewMatrixLocation", waterViewMatrixLocation);
+		test_isWebGLUniformLocation("waterProjectionLocation", waterProjectionLocation);
+		test_isWebGLUniformLocation("waterModelLocation", waterModelLocation);
+		test_isWebGLUniformLocation("lightPositionAttribLocation", lightPositionAttribLocation);
+		test_isWebGLUniformLocation("lightColourAttribLocation", lightColourAttribLocation);
+		test_isWebGLUniformLocation("waterMoveFactorLocation", waterMoveFactorLocation);
+		test_isWebGLUniformLocation("waterReflectivityLocation", waterReflectivityLocation);
+		test_isWebGLUniformLocation("waterWaveStrengthLocation", waterWaveStrengthLocation);
+	}
+	
+	/**
+	Tests if passed in value is NaN
+	
+	@method test_isNaN
+	@param {string} the name of the attribute to test, so we can print an error
+	@param {int} the value to test
+	*/
+	function test_isNaN(name, value){
+		if(isNaN(value)){
+			console.error("In test_waterShaderLocationVariables, " + name + " was NaN!");
+		}
+	}
+	
+	/**
+	Tests if location is a WebGLUniformLocation
+	
+	@method test_isWebGLUniformLocation
+	@param {name} the name of the attribute to test, so we can print an error
+	@param {location} the location value to test
+	*/
+	function test_isWebGLUniformLocation(name, location){
+		if(!location instanceof WebGLUniformLocation){
+			console.error("In test_isWebGLUniformLocation: " + name + ", is not a WebGLUniformLocation");
+		}
 	}
 	
 }

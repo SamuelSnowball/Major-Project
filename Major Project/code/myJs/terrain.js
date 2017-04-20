@@ -1,4 +1,17 @@
 
+/**
+ * This class builds the terrain of the scene.
+ * 
+ * It creates a 2D heightMap using stacked perlin noise,
+ * It then builds 3D vertices from that heightMap and stores them in "quadrants" (sections of the map)
+ * 
+ * The render method, calls methods to clips off any quadrants, 
+ * apart from the 3x3 surrounding quadrants of the camera
+ * 
+ * This file also creates and renders the terrain boundaries
+ * 
+ * @class Terrain
+*/
 function Terrain(){
 	
 	// A 2D array storing stacked perlin noise height values, later assigned to quadrantVertices height coordinate.
@@ -8,9 +21,9 @@ function Terrain(){
 	var quadrantRowSize = 128;
 	var quadrantColumnSize = 128;
 	
-	// How many map quadrants, each having 128*128 vertices each
-	var numberQuadrantRows = 8; 
-	var numberQuadrantColumns = 8; 
+	// How many map quadrants, each having 128*128 vertices each, get from the UI
+	var numberQuadrantRows = myGUI.get.ui_terrain_size; 
+	var numberQuadrantColumns = myGUI.get.ui_terrain_size; 
 	
 	// Contains entire map size, not individual quadrant size, needed for heightMap
 	var terrainRows = numberQuadrantRows * quadrantRowSize;
@@ -46,22 +59,45 @@ function Terrain(){
 	// Final set of indices to render
 	var renderIndices = []; 
 	
-	//Needed in rockGenerator, careful might be quadrantRows
 	this.get = {
+		/**
+		@method get.getTerrainRows
+		@return {int} the width/height of the entire map
+		*/
 		get getTerrainRows(){
 			return terrainRows;
 		},
+		
+		/**
+		@method get.getNumberQuadrantRows
+		@return {int} the number of quadrant rows (default 8 rows)
+		*/		
 		get getNumberQuadrantRows(){
 			return numberQuadrantRows;
 		},
+		
+		/**
+		@method get.getNumberQuadrantColumns
+		@return {int} the number of quadrant columns (default 8 columns)
+		*/		
 		get getNumberQuadrantColumns(){
 			return numberQuadrantColumns;
 		},
+		
+		/**
+		@method get.getQuadrantRowSize
+		@return {int} how many vertices per each quadrant row (always 128)
+		*/		
 		get getQuadrantRowSize(){
 			return quadrantRowSize;
 		},
+		
+		/**
+		@method get.getRenderIndices
+		@return {int[]} the final set of terrain map indices to render
+		*/		
 		get getRenderIndices(){
-			return renderIndices; // rocks needs these
+			return renderIndices; // roxkGenerator class needs these
 		}
 	};
 
@@ -75,12 +111,29 @@ function Terrain(){
 	var temporaryHeightMapX;
 	var temporaryHeightMapZ;
 	this.heightMapValueAtIndex = {
-		set setTemporaryHeightMapX(name){
-			temporaryHeightMapX = name;
+		/**
+		@method heightMapValueAtIndex.setTemporaryHeightMapX
+		@param {int} the Z index to set in the 2D heightMap (it's reversed)
+		*/
+		set setTemporaryHeightMapX(value){
+			temporaryHeightMapX = value;
 		},
-		set setTemporaryHeightMapZ(name){
-			temporaryHeightMapZ = name;
+		
+		/**
+		@method heightMapValueAtIndex.setTemporaryHeightMapZ
+		@param {int} the X index to set in the 2D heightMap (it's reversed)
+		*/		
+		set setTemporaryHeightMapZ(value){
+			temporaryHeightMapZ = value;
 		},
+		
+		/**
+		Use the previous 2 methods to set temporary heightMap indexes,
+		Then use this method to get height value, at the given indexes
+		
+		@method heightMapValueAtIndex.getTemporaryHeightMapValue
+		@return the height value retrieved from the 2D heightMap, used to set rocks position and player height
+		*/		
 		get getTemporaryHeightMapValue(){
 			if(temporaryHeightMapZ > 0 && temporaryHeightMapZ < terrainRows
 			&& temporaryHeightMapX > 0 && temporaryHeightMapX < terrainRows){
@@ -97,12 +150,17 @@ function Terrain(){
 	Constructor below
 	#################
 	*/
-		// Create, fill and edit heightMap data
+		/**
+		Create, fill and edit heightMap data
+		Use that heightMap data to create vertices 
+		
+		@constructor
+		*/
 		createHeightMap();
 		fillHeightMap();
-		// Use that heightMap data to create vertices 
 		buildAllTerrainData();
 		setupVaoIndices();
+		setupMapBoundariesData();
 	/*
 	#################
 	Constructor above
@@ -110,10 +168,12 @@ function Terrain(){
 	*/
 	
 	
-	/*
+	/**
 	Loops over each quadrant
 	
 	For each map quadrant, create its data, and a VAO, store that VAO in the terrainVAOs array.
+	
+	@method buildAllTerrainData
 	*/
 	function buildAllTerrainData(){
 		
@@ -132,7 +192,7 @@ function Terrain(){
 				// Reset current quadrant data (if any), and create new quadrant data
 				createQuadrantVertices(x, z);
 				createQuadrantIndices();
-				createQuadrantUvs(x, z);
+				createQuadrantUvs();
 				createQuadrantNormals();
 				
 				// @Test
@@ -165,11 +225,13 @@ function Terrain(){
 	####################################
 	*/
 	
-		/*
+		/**
 		Private
 		
 		Create the 2D heightMap array:
 			heightMap[terrainRows][terrainColumns];
+			
+		@method createHeightMap
 		*/
 		function createHeightMap(){
 			heightMap = new Array(terrainRows).fill(0); 
@@ -181,11 +243,17 @@ function Terrain(){
 			if(useTests) test_createHeightMap();
 		}
 		
-		/*
+		/**
 		Private
 		
 		Takes in a coordinate in 2D heightMap array, loops over specified number of octaves,
 		adds noise octaves onto each other, returns final the height value for the vertex
+		
+		@method stackNoise
+		@param {int} the x offset 
+		@param {int} the y offset
+		@param {int} how many octaves to loop over and stack together, default is 8
+		@return the perlin noise height value for a 3D point
 		*/
 		function stackNoise(x, y, numOctaves){
 			var v = 0;
@@ -194,7 +262,8 @@ function Terrain(){
 			var noiseTotal = 0;
 			
 			for(var i=0; i<numOctaves; i++){
-				v += perlin.noise(x * amplitude, y * amplitude, x * amplitude) * frequency;
+				// https://github.com/josephg/noisejs
+				v += noise.perlin2(x * amplitude, y * amplitude, x * amplitude) * frequency;
 				noiseTotal += frequency;
 				amplitude *= 0.5;
 				frequency *= 2.0;
@@ -203,10 +272,14 @@ function Terrain(){
 			return v / noiseTotal;
 		}
 		
-		/*
+		/**
 		Private
 		
-		Fills the 2D HeightMap with initial values
+		Fills the 2D HeightMap with stacked perlin noise values,
+		These height values are then assigned to 3D vertices later on,
+		This in turn creates the smooth terrain
+		
+		@method fillHeightMap
 		*/
 		function fillHeightMap(){
 			var error = false;
@@ -215,13 +288,35 @@ function Terrain(){
 			var offsetIncrement;
 			var scale;
 			
+			// https://github.com/josephg/noisejs
+			noise.seed(Math.random());
+			
 			//Does for entire map
 			for(var x=0; x<terrainRows; x++){
 				for(var y=0; y<terrainRows; y++){
 				
 					// Retrieve octaves and scale values from GUI
 					var stacked = stackNoise(x, y, myGUI.get.ui_noise_octaves);
-					heightMap[x][y] = stacked * myGUI.get.ui_noise_scale;	
+					heightMap[x][y] = stacked * (myGUI.get.ui_noise_scale);
+
+					// Set terrain outside map boundaries as high
+					if(x < terrainRows/numberQuadrantRows && y < terrainRows){
+						var stacked = stackNoise(x, y ,8);
+						heightMap[x][y] = stacked * 50;					
+					}
+					// Right row out of bounds section
+					else if(x > terrainRows-quadrantRowSize && y < terrainRows){
+						var stacked = stackNoise(x, y ,8);
+						heightMap[x][y] = stacked * 50;	
+					}
+					else if(y < terrainRows/numberQuadrantRows && x < terrainRows){
+						var stacked = stackNoise(x, y ,8);
+						heightMap[x][y] = stacked * 50;						
+					}
+					else if(y > terrainRows-quadrantRowSize && x < terrainRows){
+						var stacked = stackNoise(x, y ,8);
+						heightMap[x][y] = stacked * 50;						
+					}					
 					
 					// @Test
 					if(useTests) test_fillHeightMap(heightMap[x][y]);
@@ -248,13 +343,19 @@ function Terrain(){
 	#######################
 	*/
 	
-		/*
+		/**
 		Private
 		
 		I have a 2D heightMap
 
 		Now create the terrain vertices having x, y, z values 
 		Where y is the value from the heightMap we made.
+		
+		This function creates data for one quadrant at a time
+		
+		@method createQuadrantVertices
+		@param {int} the x index to start generating vertices at, the x position is calculate from this
+		@param {int} the z index to start generating vertices at, the z position is calculate from this
 		*/
 		function createQuadrantVertices(vaoXPosition, vaoZPosition){
 		
@@ -300,13 +401,15 @@ function Terrain(){
 		}
 		
 
-		/*
+		/**
 		Private
 		
 		Creates the quadrantIndices from the vertices
 		
 		Code from: http://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips
 		Answer with 11 upvotes
+		
+		@method createQuadrantIndices
 		*/
 		function createQuadrantIndices(){
 			// Reset current indices
@@ -323,12 +426,14 @@ function Terrain(){
 			}
 		}
 
-		/*
+		/**
 		Private
 		
 		Creates the quadrants UV coordinates
+		
+		@method createQuadrantUvs
 		*/
-		function createQuadrantUvs(x, z){
+		function createQuadrantUvs(){
 		
 			// Reset current UVs
 			quadrantUvs = [];
@@ -357,17 +462,23 @@ function Terrain(){
 			}
 		}
 		
-		/*
+		/**
 		Private
 		
-		Calculate the normals for every vertex, using surrounding vertices to do this
-		It calculates it from a 1D array of vertices, so the indexing is slightly confusing
+		Sets all of the terrain normals to [1, 1, 1], this stops a bug with the lighting.
 		
-		Could have this in an existing loop for efficiency, but only worked out once, so its ok
+		Due to the terrain sections being split, there was a bug as the current point needed information
+		from the previous row. But the previous row was in a different section, and therefore wasn't
+		available. This caused black lines on the terrain boundaries.
+		
+		Setting the normals to [1,1,1] fixes this.
+		You can't even notice the lighting on the terrain anyway,
+		
+		@method createQuadrantNormals
 		*/
 		function createQuadrantNormals(){
 			
-			//Reset current normals
+			// Reset current normals
 			quadrantNormals = [];
 			
 			/*
@@ -395,8 +506,10 @@ function Terrain(){
 	#################
 	*/
 	
-		/*
+		/**
 		Private, called from setupTerrainBuffers
+		
+		@method setupQuadrantVertexBuffer
 		*/
 		function setupQuadrantVertexBuffer(){
 			quadrantVertexBuffer = gl.createBuffer();
@@ -405,10 +518,12 @@ function Terrain(){
 			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
 		}
 		
-		/*
+		/**
 		Private
 		
 		Adds the current quadrant indices to the quadrantIndices VBO
+		
+		@method setupQuadrantIndiciesBuffer
 		*/
 		function setupQuadrantIndiciesBuffer(){
 			quadrantIndicesBuffer = gl.createBuffer();
@@ -416,14 +531,16 @@ function Terrain(){
 			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(quadrantIndices), gl.DYNAMIC_DRAW);		
 		}
 		
-		/*
+		/**
 		Private, called from setupTerrainBuffers
 		
 		Every texture goes from 0 -> 1, regardless of dimensions
 
-		GL has 32 texture registers, we're using TEXTURE0
+		GL has 16/32 texture registers, we're using TEXTURE0
 		Bind the previously loaded texture to that register
 		Set the sampler in the shader to use that texture
+		
+		@method setupQuadrantUvBuffer
 		*/
 		function setupQuadrantUvBuffer(){
 			quadrantUvBuffer = gl.createBuffer();
@@ -432,8 +549,10 @@ function Terrain(){
 			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
 		}
 		
-		/*
+		/**
 		Private, called from setupTerrainBuffers
+		
+		@method setupQuadrantNormalBuffer
 		*/
 		function setupQuadrantNormalBuffer(){
 			quadrantNormalBuffer = gl.createBuffer();
@@ -455,7 +574,7 @@ function Terrain(){
 	##########################
 	*/
 		
-		/*
+		/**
 		Private
 		
 		Find out what indices the corner and edge quadrants are at
@@ -492,6 +611,8 @@ function Terrain(){
 				add these values to 'edges' array, IF it isn't in corners array, else its a corner
 			
 			Else, they're in a centre cell, so render a 3x3 grid
+			
+		@method setupVaoIndices
 		*/
 		function setupVaoIndices(){
 			//Corners
@@ -530,13 +651,15 @@ function Terrain(){
 			}		
 		}
 		
-		/*
+		/**
 		Private
 		
-		camera is in a corner, create indices appropriately
+		Camera is in a corner, create indices appropriately
 		
 		Need to check what corner they're in to calculate renderIndices properly
 		4 different indices orders, depending on what corner they're in!	
+		
+		@method setupIndicesCornerCells
 		*/
 		function setupIndicesCornerCells(){
 			if(camera.get.quadrant === cornerIndices[0]){
@@ -572,10 +695,10 @@ function Terrain(){
 			}
 		}
 		
-		/*
-		All private
+		/**
+		Camera is on the map edges (boundaries), render correct cells
 		
-		camera is on the map edges (boundaries), render correct cells
+		@method setupIndicesTopEdgeCells
 		*/
 		function setupIndicesTopEdgeCells(){
 			if(topEdgeIndices.includes(camera.get.quadrant)){
@@ -586,6 +709,9 @@ function Terrain(){
 				);	
 			}
 		}
+		/**
+		@method setupIndicesBottomEdgeCells
+		*/
 		function setupIndicesBottomEdgeCells(){
 			if(bottomEdgeIndices.includes(camera.get.quadrant)){
 				// camera on bottom row
@@ -595,6 +721,9 @@ function Terrain(){
 				);	
 			}		
 		}
+		/**
+		@method setupIndicesLeftEdgeCells
+		*/
 		function setupIndicesLeftEdgeCells(){
 			if(leftEdgeIndices.includes(camera.get.quadrant)){
 				// camera on left row
@@ -605,6 +734,9 @@ function Terrain(){
 				);	
 			}
 		}
+		/**
+		@method setupIndicesRightEdgeCells
+		*/
 		function setupIndicesRightEdgeCells(){
 			if(rightEdgeIndices.includes(camera.get.quadrant)){
 				// camera on right row
@@ -616,10 +748,11 @@ function Terrain(){
 			}
 		}
 		
-		/*
+		/**
 		Private
 		
 		Create indices of the standard 3x3 pattern
+		@method setupIndices3x3Cells
 		*/
 		function setupIndices3x3Cells(){
 			renderIndices.push(
@@ -641,12 +774,14 @@ function Terrain(){
 	*/
 	
 	
-	/*
+	/**
 	Public
 	
 	Apply matrices, bind the terrain VAO, 
 	Work out what indices to process and render,
 	Then draw the terrain.
+	
+	@method render
 	*/
 	this.render = function(){	
 		lightColour = [1, 1, 1];
@@ -727,12 +862,151 @@ function Terrain(){
 		}
 	}
 	
+	var mapBoundaryVertices = [];
+	var mapBoundaryPositionBuffer;
+	
+	var mapBoundaryIndices = [];
+	var mapBoundaryIndiceBuffer;
+	
+	var mapBoundaryUvs = [];
+	var mapBoundaryUvBuffer;
+	
+	/**
+	Builds the quads for the map boundaries
+	
+	@method setupMapBoundariesData
+	*/
+	function setupMapBoundariesData(){
+		// Vertices
+		mapBoundaryVertices = [
+		   -1, 1, 0, // top left, 
+		   -1, -1, 0, // bottom left 
+		   1, -1, 0, // bottom right
+		   1, 1, 0 // top right
+		];
+		mapBoundaryPositionBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, mapBoundaryPositionBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mapBoundaryVertices), gl.STATIC_DRAW);
+		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);		
+		
+		// Indices
+		mapBoundaryIndices = [3,2,1,3,1,0]; 
+		mapBoundaryIndiceBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mapBoundaryIndiceBuffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mapBoundaryIndices), gl.STATIC_DRAW);
+		
+		// UVs
+		mapBoundaryUvs = [
+			0.0, 0.0,
+			0.0, 1.0,
+			1.0, 1.0,
+			1.0, 0.0
+		];
+		mapBoundaryUvBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, mapBoundaryUvBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mapBoundaryUvs), gl.DYNAMIC_DRAW);
+		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+	}
+	
+	/**
+	If we're in day time, then render the transparent boundaries,
+	If we're in night time, render black squares, alpha didn't work in night :(
+	
+	@method actuallyRenderMapBoundaries
+	@param {Bool} if true, we render the white transparent boundaries, if false, render black ones
+	*/
+	function actuallyRenderMapBoundaries(useAlpha){
+		if(useAlpha){
+			gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+			gl.enable(gl.BLEND);
+			gl.uniform1f(alphaLocation, 0.4);
+			gl.uniform1i(useAlphaLocation, true);		
+		}
+
+		// Render different map boundaries
+		for(var i=0; i<4; i++){
+			var spawnX = 0, spawnZ = 0;
+			
+			if(i === 0){
+				// Top boundary
+				spawnX = 0;
+				spawnZ = 128-4;
+				scale = m4.scaling(terrainRows, 10, 1);
+			}
+			else if(i === 1){
+				// Bottom boundary
+				spawnX = 0;
+				spawnZ = terrainRows - 128+4;
+				scale = m4.scaling(terrainRows, 10, 1);
+			}
+			else if(i === 2){
+				// Left boundary
+				spawnZ = 0;
+				spawnX = 128-4;
+				rotateY = m4.yRotation(Math.PI / 2);
+				scale = m4.scaling(terrainRows, 10, 1); 
+			}
+			else if(i === 3){
+				// Right boundary
+				spawnZ = 0;
+				spawnX = terrainRows - 128+4;
+				rotateY = m4.yRotation(Math.PI / 2);
+				scale = m4.scaling(terrainRows, 10, 1); 
+			}
+		
+			position = m4.translation(spawnX, 0, spawnZ);	
+			rotateX = m4.xRotation(0);
+			rotateZ = m4.zRotation(0);	
+		
+			updateAttributesAndUniforms();
+
+			currentTexture = borderTexture;
+			gl.activeTexture(gl.TEXTURE0);
+			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
+
+			gl.bindBuffer(gl.ARRAY_BUFFER, mapBoundaryPositionBuffer);
+			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+			
+			gl.bindBuffer(gl.ARRAY_BUFFER, mapBoundaryUvBuffer);
+			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mapBoundaryIndiceBuffer);
+			
+			gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);	
+		}		
+		
+		if(useAlpha){
+			gl.disable(gl.BLEND);
+			gl.uniform1i(useAlphaLocation, false);	
+		}
+	}
+	
+	/**
+	Doesn't render the map boundaries, but calls a function which does
+	Calculates which boundaries to render:
+		Transparent boundaries for day,
+		Black boundaries for night
+		
+	@method renderMapBoundaries
+	*/
+	this.renderMapBoundaries = function(){
+		if(skybox.get.currentTime < 0600 || skybox.get.currentTime > 2000){
+			actuallyRenderMapBoundaries(false); // don't use alpha
+		}
+		else{
+			actuallyRenderMapBoundaries(true); // use alpha
+		}
+	}
+	
 	/*
 	TESTING FUNCTIONS BELOW
 	*/
 	
-	/*
+	/**
 	Test 2D heightMap array is of correct size
+	
+	@method test_createHeightMap
 	*/
 	function test_createHeightMap(){
 		if(heightMap.length === quadrantRowSize * numberQuadrantRows && 
@@ -746,8 +1020,11 @@ function Terrain(){
 		}
 	}
 	
-	/*
+	/**
 	Test if the current heightMap value is a number
+	
+	@method test_fillHeightMap
+	@param {int} the value to check 
 	*/
 	function test_fillHeightMap(value){
 		if(isNaN(value)){
@@ -762,13 +1039,15 @@ function Terrain(){
 	Testing buildAllTerrainData
 	*/
 	
-	/*
+	/**
 	Test the correct amount of quadrant vertices where created
 		quadrantRowSize = number of vertices per row (128)
 		quadrantColumnSize = number of vertices per column (128)
 	Times these by 3, because each vertex has x, y, z
 		
 	quadrantVertices.length = number of x, y, z values in current section
+	
+	@method test_createQuadrantVertices
 	*/
 	function test_createQuadrantVertices(){
 		var expected_number_vertices = 3 * (quadrantRowSize * quadrantColumnSize);
@@ -776,11 +1055,13 @@ function Terrain(){
 		test_quadrantData("vertices", expected_number_vertices, actual_number_vertices);
 	}
 	
-	/*
+	/**
 	Test the correct amount of quadrant indices where created
 	
 	Each quadrant should have double the number of indices to vertices
 		Divide quadrantVertices by 3 to get the amount of vertices, not x, y, z values
+		
+	@method test_createQuadrantIndices
 	*/
 	function test_createQuadrantIndices(){
 		var expected_indices_length = (quadrantVertices.length/3) * 2;
@@ -788,11 +1069,13 @@ function Terrain(){
 		test_quadrantData("indices", expected_indices_length, actual_indices_length);
 	}
 	
-	/*
+	/**
 	Test correct amount of UV coordinates
 	
 	For each vertex, there should be 2 UV coordinates
 		Divide quadrantVertices by 3 to get the amount of vertices, not x, y, z values
+		
+	@method test_createQuadrantUvs
 	*/
 	function test_createQuadrantUvs(){
 		var expected_uvs_length = (quadrantVertices.length/3) * 2;
@@ -800,9 +1083,11 @@ function Terrain(){
 		test_quadrantData("uvs", expected_uvs_length, actual_uvs_length);
 	}
 	
-	/*
+	/**
 	Test correct amount of quadrant normals
 	Normals should be equal to number of quadrantVertices
+	
+	@method test_createQuadrantNormals
 	*/
 	function test_createQuadrantNormals(){
 		var expected_normals_length = quadrantVertices.length;
@@ -810,13 +1095,13 @@ function Terrain(){
 		test_quadrantData("normals", expected_normals_length, actual_normals_length);
 	}
 	
-	/*
+	/**
 	Tests length of the quadrants (vertices/normals/UVs/indices)
-	
-	Parameters:
-		attribute: which of the quadrants (vertices/normals/UVs/indices) are being tested
-		expectedLength
-		actualLength
+
+	@method test_quadrantData
+	@param {string} name of the attribute that is being tested (vertices/normals/UVs/indices) 
+	@param {int} the expectedLength of the attribute
+	@param {int} the actualLength of the attribute
 	*/
 	function test_quadrantData(attribute, expectedLength, actualLength){
 
@@ -830,8 +1115,10 @@ function Terrain(){
 		}		
 	}
 	
-	/*
-	Test the quadrantVertexBuffer is a WebGL buffer object (VBO)
+	/**
+	Test the quadrant buffers if they're WebGL buffer objects (VBO)
+	
+	@method test_setupQuadrantBuffers
 	*/
 	function test_setupQuadrantBuffers(){
 		test_isWebGLBuffer("vertex buffer", quadrantVertexBuffer);
@@ -840,14 +1127,21 @@ function Terrain(){
 		test_isWebGLBuffer("normal buffer", quadrantNormalBuffer);
 	}
 	
+	/**
+	@method test_isWebGLBuffer
+	@param {string} the buffers name we're testing
+	@param {buffer} hopefully its an instance of WebGLBuffer!
+	*/
 	function test_isWebGLBuffer(bufferName, buffer){
 		if(!buffer instanceof WebGLBuffer){
 			console.error("In isWebGLBuffer, quadrant: " + bufferName + ", is not a WebGLBuffer object");
 		}
 	}
 	
-	/*
+	/**
 	Make sure the terrainVAOs array was filled with WebGLVertexArrayObjectOES objects properly
+	
+	@method test_terrainVAOs
 	*/
 	function test_terrainVAOs(){
 		for(var i=0; i<numberQuadrantRows * numberQuadrantColumns; i++){
@@ -864,5 +1158,5 @@ function Terrain(){
 	Don't have unit tests for terrain section rendering,
 	Because I took screen shots when building the algorithm, showing that it works
 	*/
-
+	
 }

@@ -1,16 +1,19 @@
-/*
-	Handles user input and changes the 4 movement variables
-		
-	W Key:
-		Moves camera up
-	S Key:
-		Moves camera down	
 
-	R Key:
-		Moves camera up
-	F Key:
-		Moves camera down		
-*/
+/**
+ * Handles user input and changes the 4 movement variables
+ * 	
+ * W Key:
+ * 	Moves camera up
+ * S Key:
+ * 	Moves camera down	
+ * 
+ * R Key:
+ * 	Moves camera up
+ * F Key:
+ * 	Moves camera down	
+ * 
+ * @class Camera
+*/		
 function Camera(){
 
 	var yaw = -90;
@@ -19,14 +22,15 @@ function Camera(){
 	var lastX = window.innerWidth/2;
 	var lastY = window.innerHeight/2;
 
-	// Cameras spawn position
+	// Camera position, initialize to centre of map
+	// the + 1 fixes a bug of only 1 quadrant rendering to begin with
 	var cameraPosition = [
-		250,
+		(terrain.get.getTerrainRows / 2) + 1,
 		5,
-		250
+		(terrain.get.getTerrainRows / 2) + 1
 	];
 
-	//Actual usage in index file, but definition needed here
+	// Where the camera is looking
 	var cameraTarget = [
 		0.1,
 		0.1,
@@ -52,79 +56,172 @@ function Camera(){
 	var numberQuadrantColumns = terrain.get.getNumberQuadrantColumns;
 	
 	this.get = {
+		/**
+		@method get.quadrant
+		@return {int} the cameras current quadrant
+		*/
 		get quadrant(){
 			return quadrant;
 		},
 		
+		/**
+		@method get.position
+		@return {vec3} the cameras current position
+		*/		
 		get position(){
 			return cameraPosition;
 		},
+		
+		/**
+		@method get.x
+		@return {float} the cameras current x position
+		*/
 		get x(){
 			return cameraPosition[0];
 		},
+
+		/**
+		@method get.y
+		@return {float} the cameras current y position
+		*/		
 		get y(){
 			return cameraPosition[1];
 		},
+		
+		/**
+		@method get.z
+		@return {float} the cameras current z position
+		*/		
 		get z(){
 			return cameraPosition[2];
 		},		
 		
+		/**
+		@method get.targetX
+		@return {float} the cameras current x viewing target
+		*/
 		get targetX(){
 			return cameraTarget[0];
 		},
+		
+		/**
+		@method get.targetY
+		@return {float} the cameras current y viewing target
+		*/
 		get targetY(){
 			return cameraTarget[1];
 		},
+		
+		/**
+		@method get.targetZ
+		@return {float} the cameras current z viewing target
+		*/
 		get targetZ(){
 			return cameraTarget[2];
 		},		
+		
+		/**
+		@method get.cameraTarget
+		@return {vec3} the cameras current viewing target
+		*/
 		get cameraTarget(){
 			return cameraTarget;
 		},
 		
+		/**
+		@method get.movingForward
+		@return {bool} is the player moving forward? true/false
+		*/
 		get movingForward(){
 			return moveForward;
 		},
+		
+		/**
+		@method get.movingBackward
+		@return {bool} is the player moving backward? true/false
+		*/
 		get movingBackward(){
 			return moveBack;
 		},
+		
+		/**
+		@method get.movingUp
+		@return {bool} is the player moving up? true/false
+		*/
 		get movingUp(){
 			return moveUp;
 		},
+		
+		/**
+		@method get.movingDown
+		@return {bool} is the player moving down? true/false
+		*/
 		get movingDown(){
 			return moveDown;
 		}
 	}
 	
 	this.set = {
+		/**
+		@method set.x
+		@param {float} the x position to set the camera at
+		*/
 		set x(xParam){
 			cameraPosition[0] = xParam;
 		},
+		
+		/**
+		@method set.y
+		@param {float} the y position to set the camera at
+		*/		
 		set y(yParam){
 			cameraPosition[1] = yParam;
 		},
+		
+		/**
+		@method set.z
+		@param {float} the z position to set the camera at
+		*/		
 		set z(zParam){
 			cameraPosition[2] = zParam;
 		},		
-		
+
+		/**
+		@method set.targetX
+		@param {float} the x position to set the camera target at
+		*/		
 		set targetX(x){
 			cameraTarget[0] = x;
 		},
+		
+		/**
+		@method set.targetY
+		@param {float} the y position to set the camera target at
+		*/		
 		set targetY(y){
 			cameraTarget[1] = y;
 		},
+		
+		/**
+		@method set.targetZ
+		@param {float} the z position to set the camera target at
+		*/		
 		set targetZ(z){
 			cameraTarget[2] = z;
 		},		
 	}
 		
-	// Constructor
+	/**
+	@constructor
+	*/
 	setupMouseMove();
 	setupUserMovement();
 		
-	/*
+	/**
 	Adds mouse moved event listener, 
 	Changes cameraTarget based on user rotation
+	
+	@method setupMouseMove
 	*/
 	function setupMouseMove(){
 		canvas.addEventListener('mousemove', function(e){
@@ -162,8 +259,11 @@ function Camera(){
 		});		
 	}
 		
-	/*
+	/**
+	Adds event listeners for the user movement
 	Not actually updating camera here, because jerky movement..
+	
+	@method setupUserMovement
 	*/
 	function setupUserMovement(){
 		document.addEventListener('keydown', function(event){
@@ -200,7 +300,11 @@ function Camera(){
 	
 	}	
 	
-	// Why not have this in other function?
+	/**
+	Updates the camera position and view direction, in the camera matrix
+	
+	@method updateCamera
+	*/
 	this.updateCamera = function(){
 
 		if(moveForward){
@@ -236,9 +340,11 @@ function Camera(){
 		updateAttributesAndUniforms();
 	}
 	
-	/*
+	/**
 	Work out what quadrant the user is in
 	So can process and render what's in view of the player
+	
+	@method assignCameraQuadrant
 	*/
 	this.assignCameraQuadrant = function(){
 	

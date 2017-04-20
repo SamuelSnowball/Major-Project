@@ -1,8 +1,10 @@
-/*
-Tests collision for the player against:
-	Terrain
-	Rocks
-	Map boundaries
+/**
+ * Tests collision for the player against:
+ * 	Terrain
+ * 	Rocks
+ * 	Map boundaries
+ *
+ * @class CollisionTester
 */
 function CollisionTester(){
 
@@ -20,19 +22,27 @@ function CollisionTester(){
 	var mapBottomLeftCornerVector = [quadrantRowSize, 0, terrainRows-quadrantRowSize];
 	var mapBottomRightCornerVector = [terrainRows-quadrantRowSize, 0, terrainRows-quadrantRowSize];
 	
-	/*
+	/**
+	Public
+	
 	Called from render(), tests all collision
+	
+	@method testAllCollision
 	*/
 	this.testAllCollision = function(){
 		setCameraHeight();
 		testCameraMapBoundaries();
 	}
 	
-	/*
+	/**
+	Private
+	
 	Moves the camera when traversing over terrain.
 
 	Uses the camera current X and Z position to find what terrain vertex they're nearest to.
 	The camera height then gets assigned to the nearest terrain vertex.
+	
+	@method setCameraHeight
 	*/
 	function setCameraHeight(){
 		
@@ -59,10 +69,14 @@ function CollisionTester(){
 		}
 	}
 
-	/*
+	/**
+	Private
+	
 	Player coordinates are sometimes decimals, 
 	So get floored so they don't mess up the array indexing,
 	as array indexes must be a integer.
+	
+	@method floorTemporaryPlayerCoordinates
 	*/
 	function floorTemporaryPlayerCoordinates(){
 		if(tempCameraX / terrain.scale < 0.5){
@@ -78,7 +92,9 @@ function CollisionTester(){
 		}	
 	}
 
-	/*
+	/**
+	Private
+	
 	Need to find what height to position the player at.
 	So need to find what terrain vertex they're nearest to.
 	
@@ -87,6 +103,10 @@ function CollisionTester(){
 	
 	Get the nearest height from the heightMap, which is private,
 	So call the getter method
+	
+	@method findNearestTerrainVertex
+	@return {int} the height of the nearest vertex + 4, to position the camera at
+			adding + 4 because otherwise the camera would be in the floor
 	*/	
 	function findNearestTerrainVertex(){
 		var nearestHeight;
@@ -105,28 +125,32 @@ function CollisionTester(){
 		return nearestHeight + 4;
 	}
 	
-	/*
+	/**
 	Moves the player forwards/backwards depending on the direction they where moving when they collided
 
 	If direction === 1
 		Then player has collided moving forwards, so move the player backwards
 	If direction === -1
 		Then player has collided moving backward, so move the player forwards
+		
+	@method pushPlayer
+	@param {int} the direction to push them, push backwards = 1, push forwards = -1
 	*/
 	function pushPlayer(direction){
 		camera.set.x = camera.get.x +  direction * ( - camera.get.targetX) * 5;
 		camera.set.z = camera.get.z +  direction * ( - camera.get.targetZ) * 5;
 	}
 	
-	/*
+	/**
 	Check if they're going forwards or backwards
 	Push them different ways based on movement direction
 	
 	If parameter is true, they collided with a rock, decrement player HP
 	else, they collided with edge of map, keep HP same
-	*/	
-	function movePlayerForwardOrBackward(rockCollision, cornerX, cornerZ){
 	
+	@method movePlayerForwardOrBackward
+	*/	
+	function movePlayerForwardOrBackward(){
 		// If they collided whilst moving forward, push them back etc
 		if(camera.get.movingForward === true){	
 			pushPlayer(1);
@@ -134,14 +158,12 @@ function CollisionTester(){
 		else if(camera.get.movingBackward === true){
 			pushPlayer(-1);
 		}
-		else{
-		
-		}	
-		
 	}
 	
-	/*
+	/**
 	Tests if player is going out of map boundaries, moves them back if so
+	
+	@method testCameraMapBoundaries
 	*/
 	function testCameraMapBoundaries(){
 
@@ -189,10 +211,11 @@ function CollisionTester(){
 
 	}
 	
-	/*
+	/**
 	Test if camera is near a corner, and move them back if so
-	
-	Parameter cornerVector, the corner vector to test camera vector against
+		
+	@method testCameraCornerCollision
+	@param {vec3}, the corner vector to test camera vector against
 	*/
 	function testCameraCornerCollision(cornerVector){
 		var playerVector = [camera.get.x, camera.get.y, camera.get.z];
@@ -225,5 +248,3 @@ function CollisionTester(){
 	}
 
 }
-
-

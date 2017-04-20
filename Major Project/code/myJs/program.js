@@ -133,6 +133,7 @@ gl.enableVertexAttribArray(useFogLocation);
 var useInstancingLocation = gl.getUniformLocation(program, 'useInstancing');
 gl.enableVertexAttribArray(useInstancingLocation);	
 
+// The 4 vec4s which are combined in the shader to give a matrix4
 var instancingLocation0 = gl.getAttribLocation(program, "instanceMatrixRow0");
 var instancingLocation1 = gl.getAttribLocation(program, "instanceMatrixRow1");
 var instancingLocation2 = gl.getAttribLocation(program, "instanceMatrixRow2");
@@ -141,6 +142,10 @@ var instancingLocation3 = gl.getAttribLocation(program, "instanceMatrixRow3");
 // Clipping planes for water rendering
 var clipPlaneLocation = gl.getUniformLocation(program, 'clipPlane');
 gl.enableVertexAttribArray(clipPlaneLocation);	
+
+// For blending of the map boundaries
+var alphaLocation = gl.getUniformLocation(program, 'alpha');
+var useAlphaLocation = gl.getUniformLocation(program, 'useAlpha');
 
 /*
 Loads global variables and matrices into shaders every frame
@@ -176,8 +181,3 @@ function updateAttributesAndUniforms(){
 	// Clip plane
 	gl.uniform4fv(clipPlaneLocation, clipPlane);
 }
-
-
-
-
-
