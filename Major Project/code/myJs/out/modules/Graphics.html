@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>stuff.js</title>
+    <title>Graphics</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -39,11 +39,13 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/Camera.html">Camera</a></li>
-                                <li><a href="../classes/WATTTTTTT.html">WATTTTTTT</a></li>
+                                <li><a href="../classes/WaterSystem.html">WaterSystem</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/Engine.html">Engine</a></li>
+                                <li><a href="../modules/Graphics.html">Graphics</a></li>
                             </ul>
                         </div>
                     </div>
@@ -77,19 +79,46 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: stuff.js</h1>
+<h1>Graphics Module</h1>
+<div class="box clearfix meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-/**
- *  TEST FILE
- * @class WATTTTTTT
- * @constructor
-*/
-function doStuff(){
-	
-}
-    </pre>
+
+        <div class="foundat">
+            Defined in: <a href="../files/WaterSystem.js.html#l2"><code>WaterSystem.js:2</code></a>
+        </div>
+
+</div>
+
+
+<div class="box intro">
+    <p>The file includes code for:</p>
+<p>Creation of reflection frame buffer and its texture
+Creation of refraction frame buffer and its texture</p>
+<p>WaterVertexShader
+WaterFragmentShader
+Creating and linking shaders into the water program</p>
+<p>Rendering the scene to the reflection and refraction textures and applying those textures to a water quad</p>
+<p>And finally rendering the water quad</p>
+
+</div>
+
+
+<div class="yui3-g">
+    <div class="yui3-u-1-2">
+            <p>This module provides the following classes:</p>
+
+            <ul class="module-classes">
+                <li class="module-class">
+                    <a href="../classes/WaterSystem.html">
+                        WaterSystem
+                    </a>
+                </li>
+            </ul>
+    </div>
+
+
+    <div class="yui3-u-1-2">
+    </div>
 </div>
                     </div>
                 </div>

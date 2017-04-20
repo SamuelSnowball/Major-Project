@@ -3,7 +3,9 @@
     "files": {
         "Camera.js": {
             "name": "Camera.js",
-            "modules": {},
+            "modules": {
+                "Engine": 1
+            },
             "classes": {
                 "Camera": 1
             },
@@ -24,17 +26,48 @@
             "fors": {},
             "namespaces": {}
         },
-        "stuff.js": {
-            "name": "stuff.js",
-            "modules": {},
+        "WaterSystem.js": {
+            "name": "WaterSystem.js",
+            "modules": {
+                "Graphics": 1
+            },
             "classes": {
-                "WATTTTTTT": 1
+                "WaterSystem": 1
             },
             "fors": {},
             "namespaces": {}
         }
     },
-    "modules": {},
+    "modules": {
+        "Engine": {
+            "name": "Engine",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "Camera": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "Camera.js",
+            "line": 2,
+            "description": "Handles user input and changes the 4 movement variables\n\t\nW Key:\n\tMoves camera up\nS Key:\n\tMoves camera down\t\n\nR Key:\n\tMoves camera up\nF Key:\n\tMoves camera down"
+        },
+        "Graphics": {
+            "name": "Graphics",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "WaterSystem": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "WaterSystem.js",
+            "line": 2,
+            "description": "The file includes code for:\n\nCreation of reflection frame buffer and its texture \nCreation of refraction frame buffer and its texture\n\nWaterVertexShader\nWaterFragmentShader\nCreating and linking shaders into the water program\n\nRendering the scene to the reflection and refraction textures and applying those textures to a water quad\n\nAnd finally rendering the water quad"
+        }
+    },
     "classes": {
         "Camera": {
             "name": "Camera",
@@ -44,172 +77,187 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "Engine",
             "file": "Camera.js",
             "line": 2,
             "description": "Handles user input and changes the 4 movement variables\n\t\nW Key:\n\tMoves camera up\nS Key:\n\tMoves camera down\t\n\nR Key:\n\tMoves camera up\nF Key:\n\tMoves camera down"
         },
-        "WATTTTTTT": {
-            "name": "WATTTTTTT",
-            "shortname": "WATTTTTTT",
+        "WaterSystem": {
+            "name": "WaterSystem",
+            "shortname": "WaterSystem",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "stuff.js",
-            "line": 1,
-            "description": "TEST FILE",
-            "is_constructor": 1
+            "module": "Graphics",
+            "namespace": "",
+            "file": "WaterSystem.js",
+            "line": 2,
+            "description": "The file includes code for:\n\nCreation of reflection frame buffer and its texture \nCreation of refraction frame buffer and its texture\n\nWaterVertexShader\nWaterFragmentShader\nCreating and linking shaders into the water program\n\nRendering the scene to the reflection and refraction textures and applying those textures to a water quad\n\nAnd finally rendering the water quad"
         }
     },
     "elements": {},
     "classitems": [
         {
             "file": "Camera.js",
-            "line": 59,
+            "line": 60,
             "itemtype": "method",
             "name": "get.quadrant",
             "return": {
                 "description": "the cameras current quadrant",
                 "type": "Int"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 67,
+            "line": 68,
             "itemtype": "method",
             "name": "get.position",
             "return": {
                 "description": "the cameras current position",
                 "type": "Vec3"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 75,
+            "line": 76,
             "itemtype": "method",
             "name": "get.x",
             "return": {
                 "description": "the cameras current x position",
                 "type": "Float"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 83,
+            "line": 84,
             "itemtype": "method",
             "name": "get.y",
             "return": {
                 "description": "the cameras current y position",
                 "type": "Float"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 91,
+            "line": 92,
             "itemtype": "method",
             "name": "get.z",
             "return": {
                 "description": "the cameras current z position",
                 "type": "Float"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 99,
+            "line": 100,
             "itemtype": "method",
             "name": "get.targetX",
             "return": {
                 "description": "the cameras current x viewing target",
                 "type": "Float"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 107,
+            "line": 108,
             "itemtype": "method",
             "name": "get.targetY",
             "return": {
                 "description": "the cameras current y viewing target",
                 "type": "Float"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 115,
+            "line": 116,
             "itemtype": "method",
             "name": "get.targetZ",
             "return": {
                 "description": "the cameras current z viewing target",
                 "type": "Float"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 123,
+            "line": 124,
             "itemtype": "method",
             "name": "get.cameraTarget",
             "return": {
                 "description": "the cameras current viewing target",
                 "type": "Vec3"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 131,
+            "line": 132,
             "itemtype": "method",
             "name": "get.movingForward",
             "return": {
                 "description": "is the player moving forward? true/false",
                 "type": "Bool"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 139,
+            "line": 140,
             "itemtype": "method",
             "name": "get.movingBackward",
             "return": {
                 "description": "is the player moving backward? true/false",
                 "type": "Bool"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 147,
+            "line": 148,
             "itemtype": "method",
             "name": "get.movingUp",
             "return": {
                 "description": "is the player moving up? true/false",
                 "type": "Bool"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 155,
+            "line": 156,
             "itemtype": "method",
             "name": "get.movingDown",
             "return": {
                 "description": "is the player moving down? true/false",
                 "type": "Bool"
             },
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 165,
+            "line": 166,
             "itemtype": "method",
             "name": "set.x",
             "params": [
@@ -219,11 +267,12 @@
                     "type": "Float"
                 }
             ],
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 173,
+            "line": 174,
             "itemtype": "method",
             "name": "set.y",
             "params": [
@@ -233,11 +282,12 @@
                     "type": "Float"
                 }
             ],
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 181,
+            "line": 182,
             "itemtype": "method",
             "name": "set.z",
             "params": [
@@ -247,11 +297,12 @@
                     "type": "Float"
                 }
             ],
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 189,
+            "line": 190,
             "itemtype": "method",
             "name": "set.targetX",
             "params": [
@@ -261,11 +312,12 @@
                     "type": "Float"
                 }
             ],
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 197,
+            "line": 198,
             "itemtype": "method",
             "name": "set.targetY",
             "params": [
@@ -275,11 +327,12 @@
                     "type": "Float"
                 }
             ],
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 205,
+            "line": 206,
             "itemtype": "method",
             "name": "set.targetZ",
             "params": [
@@ -289,27 +342,31 @@
                     "type": "Float"
                 }
             ],
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 214,
+            "line": 215,
             "is_constructor": 1,
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Camera.js",
-            "line": 220,
+            "line": 221,
             "description": "Adds mouse moved event listener, \nChanges cameraTarget based on user rotation",
             "itemtype": "method",
             "name": "setupMouseMove",
-            "class": "Camera"
+            "class": "Camera",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 912,
+            "line": 916,
             "description": "Testing buildAllTerrainData",
-            "class": "WATTTTTTT"
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "TextureLoader.js",
@@ -320,17 +377,189 @@
                     "description": "if we should load the night skybox, or the day skybox"
                 }
             ],
-            "class": "WATTTTTTT"
+            "class": "WaterSystem",
+            "module": "Engine"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 52,
+            "itemtype": "method",
+            "name": "get.waterReflectivity",
+            "return": {
+                "description": "the waters reflectivity",
+                "type": "Float"
+            },
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 59,
+            "itemtype": "method",
+            "name": "get.waterReflectivityIncrement",
+            "return": {
+                "description": "how fast the waterReflectivity changes from day/night",
+                "type": "Float"
+            },
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 69,
+            "itemtype": "method",
+            "name": "set.waterReflectivity",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "reflectivity to set",
+                    "type": "Flaot"
+                }
+            ],
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 78,
+            "description": "Sets up the reflectionFrameBuffer\nCreates the reflectionTexture\nCreates the reflectionDepthBuffer",
+            "itemtype": "method",
+            "name": "setupReflectionFrameBuffer",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 112,
+            "description": "Sets up the refractionFrameBuffer.\nCreates the refractionTexture\nCreates the refractionDepthBuffer",
+            "itemtype": "method",
+            "name": "setupRefractionFrameBuffer",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 300,
+            "description": "Renders everything under the water height to the refractionFrameBuffer",
+            "itemtype": "method",
+            "name": "renderToRefractionBuffer",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 320,
+            "description": "Renders the scene to the reflectionFrameBuffer\n\nTo create illusion of reflection texture\nNeed to move camera under the water, before rendering the reflection texture\n\nThe camera should move down by:\n\tits original distance above the water * 2\nThe pitch of the camera also needs to be inverted",
+            "itemtype": "method",
+            "name": "renderToReflectionBuffer",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 375,
+            "description": "Builds the water quad",
+            "itemtype": "method",
+            "name": "setupWaterQuad",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 401,
+            "description": "Loads in variables into the water shader:\n\tcameraPosition\n\tlightColour\n\tlightPosition\n\tmoveFactor\n\twaterReflectivity\n\twaterWaveStrength\n\tfullTransforms,\n\tview & projectionMatrix\n\t\nThis method also calculates and moves the sun position, to match the rotating skybox",
+            "itemtype": "method",
+            "name": "updateWaterAttributesAndUniforms",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 483,
+            "description": "Renders the water quad with the textures sampled from the:\n\treflectionFrameBuffer, \n\trefractionFrameBuffer,\n\twaterDudvMap\n\twaterNormalMap",
+            "itemtype": "method",
+            "name": "render",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 541,
+            "description": "Test the water reflection frame buffer is an WebGLFrameBuffer object",
+            "itemtype": "method",
+            "name": "test_setupReflectionFrameBuffer",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 553,
+            "description": "Test the water refraction frame buffer is an WebGLFrameBuffer object",
+            "itemtype": "method",
+            "name": "test_setupRefractionFrameBuffer",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 565,
+            "description": "Checks the location variables from the shaders are valid\nCheck the attribute locations are ints,\nAnd check the uniform locations are WebGLUniformLocation objects",
+            "itemtype": "method",
+            "name": "test_waterShaderLocationVariables",
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 584,
+            "description": "Tests if passed in value is NaN",
+            "itemtype": "method",
+            "name": "test_isNaN",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "name of the attribute to test, so we can print an error",
+                    "type": "String"
+                },
+                {
+                    "name": "the",
+                    "description": "value to test",
+                    "type": "Int"
+                }
+            ],
+            "class": "WaterSystem",
+            "module": "Graphics"
+        },
+        {
+            "file": "WaterSystem.js",
+            "line": 596,
+            "description": "Tests if location is a WebGLUniformLocation",
+            "itemtype": "method",
+            "name": "test_isWebGLUniformLocation",
+            "params": [
+                {
+                    "name": "the",
+                    "description": "name of the attribute to test, so we can print an error",
+                    "type": "Name"
+                },
+                {
+                    "name": "the",
+                    "description": "location value to test",
+                    "type": "Location"
+                }
+            ],
+            "class": "WaterSystem",
+            "module": "Graphics"
         }
     ],
     "warnings": [
         {
             "message": "Missing item type",
-            "line": " Camera.js:214"
+            "line": " Camera.js:215"
         },
         {
             "message": "Missing item type\nTesting buildAllTerrainData",
-            "line": " Terrain.js:912"
+            "line": " Terrain.js:916"
         },
         {
             "message": "Missing item type",

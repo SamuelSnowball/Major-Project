@@ -1,18 +1,18 @@
 
 /**
-	Handles user input and changes the 4 movement variables
-		
-	W Key:
-		Moves camera up
-	S Key:
-		Moves camera down	
-
-	R Key:
-		Moves camera up
-	F Key:
-		Moves camera down	
-
-	@class Camera
+ * Handles user input and changes the 4 movement variables
+ * 	
+ * W Key:
+ * 	Moves camera up
+ * S Key:
+ * 	Moves camera down	
+ * 
+ * R Key:
+ * 	Moves camera up
+ * F Key:
+ * 	Moves camera down	
+ * 
+ * @class Camera
 */		
 function Camera(){
 
