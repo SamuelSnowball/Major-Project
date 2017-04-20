@@ -302,6 +302,7 @@ function Camera(){
 	
 	/**
 	Updates the camera position and view direction, in the camera matrix
+	
 	@method updateCamera
 	*/
 	this.updateCamera = function(){

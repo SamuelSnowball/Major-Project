@@ -51,6 +51,7 @@ function RockGenerator(){
 	
 	/**
 	For every terrain quadrant, generate a set of rocks for it
+	
 	@method buildAllRockData
 	*/
 	function buildAllRockData(){
@@ -146,6 +147,7 @@ function RockGenerator(){
 	/**
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 1st column of the matrix translation
+	
 	@method generateMatricesForTransformRow1
 	@param {int} The index to calculate where the minimum rock X spawn position should be
 	*/
@@ -189,6 +191,7 @@ function RockGenerator(){
 	/**
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 2nd column of the matrix translation
+	
 	@method generateMatricesForTransformRow2
 	*/
 	function generateMatricesForTransformRow2(){
@@ -226,6 +229,7 @@ function RockGenerator(){
 	/**
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 3rd column of the matrix translation
+	
 	@method generateMatricesForTransformRow3
 	@param {int} The index to calculate where the minimum rock Z spawn position should be
 	*/
@@ -260,6 +264,7 @@ function RockGenerator(){
 	/**
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 4th column of the matrix translation
+	
 	@method generateMatricesForTransformRow4
 	*/	
 	function generateMatricesForTransformRow4(){
@@ -285,6 +290,7 @@ function RockGenerator(){
 	Uses the terrain render indices to determine what rocks should be processed, then rendered
 	
 	See terrain.render for comments on terrain render indices
+	
 	@method renderInstancedRocks
 	*/
 	this.renderInstancedRocks = function(){

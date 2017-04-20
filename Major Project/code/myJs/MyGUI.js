@@ -30,6 +30,7 @@ function MyGUI(){
 		get ui_terrain_size(){
 			return ui_terrain_size;
 		},
+		
 		/**
 		@method get.ui_noise_scale
 		@return {int} the value for the terrain scale, chosen through the UI
@@ -37,6 +38,7 @@ function MyGUI(){
 		get ui_noise_scale(){
 			return ui_noise_scale;
 		},
+		
 		/**
 		@method get.ui_noise_octaves
 		@return {int} the value for the terrain octaves, chosen through the UI
@@ -44,6 +46,7 @@ function MyGUI(){
 		get ui_noise_octaves(){
 			return ui_noise_octaves;
 		},
+		
 		/**
 		@method get.ui_min_rocks
 		@return {int} the value for the minimum number of rocks, chosen through the UI
@@ -51,6 +54,7 @@ function MyGUI(){
 		get ui_min_rocks(){
 			return ui_min_rocks;
 		},
+		
 		/**
 		@method get.ui_max_rocks
 		@return {int} the value for the maximum number of rocks, chosen through the UI
@@ -58,6 +62,7 @@ function MyGUI(){
 		get ui_max_rocks(){
 			return ui_max_rocks;
 		},		
+		
 		/**
 		@method get.ui_water_strength
 		@return {int} the value for the water strength, chosen through the UI
@@ -87,6 +92,7 @@ function MyGUI(){
 	
 	/**
 	Adds all of the options to the UI, so they can be changed
+	
 	@method setupSystemGUI
 	*/
 	function setupSystemGUI(){
@@ -171,6 +177,7 @@ function MyGUI(){
 
 	/**
 	Displays message when use tries to go off map
+	
 	@method showMapCollision
 	*/
 	this.showMapCollision = function(){
@@ -182,6 +189,7 @@ function MyGUI(){
 	
 	/**
 	Hides message when use tries to go off map
+	
 	@method hideMapCollision
 	*/
 	this.hideMapCollision = function(){

@@ -67,6 +67,7 @@ function Terrain(){
 		get getTerrainRows(){
 			return terrainRows;
 		},
+		
 		/**
 		@method get.getNumberQuadrantRows
 		@return {int} the number of quadrant rows (default 8 rows)
@@ -74,6 +75,7 @@ function Terrain(){
 		get getNumberQuadrantRows(){
 			return numberQuadrantRows;
 		},
+		
 		/**
 		@method get.getNumberQuadrantColumns
 		@return {int} the number of quadrant columns (default 8 columns)
@@ -81,6 +83,7 @@ function Terrain(){
 		get getNumberQuadrantColumns(){
 			return numberQuadrantColumns;
 		},
+		
 		/**
 		@method get.getQuadrantRowSize
 		@return {int} how many vertices per each quadrant row (always 128)
@@ -88,6 +91,7 @@ function Terrain(){
 		get getQuadrantRowSize(){
 			return quadrantRowSize;
 		},
+		
 		/**
 		@method get.getRenderIndices
 		@return {int[]} the final set of terrain map indices to render
@@ -114,6 +118,7 @@ function Terrain(){
 		set setTemporaryHeightMapX(value){
 			temporaryHeightMapX = value;
 		},
+		
 		/**
 		@method heightMapValueAtIndex.setTemporaryHeightMapZ
 		@param {int} the X index to set in the 2D heightMap (it's reversed)
@@ -121,6 +126,7 @@ function Terrain(){
 		set setTemporaryHeightMapZ(value){
 			temporaryHeightMapZ = value;
 		},
+		
 		/**
 		Use the previous 2 methods to set temporary heightMap indexes,
 		Then use this method to get height value, at the given indexes
