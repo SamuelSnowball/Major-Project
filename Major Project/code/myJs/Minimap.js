@@ -1,17 +1,19 @@
 
-/*
-Minimap in bottom right corner of screen,
-Displays terrain cells and camera position
-
-Uses a completely new 2D canvas, rendering over the WebGL one
-
-Current problems:
-	The collision on the grid is calculated from cameras world position like usual
-	But the user appears to go into the out of range cells, due to coordinates being calculated
-	from the top left of the square.
-	
-	The user doesn't actually go outside of the allowed cells on the map, 
-	it just looks like they do on the minimap.
+/**
+ * Minimap in bottom right corner of screen,
+ * Displays terrain cells and camera position
+ * 
+ * Uses a completely new 2D canvas, rendering over the WebGL one
+ * 
+ * Current problems:
+ * 	The collision on the grid is calculated from cameras world position like usual
+ * 	But the user appears to go into the out of range cells, due to coordinates being calculated
+ * 	from the top left of the square.
+ * 	
+ * 	The user doesn't actually go outside of the allowed cells on the map, 
+ * 	it just looks like they do on the minimap.
+ * 
+ * @class Minimap
 */
 function Minimap(){
 
@@ -38,9 +40,12 @@ function Minimap(){
 	var user_width = 5;
 	var user_height = 5;
 
-	/*
+	/**
+	Private
 	Maps the user position in the world, to the position on the canvas
 	Then draws the user as a blue square
+	
+	@method renderUser
 	*/
 	function renderUser(){
 		// Do the mapping
@@ -53,8 +58,11 @@ function Minimap(){
 		gui_context.fillRect(userX, userZ, user_width, user_height); // Draws square
 	}
 
-	/*
+	/**
+	Private
 	The below code draws the blue lines across the minimap
+	
+	@method renderGrid
 	*/	
 	function renderGrid(){
 	
@@ -104,6 +112,11 @@ function Minimap(){
 		}		
 	}
 
+	/**
+	Calls methods ot render grid and user
+	
+	@method render
+	*/
 	this.render = function(){
 		renderUser();
 		renderGrid();

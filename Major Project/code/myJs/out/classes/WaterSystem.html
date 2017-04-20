@@ -39,13 +39,16 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/Camera.html">Camera</a></li>
+                                <li><a href="../classes/CollisionTester.html">CollisionTester</a></li>
+                                <li><a href="../classes/Minimap.html">Minimap</a></li>
+                                <li><a href="../classes/MyGUI.html">MyGUI</a></li>
+                                <li><a href="../classes/RockGenerator.html">RockGenerator</a></li>
+                                <li><a href="../classes/Terrain.html">Terrain</a></li>
                                 <li><a href="../classes/WaterSystem.html">WaterSystem</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
-                                <li><a href="../modules/Engine.html">Engine</a></li>
-                                <li><a href="../modules/Graphics.html">Graphics</a></li>
                             </ul>
                         </div>
                     </div>
@@ -87,7 +90,6 @@
             Defined in: <a href="../files/WaterSystem.js.html#l2"><code>WaterSystem.js:2</code></a>
         </div>
 
-            Module: <a href="../modules/Graphics.html">Graphics</a>
 
 </div>
 
@@ -208,7 +210,7 @@ Creating and linking shaders into the water program</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l52"><code>WaterSystem.js:52</code></a>
+        <a href="../files/WaterSystem.js.html#l53"><code>WaterSystem.js:53</code></a>
         </p>
 
 
@@ -250,7 +252,7 @@ Creating and linking shaders into the water program</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l59"><code>WaterSystem.js:59</code></a>
+        <a href="../files/WaterSystem.js.html#l61"><code>WaterSystem.js:61</code></a>
         </p>
 
 
@@ -289,7 +291,7 @@ Creating and linking shaders into the water program</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l483"><code>WaterSystem.js:483</code></a>
+        <a href="../files/WaterSystem.js.html#l485"><code>WaterSystem.js:485</code></a>
         </p>
 
 
@@ -324,7 +326,7 @@ waterNormalMap</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l320"><code>WaterSystem.js:320</code></a>
+        <a href="../files/WaterSystem.js.html#l323"><code>WaterSystem.js:323</code></a>
         </p>
 
 
@@ -338,6 +340,12 @@ Need to move camera under the water, before rendering the reflection texture</p>
 <p>The camera should move down by:
 its original distance above the water * 2
 The pitch of the camera also needs to be inverted</p>
+<p>Want to render scene to a texture (frame buffer), so bind it
+Clear it
+Render to the texture (frame buffer)
+Then unbind it</p>
+<p>Then later on, we can render a square with that texture</p>
+<p>Make sure this gets rendered to something that the original scene doesn't render</p>
 
     </div>
 
@@ -360,7 +368,7 @@ The pitch of the camera also needs to be inverted</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l300"><code>WaterSystem.js:300</code></a>
+        <a href="../files/WaterSystem.js.html#l303"><code>WaterSystem.js:303</code></a>
         </p>
 
 
@@ -397,7 +405,7 @@ The pitch of the camera also needs to be inverted</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l69"><code>WaterSystem.js:69</code></a>
+        <a href="../files/WaterSystem.js.html#l71"><code>WaterSystem.js:71</code></a>
         </p>
 
 
@@ -444,7 +452,7 @@ The pitch of the camera also needs to be inverted</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l78"><code>WaterSystem.js:78</code></a>
+        <a href="../files/WaterSystem.js.html#l80"><code>WaterSystem.js:80</code></a>
         </p>
 
 
@@ -477,7 +485,7 @@ Creates the reflectionDepthBuffer</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l112"><code>WaterSystem.js:112</code></a>
+        <a href="../files/WaterSystem.js.html#l114"><code>WaterSystem.js:114</code></a>
         </p>
 
 
@@ -550,7 +558,7 @@ Creates the refractionDepthBuffer</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l584"><code>WaterSystem.js:584</code></a>
+        <a href="../files/WaterSystem.js.html#l590"><code>WaterSystem.js:590</code></a>
         </p>
 
 
@@ -618,7 +626,7 @@ Creates the refractionDepthBuffer</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l596"><code>WaterSystem.js:596</code></a>
+        <a href="../files/WaterSystem.js.html#l603"><code>WaterSystem.js:603</code></a>
         </p>
 
 
@@ -677,7 +685,7 @@ Creates the refractionDepthBuffer</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l541"><code>WaterSystem.js:541</code></a>
+        <a href="../files/WaterSystem.js.html#l544"><code>WaterSystem.js:544</code></a>
         </p>
 
 
@@ -708,7 +716,7 @@ Creates the refractionDepthBuffer</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l553"><code>WaterSystem.js:553</code></a>
+        <a href="../files/WaterSystem.js.html#l557"><code>WaterSystem.js:557</code></a>
         </p>
 
 
@@ -739,7 +747,7 @@ Creates the refractionDepthBuffer</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l565"><code>WaterSystem.js:565</code></a>
+        <a href="../files/WaterSystem.js.html#l570"><code>WaterSystem.js:570</code></a>
         </p>
 
 
@@ -772,7 +780,7 @@ And check the uniform locations are WebGLUniformLocation objects</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/WaterSystem.js.html#l401"><code>WaterSystem.js:401</code></a>
+        <a href="../files/WaterSystem.js.html#l402"><code>WaterSystem.js:402</code></a>
         </p>
 
 

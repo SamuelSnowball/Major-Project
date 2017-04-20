@@ -57,6 +57,7 @@ function WaterSystem(){
 		get waterReflectivity(){
 			return waterReflectivity;
 		},
+		
 		/**
 		@method get.waterReflectivityIncrement
 		@return {float} how fast the waterReflectivity changes from day/night
@@ -373,6 +374,7 @@ function WaterSystem(){
 	
 	/**
 	Builds the water quad
+	
 	@method setupWaterQuad
 	*/
 	function setupWaterQuad(){
@@ -409,6 +411,7 @@ function WaterSystem(){
 		view & projectionMatrix
 		
 	This method also calculates and moves the sun position, to match the rotating skybox
+	
 	@method updateWaterAttributesAndUniforms
 	*/
 	function updateWaterAttributesAndUniforms(){
@@ -485,6 +488,7 @@ function WaterSystem(){
 		refractionFrameBuffer,
 		waterDudvMap
 		waterNormalMap
+		
 	@method render
 	*/
 	this.render = function(){
@@ -539,6 +543,7 @@ function WaterSystem(){
 	
 	/**
 	Test the water reflection frame buffer is an WebGLFrameBuffer object
+	
 	@method test_setupReflectionFrameBuffer
 	*/
 	function test_setupReflectionFrameBuffer(){
@@ -551,6 +556,7 @@ function WaterSystem(){
 	
 	/**
 	Test the water refraction frame buffer is an WebGLFrameBuffer object
+	
 	@method test_setupRefractionFrameBuffer
 	*/
 	function test_setupRefractionFrameBuffer(){
@@ -565,6 +571,7 @@ function WaterSystem(){
 	Checks the location variables from the shaders are valid
 	Check the attribute locations are ints,
 	And check the uniform locations are WebGLUniformLocation objects
+	
 	@method test_waterShaderLocationVariables
 	*/
 	function test_waterShaderLocationVariables(){
@@ -582,6 +589,7 @@ function WaterSystem(){
 	
 	/**
 	Tests if passed in value is NaN
+	
 	@method test_isNaN
 	@param {string} the name of the attribute to test, so we can print an error
 	@param {int} the value to test
@@ -594,6 +602,7 @@ function WaterSystem(){
 	
 	/**
 	Tests if location is a WebGLUniformLocation
+	
 	@method test_isWebGLUniformLocation
 	@param {name} the name of the attribute to test, so we can print an error
 	@param {location} the location value to test

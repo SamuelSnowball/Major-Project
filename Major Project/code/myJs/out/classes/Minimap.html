@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Engine</title>
+    <title>Minimap</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -39,13 +39,16 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/Camera.html">Camera</a></li>
+                                <li><a href="../classes/CollisionTester.html">CollisionTester</a></li>
+                                <li><a href="../classes/Minimap.html">Minimap</a></li>
+                                <li><a href="../classes/MyGUI.html">MyGUI</a></li>
+                                <li><a href="../classes/RockGenerator.html">RockGenerator</a></li>
+                                <li><a href="../classes/Terrain.html">Terrain</a></li>
                                 <li><a href="../classes/WaterSystem.html">WaterSystem</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
-                                <li><a href="../modules/Engine.html">Engine</a></li>
-                                <li><a href="../modules/Graphics.html">Graphics</a></li>
                             </ul>
                         </div>
                     </div>
@@ -79,46 +82,169 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>Engine Module</h1>
-<div class="box clearfix meta">
+<h1>Minimap Class</h1>
+<div class="box meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/Camera.js.html#l2"><code>Camera.js:2</code></a>
+            Defined in: <a href="../files/Minimap.js.html#l2"><code>Minimap.js:2</code></a>
         </div>
+
 
 </div>
 
 
 <div class="box intro">
-    <p>Handles user input and changes the 4 movement variables</p>
-<p>W Key:
-Moves camera up
-S Key:
-Moves camera down</p>
-<p>R Key:
-Moves camera up
-F Key:
-Moves camera down</p>
+    <p>Minimap in bottom right corner of screen,
+Displays terrain cells and camera position</p>
+<p>Uses a completely new 2D canvas, rendering over the WebGL one</p>
+<p>Current problems:
+The collision on the grid is calculated from cameras world position like usual
+But the user appears to go into the out of range cells, due to coordinates being calculated
+from the top left of the square.</p>
+<pre class="code prettyprint"><code>The user doesn't actually go outside of the allowed cells on the map, 
+it just looks like they do on the minimap.</code></pre>
 
 </div>
 
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/Camera.html">
-                        Camera
-                    </a>
-                </li>
-            </ul>
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method">
+                                <a href="#method_render">render</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_renderGrid">renderGrid</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_renderUser">renderUser</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_render" class="method item">
+    <h3 class="name"><code>render</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Minimap.js.html#l115"><code>Minimap.js:115</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Calls methods ot render grid and user</p>
+
     </div>
 
 
-    <div class="yui3-u-1-2">
+
+
+</div>
+<div id="method_renderGrid" class="method item">
+    <h3 class="name"><code>renderGrid</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Minimap.js.html#l61"><code>Minimap.js:61</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Private
+The below code draws the blue lines across the minimap</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_renderUser" class="method item">
+    <h3 class="name"><code>renderUser</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Minimap.js.html#l43"><code>Minimap.js:43</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Private
+Maps the user position in the world, to the position on the canvas
+Then draws the user as a blue square</p>
+
+    </div>
+
+
+
+
+</div>
+            </div>
+
+
+
     </div>
 </div>
                     </div>

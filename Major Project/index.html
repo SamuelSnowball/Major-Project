@@ -125,8 +125,6 @@ function render(){
 	
 	camera.updateCamera();
 	
-	
-
 	/*
 	Don't change render order
 	Terrain render generates the renderIndices, 
@@ -135,7 +133,6 @@ function render(){
 	*/
 	terrain.render(); 
 	
-	
 	rockGenerator.renderInstancedRocks();
 	
 	//particleSystem.render(); 
@@ -143,9 +140,6 @@ function render(){
 	
 	waterSystem.render();
 
-
-	
-	
 	terrain.renderMapBoundaries();
 
 	skybox.render();

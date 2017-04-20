@@ -39,13 +39,16 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/Camera.html">Camera</a></li>
+                                <li><a href="../classes/CollisionTester.html">CollisionTester</a></li>
+                                <li><a href="../classes/Minimap.html">Minimap</a></li>
+                                <li><a href="../classes/MyGUI.html">MyGUI</a></li>
+                                <li><a href="../classes/RockGenerator.html">RockGenerator</a></li>
+                                <li><a href="../classes/Terrain.html">Terrain</a></li>
                                 <li><a href="../classes/WaterSystem.html">WaterSystem</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
-                                <li><a href="../modules/Engine.html">Engine</a></li>
-                                <li><a href="../modules/Graphics.html">Graphics</a></li>
                             </ul>
                         </div>
                     </div>
@@ -99,7 +102,6 @@
  * And finally rendering the water quad
  * 
  * @class WaterSystem
- * @module Graphics
 */
 function WaterSystem(){
 
@@ -128,7 +130,9 @@ function WaterSystem(){
 	var waterReflectivity = 0.0;
 	var waterReflectivityIncrement = 0.001; // how fast to increment/decrement the waterReflectivity based on time of day
 	
-	// Constructor
+	/**
+	@constructor
+	*/
 	setupReflectionFrameBuffer();
 	setupRefractionFrameBuffer();
 	setupWaterQuad();
@@ -141,6 +145,7 @@ function WaterSystem(){
 		get waterReflectivity(){
 			return waterReflectivity;
 		},
+		
 		/**
 		@method get.waterReflectivityIncrement
 		@return {float} how fast the waterReflectivity changes from day/night
@@ -351,6 +356,7 @@ function WaterSystem(){
 	console.log(&quot;waterProgram status: &quot; + gl.getProgramInfoLog(waterProgram));
 
 	gl.useProgram(waterProgram);
+	
 		var waterPositionAttribLocation = gl.getAttribLocation(waterProgram, &#x27;waterPosition&#x27;);
 		gl.enableVertexAttribArray(waterPositionAttribLocation);
 		
@@ -412,22 +418,19 @@ function WaterSystem(){
 		its original distance above the water * 2
 	The pitch of the camera also needs to be inverted
 	
+	Want to render scene to a texture (frame buffer), so bind it
+	Clear it
+	Render to the texture (frame buffer)
+	Then unbind it
+		
+	Then later on, we can render a square with that texture
+		
+	Make sure this gets rendered to something that the original scene doesn&#x27;t render
+	
 	@method renderToReflectionBuffer
 	*/
 	this.renderToReflectionBuffer = function(){
-	
-		/*
-		Want to render scene to a texture (frame buffer), so bind it
-		Clear it
-		Render to the texture (frame buffer)
-		Then unbind it
-		
-		Then later on, we can render a square with that texture
-		
-		Make sure this gets rendered to something that the original scene doesn&#x27;t render
-		*/
 		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
-
 			// Calculate distance we want to move camera down by
 			// And invert pitch
 			var distance = 2 * (camera.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
@@ -459,6 +462,7 @@ function WaterSystem(){
 	
 	/**
 	Builds the water quad
+	
 	@method setupWaterQuad
 	*/
 	function setupWaterQuad(){
@@ -495,6 +499,7 @@ function WaterSystem(){
 		view &amp; projectionMatrix
 		
 	This method also calculates and moves the sun position, to match the rotating skybox
+	
 	@method updateWaterAttributesAndUniforms
 	*/
 	function updateWaterAttributesAndUniforms(){
@@ -571,6 +576,7 @@ function WaterSystem(){
 		refractionFrameBuffer,
 		waterDudvMap
 		waterNormalMap
+		
 	@method render
 	*/
 	this.render = function(){
@@ -625,6 +631,7 @@ function WaterSystem(){
 	
 	/**
 	Test the water reflection frame buffer is an WebGLFrameBuffer object
+	
 	@method test_setupReflectionFrameBuffer
 	*/
 	function test_setupReflectionFrameBuffer(){
@@ -637,6 +644,7 @@ function WaterSystem(){
 	
 	/**
 	Test the water refraction frame buffer is an WebGLFrameBuffer object
+	
 	@method test_setupRefractionFrameBuffer
 	*/
 	function test_setupRefractionFrameBuffer(){
@@ -651,6 +659,7 @@ function WaterSystem(){
 	Checks the location variables from the shaders are valid
 	Check the attribute locations are ints,
 	And check the uniform locations are WebGLUniformLocation objects
+	
 	@method test_waterShaderLocationVariables
 	*/
 	function test_waterShaderLocationVariables(){
@@ -668,6 +677,7 @@ function WaterSystem(){
 	
 	/**
 	Tests if passed in value is NaN
+	
 	@method test_isNaN
 	@param {string} the name of the attribute to test, so we can print an error
 	@param {int} the value to test
@@ -680,6 +690,7 @@ function WaterSystem(){
 	
 	/**
 	Tests if location is a WebGLUniformLocation
+	
 	@method test_isWebGLUniformLocation
 	@param {name} the name of the attribute to test, so we can print an error
 	@param {location} the location value to test
