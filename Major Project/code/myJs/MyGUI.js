@@ -1,7 +1,9 @@
 
-/*
-This file creates and displays the GUI elements of the scene, using the library (MIT):
-https://github.com/dataarts/dat.gui
+/**
+ * This file creates and displays the GUI elements of the scene, using the library (MIT):
+ * https://github.com/dataarts/dat.gui
+ * 
+ * @class MyGUI
 */
 
 function MyGUI(){
@@ -21,21 +23,45 @@ function MyGUI(){
 	var ui_water_strength = 0.01;
 	
 	this.get = {
+		/**
+		@method get.ui_terrain_size
+		@return {int} the value for the terrain size, chosen through the UI
+		*/
 		get ui_terrain_size(){
 			return ui_terrain_size;
 		},
+		/**
+		@method get.ui_noise_scale
+		@return {int} the value for the terrain scale, chosen through the UI
+		*/
 		get ui_noise_scale(){
 			return ui_noise_scale;
 		},
+		/**
+		@method get.ui_noise_octaves
+		@return {int} the value for the terrain octaves, chosen through the UI
+		*/
 		get ui_noise_octaves(){
 			return ui_noise_octaves;
 		},
+		/**
+		@method get.ui_min_rocks
+		@return {int} the value for the minimum number of rocks, chosen through the UI
+		*/
 		get ui_min_rocks(){
 			return ui_min_rocks;
 		},
+		/**
+		@method get.ui_max_rocks
+		@return {int} the value for the maximum number of rocks, chosen through the UI
+		*/
 		get ui_max_rocks(){
 			return ui_max_rocks;
 		},		
+		/**
+		@method get.ui_water_strength
+		@return {int} the value for the water strength, chosen through the UI
+		*/
 		get ui_water_strength(){
 			return ui_water_strength;
 		}
@@ -54,9 +80,15 @@ function MyGUI(){
 		Water_strength: 0.01,
 	};
 	
-	// Constructor
+	/**
+	@constructor
+	*/
 	setupSystemGUI();
 	
+	/**
+	Adds all of the options to the UI, so they can be changed
+	@method setupSystemGUI
+	*/
 	function setupSystemGUI(){
 	
 		// Add items on the left of the systemOptions
@@ -137,7 +169,10 @@ function MyGUI(){
 		})
 	});
 
-	// Displays message when use tries to go off map
+	/**
+	Displays message when use tries to go off map
+	@method showMapCollision
+	*/
 	this.showMapCollision = function(){
 		document.getElementById("outOfBoundsID").style.visibility = "visible";	
 		$( "#outOfBoundsID" ).progressbar({
@@ -145,7 +180,10 @@ function MyGUI(){
 		})		
 	}
 	
-	// Hides message when use tries to go off map
+	/**
+	Hides message when use tries to go off map
+	@method hideMapCollision
+	*/
 	this.hideMapCollision = function(){
 		document.getElementById("outOfBoundsID").style.visibility = "hidden";		
 	}
