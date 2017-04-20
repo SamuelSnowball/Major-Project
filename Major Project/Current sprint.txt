@@ -31,17 +31,14 @@ How to reference books?
 include a copy of what it says?
 
 
-
 	Minor tasks:
 
 		Water reflection doesn't look right when moving up/down
+
 		See whats taking up render time! 
 		Try set rock textures to 1, see differnece
+		Check render time
 
-		New perlin seed each time
-			Could mimic this by selecting scale + small random number
-			scale = 15.0014
-			then scale = 15.0019 etc
 		Ambient water audio
 			Need mute section?
 		

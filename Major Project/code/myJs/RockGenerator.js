@@ -76,7 +76,7 @@ function RockGenerator(){
 		// Pull min/max numbers of rocks from GUI
 		mesh.numInstances = utility.randomIntBetween(myGUI.get.ui_min_rocks, myGUI.get.ui_max_rocks);
 		// Give rocks in this quadrant random texture
-		mesh.texture = rockTextures[ 0]; 
+		mesh.texture = rockTextures[ Math.floor(Math.random() * 5) + 0]; 
 
 		// Reset previous buffers, ready for new translations
 		buffers = twgl.createBuffersFromArrays(gl, {

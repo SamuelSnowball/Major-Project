@@ -81,6 +81,9 @@ function WaterSystem(){
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+		
+		// @Test
+		if(useTests) test_setupReflectionFrameBuffer();
 	}
 
 	function setupRefractionFrameBuffer(){
@@ -104,6 +107,9 @@ function WaterSystem(){
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+		
+		// @Test
+		if(useTests) test_setupRefractionFrameBuffer();		
 	}
 	
 	var waterVertexShader = gl.createShader(gl.VERTEX_SHADER);
@@ -255,7 +261,6 @@ function WaterSystem(){
 		var waterReflectivityLocation = gl.getUniformLocation(waterProgram, 'reflectivity');
 		
 		var waterWaveStrengthLocation = gl.getUniformLocation(waterProgram, 'waveStrength');
-		
 	gl.useProgram(program);
 	
 	this.renderToRefractionBuffer = function(){
@@ -358,7 +363,6 @@ function WaterSystem(){
 		
 		// Pass in lighting colour
 		gl.uniform3fv(lightColourAttribLocation, lightColour);
-		
 		
 		// The rotation matrix to apply to the suns position
 		var rotationMatrix = [];
@@ -467,6 +471,28 @@ function WaterSystem(){
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 6);
 
 		gl.useProgram(program);
+	}
+	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
+	
+	// Test the water reflection frame buffer is an WebGLFrameBuffer object
+	function test_setupReflectionFrameBuffer(){
+		if(gl.isFramebuffer(reflectionFrameBuffer)){
+			 // It's a valid frame buffer object
+		}else{
+			console.error("Testing water reflection frame buffer, its not a FBO!: " + reflectionFrameBuffer);
+		}
+	}
+	
+	// Test the water refraction frame buffer is an WebGLFrameBuffer object
+	function test_setupRefractionFrameBuffer(){
+		if(gl.isFramebuffer(refractionFrameBuffer)){
+			 // It's a valid frame buffer object
+		}else{
+			console.error("Testing water refraction frame buffer, its not a FBO!: " + refractionFrameBuffer);
+		}
 	}
 	
 }
