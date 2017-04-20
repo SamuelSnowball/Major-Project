@@ -1,13 +1,15 @@
-/*
-All rocks use the same OBJ model
-This file generates translations to apply to the singular rock vertex set
-The rocks are then instanced rendered
-
-Uses the obj loader library: webgl-obj-loader from frenchtoast747 on GitHub
-	https://github.com/frenchtoast747/webgl-obj-loader
-	
-Rock objs used and edited from (Public domain): 
-	http://nobiax.deviantart.com/art/Free-LowPoly-Rocks-set01-587036357
+/**
+ * All rocks use the same OBJ model
+ * This file generates translations to apply to the singular rock vertex set
+ * The rocks are then instanced rendered
+ * 
+ * Uses the obj loader library: webgl-obj-loader from frenchtoast747 on GitHub
+ * 	https://github.com/frenchtoast747/webgl-obj-loader
+ * 	
+ * Rock objs used and edited from (Public domain): 
+ * 	http://nobiax.deviantart.com/art/Free-LowPoly-Rocks-set01-587036357
+ * 
+ * @class RockGenerator
 */	
 function RockGenerator(){
 
@@ -42,11 +44,14 @@ function RockGenerator(){
 	var savedXScales = [];
 	var savedZScales = [];
 
-	// Constructor
+	/**
+	@constructor
+	*/
 	buildAllRockData();
 	
-	/*
+	/**
 	For every terrain quadrant, generate a set of rocks for it
+	@method buildAllRockData
 	*/
 	function buildAllRockData(){
 		for(var x=0; x<terrain.get.getNumberQuadrantRows; x++){
@@ -56,7 +61,9 @@ function RockGenerator(){
 		}
 	}
 	
-	/*
+	/**
+	Sets up the data needed to render the rocks
+	
 	Wouldn't want to render the quadrants rocks in the same place, 
 	Need to apply different matrices per rock instance
 	
@@ -67,6 +74,12 @@ function RockGenerator(){
 		Generate big rock (low chance)
 		Generate medium rock (mid chance)
  		Generate small rock (high chance)
+		
+	@method setupInstancedRockBuffers
+	@param {int} The x index of the quadrant to generate the rocks in, 
+				 the actual position of the rock is calculated in this method
+	@param {int} The z index of the quadrant to generate the rocks in
+				 the actual position of the rock is calculated in this method
 	*/
 	function setupInstancedRockBuffers(x, z){
 		
@@ -130,9 +143,11 @@ function RockGenerator(){
 		buffersArray.push(buffers);
 	}
 	
-	/*
+	/**
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 1st column of the matrix translation
+	@method generateMatricesForTransformRow1
+	@param {int} The index to calculate where the minimum rock X spawn position should be
 	*/
 	function generateMatricesForTransformRow1(xMin){
 		// Bind buffer, create all data, then buffer data
@@ -171,9 +186,10 @@ function RockGenerator(){
 		gl.vertexAttribPointer(instancingLocation0, 4, gl.FLOAT, false, 0, 0);
 	}
 	
-	/*
+	/**
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 2nd column of the matrix translation
+	@method generateMatricesForTransformRow2
 	*/
 	function generateMatricesForTransformRow2(){
 		/*
@@ -207,9 +223,11 @@ function RockGenerator(){
 		gl.vertexAttribPointer(instancingLocation1, 4, gl.FLOAT, false, 0, 0);	
 	}
 
-	/*
+	/**
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 3rd column of the matrix translation
+	@method generateMatricesForTransformRow3
+	@param {int} The index to calculate where the minimum rock Z spawn position should be
 	*/
 	function generateMatricesForTransformRow3(zMin){
 		/*
@@ -226,7 +244,6 @@ function RockGenerator(){
 			savedZScales.push(scaleZ);
 
 			positionZ = Math.floor(Math.random() * 128) + zMin;
-			
 			savedZPositions.push(positionZ);
 			
 			data.push(
@@ -240,9 +257,10 @@ function RockGenerator(){
 		gl.vertexAttribPointer(instancingLocation2, 4, gl.FLOAT, false, 0, 0);		
 	}
 
-	/*
+	/**
 	Read setupInstancedRockBuffers function comments first
 	Sets up the 4th column of the matrix translation
+	@method generateMatricesForTransformRow4
 	*/	
 	function generateMatricesForTransformRow4(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow4);
@@ -250,7 +268,6 @@ function RockGenerator(){
 		for(var i=0; i<mesh.numInstances; i++){
 			var testYRotation = m4.yRotation(Math.random(Math.PI * 2) + 0); // 0 -> Math.PI * 2 (360 degrees)
 			m4.multiply(testYRotation, testTransform, testTransform); // a, b, destination
-			
 			
 			data.push(
 				testTransform[3], 
@@ -263,11 +280,12 @@ function RockGenerator(){
 		gl.vertexAttribPointer(instancingLocation3, 4, gl.FLOAT, false, 0, 0);
 	}
 	
-	/*
+	/**
 	9 instanced draw calls
 	Uses the terrain render indices to determine what rocks should be processed, then rendered
 	
 	See terrain.render for comments on terrain render indices
+	@method renderInstancedRocks
 	*/
 	this.renderInstancedRocks = function(){
 
@@ -370,7 +388,7 @@ function RockGenerator(){
 	TESTING FUNCTIONS BELOW
 	*/
 		
-	/*
+	/**
 	Test column 1 of matrix applied to the rock instance at a time, 
 	Test mesh.numInstances is correct length
 	The data array contains values for the one column only, at a time
@@ -382,6 +400,9 @@ function RockGenerator(){
 	 4, x, x, x]
 	 8, x, x, x]
 	 12 x, x, x]
+	 
+	@method test_matricesForTransformRow
+	@param {int} the matrix column to test
 	*/
 	function test_matricesForTransformRow(column){
 		var error = false;
