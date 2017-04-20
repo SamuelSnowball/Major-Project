@@ -259,8 +259,11 @@ function Camera(){
 		});		
 	}
 		
-	/*
+	/**
+	Adds event listeners for the user movement
 	Not actually updating camera here, because jerky movement..
+	
+	@method setupUserMovement
 	*/
 	function setupUserMovement(){
 		document.addEventListener('keydown', function(event){
@@ -297,7 +300,10 @@ function Camera(){
 	
 	}	
 	
-	// Why not have this in other function?
+	/**
+	Updates the camera position and view direction, in the camera matrix
+	@method updateCamera
+	*/
 	this.updateCamera = function(){
 
 		if(moveForward){
@@ -333,9 +339,11 @@ function Camera(){
 		updateAttributesAndUniforms();
 	}
 	
-	/*
+	/**
 	Work out what quadrant the user is in
 	So can process and render what's in view of the player
+	
+	@method assignCameraQuadrant
 	*/
 	this.assignCameraQuadrant = function(){
 	
