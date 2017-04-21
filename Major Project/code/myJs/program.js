@@ -112,18 +112,14 @@ function MainProgram(vertexShader, fragmentShader){
 
 	// Light position
 	var lightPositionUniformLocation = gl.getUniformLocation(theProgram, 'lightPosition');
-	gl.enableVertexAttribArray(lightPositionUniformLocation);
 
 	// Light color
 	var lightColourUniformLocation = gl.getUniformLocation(theProgram, 'lightColour');
-	gl.enableVertexAttribArray(lightColourUniformLocation);
 
 	// Specular lighting, for use on textures
-	var shineDamperAttribLocation = gl.getUniformLocation(theProgram, 'shineDamper');
-	gl.enableVertexAttribArray(shineDamperAttribLocation);
+	var shineDamperUniformLocation = gl.getUniformLocation(theProgram, 'shineDamper');
 
-	var reflectivityAttribLocation = gl.getUniformLocation(theProgram, 'reflectivity');
-	gl.enableVertexAttribArray(reflectivityAttribLocation);
+	var reflectivityUniformLocation = gl.getUniformLocation(theProgram, 'reflectivity');
 
 	// Directional lighting
 	var reverseLightDirectionLocation = gl.getUniformLocation(theProgram, 'reverseLightDirection');
@@ -158,6 +154,10 @@ function MainProgram(vertexShader, fragmentShader){
 	// For blending of the map boundaries
 	var alphaLocation = gl.getUniformLocation(theProgram, 'alpha');
 	var useAlphaLocation = gl.getUniformLocation(theProgram, 'useAlpha');
+	
+	// @Test
+	if(useTests) test_allUniformLocations();
+	if(useTests) test_allAttribLocations();
 	
 	/*
 	Getters
@@ -254,21 +254,21 @@ function MainProgram(vertexShader, fragmentShader){
 		},
 
 		/**
-		@method get.shineDamperAttribLocation
+		@method get.shineDamperUniformLocation
 		@public 
 		@return {WebGLUniformLocation} the shiner damper location in the shader
 		*/		
-		get shineDamperAttribLocation(){
-			return shineDamperAttribLocation;
+		get shineDamperUniformLocation(){
+			return shineDamperUniformLocation;
 		},
 
 		/**
-		@method get.reflectivityAttribLocation
+		@method get.reflectivityUniformLocation
 		@public 
 		@return {WebGLUniformLocation} the reflectivity location in the shader
 		*/		
-		get reflectivityAttribLocation(){
-			return reflectivityAttribLocation;
+		get reflectivityUniformLocation(){
+			return reflectivityUniformLocation;
 		},
 
 		/**
@@ -400,8 +400,8 @@ function MainProgram(vertexShader, fragmentShader){
 		gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
 		
 		gl.uniform3fv(lightColourUniformLocation, lightColour);
-		gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
-		gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
+		gl.uniform1f(shineDamperUniformLocation, currentTexture.getTextureAttribute.shineDamper);
+		gl.uniform1f(reflectivityUniformLocation, currentTexture.getTextureAttribute.reflectivity);
 		
 		// Directional lighting, coming straight down
 		gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0, -1, 0]));
@@ -418,21 +418,96 @@ function MainProgram(vertexShader, fragmentShader){
 		// Clip plane
 		gl.uniform4fv(clipPlaneLocation, clipPlane);
 	}
+	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
+	
+	/**
+	Tests all uniform locations to see if they're valid
+	
+	@method test_allUniformLocations
+	@private
+	*/
+	function test_allUniformLocations(){
+		test_isWebGLUniformLocation("modelLocation", modelLocation);
+		test_isWebGLUniformLocation("viewMatrixLocation", viewMatrixLocation);
+		test_isWebGLUniformLocation("inverseViewMatrixLocation", inverseViewMatrixLocation);
+		test_isWebGLUniformLocation("projectionLocation", projectionLocation);
+		test_isWebGLUniformLocation("lightPositionUniformLocation", lightPositionUniformLocation);
+		test_isWebGLUniformLocation("lightColourUniformLocation", lightColourUniformLocation);
+		test_isWebGLUniformLocation("shineDamperUniformLocation", shineDamperUniformLocation);
+		test_isWebGLUniformLocation("reflectivityUniformLocation", reflectivityUniformLocation);
+		test_isWebGLUniformLocation("reverseLightDirectionLocation", reverseLightDirectionLocation);
+		test_isWebGLUniformLocation("lightDirectionLocation", lightDirectionLocation);
+		test_isWebGLUniformLocation("skyColourLocation", skyColourLocation);
+		test_isWebGLUniformLocation("useFogLocation", useFogLocation);
+		test_isWebGLUniformLocation("useInstancingLocation", useInstancingLocation);
+		test_isWebGLUniformLocation("clipPlaneLocation", clipPlaneLocation);
+		test_isWebGLUniformLocation("alphaLocation", alphaLocation);
+		test_isWebGLUniformLocation("useAlphaLocation", useAlphaLocation);
+	}
+	
+	/**
+	Tests if location is a WebGLUniformLocation
+	
+	@method test_isWebGLUniformLocation
+	@private
+	@param name {string} the name of the attribute to test, so we can print an error
+	@param location {buffer} the location value to test
+	*/
+	function test_isWebGLUniformLocation(name, location){
+		if(!location instanceof WebGLUniformLocation){
+			console.error("In test_isWebGLUniformLocation: " + name + ", is not a WebGLUniformLocation");
+		}
+	}
+	
+	/**
+	Tests if location is a WebGLUniformLocation
+	
+	@method test_isWebGLUniformLocation
+	@private
+	@param name {string} the name of the attribute to test, so we can print an error
+	@param location {buffer} the location value to test
+	*/
+	function test_isWebGLUniformLocation(name, location){
+		if(!location instanceof WebGLUniformLocation){
+			console.error("In test_isWebGLUniformLocation: " + name + ", is not a WebGLUniformLocation");
+		}
+	}
+			
+		
+	/**
+	Tests all attrib locations to see if they're valid
+	
+	@method test_allAttribLocations
+	*/
+	function test_allAttribLocations(){
+		test_isNaN("positionAttribLocation", positionAttribLocation);
+		test_isNaN("textureCoordLocation", textureCoordLocation);
+		test_isNaN("normalAttribLocation", normalAttribLocation);
+		test_isNaN("instancingLocation0", instancingLocation0);
+		test_isNaN("instancingLocation1", instancingLocation1);
+		test_isNaN("instancingLocation2", instancingLocation2);
+		test_isNaN("instancingLocation3", instancingLocation3);
+	}
+	
+	
+	/**
+	Tests if passed in value is NaN
+	
+	@method test_isNaN
+	@private
+	@param name {string} the name of the attribute to test, so we can print an error
+	@param value {int} the value to test
+	*/
+	function test_isNaN(name, value){
+		if(isNaN(value)){
+			console.error("In test_waterShaderLocationVariables, " + name + " was NaN!");
+		}
+	}
 
 }
 
 
 
-/*
-Program creation, attaching shaders, linking, printing errors
-*/
-
-
-/*
-TESTING FUNCTIONS BELOW
-
-can easily make a program class...?
-	somehow reuse for skybox/water shaders
-	in constructor, take in src of shaders
-*/
-	

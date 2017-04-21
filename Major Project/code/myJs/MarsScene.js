@@ -24,7 +24,12 @@ var camera = new Camera();
 var rockGenerator = new RockGenerator();
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
+
+// Water code
+var waterProgram = new WaterProgram(waterVertexShader, waterFragmentShader);
+var waterFramebuffers = new WaterFramebuffers();
 var waterSystem = new WaterSystem();
+
 var skybox = new Skybox();
 var minimap = new Minimap();
 var sound = new Sound();
