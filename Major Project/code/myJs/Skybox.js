@@ -115,7 +115,7 @@ function Skybox(){
 		// Skybox blending uniforms
 		var skyboxBlendFactorLocation = gl.getUniformLocation(skyboxProgram, 'blendFactor');
 		
-	gl.useProgram(program);
+	gl.useProgram(mainProgram.get.program);
 	
 	/**
 	This function:
@@ -268,7 +268,7 @@ function Skybox(){
 	];
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(skybox_vertices), gl.STATIC_DRAW);
 	gl.vertexAttribPointer(skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	gl.useProgram(program);
+	gl.useProgram(mainProgram.get.program);
 	
 	/**
 	This function loads the skybox variables into the shader
@@ -335,7 +335,7 @@ function Skybox(){
 		
 		gl.drawArrays(gl.TRIANGLES, 0, skybox_vertices.length/3);
 		
-		gl.useProgram(program);
+		gl.useProgram(mainProgram.get.program);
 	}
 	
 }

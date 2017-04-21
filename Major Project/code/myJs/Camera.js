@@ -359,7 +359,7 @@ function Camera(){
 		viewMatrix = m4.inverse(cameraMatrix);
 		viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 		
-		updateAttributesAndUniforms();
+		mainProgram.updateAttributesAndUniforms();
 	}
 	
 	/**

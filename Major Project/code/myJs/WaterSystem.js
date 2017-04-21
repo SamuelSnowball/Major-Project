@@ -303,7 +303,7 @@ function WaterSystem(){
 		// @Test
 		if(useTests) test_waterShaderLocationVariables();
 		
-	gl.useProgram(program);
+	gl.useProgram(mainProgram.get.program);
 	
 	/**
 	Renders everything under the water height to the refractionFrameBuffer
@@ -404,7 +404,7 @@ function WaterSystem(){
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.DYNAMIC_DRAW);
 		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
 
-		gl.useProgram(program);
+		gl.useProgram(mainProgram.get.program);
 	}
 
 	/**
@@ -544,7 +544,7 @@ function WaterSystem(){
 		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 6);
 
-		gl.useProgram(program);
+		gl.useProgram(mainProgram.get.program);
 	}
 	
 	/*
