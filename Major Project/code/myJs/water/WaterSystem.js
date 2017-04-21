@@ -44,6 +44,15 @@ function WaterSystem(){
 		*/
 		get waterReflectivityIncrement(){
 			return waterReflectivityIncrement;
+		},
+		
+		/**
+		@method get.waterMoveFactor
+		@public
+		@return {float} the water move factor speed
+		*/
+		get waterMoveFactor(){
+			return moveFactor;
 		}
 	};
 	
@@ -55,6 +64,15 @@ function WaterSystem(){
 		*/
 		set waterReflectivity(x){
 			waterReflectivity = x;
+		},
+		
+		/**
+		@method set.waterMoveFactor
+		@public
+		@param x {float} the water move factor to set
+		*/
+		set waterMoveFactor(x){
+			moveFactor = x;
 		}
 	};
 	
@@ -140,7 +158,7 @@ function WaterSystem(){
 	@private
 	*/
 	function setupWaterQuad(){
-		gl.useProgram(waterProgram);
+		gl.useProgram(waterProgram.get.program);
 		
 		waterVertexPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
@@ -156,7 +174,7 @@ function WaterSystem(){
 			 1,  1   
 		];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(waterVertices), gl.DYNAMIC_DRAW);
-		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(waterProgram.get.waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
 
 		gl.useProgram(mainProgram.get.program);
 	}
@@ -172,8 +190,8 @@ function WaterSystem(){
 	@public
 	*/
 	this.render = function(){
-		gl.useProgram(waterProgram);
-		gl.enableVertexAttribArray(waterPositionAttribLocation);
+		gl.useProgram(waterProgram.get.program);
+		gl.enableVertexAttribArray(waterProgram.get.waterPositionAttribLocation);
 
 		// Base water size off the map size
 		var xScale = terrain.get.getNumberQuadrantRows * terrain.get.getQuadrantRowSize;
@@ -188,30 +206,30 @@ function WaterSystem(){
 		rotateZ = m4.zRotation(0);
 		position = m4.translation(xScale, waterHeight, zScale);
 		
-		updateWaterAttributesAndUniforms();
+		waterProgram.updateWaterAttributesAndUniforms();
 		
 		// Reflection texture sampled from unit 0
 		gl.activeTexture(gl.TEXTURE0);
-		gl.uniform1i(gl.getUniformLocation(waterProgram, "reflectionTextureSampler"), 0);
+		gl.uniform1i(gl.getUniformLocation(waterProgram.get.program, "reflectionTextureSampler"), 0);
 		gl.bindTexture(gl.TEXTURE_2D, waterFramebuffers.get.reflectionTexture);
 		
 		// Refraction texture sampled from unit 1
 		gl.activeTexture(gl.TEXTURE1); 
-		gl.uniform1i(gl.getUniformLocation(waterProgram, "refractionTextureSampler"), 1);
+		gl.uniform1i(gl.getUniformLocation(waterProgram.get.program, "refractionTextureSampler"), 1);
 		gl.bindTexture(gl.TEXTURE_2D, waterFramebuffers.get.refractionTexture);		
 		
 		// dudvMap texture sampled from unit 2
 		gl.activeTexture(gl.TEXTURE2); 
-		gl.uniform1i(gl.getUniformLocation(waterProgram, "dudvMapSampler"), 2);
+		gl.uniform1i(gl.getUniformLocation(waterProgram.get.program, "dudvMapSampler"), 2);
 		gl.bindTexture(gl.TEXTURE_2D, WATER_DUDV_MAP_TEXTURE.getTextureAttribute.texture);			
 
 		// normal map sampled from unit 3
 		gl.activeTexture(gl.TEXTURE3);
-		gl.uniform1i(gl.getUniformLocation(waterProgram, "normalMapSampler"), 3);
+		gl.uniform1i(gl.getUniformLocation(waterProgram.get.program, "normalMapSampler"), 3);
 		gl.bindTexture(gl.TEXTURE_2D, WATER_NORMAL_MAP_TEXTURE.getTextureAttribute.texture);			
 
 		gl.bindBuffer(gl.ARRAY_BUFFER, waterVertexPositionBuffer);
-		gl.vertexAttribPointer(waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(waterProgram.get.waterPositionAttribLocation, 2, gl.FLOAT, false, 0, 0);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 6);
 
 		gl.useProgram(mainProgram.get.program);

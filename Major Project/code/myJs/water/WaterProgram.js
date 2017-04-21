@@ -1,4 +1,8 @@
 
+/**
+
+
+*/
 function WaterProgram(waterVertexShader, waterFragmentShader){
 	
 	var waterProgram = gl.createProgram();
@@ -8,25 +12,25 @@ function WaterProgram(waterVertexShader, waterFragmentShader){
 	console.log("waterProgram status: " + gl.getProgramInfoLog(waterProgram));
 	gl.useProgram(waterProgram);
 	
+	/*
+	Get location of variables in shaders, so we can send data to shaders
+	Enable them if needed
+	*/	
+	
 	var waterPositionAttribLocation = gl.getAttribLocation(waterProgram, 'waterPosition');
 	gl.enableVertexAttribArray(waterPositionAttribLocation);
 	
 	var waterCameraPositionLocation = gl.getUniformLocation(waterProgram, 'cameraPosition');
 	
 	var waterViewMatrixLocation = gl.getUniformLocation(waterProgram, 'viewMatrix');
-	gl.uniformMatrix4fv(waterViewMatrixLocation, false, new Float32Array(viewMatrix));
-	
-	var waterProjectionLocation = gl.getUniformLocation(waterProgram, 'projectionMatrix');
-	gl.uniformMatrix4fv(waterProjectionLocation, false, new Float32Array(projectionMatrix));
-	
-	var waterModelLocation = gl.getUniformLocation(waterProgram, 'model');
-	gl.uniformMatrix4fv(waterModelLocation, false, new Float32Array(fullTransforms));
 
-	var lightPositionAttribLocation = gl.getUniformLocation(waterProgram, 'lightPosition');
-	gl.enableVertexAttribArray(lightPositionAttribLocation);
+	var waterProjectionLocation = gl.getUniformLocation(waterProgram, 'projectionMatrix');
+
+	var waterModelLocation = gl.getUniformLocation(waterProgram, 'model');
 	
-	var lightColourAttribLocation = gl.getUniformLocation(waterProgram, 'lightColour');
-	gl.enableVertexAttribArray(lightColourAttribLocation);
+	var lightPositionUniformLocation = gl.getUniformLocation(waterProgram, 'lightPosition');
+
+	var lightColourUniformLocation = gl.getUniformLocation(waterProgram, 'lightColour');
 	
 	var waterMoveFactorLocation = gl.getUniformLocation(waterProgram, 'moveFactor');
 	
@@ -36,6 +40,106 @@ function WaterProgram(waterVertexShader, waterFragmentShader){
 	
 	// @Test
 	if(useTests) test_waterShaderLocationVariables();
+	
+	this.get = {
+		/**
+		@method get.program
+		@return {WebGLProgram} the water program
+		*/
+		get program(){
+			return waterProgram;
+		},
+	
+		/**
+		@method get.waterPositionAttribLocation
+		@public
+		@return {int} the waters vertex position location in the shader
+		*/
+		get waterPositionAttribLocation(){
+			return waterPositionAttribLocation;
+		},
+		
+		/**
+		@method get.waterCameraPositionLocation
+		@public
+		@return {WebGLUniformLocation} the camera position location in the shader
+		*/
+		get waterCameraPositionLocation(){
+			return waterCameraPositionLocation;
+		},
+
+		/**
+		@method get.waterViewMatrixLocation
+		@public
+		@return {WebGLUniformLocation} the view matrix location in the shader
+		*/
+		get waterViewMatrixLocation(){
+			return waterViewMatrixLocation;
+		},
+
+		/**
+		@method get.waterProjectionLocation
+		@public
+		@return {WebGLUniformLocation} the projection matrix location in the shader
+		*/
+		get waterProjectionLocation(){
+			return waterProjectionLocation;
+		},
+
+		/**
+		@method get.waterModelLocation
+		@public
+		@return {WebGLUniformLocation} the models location in the shader
+		*/
+		get waterModelLocation(){
+			return waterModelLocation;
+		},
+
+		/**
+		@method get.lightPositionUniformLocation
+		@public
+		@return {WebGLUniformLocation} the light position location in the shader
+		*/
+		get lightPositionUniformLocation(){
+			return lightPositionUniformLocation;
+		},
+
+		/**
+		@method get.lightColourUniformLocation
+		@public
+		@return {WebGLUniformLocation} the light colour location in the shader
+		*/
+		get lightColourUniformLocation(){
+			return lightColourUniformLocation;
+		},
+
+		/**
+		@method get.waterMoveFactorLocation
+		@public
+		@return {WebGLUniformLocation} the water move factor location in the shader
+		*/
+		get waterMoveFactorLocation(){
+			return waterMoveFactorLocation;
+		},
+
+		/**
+		@method get.waterReflectivityLocation
+		@public
+		@return {WebGLUniformLocation} the water reflectivity location in the shader
+		*/
+		get waterReflectivityLocation(){
+			return waterReflectivityLocation;
+		},
+
+		/**
+		@method get.waterWaveStrengthLocation
+		@public
+		@return {WebGLUniformLocation} the water wave strength location in the shader
+		*/
+		get waterWaveStrengthLocation(){
+			return waterWaveStrengthLocation;
+		},		
+	};
 	
 	/**
 	Loads in variables into the water shader:
@@ -51,15 +155,15 @@ function WaterProgram(waterVertexShader, waterFragmentShader){
 	This method also calculates and moves the sun position, to match the rotating skybox
 	
 	@method updateWaterAttributesAndUniforms
-	@private
+	@public
 	*/
-	function updateWaterAttributesAndUniforms(){
+	this.updateWaterAttributesAndUniforms = function(){
 	
 		// Pass in camera position
 		gl.uniform3fv(waterCameraPositionLocation, camera.get.position);
 		
 		// Pass in lighting colour
-		gl.uniform3fv(lightColourAttribLocation, lightColour);
+		gl.uniform3fv(lightColourUniformLocation, lightColour);
 		
 		// The rotation matrix to apply to the suns position
 		var rotationMatrix = [];
@@ -98,15 +202,15 @@ function WaterProgram(waterVertexShader, waterFragmentShader){
 							  rotationMatrix[15] * lightPosition[3];						
 		
 		// Pass in the final sun position
-		gl.uniform3fv(lightPositionAttribLocation, [finalSunPosition[0], finalSunPosition[1], finalSunPosition[2]] );
+		gl.uniform3fv(lightPositionUniformLocation, [finalSunPosition[0], finalSunPosition[1], finalSunPosition[2]] );
 	
 		// Pass in how much the water should move
-		moveFactor += Date.now() * 0.0000000000000009; // dont ask....
-		moveFactor %= 1; // loops when reaches 0
-		gl.uniform1f(waterMoveFactorLocation, moveFactor);
+		waterSystem.set.waterMoveFactor = waterSystem.get.waterMoveFactor + Date.now() * 0.0000000000000009; // dont ask....
+		waterSystem.set.waterMoveFactor = waterSystem.get.waterMoveFactor % 1;
+		gl.uniform1f(waterMoveFactorLocation, waterSystem.get.waterMoveFactor);
 		
 		// Pass in waterReflectivity to shader
-		gl.uniform1f(waterReflectivityLocation, waterReflectivity);
+		gl.uniform1f(waterReflectivityLocation, waterSystem.get.waterReflectivity);
 		
 		// Pass in wave strength, get it from the GUI
 		gl.uniform1f(waterWaveStrengthLocation, myGUI.get.ui_water_strength);
@@ -139,8 +243,8 @@ function WaterProgram(waterVertexShader, waterFragmentShader){
 		test_isWebGLUniformLocation("waterViewMatrixLocation", waterViewMatrixLocation);
 		test_isWebGLUniformLocation("waterProjectionLocation", waterProjectionLocation);
 		test_isWebGLUniformLocation("waterModelLocation", waterModelLocation);
-		test_isWebGLUniformLocation("lightPositionAttribLocation", lightPositionAttribLocation);
-		test_isWebGLUniformLocation("lightColourAttribLocation", lightColourAttribLocation);
+		test_isWebGLUniformLocation("lightPositionUniformLocation", lightPositionUniformLocation);
+		test_isWebGLUniformLocation("lightColourUniformLocation", lightColourUniformLocation);
 		test_isWebGLUniformLocation("waterMoveFactorLocation", waterMoveFactorLocation);
 		test_isWebGLUniformLocation("waterReflectivityLocation", waterReflectivityLocation);
 		test_isWebGLUniformLocation("waterWaveStrengthLocation", waterWaveStrengthLocation);

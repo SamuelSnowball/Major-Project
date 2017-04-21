@@ -13,15 +13,10 @@ Sprint 9 (17th - 24th April)
 			Fix lengths of barrier
 			Fix barrier coming in/out of view
 
-Whats worrying you?
-	background reading/analysis
 
 Email neil
 Describe report in iterations?
 	Would make sense
-
-vertex/fragment/glseutp/program put into engine module
-
 
 Have brackets for return values, 
 not for parameters, but have a parameter name
@@ -30,9 +25,6 @@ Look at structure of final report for guidance
 
 @return {type} this is a return value
 @param zParam {float} the...
-
-yuidoc, property? used for variables?
-@type Number, @property, @default
 
 @example
 
