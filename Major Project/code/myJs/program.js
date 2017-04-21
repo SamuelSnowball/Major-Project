@@ -110,13 +110,13 @@ function MainProgram(vertexShader, fragmentShader){
 	var normalAttribLocation = gl.getAttribLocation(theProgram, 'normal');
 	gl.enableVertexAttribArray(normalAttribLocation);
 
-	// Light position, can remove this?
-	var lightPositionAttribLocation = gl.getUniformLocation(theProgram, 'lightPosition');
-	gl.enableVertexAttribArray(lightPositionAttribLocation);
+	// Light position
+	var lightPositionUniformLocation = gl.getUniformLocation(theProgram, 'lightPosition');
+	gl.enableVertexAttribArray(lightPositionUniformLocation);
 
 	// Light color
-	var lightColourAttribLocation = gl.getUniformLocation(theProgram, 'lightColour');
-	gl.enableVertexAttribArray(lightColourAttribLocation);
+	var lightColourUniformLocation = gl.getUniformLocation(theProgram, 'lightColour');
+	gl.enableVertexAttribArray(lightColourUniformLocation);
 
 	// Specular lighting, for use on textures
 	var shineDamperAttribLocation = gl.getUniformLocation(theProgram, 'shineDamper');
@@ -165,108 +165,227 @@ function MainProgram(vertexShader, fragmentShader){
 	this.get = {
 		/**
 		@method get.program
+		@public 
 		@return {WebGLProgram} the program being used
 		*/
 		get program(){
 			return theProgram;
 		},
 		
+		/**
+		@method get.modelLocation
+		@public 
+		@return {WebGLUniformLocation} the models location in the shader
+		*/
 		get modelLocation(){
 			return modelLocation;
 		},
-		
+
+		/**
+		@method get.viewMatrixLocation
+		@public 
+		@return {WebGLUniformLocation} the viwe matrix location in the shader
+		*/		
 		get viewMatrixLocation(){
 			return viewMatrixLocation;
 		},		
-		
+
+		/**
+		@method get.inverseViewMatrixLocation
+		@public 
+		@return {WebGLUniformLocation} the inverse view matrix location in the shader
+		*/		
 		get inverseViewMatrixLocation(){
 			return inverseViewMatrixLocation;
 		},
-		
+
+		/**
+		@method get.projectionLocation
+		@public 
+		@return {WebGLUniformLocation} the projection location in the shader
+		*/		
 		get projectionLocation(){
 			return projectionLocation;
 		},
-		
+
+		/**
+		@method get.positionAttribLocation
+		@public 
+		@return {int} the position location in the shader
+		*/		
 		get positionAttribLocation(){
 			return positionAttribLocation;
 		},
-		
+
+		/**
+		@method get.textureCoordLocation
+		@public 
+		@return {int} the texture coordinate location in the shader
+		*/		
 		get textureCoordLocation(){
 			return textureCoordLocation;
 		},
-		
+
+		/**
+		@method get.normalAttribLocation
+		@public 
+		@return {int} the notmal location in the shader
+		*/		
 		get normalAttribLocation(){
 			return normalAttribLocation;
 		},
-		
-		get lightPositionAttribLocation(){
-			return lightPositionAttribLocation;
+
+		/**
+		@method get.lightPositionUniformLocation
+		@public 
+		@return {WebGLUniformLocation} the light position location in the shader
+		*/		
+		get lightPositionUniformLocation(){
+			return lightPositionUniformLocation;
 		},
-		
-		get lightColourAttribLocation(){
-			return lightColourAttribLocation;
+
+		/**
+		@method get.lightColourUniformLocation
+		@public 
+		@return {WebGLUniformLocation} the light colour location in the shader
+		*/		
+		get lightColourUniformLocation(){
+			return lightColourUniformLocation;
 		},
-		
+
+		/**
+		@method get.shineDamperAttribLocation
+		@public 
+		@return {WebGLUniformLocation} the shiner damper location in the shader
+		*/		
 		get shineDamperAttribLocation(){
 			return shineDamperAttribLocation;
 		},
-		
+
+		/**
+		@method get.reflectivityAttribLocation
+		@public 
+		@return {WebGLUniformLocation} the reflectivity location in the shader
+		*/		
 		get reflectivityAttribLocation(){
 			return reflectivityAttribLocation;
 		},
-		
+
+		/**
+		@method get.reverseLightDirectionLocation
+		@public 
+		@return {WebGLUniformLocation} the reverse light direction location in the shader
+		*/		
 		get reverseLightDirectionLocation(){
 			return reverseLightDirectionLocation;
 		},
-	
+
+		/**
+		@method get.lightDirectionLocation
+		@public 
+		@return {WebGLUniformLocation} the light direction location in the shader
+		*/		
 		get lightDirectionLocation(){
 			return lightDirectionLocation;
 		},
-		
+
+		/**
+		@method get.skyColourLocation
+		@public 
+		@return {WebGLUniformLocation} the sky colour location in the shader
+		*/		
 		get skyColourLocation(){
 			return skyColourLocation;
 		},
-		
+
+		/**
+		@method get.useFogLocation
+		@public 
+		@return {WebGLUniformLocation} the use fog location in the shader
+		*/		
 		get useFogLocation(){
 			return useFogLocation;
 		},
-		
+
+		/**
+		@method get.useInstancingLocation
+		@public 
+		@return {WebGLUniformLocation} the use instancing location in the shader
+		*/		
 		get useInstancingLocation(){
 			return useInstancingLocation;
 		},
-		
+
+		/**
+		@method get.instancingLocation0
+		@public 
+		@return {int} the instancingLocation0 in the shader
+		*/		
 		get instancingLocation0(){
 			return instancingLocation0;
 		},
-		
+
+		/**
+		@method get.instancingLocation1
+		@public 
+		@return {int} the instancingLocation1 in the shader
+		*/		
 		get instancingLocation1(){
 			return instancingLocation1;
 		},
-		
+
+		/**
+		@method get.instancingLocation2
+		@public 
+		@return {int} the instancingLocation2 in the shader
+		*/		
 		get instancingLocation2(){
 			return instancingLocation2;
 		},
-		
+
+		/**
+		@method get.instancingLocation3
+		@public 
+		@return {int} the instancingLocation3 in the shader
+		*/		
 		get instancingLocation3(){
 			return instancingLocation3;
 		},
-		
+
+		/**
+		@method get.clipPlaneLocation
+		@public 
+		@return {WebGLUniformLocation} the clip plane location in the shader
+		*/		
 		get clipPlaneLocation(){
 			return clipPlaneLocation;
 		},
-		
+
+		/**
+		@method get.alphaLocation
+		@public 
+		@return {WebGLUniformLocation} the alpha location in the shader
+		*/		
 		get alphaLocation(){
 			return alphaLocation;
 		},
-		
+
+		/**
+		@method get.useAlphaLocation
+		@public 
+		@return {WebGLUniformLocation} the use alpha location in the shader
+		*/		
 		get useAlphaLocation(){
 			return useAlphaLocation;
 		},
 	};
 
 
-	/*
+	/**
 	Loads variables and matrices into shaders every frame
+	
+	@method updateAttributesAndUniforms 
+	@public 
 	*/
 	this.updateAttributesAndUniforms = function(){
 
@@ -280,7 +399,7 @@ function MainProgram(vertexShader, fragmentShader){
 		gl.uniformMatrix4fv(inverseViewMatrixLocation, false, new Float32Array(m4.inverse(viewMatrix)));
 		gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
 		
-		gl.uniform3fv(lightColourAttribLocation, lightColour);
+		gl.uniform3fv(lightColourUniformLocation, lightColour);
 		gl.uniform1f(shineDamperAttribLocation, currentTexture.getTextureAttribute.shineDamper);
 		gl.uniform1f(reflectivityAttribLocation, currentTexture.getTextureAttribute.reflectivity);
 		
@@ -302,19 +421,11 @@ function MainProgram(vertexShader, fragmentShader){
 
 }
 
-/*
-Creates the main program object
-Then retrieves the actual WebGLProgram from that programObject
-*/
-var mainProgram = new MainProgram(vertexShader, fragmentShader);
 
 
 /*
 Program creation, attaching shaders, linking, printing errors
 */
-
-
-
 
 
 /*

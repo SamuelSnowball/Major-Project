@@ -6,6 +6,14 @@ it also contains the setup and render methods
 
 var useTests = true; // change this to enable/disable testing
 	
+/*
+Creates the main program object for rendering the scene (the vertex/fragment shaders combiend) 
+	Other programs include:
+		WaterProgram
+		SkyboxProgram
+*/
+var mainProgram = new MainProgram(vertexShader, fragmentShader);	
+	
 // All scene files and classes
 var myGUI = new MyGUI();
 var utility = new Utility();
