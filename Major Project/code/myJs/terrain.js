@@ -194,9 +194,9 @@ function Terrain(){
 				
 				// When a VAO is created all attrib locations are disabled by default
 				// So need to enable them for each VAO
-				gl.enableVertexAttribArray(positionAttribLocation);
-				gl.enableVertexAttribArray(textureCoordLocation);
-				gl.enableVertexAttribArray(normalAttribLocation);
+				gl.enableVertexAttribArray(mainProgram.get.positionAttribLocation);
+				gl.enableVertexAttribArray(mainProgram.get.textureCoordLocation);
+				gl.enableVertexAttribArray(mainProgram.get.normalAttribLocation);
 						
 				// Reset current quadrant data (if any), and create new quadrant data
 				createQuadrantVertices(x, z);
@@ -520,7 +520,7 @@ function Terrain(){
 			quadrantVertexBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantVertexBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantVertices), gl.DYNAMIC_DRAW);
-			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
+			gl.vertexAttribPointer(mainProgram.get.positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
 		}
 		
 		/**
@@ -549,7 +549,7 @@ function Terrain(){
 			quadrantUvBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantUvBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantUvs), gl.DYNAMIC_DRAW);
-			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+			gl.vertexAttribPointer(mainProgram.get.textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
 		}
 		
 		/**
@@ -560,7 +560,7 @@ function Terrain(){
 			quadrantNormalBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ARRAY_BUFFER, quadrantNormalBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(quadrantNormals), gl.DYNAMIC_DRAW);
-			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);				
+			gl.vertexAttribPointer(mainProgram.get.normalAttribLocation, 3, gl.FLOAT, false, 0, 0);				
 		}
 		
 	/*
@@ -797,11 +797,11 @@ function Terrain(){
 		currentTexture = mapTexture;
 
 		useInstancing = false;
-		gl.uniform1i(useInstancingLocation, useInstancing);
-		gl.disableVertexAttribArray(instancingLocation0);
-		gl.disableVertexAttribArray(instancingLocation1);
-		gl.disableVertexAttribArray(instancingLocation2);
-		gl.disableVertexAttribArray(instancingLocation3);
+		gl.uniform1i(mainProgram.get.useInstancingLocation, useInstancing);
+		gl.disableVertexAttribArray(mainProgram.get.instancingLocation0);
+		gl.disableVertexAttribArray(mainProgram.get.instancingLocation1);
+		gl.disableVertexAttribArray(mainProgram.get.instancingLocation2);
+		gl.disableVertexAttribArray(mainProgram.get.instancingLocation3);
 		
 		scale = m4.scaling(1, 1, 1);
 		rotateX = m4.xRotation(0);
@@ -811,10 +811,10 @@ function Terrain(){
 		position = m4.translation(0, 0, 0);
 		
 		// Times matrices together
-		updateAttributesAndUniforms();
+		mainProgram.updateAttributesAndUniforms();
 
 		gl.activeTexture(gl.TEXTURE0);
-		gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+		gl.uniform1i(gl.getUniformLocation(mainProgram.get.program, "uSampler"), 0);
 		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 		
 		// Reset VAO indices to process and render
@@ -897,7 +897,7 @@ function Terrain(){
 		mapBoundaryPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, mapBoundaryPositionBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mapBoundaryVertices), gl.STATIC_DRAW);
-		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);		
+		gl.vertexAttribPointer(mainProgram.get.positionAttribLocation, 3, gl.FLOAT, false, 0, 0);		
 		
 		// Indices
 		mapBoundaryIndices = [3,2,1,3,1,0]; 
@@ -915,7 +915,7 @@ function Terrain(){
 		mapBoundaryUvBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, mapBoundaryUvBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mapBoundaryUvs), gl.DYNAMIC_DRAW);
-		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+		gl.vertexAttribPointer(mainProgram.get.textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
 	}
 	
 	/**
@@ -930,8 +930,8 @@ function Terrain(){
 		if(useAlpha){
 			gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 			gl.enable(gl.BLEND);
-			gl.uniform1f(alphaLocation, 0.4);
-			gl.uniform1i(useAlphaLocation, true);		
+			gl.uniform1f(mainProgram.get.alphaLocation, 0.4);
+			gl.uniform1i(mainProgram.get.useAlphaLocation, true);		
 		}
 
 		// Render different map boundaries
@@ -969,18 +969,18 @@ function Terrain(){
 			rotateX = m4.xRotation(0);
 			rotateZ = m4.zRotation(0);	
 		
-			updateAttributesAndUniforms();
+			mainProgram.updateAttributesAndUniforms();
 
 			currentTexture = borderTexture;
 			gl.activeTexture(gl.TEXTURE0);
-			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+			gl.uniform1i(gl.getUniformLocation(mainProgram.get.program, "uSampler"), 0);
 			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 
 			gl.bindBuffer(gl.ARRAY_BUFFER, mapBoundaryPositionBuffer);
-			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+			gl.vertexAttribPointer(mainProgram.get.positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 			
 			gl.bindBuffer(gl.ARRAY_BUFFER, mapBoundaryUvBuffer);
-			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+			gl.vertexAttribPointer(mainProgram.get.textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mapBoundaryIndiceBuffer);
 			
@@ -989,7 +989,7 @@ function Terrain(){
 		
 		if(useAlpha){
 			gl.disable(gl.BLEND);
-			gl.uniform1i(useAlphaLocation, false);	
+			gl.uniform1i(mainProgram.get.useAlphaLocation, false);	
 		}
 	}
 	

@@ -188,7 +188,7 @@ function RockGenerator(){
 			); 
 		}
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
-		gl.vertexAttribPointer(instancingLocation0, 4, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(mainProgram.get.instancingLocation0, 4, gl.FLOAT, false, 0, 0);
 	}
 	
 	/**
@@ -227,7 +227,7 @@ function RockGenerator(){
 			); 
 		}
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);	
-		gl.vertexAttribPointer(instancingLocation1, 4, gl.FLOAT, false, 0, 0);	
+		gl.vertexAttribPointer(mainProgram.get.instancingLocation1, 4, gl.FLOAT, false, 0, 0);	
 	}
 
 	/**
@@ -263,7 +263,7 @@ function RockGenerator(){
 			); 
 		}
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
-		gl.vertexAttribPointer(instancingLocation2, 4, gl.FLOAT, false, 0, 0);		
+		gl.vertexAttribPointer(mainProgram.get.instancingLocation2, 4, gl.FLOAT, false, 0, 0);		
 	}
 
 	/**
@@ -288,7 +288,7 @@ function RockGenerator(){
 			);
 		}
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
-		gl.vertexAttribPointer(instancingLocation3, 4, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(mainProgram.get.instancingLocation3, 4, gl.FLOAT, false, 0, 0);
 	}
 	
 	/**
@@ -310,18 +310,18 @@ function RockGenerator(){
 		position = m4.translation(0, 0, 0);
 		
 		// Times matrices together
-		updateAttributesAndUniforms();
+		mainProgram.updateAttributesAndUniforms();
 		
 		// Yes, want to use instancing
 		// This will build the 4x4 matrix from the 1x4 matrix rows passed into the shader
 		useInstancing = true;
-		gl.uniform1i(useInstancingLocation, useInstancing);
+		gl.uniform1i(mainProgram.get.useInstancingLocation, useInstancing);
 		
-		gl.enableVertexAttribArray(instancingLocation0);
-		gl.enableVertexAttribArray(instancingLocation1);
-		gl.enableVertexAttribArray(instancingLocation2);
-		gl.enableVertexAttribArray(instancingLocation3);
-	
+		gl.enableVertexAttribArray(mainProgram.get.instancingLocation0);
+		gl.enableVertexAttribArray(mainProgram.get.instancingLocation1);
+		gl.enableVertexAttribArray(mainProgram.get.instancingLocation2);
+		gl.enableVertexAttribArray(mainProgram.get.instancingLocation3);
+	    
 		// The indices to render, see terrain.render for comments
 		var renderIndices = terrain.get.getRenderIndices;
 
@@ -331,55 +331,55 @@ function RockGenerator(){
 			// Get the rocks texture
 			currentTexture = meshArray[renderIndices[i]].texture;
 			gl.activeTexture(gl.TEXTURE0);
-			gl.uniform1i(gl.getUniformLocation(program, "uSampler"), 0);
+			gl.uniform1i(gl.getUniformLocation(mainProgram.get.program, "uSampler"), 0);
 			gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 			
 			// Bind vertices
 			gl.bindBuffer(gl.ARRAY_BUFFER, meshArray[renderIndices[i]].vertexBuffer);
-			gl.enableVertexAttribArray(positionAttribLocation);
-			gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+			gl.enableVertexAttribArray(mainProgram.get.positionAttribLocation);
+			gl.vertexAttribPointer(mainProgram.get.positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 			
 			// Bind UVs
 			gl.bindBuffer(gl.ARRAY_BUFFER, meshArray[renderIndices[i]].textureBuffer);
-			gl.enableVertexAttribArray(textureCoordLocation);
-			gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
+			gl.enableVertexAttribArray(mainProgram.get.textureCoordLocation);
+			gl.vertexAttribPointer(mainProgram.get.textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 			
 			// Bind normals
 			gl.bindBuffer(gl.ARRAY_BUFFER, meshArray[renderIndices[i]].normalBuffer);
-			gl.enableVertexAttribArray(normalAttribLocation);
-			gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
+			gl.enableVertexAttribArray(mainProgram.get.normalAttribLocation);
+			gl.vertexAttribPointer(mainProgram.get.normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
 			 
 			// Bind the first transforms row
 			gl.bindBuffer(gl.ARRAY_BUFFER, buffersArray[renderIndices[i]].fullTransformsRow1);
-			gl.enableVertexAttribArray(instancingLocation0);
-			gl.vertexAttribPointer(instancingLocation0, 4, gl.FLOAT, false, 0, 0);
+			gl.enableVertexAttribArray(mainProgram.get.instancingLocation0);
+			gl.vertexAttribPointer(mainProgram.get.instancingLocation0, 4, gl.FLOAT, false, 0, 0);
 			  
 			// Bind the second transforms row 
 			gl.bindBuffer(gl.ARRAY_BUFFER, buffersArray[renderIndices[i]].fullTransformsRow2);
-			gl.enableVertexAttribArray(instancingLocation1);
-			gl.vertexAttribPointer(instancingLocation1, 4, gl.FLOAT, false, 0, 0);
+			gl.enableVertexAttribArray(mainProgram.get.instancingLocation1);
+			gl.vertexAttribPointer(mainProgram.get.instancingLocation1, 4, gl.FLOAT, false, 0, 0);
 			
 			// Bind the third transforms row
 			gl.bindBuffer(gl.ARRAY_BUFFER, buffersArray[renderIndices[i]].fullTransformsRow3);
-			gl.enableVertexAttribArray(instancingLocation2);
-			gl.vertexAttribPointer(instancingLocation2, 4, gl.FLOAT, false, 0, 0);
+			gl.enableVertexAttribArray(mainProgram.get.instancingLocation2);
+			gl.vertexAttribPointer(mainProgram.get.instancingLocation2, 4, gl.FLOAT, false, 0, 0);
 				
 			// Bind the forth transforms row					
 			gl.bindBuffer(gl.ARRAY_BUFFER, buffersArray[renderIndices[i]].fullTransformsRow4);
-			gl.enableVertexAttribArray(instancingLocation3);
-			gl.vertexAttribPointer(instancingLocation3, 4, gl.FLOAT, false, 0, 0);
+			gl.enableVertexAttribArray(mainProgram.get.instancingLocation3);
+			gl.vertexAttribPointer(mainProgram.get.instancingLocation3, 4, gl.FLOAT, false, 0, 0);
 
 			// Bind indices
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, meshArray[renderIndices[i]].indexBuffer);
 			 
 			// Specify how values should vary between instance
-			extension.vertexAttribDivisorANGLE(positionAttribLocation, 0);
-			extension.vertexAttribDivisorANGLE(textureCoordLocation, 0); 
-			extension.vertexAttribDivisorANGLE(normalAttribLocation, 0);
-			extension.vertexAttribDivisorANGLE(instancingLocation0, 1);
-			extension.vertexAttribDivisorANGLE(instancingLocation1, 1);
-			extension.vertexAttribDivisorANGLE(instancingLocation2, 1);
-			extension.vertexAttribDivisorANGLE(instancingLocation3, 1);
+			extension.vertexAttribDivisorANGLE(mainProgram.get.positionAttribLocation, 0);
+			extension.vertexAttribDivisorANGLE(mainProgram.get.textureCoordLocation, 0); 
+			extension.vertexAttribDivisorANGLE(mainProgram.get.normalAttribLocation, 0);
+			extension.vertexAttribDivisorANGLE(mainProgram.get.instancingLocation0, 1);
+			extension.vertexAttribDivisorANGLE(mainProgram.get.instancingLocation1, 1);
+			extension.vertexAttribDivisorANGLE(mainProgram.get.instancingLocation2, 1);
+			extension.vertexAttribDivisorANGLE(mainProgram.get.instancingLocation3, 1);
 		
 			/*
 			This draw call is weird, uses indexBuffer.numItems instead of vertexBuffer.numItems
@@ -389,12 +389,12 @@ function RockGenerator(){
 		
 		// Disable instancing now
 		useInstancing = false;
-		gl.uniform1i(useInstancingLocation, useInstancing);
+		gl.uniform1i(mainProgram.get.useInstancingLocation, useInstancing);
 		
-		gl.disableVertexAttribArray(instancingLocation0);
-		gl.disableVertexAttribArray(instancingLocation1);
-		gl.disableVertexAttribArray(instancingLocation2);
-		gl.disableVertexAttribArray(instancingLocation3);
+		gl.disableVertexAttribArray(mainProgram.get.instancingLocation0);
+		gl.disableVertexAttribArray(mainProgram.get.instancingLocation1);
+		gl.disableVertexAttribArray(mainProgram.get.instancingLocation2);
+		gl.disableVertexAttribArray(mainProgram.get.instancingLocation3);
 	}
 	
 	/*
