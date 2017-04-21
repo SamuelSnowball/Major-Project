@@ -1,19 +1,3 @@
-/*
-This file includes the TextureLoader and Texture classes
-
-Texture knowledge gained from:
-	http://stackoverflow.com/questions/19722247/webgl-wait-for-texture-to-load/19748905#19748905
-	https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
-	https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js
-	
-Some rock resources from:
-	http://www.textures.com/download/rocksarid0035/68071?&secure=login
-	https://www.textures.com/download/rocksarid0048/42217?&secure=login
-	https://www.textures.com/download/rocksarid0049/42220?&secure=login
-	
-Sand:
-	http://www.textures.com/download/soilbeach0131/106132
-*/
 
 // This texture gets set to other textures whilst rendering
 var currentTexture;
@@ -24,10 +8,7 @@ var WATER_DUDV_MAP_TEXTURE;
 var WATER_NORMAL_MAP_TEXTURE;
 var borderTexture;
 
-
-/*
-Rock textures
-*/
+// Rock textures
 var rockTexture0;
 var rockTexture1;
 var rockTexture2;
@@ -36,14 +17,41 @@ var rockTexture4;
 var rockTexture5;
 var rockTextures = [];
 
+// Skybox textures
 var skybox_texture = 0;
 var skybox_night_texture = 0;
 
+/**
+ * This file loads the textures into their global variables
+ * 
+ * Texture knowledge gained from:
+ * 	http://stackoverflow.com/questions/19722247/webgl-wait-for-texture-to-load/19748905#19748905
+ * 	https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+ * 	https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js
+ * 	
+ * Some rock resources from:
+ * 	http://www.textures.com/download/rocksarid0035/68071?&secure=login
+ * 	https://www.textures.com/download/rocksarid0048/42217?&secure=login
+ * 	https://www.textures.com/download/rocksarid0049/42220?&secure=login
+ * 	
+ * Sand:
+ * 	http://www.textures.com/download/soilbeach0131/106132
+ * 	
+ * 	@class TextureLoader
+ * 	
+*/
 function TextureLoader(){
 
-	// Constructor
+	/**
+	@constructor
+	*/
 	loadTextures();
 	
+	/**
+	Loads all textures into their global variables
+	
+	@method loadTextures
+	*/
 	function loadTextures(){
 	
 		borderTexture = new Texture("", 10, 0);
@@ -76,8 +84,9 @@ function TextureLoader(){
 	}
 	
 	/**
-	 * @param true/false, if we should load the night skybox, or the day skybox
-	 */
+	@method loadCubeMap
+	@param loadNightSkybox {bool} if we should load the night skybox, or the day skybox, true/false
+	*/
 	function loadCubeMap(loadNightSkybox) {
 		var texture = gl.createTexture();
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);

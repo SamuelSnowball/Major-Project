@@ -158,7 +158,7 @@ function WaterSystem(){
 	this.set = {
 		/**
 		@method set.waterReflectivity
-		@param {flaot} the reflectivity to set
+		@param x {float} the reflectivity to set
 		*/
 		set waterReflectivity(x){
 			waterReflectivity = x;
@@ -679,8 +679,8 @@ function WaterSystem(){
 	Tests if passed in value is NaN
 	
 	@method test_isNaN
-	@param {string} the name of the attribute to test, so we can print an error
-	@param {int} the value to test
+	@param name {string} the name of the attribute to test, so we can print an error
+	@param value {int} the value to test
 	*/
 	function test_isNaN(name, value){
 		if(isNaN(value)){
@@ -692,8 +692,8 @@ function WaterSystem(){
 	Tests if location is a WebGLUniformLocation
 	
 	@method test_isWebGLUniformLocation
-	@param {name} the name of the attribute to test, so we can print an error
-	@param {location} the location value to test
+	@param name {string} the name of the attribute to test, so we can print an error
+	@param location {buffer} the location value to test
 	*/
 	function test_isWebGLUniformLocation(name, location){
 		if(!location instanceof WebGLUniformLocation){

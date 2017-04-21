@@ -10,9 +10,17 @@ function Skybox(){
 	var skyColourIncrement = 0.001; // how quickly the fog increases/decreases based on time of day
 	
 	this.get = {
+		/**
+		@method get.currentRotation
+		@return {float} the cameras current rotation
+		*/
 		get currentRotation(){
 			return currentRotation;
 		},
+		/**
+		@method get.currentTime
+		@return {float} the current time of the world (0000 -> 2400)
+		*/		
 		get currentTime(){
 			return time;
 		}
@@ -101,8 +109,16 @@ function Skybox(){
 		
 	gl.useProgram(program);
 	
+	/**
+	This function:
+		Updates the time of day,
+		Updates the skybox from night to day etc
+		Changes fog colour based on time of day
+		Sets the water reflectivity based on time of day (at night, no specular highlights)
+	
+	@method updateDay
+	*/
 	function updateDay(){
-		
 		
 		// 0.00000000000003 bit slow
 		// 0.0000000000003 bit fast
@@ -245,8 +261,11 @@ function Skybox(){
 	gl.vertexAttribPointer(skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 	gl.useProgram(program);
 	
-	/*
+	/**
+	This function loads the skybox variables into the shader
+	It also rotates the skybox
 	
+	@method updateSkyboxAttributesAndUniforms
 	*/
 	function updateSkyboxAttributesAndUniforms( ){
 		// Remove the translation from the view matrix
@@ -272,6 +291,11 @@ function Skybox(){
 		gl.uniformMatrix4fv(skyboxProjectionLocation, false, new Float32Array(projectionMatrix));
 	}
 	
+	/**
+	Renders the skybox
+	
+	@method render
+	*/
 	this.render = function(){
 		gl.useProgram(skyboxProgram);
 		

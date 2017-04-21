@@ -300,7 +300,7 @@ apart from the 3x3 surrounding quadrants of the camera</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>if</code>
+                        <code>useAlpha</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -333,12 +333,12 @@ If we're in night time, render black squares, alpha didn't work in night :(</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">if</code>
+                        <code class="param-name">useAlpha</code>
                         <span class="type">Bool</span>
 
 
                     <div class="param-description">
-                        <p>true, we render the white transparent boundaries, if false, render black ones</p>
+                        <p>if true, we render the white transparent boundaries, if false, render black ones</p>
 
                     </div>
 
@@ -523,10 +523,10 @@ You can't even notice the lighting on the terrain anyway,</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>the</code>
+                        <code>vaoXPosition</code>
                 </li>
                 <li class="arg">
-                        <code>the</code>
+                        <code>vaoZPosition</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -562,23 +562,23 @@ Where y is the value from the heightMap we made.</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">vaoXPosition</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>x index to start generating vertices at, the x position is calculate from this</p>
+                        <p>the x index to start generating vertices at, the x position is calculate from this</p>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">vaoZPosition</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>z index to start generating vertices at, the z position is calculate from this</p>
+                        <p>the z index to start generating vertices at, the z position is calculate from this</p>
 
                     </div>
 
@@ -839,7 +839,7 @@ This in turn creates the smooth terrain</p>
         <span class="paren">()</span>
 
         <span class="returns-inline">
-            <span class="type"></span>
+            <span class="type">Float</span>
         </span>
 
 
@@ -869,6 +869,7 @@ Then use this method to get height value, at the given indexes</p>
             <h4>Returns:</h4>
 
             <div class="returns-description">
+                        <span class="type">Float</span>:
                     <p>the height value retrieved from the 2D heightMap, used to set rocks position and player height</p>
 
             </div>
@@ -882,7 +883,7 @@ Then use this method to get height value, at the given indexes</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>the</code>
+                        <code>value</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -913,12 +914,12 @@ Then use this method to get height value, at the given indexes</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">value</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>Z index to set in the 2D heightMap (it's reversed)</p>
+                        <p>the Z index to set in the 2D heightMap (it's reversed)</p>
 
                     </div>
 
@@ -935,7 +936,7 @@ Then use this method to get height value, at the given indexes</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>the</code>
+                        <code>value</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -966,12 +967,12 @@ Then use this method to get height value, at the given indexes</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">value</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>X index to set in the 2D heightMap (it's reversed)</p>
+                        <p>the X index to set in the 2D heightMap (it's reversed)</p>
 
                     </div>
 
@@ -1464,19 +1465,19 @@ Else, they're in a centre cell, so render a 3x3 grid</code></pre>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>the</code>
+                        <code>x</code>
                 </li>
                 <li class="arg">
-                        <code>the</code>
+                        <code>y</code>
                 </li>
                 <li class="arg">
-                        <code>how</code>
+                        <code>numOctaves</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
 
         <span class="returns-inline">
-            <span class="type"></span>
+            <span class="type">Float</span>
         </span>
 
 
@@ -1507,34 +1508,34 @@ adds noise octaves onto each other, returns final the height value for the verte
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">x</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>x offset</p>
+                        <p>the x offset</p>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">y</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>y offset</p>
+                        <p>the y offset</p>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">how</code>
+                        <code class="param-name">numOctaves</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>many octaves to loop over and stack together, default is 8</p>
+                        <p>how many octaves to loop over and stack together, default is 8</p>
 
                     </div>
 
@@ -1546,6 +1547,7 @@ adds noise octaves onto each other, returns final the height value for the verte
             <h4>Returns:</h4>
 
             <div class="returns-description">
+                        <span class="type">Float</span>:
                     <p>the perlin noise height value for a 3D point</p>
 
             </div>
@@ -1723,7 +1725,7 @@ Times these by 3, because each vertex has x, y, z</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>the</code>
+                        <code>value</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -1755,12 +1757,12 @@ Times these by 3, because each vertex has x, y, z</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">value</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>value to check</p>
+                        <p>the value to check</p>
 
                     </div>
 
@@ -1777,10 +1779,10 @@ Times these by 3, because each vertex has x, y, z</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>the</code>
+                        <code>bufferName</code>
                 </li>
                 <li class="arg">
-                        <code>hopefully</code>
+                        <code>buffer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -1811,23 +1813,23 @@ Times these by 3, because each vertex has x, y, z</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">bufferName</code>
                         <span class="type">String</span>
 
 
                     <div class="param-description">
-                        <p>buffers name we're testing</p>
+                        <p>the buffers name we're testing</p>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">hopefully</code>
+                        <code class="param-name">buffer</code>
                         <span class="type">Buffer</span>
 
 
                     <div class="param-description">
-                        <p>its an instance of WebGLBuffer!</p>
+                        <p>hopefully its an instance of WebGLBuffer!</p>
 
                     </div>
 
@@ -1844,13 +1846,13 @@ Times these by 3, because each vertex has x, y, z</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>name</code>
+                        <code>attribute</code>
                 </li>
                 <li class="arg">
-                        <code>the</code>
+                        <code>expectLemgth</code>
                 </li>
                 <li class="arg">
-                        <code>the</code>
+                        <code>actualLength</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -1882,34 +1884,34 @@ Times these by 3, because each vertex has x, y, z</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">name</code>
+                        <code class="param-name">attribute</code>
                         <span class="type">String</span>
 
 
                     <div class="param-description">
-                        <p>of the attribute that is being tested (vertices/normals/UVs/indices)</p>
+                        <p>name of the attribute that is being tested (vertices/normals/UVs/indices)</p>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">expectLemgth</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>expectedLength of the attribute</p>
+                        <p>the expectedLength of the attribute</p>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">the</code>
+                        <code class="param-name">actualLength</code>
                         <span class="type">Int</span>
 
 
                     <div class="param-description">
-                        <p>actualLength of the attribute</p>
+                        <p>the actualLength of the attribute</p>
 
                     </div>
 

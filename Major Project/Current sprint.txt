@@ -20,16 +20,20 @@ Email neil
 Describe report in iterations?
 	Would make sense
 
-Fix param comment on:
-	Camera
-	WaterSystem
-	RockGenerator
-	MyGUI
-	Terrain
-	Minimap
-	CollisionTester
+vertex/fragment/glseutp/program put into engine module
+
+Add MarsScene class, 
+	Then add comments on it
+	Cant add yuidoc on html file
+	
+
+Have brackets for return values, 
+not for parameters, but have a parameter name
 
 Look at structure of final report for guidance
+
+@return {type} this is a return value
+@param zParam {float} the...
 
 
 
@@ -51,4 +55,5 @@ where should I mention this?
 
 		Ambient water audio
 			Need mute section?
+			
 		

@@ -113,7 +113,7 @@ function Terrain(){
 	this.heightMapValueAtIndex = {
 		/**
 		@method heightMapValueAtIndex.setTemporaryHeightMapX
-		@param {int} the Z index to set in the 2D heightMap (it's reversed)
+		@param value {int} the Z index to set in the 2D heightMap (it's reversed)
 		*/
 		set setTemporaryHeightMapX(value){
 			temporaryHeightMapX = value;
@@ -121,7 +121,7 @@ function Terrain(){
 		
 		/**
 		@method heightMapValueAtIndex.setTemporaryHeightMapZ
-		@param {int} the X index to set in the 2D heightMap (it's reversed)
+		@param value {int} the X index to set in the 2D heightMap (it's reversed)
 		*/		
 		set setTemporaryHeightMapZ(value){
 			temporaryHeightMapZ = value;
@@ -132,7 +132,7 @@ function Terrain(){
 		Then use this method to get height value, at the given indexes
 		
 		@method heightMapValueAtIndex.getTemporaryHeightMapValue
-		@return the height value retrieved from the 2D heightMap, used to set rocks position and player height
+		@return {float} the height value retrieved from the 2D heightMap, used to set rocks position and player height
 		*/		
 		get getTemporaryHeightMapValue(){
 			if(temporaryHeightMapZ > 0 && temporaryHeightMapZ < terrainRows
@@ -250,10 +250,10 @@ function Terrain(){
 		adds noise octaves onto each other, returns final the height value for the vertex
 		
 		@method stackNoise
-		@param {int} the x offset 
-		@param {int} the y offset
-		@param {int} how many octaves to loop over and stack together, default is 8
-		@return the perlin noise height value for a 3D point
+		@param x {int} the x offset 
+		@param y {int} the y offset
+		@param numOctaves {int} how many octaves to loop over and stack together, default is 8
+		@return {float} the perlin noise height value for a 3D point
 		*/
 		function stackNoise(x, y, numOctaves){
 			var v = 0;
@@ -354,8 +354,8 @@ function Terrain(){
 		This function creates data for one quadrant at a time
 		
 		@method createQuadrantVertices
-		@param {int} the x index to start generating vertices at, the x position is calculate from this
-		@param {int} the z index to start generating vertices at, the z position is calculate from this
+		@param vaoXPosition {int} the x index to start generating vertices at, the x position is calculate from this
+		@param vaoZPosition {int} the z index to start generating vertices at, the z position is calculate from this
 		*/
 		function createQuadrantVertices(vaoXPosition, vaoZPosition){
 		
@@ -913,7 +913,7 @@ function Terrain(){
 	If we're in night time, render black squares, alpha didn't work in night :(
 	
 	@method actuallyRenderMapBoundaries
-	@param {Bool} if true, we render the white transparent boundaries, if false, render black ones
+	@param useAlpha {Bool} if true, we render the white transparent boundaries, if false, render black ones
 	*/
 	function actuallyRenderMapBoundaries(useAlpha){
 		if(useAlpha){
@@ -1024,7 +1024,7 @@ function Terrain(){
 	Test if the current heightMap value is a number
 	
 	@method test_fillHeightMap
-	@param {int} the value to check 
+	@param value {int} the value to check 
 	*/
 	function test_fillHeightMap(value){
 		if(isNaN(value)){
@@ -1099,9 +1099,9 @@ function Terrain(){
 	Tests length of the quadrants (vertices/normals/UVs/indices)
 
 	@method test_quadrantData
-	@param {string} name of the attribute that is being tested (vertices/normals/UVs/indices) 
-	@param {int} the expectedLength of the attribute
-	@param {int} the actualLength of the attribute
+	@param attribute {string} name of the attribute that is being tested (vertices/normals/UVs/indices) 
+	@param expectLemgth {int} the expectedLength of the attribute
+	@param actualLength {int} the actualLength of the attribute
 	*/
 	function test_quadrantData(attribute, expectedLength, actualLength){
 
@@ -1129,8 +1129,8 @@ function Terrain(){
 	
 	/**
 	@method test_isWebGLBuffer
-	@param {string} the buffers name we're testing
-	@param {buffer} hopefully its an instance of WebGLBuffer!
+	@param bufferName {string} the buffers name we're testing
+	@param buffer {buffer} hopefully its an instance of WebGLBuffer!
 	*/
 	function test_isWebGLBuffer(bufferName, buffer){
 		if(!buffer instanceof WebGLBuffer){

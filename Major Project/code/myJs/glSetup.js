@@ -1,8 +1,10 @@
-/*
-This code is needed before the projection + matrices code use it.
-Without this file being included before matrices.js and projection.js, a undefined gl is thrown
-
-Also loads in extension libraries for WebGL
+/**
+ * This code is needed before the projection + matrices code use it.
+ * Without this file being included before matrices.js and projection.js, a undefined gl is thrown
+ * 
+ * Also loads in extension libraries for WebGL
+ * 
+ * @module Engine
 */
 var canvas = document.getElementById('canvas');
 canvas.width = window.innerWidth;

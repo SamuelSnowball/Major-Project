@@ -164,7 +164,7 @@ function Camera(){
 	this.set = {
 		/**
 		@method set.x
-		@param {float} the x position to set the camera at
+		@param xParam {float} the x position to set the camera at
 		*/
 		set x(xParam){
 			cameraPosition[0] = xParam;
@@ -172,7 +172,7 @@ function Camera(){
 		
 		/**
 		@method set.y
-		@param {float} the y position to set the camera at
+		@param yParam {float} the y position to set the camera at
 		*/		
 		set y(yParam){
 			cameraPosition[1] = yParam;
@@ -180,7 +180,7 @@ function Camera(){
 		
 		/**
 		@method set.z
-		@param {float} the z position to set the camera at
+		@param zParam {float} the z position to set the camera at
 		*/		
 		set z(zParam){
 			cameraPosition[2] = zParam;
@@ -188,7 +188,7 @@ function Camera(){
 
 		/**
 		@method set.targetX
-		@param {float} the x position to set the camera target at
+		@param x {float} the x position to set the camera target at
 		*/		
 		set targetX(x){
 			cameraTarget[0] = x;
@@ -196,7 +196,7 @@ function Camera(){
 		
 		/**
 		@method set.targetY
-		@param {float} the y position to set the camera target at
+		@param y {float} the y position to set the camera target at
 		*/		
 		set targetY(y){
 			cameraTarget[1] = y;
@@ -204,7 +204,7 @@ function Camera(){
 		
 		/**
 		@method set.targetZ
-		@param {float} the z position to set the camera target at
+		@param z {float} the z position to set the camera target at
 		*/		
 		set targetZ(z){
 			cameraTarget[2] = z;

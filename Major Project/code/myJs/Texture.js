@@ -1,4 +1,12 @@
 
+/**
+ * The texture class, this holds the actual WebGLTexture
+ * 
+ * @class Texture
+ * @param path {string} path to the texture file/image
+ * @param shineDamperParam (float) its shine damper value
+ * @param reflectivityParam (float) how reflective it is
+*/
 function Texture(path, shineDamperParam, reflectivityParam){
 
 	var shineDamper = shineDamperParam; 
@@ -27,8 +35,12 @@ function Texture(path, shineDamperParam, reflectivityParam){
 	image.src = path;
 	image.onload = function (){handleTextureLoaded(image, texture);}	
 	
-	/*
+	/**
 	This gets run after image is done loading
+	
+	@method handleTextureLoaded
+	@param image {image} the JavaScript image object to use
+	@param texture {WebGLTexture} the WebGLTexture to load
 	*/
 	function handleTextureLoaded(image, texture){
 	

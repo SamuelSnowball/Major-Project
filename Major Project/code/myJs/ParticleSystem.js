@@ -1,4 +1,14 @@
 
+/**
+ * This file currently isn't being used as I didn't have time.
+ * 
+ * The particle system uses instance rendering, so there is one square only,
+ * and then matrices are generated to move the particle instance to new positions.
+ * 
+ * Currently no function exists to update the particles, they're just remade every loop
+ *
+ * @class ParticleSystem
+*/
 function ParticleSystem(){
 	
 	var particle_vertices = [];
@@ -21,87 +31,58 @@ function ParticleSystem(){
 	var squareVertexPositionBuffer2;
 	var	squareUVBuffer2;
 
-		x = 1;
-		y = 1;
-		z = 1;
-		this.velocity = Math.random() * 5;
-		
-		// 2D square, then texture coordinate are easy!
-		// Remember to bind these buffers in render method
-		particle_vertices.push(x, y, z);
-		particle_uvs.push(0, 1);
-		particle_normals.push(0, 1, 0);
-		
-		
-		squareVertexPositionBuffer2 = gl.createBuffer();;
-		gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
-		var vertices2 = [
+	x = 1;
+	y = 1;
+	z = 1;
+	this.velocity = Math.random() * 5;
+	
+	// 2D square, then texture coordinate are easy!
+	// Remember to bind these buffers in render method
+	particle_vertices.push(x, y, z);
+	particle_uvs.push(0, 1);
+	particle_normals.push(0, 1, 0);
+	
+	squareVertexPositionBuffer2 = gl.createBuffer();;
+	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
+	var vertices2 = [
 		1.0,  1.0,  0.0,
 		-1.0,  1.0,  0.0,
 		 1.0, -1.0,  0.0,
 		-1.0, -1.0,  0.0
-		];
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices2), gl.STATIC_DRAW);
-		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-		squareUVBuffer2 = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
-		var	uvs2 = [
-			0,0,
-			0,1,
-			1,0,
-			1,1
-		];
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs2), gl.STATIC_DRAW);
-		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-		
-		
-		
-		var particle_normals = [
-			1.0, 1.0, 1.0,
-			1.0, 1.0, 1.0,
-			1.0, 1.0, 1.0,
-			1.0, 1.0, 1.0
-		];
-		
-		particle_normals_buffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, particle_normals_buffer);	
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_normals), gl.DYNAMIC_DRAW);		
-		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);	
-		
-			
-		
-		//in render
-		/*
-		gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
-		gl.vertexAttribPointer(positionAttribLocation,3, gl.FLOAT, false, 0, 0);
-	 
-		gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
-		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-	 
-		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);		
-		*/
-
+	];
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices2), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+	squareUVBuffer2 = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
+	var	uvs2 = [
+		0,0,
+		0,1,
+		1,0,
+		1,1
+	];
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs2), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 	
-	
-	/*
-	particle_positions_buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, particle_positions_buffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_vertices), gl.DYNAMIC_DRAW);
-	positionAttribLocation = gl.getAttribLocation(program, 'position');
-	gl.enableVertexAttribArray(positionAttribLocation);
-	gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);	
-	
-	particle_uvs_buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, particle_uvs_buffer);	
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_uvs), gl.DYNAMIC_DRAW);
-	gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);	
+	var particle_normals = [
+		1.0, 1.0, 1.0,
+		1.0, 1.0, 1.0,
+		1.0, 1.0, 1.0,
+		1.0, 1.0, 1.0
+	];
 	
 	particle_normals_buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, particle_normals_buffer);	
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(particle_normals), gl.DYNAMIC_DRAW);		
 	gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);	
+	
+	/**
+	Builds the matrices to apply to the particle instances,
+	Allowing them to be at different world positions.
+	
+	Uses same idea as rock generation, need to build mat4 by using 4 vec4s.
+	
+	@method createParticles 
 	*/
-
 	function createParticles(){
 		
 		buffers = twgl.createBuffersFromArrays(gl, {
@@ -202,11 +183,10 @@ function ParticleSystem(){
 	}
 	
 	
-	/*
-	Particles get bigger if u move away
-	-or they get smaller, and look bigger because they're grouped?
-
-	Shouldn't matter, as particles will be temporary
+	/**
+	Currently just creates new particles every time, rather than updating them like it should
+	
+	@method render
 	*/
 	this.render = function(){
 	
@@ -235,24 +215,12 @@ function ParticleSystem(){
 		gl.enableVertexAttribArray(instancingLocation2);
 		gl.enableVertexAttribArray(instancingLocation3);
 
-		//#######
 		gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer2);
 		gl.vertexAttribPointer(positionAttribLocation,3, gl.FLOAT, false, 0, 0);
 	 
 		gl.bindBuffer(gl.ARRAY_BUFFER, squareUVBuffer2);
 		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);		
-		//#######
 
-		/*
-		gl.bindBuffer(gl.ARRAY_BUFFER, particle_positions_buffer);
-		gl.enableVertexAttribArray(positionAttribLocation);
-		gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-		
-		gl.bindBuffer(gl.ARRAY_BUFFER, particle_uvs_buffer);
-		gl.enableVertexAttribArray(textureCoordLocation);
-		gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
-		*/
-		
 		gl.bindBuffer(gl.ARRAY_BUFFER, particle_normals_buffer);
 		gl.enableVertexAttribArray(normalAttribLocation);
 		gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
@@ -281,12 +249,8 @@ function ParticleSystem(){
 		extension.vertexAttribDivisorANGLE(instancingLocation2, 1);
 		extension.vertexAttribDivisorANGLE(instancingLocation3, 1);
 
-		//#######
 		extension.drawArraysInstancedANGLE(gl.TRIANGLE_STRIP, 0, 4, particleCount);
-		//#######
-		
-		//extension.drawArraysInstancedANGLE(gl.POINTS, 0, 1, particleCount);
-				
+
 		useInstancing = false;
 		gl.uniform1i(useInstancingLocation, useInstancing);
 		

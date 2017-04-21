@@ -311,8 +311,8 @@
             "name": "set.x",
             "params": [
                 {
-                    "name": "the",
-                    "description": "x position to set the camera at",
+                    "name": "xParam",
+                    "description": "the x position to set the camera at",
                     "type": "Float"
                 }
             ],
@@ -325,8 +325,8 @@
             "name": "set.y",
             "params": [
                 {
-                    "name": "the",
-                    "description": "y position to set the camera at",
+                    "name": "yParam",
+                    "description": "the y position to set the camera at",
                     "type": "Float"
                 }
             ],
@@ -339,8 +339,8 @@
             "name": "set.z",
             "params": [
                 {
-                    "name": "the",
-                    "description": "z position to set the camera at",
+                    "name": "zParam",
+                    "description": "the z position to set the camera at",
                     "type": "Float"
                 }
             ],
@@ -353,8 +353,8 @@
             "name": "set.targetX",
             "params": [
                 {
-                    "name": "the",
-                    "description": "x position to set the camera target at",
+                    "name": "x",
+                    "description": "the x position to set the camera target at",
                     "type": "Float"
                 }
             ],
@@ -367,8 +367,8 @@
             "name": "set.targetY",
             "params": [
                 {
-                    "name": "the",
-                    "description": "y position to set the camera target at",
+                    "name": "y",
+                    "description": "the y position to set the camera target at",
                     "type": "Float"
                 }
             ],
@@ -381,8 +381,8 @@
             "name": "set.targetZ",
             "params": [
                 {
-                    "name": "the",
-                    "description": "z position to set the camera target at",
+                    "name": "z",
+                    "description": "the z position to set the camera target at",
                     "type": "Float"
                 }
             ],
@@ -793,8 +793,8 @@
             "name": "heightMapValueAtIndex.setTemporaryHeightMapX",
             "params": [
                 {
-                    "name": "the",
-                    "description": "Z index to set in the 2D heightMap (it's reversed)",
+                    "name": "value",
+                    "description": "the Z index to set in the 2D heightMap (it's reversed)",
                     "type": "Int"
                 }
             ],
@@ -807,8 +807,8 @@
             "name": "heightMapValueAtIndex.setTemporaryHeightMapZ",
             "params": [
                 {
-                    "name": "the",
-                    "description": "X index to set in the 2D heightMap (it's reversed)",
+                    "name": "value",
+                    "description": "the X index to set in the 2D heightMap (it's reversed)",
                     "type": "Int"
                 }
             ],
@@ -821,7 +821,8 @@
             "itemtype": "method",
             "name": "heightMapValueAtIndex.getTemporaryHeightMapValue",
             "return": {
-                "description": "the height value retrieved from the 2D heightMap, used to set rocks position and player height"
+                "description": "the height value retrieved from the 2D heightMap, used to set rocks position and player height",
+                "type": "Float"
             },
             "class": "Terrain"
         },
@@ -856,23 +857,24 @@
             "name": "stackNoise",
             "params": [
                 {
-                    "name": "the",
-                    "description": "x offset",
+                    "name": "x",
+                    "description": "the x offset",
                     "type": "Int"
                 },
                 {
-                    "name": "the",
-                    "description": "y offset",
+                    "name": "y",
+                    "description": "the y offset",
                     "type": "Int"
                 },
                 {
-                    "name": "how",
-                    "description": "many octaves to loop over and stack together, default is 8",
+                    "name": "numOctaves",
+                    "description": "how many octaves to loop over and stack together, default is 8",
                     "type": "Int"
                 }
             ],
             "return": {
-                "description": "the perlin noise height value for a 3D point"
+                "description": "the perlin noise height value for a 3D point",
+                "type": "Float"
             },
             "class": "Terrain"
         },
@@ -892,13 +894,13 @@
             "name": "createQuadrantVertices",
             "params": [
                 {
-                    "name": "the",
-                    "description": "x index to start generating vertices at, the x position is calculate from this",
+                    "name": "vaoXPosition",
+                    "description": "the x index to start generating vertices at, the x position is calculate from this",
                     "type": "Int"
                 },
                 {
-                    "name": "the",
-                    "description": "z index to start generating vertices at, the z position is calculate from this",
+                    "name": "vaoZPosition",
+                    "description": "the z index to start generating vertices at, the z position is calculate from this",
                     "type": "Int"
                 }
             ],
@@ -1037,8 +1039,8 @@
             "name": "actuallyRenderMapBoundaries",
             "params": [
                 {
-                    "name": "if",
-                    "description": "true, we render the white transparent boundaries, if false, render black ones",
+                    "name": "useAlpha",
+                    "description": "if true, we render the white transparent boundaries, if false, render black ones",
                     "type": "Bool"
                 }
             ],
@@ -1068,8 +1070,8 @@
             "name": "test_fillHeightMap",
             "params": [
                 {
-                    "name": "the",
-                    "description": "value to check",
+                    "name": "value",
+                    "description": "the value to check",
                     "type": "Int"
                 }
             ],
@@ -1115,18 +1117,18 @@
             "name": "test_quadrantData",
             "params": [
                 {
-                    "name": "name",
-                    "description": "of the attribute that is being tested (vertices/normals/UVs/indices)",
+                    "name": "attribute",
+                    "description": "name of the attribute that is being tested (vertices/normals/UVs/indices)",
                     "type": "String"
                 },
                 {
-                    "name": "the",
-                    "description": "expectedLength of the attribute",
+                    "name": "expectLemgth",
+                    "description": "the expectedLength of the attribute",
                     "type": "Int"
                 },
                 {
-                    "name": "the",
-                    "description": "actualLength of the attribute",
+                    "name": "actualLength",
+                    "description": "the actualLength of the attribute",
                     "type": "Int"
                 }
             ],
@@ -1147,13 +1149,13 @@
             "name": "test_isWebGLBuffer",
             "params": [
                 {
-                    "name": "the",
-                    "description": "buffers name we're testing",
+                    "name": "bufferName",
+                    "description": "the buffers name we're testing",
                     "type": "String"
                 },
                 {
-                    "name": "hopefully",
-                    "description": "its an instance of WebGLBuffer!",
+                    "name": "buffer",
+                    "description": "hopefully its an instance of WebGLBuffer!",
                     "type": "Buffer"
                 }
             ],
@@ -1213,9 +1215,9 @@
             "name": "set.waterReflectivity",
             "params": [
                 {
-                    "name": "the",
-                    "description": "reflectivity to set",
-                    "type": "Flaot"
+                    "name": "x",
+                    "description": "the reflectivity to set",
+                    "type": "Float"
                 }
             ],
             "class": "WaterSystem"
@@ -1308,13 +1310,13 @@
             "name": "test_isNaN",
             "params": [
                 {
-                    "name": "the",
-                    "description": "name of the attribute to test, so we can print an error",
+                    "name": "name",
+                    "description": "the name of the attribute to test, so we can print an error",
                     "type": "String"
                 },
                 {
-                    "name": "the",
-                    "description": "value to test",
+                    "name": "value",
+                    "description": "the value to test",
                     "type": "Int"
                 }
             ],
@@ -1328,14 +1330,14 @@
             "name": "test_isWebGLUniformLocation",
             "params": [
                 {
-                    "name": "the",
-                    "description": "name of the attribute to test, so we can print an error",
-                    "type": "Name"
+                    "name": "name",
+                    "description": "the name of the attribute to test, so we can print an error",
+                    "type": "String"
                 },
                 {
-                    "name": "the",
-                    "description": "location value to test",
-                    "type": "Location"
+                    "name": "location",
+                    "description": "the location value to test",
+                    "type": "Buffer"
                 }
             ],
             "class": "WaterSystem"

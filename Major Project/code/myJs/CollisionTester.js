@@ -134,7 +134,7 @@ function CollisionTester(){
 		Then player has collided moving backward, so move the player forwards
 		
 	@method pushPlayer
-	@param {int} the direction to push them, push backwards = 1, push forwards = -1
+	@param direction {int} the direction to push them, push backwards = 1, push forwards = -1
 	*/
 	function pushPlayer(direction){
 		camera.set.x = camera.get.x +  direction * ( - camera.get.targetX) * 5;
@@ -215,7 +215,7 @@ function CollisionTester(){
 	Test if camera is near a corner, and move them back if so
 		
 	@method testCameraCornerCollision
-	@param {vec3}, the corner vector to test camera vector against
+	@param cornerVector {vec3}, the corner vector to test camera vector against
 	*/
 	function testCameraCornerCollision(cornerVector){
 		var playerVector = [camera.get.x, camera.get.y, camera.get.z];

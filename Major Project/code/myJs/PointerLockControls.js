@@ -1,6 +1,8 @@
 
-/*
-This file adds the event listener for pointerlock,
+/**
+ * This file adds the event listener for pointerlock,
+ * 
+ * @class PointerLockControls
 */
 function PointerLockControls(){
 	canvas.requestPointerLock = canvas.requestPointerLock ||
@@ -9,9 +11,18 @@ function PointerLockControls(){
 	document.exitPointerLock =  document.exitPointerLock ||
 							    document.mozExitPointerLock;
 	
-	// Constructor
+	/**
+	Constructor
+	
+	@constructor
+	*/
 	setupPointerLock();
 	
+	/**
+	Adds pointer lock to the canvas
+	
+	@method setupPointerLock
+	*/
 	function setupPointerLock(){
 		canvas.addEventListener('mousedown', function(){
 			canvas.requestPointerLock();
