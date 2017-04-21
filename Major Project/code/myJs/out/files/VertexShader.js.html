@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Minimap</title>
+    <title>VertexShader.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -90,174 +90,107 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>Minimap Class</h1>
-<div class="box meta">
-
-
-        <div class="foundat">
-            Defined in: <a href="../files/Minimap.js.html#l2"><code>Minimap.js:2</code></a>
-        </div>
-
-            Module: <a href="../modules/Engine.html">Engine</a>
-
-</div>
-
-
-<div class="box intro">
-    <p>Minimap in bottom right corner of screen,
-Displays terrain cells and camera position</p>
-<p>Uses a completely new 2D canvas, rendering over the WebGL one</p>
-<p>Current problems:
-The collision on the grid is calculated from cameras world position like usual
-But the user appears to go into the out of range cells, due to coordinates being calculated
-from the top left of the square.</p>
-<pre class="code prettyprint"><code>The user doesn't actually go outside of the allowed cells on the map, 
-it just looks like they do on the minimap.</code></pre>
-
-</div>
-
-
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods">
-                            <li class="index-item method public">
-                                <a href="#method_render">render</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_renderGrid">renderGrid</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_renderUser">renderUser</a>
-
-                            </li>
-                    </ul>
-                </div>
-
-
-
-        </div>
-
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-<div id="method_render" class="method item public">
-    <h3 class="name"><code>render</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l117"><code>Minimap.js:117</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Calls methods ot render grid and user</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_renderGrid" class="method item private">
-    <h3 class="name"><code>renderGrid</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l62"><code>Minimap.js:62</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Private
-The below code draws the blue lines across the minimap</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_renderUser" class="method item private">
-    <h3 class="name"><code>renderUser</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l43"><code>Minimap.js:43</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Private
-Maps the user position in the world, to the position on the canvas
-Then draws the user as a blue square</p>
-
-    </div>
-
-
-
-
-</div>
-            </div>
-
-
-
-    </div>
+<h1 class="file-heading">File: VertexShader.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * Vertex shader 
+ * 
+ * @module Engine
+*/
+var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(vertexShader, [
+
+	 // Vertex position
+	&#x27;attribute vec3 position;&#x27;,
+	
+	// Get texture coordinate
+	&#x27;attribute vec2 aTextureCoord;&#x27;,
+	// And then pass to fragment shader
+	&#x27;varying highp vec2 vTextureCoord;&#x27;,
+	
+	// Out the position to fragment shader, for water
+	&#x27;varying vec4 fragPosition;&#x27;,
+	
+	// Standard matrices
+	&#x27;uniform mat4 viewMatrix;&#x27;,
+	&#x27;uniform mat4 inverseViewMatrix;&#x27;, // GLSL inverse function doesn&#x27;t work, so pass in this
+	&#x27;uniform mat4 model;&#x27;,
+	&#x27;uniform mat4 projection;&#x27;,
+	
+	// Instancing
+	&#x27;uniform bool useInstancing;&#x27;,
+	&#x27;attribute vec4 instanceMatrixRow0;&#x27;,
+	&#x27;attribute vec4 instanceMatrixRow1;&#x27;,
+	&#x27;attribute vec4 instanceMatrixRow2;&#x27;,
+	&#x27;attribute vec4 instanceMatrixRow3;&#x27;,
+	
+	// Lighting
+	&#x27;uniform vec3 lightPosition;&#x27;,
+	&#x27;attribute vec3 normal;&#x27;, //attribute = in
+	&#x27;varying vec3 surfaceNormal;&#x27;, //varying = out
+	&#x27;varying vec3 surfaceToLightVector;&#x27;,
+	
+	// For specular
+	&#x27;varying vec3 toCameraVector;&#x27;,
+	
+	// Fog, pass to fragment shader
+	&#x27;varying float visibility;&#x27;,
+	&#x27;const float density = 0.01;&#x27;, 
+	&#x27;const float gradient = 10.5;&#x27;, //3.5
+	
+	&#x27;void main(){&#x27;,
+	
+		// If using instanced rendering (for rocks only)
+		// Form the full matrix from the rows, cols then rows its weird!!
+		&#x27;mat4 fullInstanceTransform;&#x27;,
+		&#x27;if(useInstancing){&#x27;,
+			&#x27;fullInstanceTransform = mat4(instanceMatrixRow0, instanceMatrixRow1, instanceMatrixRow2, instanceMatrixRow3);&#x27;,
+		&#x27;}&#x27;,
+		&#x27;else{&#x27;,
+			&#x27;fullInstanceTransform = mat4(  1,0,0,0 , 0,1,0,0, 0,0,1,0, 0,0,0,1);&#x27;,
+		&#x27;}&#x27;,
+	
+		// Transform and rotate the vertex position, so we can use it
+		&#x27;vec4 worldPostion = model * vec4(position, 1.0) * fullInstanceTransform;&#x27;, 
+		
+		// Fog
+		&#x27;vec4 positionRelativeToCamera = viewMatrix * worldPostion;&#x27;,
+		
+		// Particles
+		&#x27;gl_PointSize = 25.0;&#x27;,
+		
+		// Set the final output vertex position
+		&#x27;gl_Position = projection * positionRelativeToCamera;&#x27;,
+
+		// Pass the texture coordinate to the fragment shader
+		&#x27;vTextureCoord = aTextureCoord;&#x27;,
+		
+		// Calculate the surface normal
+		&#x27;surfaceNormal = (model * vec4(normal, 0.0)).xyz;&#x27;, 
+		&#x27;surfaceToLightVector = lightPosition - worldPostion.xyz;&#x27;,
+		
+		// Don&#x27;t have camera position in the shader, so can&#x27;t just subtract to get the toCameraVector
+		// Do have the viewMatrix though, contains the negative camera position, so just inverse it
+		&#x27;toCameraVector = (inverseViewMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPostion.xyz;&#x27;, 
+		
+		
+		// Fog
+		// We have vector of vertex from the camera, so get distance from length of the vector
+		&#x27;float distance = length(positionRelativeToCamera.xyz);&#x27;,
+		// Use that to calculate visibility
+		&#x27;visibility = exp(-pow((distance*density), gradient));&#x27;,
+		// Ensure stays between 0 and 1
+		&#x27;visibility = clamp(visibility, 0.0, 1.0);&#x27;,
+		
+		// Pass position to fragment shader
+		&#x27;fragPosition = worldPostion;&#x27;,
+	&#x27;}&#x27;
+].join(&#x27;\n&#x27;));
+gl.compileShader(vertexShader);
+console.log(&quot;Vertex shader compliation status: &quot; + gl.getShaderInfoLog(vertexShader));
+    </pre>
 </div>
                     </div>
                 </div>

@@ -23,6 +23,7 @@
 <!-- GUI compass canvas -->
 <canvas id="GUIcanvas"></canvas>
 
+<!-- div to display when user is going out of bounds -->
 <div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
 
 <!-- WebGL setup files including main shaders and program -->
@@ -46,129 +47,11 @@
 <script src="code/myJs/Camera.js"></script>
 <script src="code/myJs/MyGUI.js"></script>
 <script src="code/myJs/Minimap.js"></script>
+<script src="code/myJs/MarsScene.js"></script>
 
 <script>
-
-var useTests = true; // change this to enable/disable testing
-var gameRunning = false;
-
-var myGUI = new MyGUI();
-var utility = new Utility();
-var controls = new PointerLockControls();
-var textureLoader = new TextureLoader();
-var terrain = new Terrain();
-var camera = new Camera();
-var rockGenerator = new RockGenerator();
-var collisionTester = new CollisionTester();
-//var particleSystem = new ParticleSystem();
-var sound = new Sound();
-var waterSystem = new WaterSystem();
-var skybox = new Skybox();
-var minimap = new Minimap();
-
-/*
-For FPS and memory, uses the library (MIT):
-https://github.com/mrdoob/stats.js/
-
-You can click on the FPS counter to change its setting
-*/
-var fpsViewer = new Stats();
-fpsViewer.showPanel( 0 ); // 0: fps
-document.body.appendChild( fpsViewer.dom );
-
-// Needed to stop/start the scene rendering,
-// when the user changes terrain properties via UI
-var animationFrameID;
-
-
-/*
-Code from: https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.htm
-*/
-function resize(canvas) {
-	// Lookup the size the browser is displaying the canvas.
-	var displayWidth  = canvas.clientWidth;
-	var displayHeight = canvas.clientHeight;
-
-	// Check if the canvas is not the same size.
-	if (canvas.width  != displayWidth ||
-		canvas.height != displayHeight) {
-		// Make the canvas the same size
-		canvas.width  = displayWidth;
-		canvas.height = displayHeight;
-	}
-}
-
-/**
-
-
-*/
-function render(){
-	resize(gl.canvas);
-	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-	
-	fpsViewer.begin();
-
-	// Work out what quadrant we're in, so we know what to render
-	camera.assignCameraQuadrant();
-	
-	// Render the scene to each the reflection and refraction textures
-	// (2x FULL scene render calls)
-	waterSystem.renderToReflectionBuffer();
-	waterSystem.renderToRefractionBuffer();
-	
-	// Now render the scene as usual
-	// We've already switched back to the default frame buffer
-	gl.clearColor(0.8, 0.8, 0.8, 0.7);
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	// Cant disable clipPlane on some drivers, just set to 0, for water
-	clipPlane = [0, 0, 0, 0];
-	
-	camera.updateCamera();
-	
-	/*
-	Don't change render order
-	Terrain render generates the renderIndices, 
-	that are needed for rock rendering
-	The skybox has to render last, or everything breaks
-	*/
-	terrain.render(); 
-	
-	rockGenerator.renderInstancedRocks();
-	
-	//particleSystem.render(); 
-	collisionTester.testAllCollision();
-	
-	waterSystem.render();
-
-	terrain.renderMapBoundaries();
-
-	skybox.render();
-	
-	minimap.render();
-	fpsViewer.end();
-	animationFrameID = requestAnimationFrame(render);
-}
-
-function setup(){
-	gameRunning = true;	
-
-	currentTexture = mapTexture;
-	updateAttributesAndUniforms();
-	camera.updateCamera();
-
-	render();
-}
-
-/*
-Waits x seconds before starting the scene,
-This allows textures to load, avoiding WebGL texture errors
-*/
-setTimeout(
-	function(){
-		setup();  
-	}, 2000
-);
-
+var scene = new MarsScene();
+scene.start();
 </script>
 
 </body>

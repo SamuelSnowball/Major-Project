@@ -22,6 +22,7 @@ function PointerLockControls(){
 	Adds pointer lock to the canvas
 	
 	@method setupPointerLock
+	@private
 	*/
 	function setupPointerLock(){
 		canvas.addEventListener('mousedown', function(){

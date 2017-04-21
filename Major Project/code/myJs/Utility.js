@@ -9,6 +9,7 @@ function Utility(){
 	
 	/**
 	@method randomIntBetween
+	@public
 	@param min {int} minimum number possible
 	@param max {int} maximum number possible
 	*/
@@ -23,6 +24,7 @@ function Utility(){
 
 	/**
 	@method randomBetween
+	@public
 	@param min {float} minimum number possible
 	@param max {float} maximum number possible
 	*/	
@@ -34,6 +36,7 @@ function Utility(){
 	Used in camera class
 	
 	@method toRadians
+	@public
 	@param angle {float} the angle to convert to radians
 	*/
 	this.toRadians = function(angle) {
@@ -44,6 +47,7 @@ function Utility(){
 	Retrieves the obj text from provided url
 	
 	@method httpGet
+	@public
 	@param theUrl {string} path to the obj text file
 	*/
 	this.httpGet = function(theUrl){

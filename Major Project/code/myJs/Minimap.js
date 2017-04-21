@@ -46,6 +46,7 @@ function Minimap(){
 	Then draws the user as a blue square
 	
 	@method renderUser
+	@private
 	*/
 	function renderUser(){
 		// Do the mapping
@@ -63,6 +64,7 @@ function Minimap(){
 	The below code draws the blue lines across the minimap
 	
 	@method renderGrid
+	@private
 	*/	
 	function renderGrid(){
 	
@@ -116,6 +118,7 @@ function Minimap(){
 	Calls methods ot render grid and user
 	
 	@method render
+	@public
 	*/
 	this.render = function(){
 		renderUser();

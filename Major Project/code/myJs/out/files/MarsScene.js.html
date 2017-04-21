@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Minimap</title>
+    <title>MarsScene.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -90,174 +90,157 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>Minimap Class</h1>
-<div class="box meta">
-
-
-        <div class="foundat">
-            Defined in: <a href="../files/Minimap.js.html#l2"><code>Minimap.js:2</code></a>
-        </div>
-
-            Module: <a href="../modules/Engine.html">Engine</a>
-
-</div>
-
-
-<div class="box intro">
-    <p>Minimap in bottom right corner of screen,
-Displays terrain cells and camera position</p>
-<p>Uses a completely new 2D canvas, rendering over the WebGL one</p>
-<p>Current problems:
-The collision on the grid is calculated from cameras world position like usual
-But the user appears to go into the out of range cells, due to coordinates being calculated
-from the top left of the square.</p>
-<pre class="code prettyprint"><code>The user doesn't actually go outside of the allowed cells on the map, 
-it just looks like they do on the minimap.</code></pre>
-
-</div>
-
-
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods">
-                            <li class="index-item method public">
-                                <a href="#method_render">render</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_renderGrid">renderGrid</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_renderUser">renderUser</a>
-
-                            </li>
-                    </ul>
-                </div>
-
-
-
-        </div>
-
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-<div id="method_render" class="method item public">
-    <h3 class="name"><code>render</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l117"><code>Minimap.js:117</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Calls methods ot render grid and user</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_renderGrid" class="method item private">
-    <h3 class="name"><code>renderGrid</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l62"><code>Minimap.js:62</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Private
-The below code draws the blue lines across the minimap</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_renderUser" class="method item private">
-    <h3 class="name"><code>renderUser</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l43"><code>Minimap.js:43</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Private
-Maps the user position in the world, to the position on the canvas
-Then draws the user as a blue square</p>
-
-    </div>
-
-
-
-
-</div>
-            </div>
-
-
-
-    </div>
+<h1 class="file-heading">File: MarsScene.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+
+/*
+This file contains all of the scene objects,
+it also contains the setup and render methods
+*/
+
+var useTests = true; // change this to enable/disable testing
+	
+// All scene files and classes
+var myGUI = new MyGUI();
+var utility = new Utility();
+var controls = new PointerLockControls();
+var textureLoader = new TextureLoader();
+var terrain = new Terrain();
+var camera = new Camera();
+var rockGenerator = new RockGenerator();
+var collisionTester = new CollisionTester();
+var particleSystem = new ParticleSystem();
+var waterSystem = new WaterSystem();
+var skybox = new Skybox();
+var minimap = new Minimap();
+var sound = new Sound();
+
+/*
+For FPS and memory, uses the library (MIT):
+https://github.com/mrdoob/stats.js/
+
+You can click on the FPS counter to change its setting
+*/
+var fpsViewer = new Stats();
+fpsViewer.showPanel( 0 ); // 0: fps
+document.body.appendChild( fpsViewer.dom );
+
+// Needed to stop/start the scene rendering,
+// when the user changes terrain properties via UI
+var animationFrameID;
+	
+/**
+ * The main class
+ *
+ * Contains methods to start and render the scene
+ * 
+ * @class MarsScene
+*/
+function MarsScene(){
+
+	/**
+	Starts the scene, by calling the render function
+	
+	Waits 2 seconds before starting the scene,
+	This allows textures to load, avoiding WebGL texture errors
+	
+	@method start
+	@public
+	*/
+	this.start = function(){
+		setTimeout(
+			function(){
+				//gameRunning = true;	
+				render();
+			}, 1000
+		);
+	}
+	
+	/**
+	The main render loop
+	
+	Per loop iteration:
+	
+		Works out the cameras quadrant, so we know what to render
+		
+		Renders scene to reflection frame buffer
+		Renders scene to refraction frame buffer
+		
+		Clears screen
+		Renders the scene as usual
+		
+		Repeat
+
+	@method render
+	@private
+	*/
+	function render(){
+		resize(gl.canvas);
+		
+		fpsViewer.begin();
+
+		// Work out what quadrant we&#x27;re in, so we know what to render
+		camera.assignCameraQuadrant();
+		
+		// Render the scene to each the reflection and refraction textures
+		// (2x FULL scene render calls)
+		waterSystem.renderToReflectionBuffer();
+		waterSystem.renderToRefractionBuffer();
+		
+		// Now render the scene as usual
+		// We&#x27;ve already switched back to the default frame buffer
+		gl.clearColor(0.8, 0.8, 0.8, 0.7);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		// Cant disable clipPlane on some drivers, just set to 0, for water
+		clipPlane = [0, 0, 0, 0];
+		
+		camera.updateCamera();
+		
+		/*
+		Don&#x27;t change render order
+		Terrain render generates the renderIndices, 
+		that are needed for rock rendering
+		*/
+		terrain.render(); 
+		rockGenerator.renderInstancedRocks();
+		//particleSystem.render(); 
+		collisionTester.testAllCollision();
+		waterSystem.render();
+		terrain.renderMapBoundaries();
+		skybox.render();
+		minimap.render();
+		
+		fpsViewer.end();
+		animationFrameID = requestAnimationFrame(render);
+	}
+	
+	/**
+	Code taken from: https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.htm
+	
+	@method resize
+	@private
+	@param canvas {canvas} the canvas to resize
+	*/
+	function resize(canvas) {
+		// Lookup the size the browser is displaying the canvas.
+		var displayWidth  = canvas.clientWidth;
+		var displayHeight = canvas.clientHeight;
+
+		// Check if the canvas is not the same size.
+		if (canvas.width  != displayWidth ||
+			canvas.height != displayHeight) {
+			// Make the canvas the same size
+			canvas.width  = displayWidth;
+			canvas.height = displayHeight;
+		}
+		
+		gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+	}
+	
+}
+    </pre>
 </div>
                     </div>
                 </div>

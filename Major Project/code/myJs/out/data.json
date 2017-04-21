@@ -19,6 +19,31 @@
             "fors": {},
             "namespaces": {}
         },
+        "FragmentShader.js": {
+            "name": "FragmentShader.js",
+            "modules": {
+                "Engine": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "GLSetup.js": {
+            "name": "GLSetup.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "MarsScene.js": {
+            "name": "MarsScene.js",
+            "modules": {},
+            "classes": {
+                "MarsScene": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "Minimap.js": {
             "name": "Minimap.js",
             "modules": {},
@@ -37,11 +62,45 @@
             "fors": {},
             "namespaces": {}
         },
+        "ParticleSystem.js": {
+            "name": "ParticleSystem.js",
+            "modules": {},
+            "classes": {
+                "ParticleSystem": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "PointerLockControls.js": {
+            "name": "PointerLockControls.js",
+            "modules": {},
+            "classes": {
+                "PointerLockControls": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "Program.js": {
+            "name": "Program.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "RockGenerator.js": {
             "name": "RockGenerator.js",
             "modules": {},
             "classes": {
                 "RockGenerator": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "Skybox.js": {
+            "name": "Skybox.js",
+            "modules": {},
+            "classes": {
+                "Skybox": 1
             },
             "fors": {},
             "namespaces": {}
@@ -55,8 +114,35 @@
             "fors": {},
             "namespaces": {}
         },
+        "Texture.js": {
+            "name": "Texture.js",
+            "modules": {},
+            "classes": {
+                "Texture": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "TextureLoader.js": {
             "name": "TextureLoader.js",
+            "modules": {},
+            "classes": {
+                "TextureLoader": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "Utility.js": {
+            "name": "Utility.js",
+            "modules": {},
+            "classes": {
+                "Utility": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "VertexShader.js": {
+            "name": "VertexShader.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -72,7 +158,35 @@
             "namespaces": {}
         }
     },
-    "modules": {},
+    "modules": {
+        "Engine": {
+            "name": "Engine",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "Camera": 1,
+                "CollisionTester": 1,
+                "MarsScene": 1,
+                "Minimap": 1,
+                "MyGUI": 1,
+                "ParticleSystem": 1,
+                "PointerLockControls": 1,
+                "RockGenerator": 1,
+                "Skybox": 1,
+                "Terrain": 1,
+                "Texture": 1,
+                "TextureLoader": 1,
+                "Utility": 1,
+                "WaterSystem": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "WaterSystem.js",
+            "line": 2,
+            "description": "Fragment shader"
+        }
+    },
     "classes": {
         "Camera": {
             "name": "Camera",
@@ -82,6 +196,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "Engine",
             "file": "Camera.js",
             "line": 2,
             "description": "Handles user input and changes the 4 movement variables\n\t\nW Key:\n\tMoves camera up\nS Key:\n\tMoves camera down\t\n\nR Key:\n\tMoves camera up\nF Key:\n\tMoves camera down"
@@ -94,9 +209,24 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "Engine",
             "file": "CollisionTester.js",
             "line": 1,
             "description": "Tests collision for the player against:\n\tTerrain\n\tRocks\n\tMap boundaries"
+        },
+        "MarsScene": {
+            "name": "MarsScene",
+            "shortname": "MarsScene",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
+            "file": "MarsScene.js",
+            "line": 38,
+            "description": "The main class\n\nContains methods to start and render the scene"
         },
         "Minimap": {
             "name": "Minimap",
@@ -106,6 +236,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
             "file": "Minimap.js",
             "line": 2,
             "description": "Minimap in bottom right corner of screen,\nDisplays terrain cells and camera position\n\nUses a completely new 2D canvas, rendering over the WebGL one\n\nCurrent problems:\n\tThe collision on the grid is calculated from cameras world position like usual\n\tBut the user appears to go into the out of range cells, due to coordinates being calculated\n\tfrom the top left of the square.\n\t\n\tThe user doesn't actually go outside of the allowed cells on the map, \n\tit just looks like they do on the minimap."
@@ -118,9 +250,39 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
             "file": "MyGUI.js",
             "line": 2,
             "description": "This file creates and displays the GUI elements of the scene, using the library (MIT):\nhttps://github.com/dataarts/dat.gui"
+        },
+        "ParticleSystem": {
+            "name": "ParticleSystem",
+            "shortname": "ParticleSystem",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
+            "file": "ParticleSystem.js",
+            "line": 2,
+            "description": "This file currently isn't being used as I didn't have time.\n\nThe particle system uses instance rendering, so there is one square only,\nand then matrices are generated to move the particle instance to new positions.\n\nCurrently no function exists to update the particles, they're just remade every loop"
+        },
+        "PointerLockControls": {
+            "name": "PointerLockControls",
+            "shortname": "PointerLockControls",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
+            "file": "PointerLockControls.js",
+            "line": 2,
+            "description": "This file adds the event listener for pointerlock,"
         },
         "RockGenerator": {
             "name": "RockGenerator",
@@ -130,9 +292,25 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
             "file": "RockGenerator.js",
             "line": 1,
             "description": "All rocks use the same OBJ model\nThis file generates translations to apply to the singular rock vertex set\nThe rocks are then instanced rendered\n\nUses the obj loader library: webgl-obj-loader from frenchtoast747 on GitHub\n\thttps://github.com/frenchtoast747/webgl-obj-loader\n\t\nRock objs used and edited from (Public domain): \n\thttp://nobiax.deviantart.com/art/Free-LowPoly-Rocks-set01-587036357"
+        },
+        "Skybox": {
+            "name": "Skybox",
+            "shortname": "Skybox",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
+            "file": "Skybox.js",
+            "line": 2,
+            "description": "Has the skybox render method\nAlas this file creates the day/night cycle"
         },
         "Terrain": {
             "name": "Terrain",
@@ -142,9 +320,69 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
             "file": "Terrain.js",
             "line": 2,
             "description": "This class builds the terrain of the scene.\n\nIt creates a 2D heightMap using stacked perlin noise,\nIt then builds 3D vertices from that heightMap and stores them in \"quadrants\" (sections of the map)\n\nThe render method, calls methods to clips off any quadrants, \napart from the 3x3 surrounding quadrants of the camera\n\nThis file also creates and renders the terrain boundaries"
+        },
+        "Texture": {
+            "name": "Texture",
+            "shortname": "Texture",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
+            "file": "Texture.js",
+            "line": 2,
+            "description": "The texture class, this holds the actual WebGLTexture",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "path",
+                    "description": "path to the texture file/image",
+                    "type": "String"
+                },
+                {
+                    "name": "shineDamperParam",
+                    "description": "(float) its shine damper value"
+                },
+                {
+                    "name": "reflectivityParam",
+                    "description": "(float) how reflective it is"
+                }
+            ]
+        },
+        "TextureLoader": {
+            "name": "TextureLoader",
+            "shortname": "TextureLoader",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
+            "file": "TextureLoader.js",
+            "line": 24,
+            "description": "This file loads the textures into their global variables\n\nTexture knowledge gained from:\n\thttp://stackoverflow.com/questions/19722247/webgl-wait-for-texture-to-load/19748905#19748905\n\thttps://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL\n\thttps://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js\n\t\nSome rock resources from:\n\thttp://www.textures.com/download/rocksarid0035/68071?&secure=login\n\thttps://www.textures.com/download/rocksarid0048/42217?&secure=login\n\thttps://www.textures.com/download/rocksarid0049/42220?&secure=login\n\t\nSand:\n\thttp://www.textures.com/download/soilbeach0131/106132"
+        },
+        "Utility": {
+            "name": "Utility",
+            "shortname": "Utility",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
+            "file": "Utility.js",
+            "line": 2,
+            "description": "Contains useful functions"
         },
         "WaterSystem": {
             "name": "WaterSystem",
@@ -154,6 +392,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "Engine",
+            "namespace": "",
             "file": "WaterSystem.js",
             "line": 2,
             "description": "The file includes code for:\n\nCreation of reflection frame buffer and its texture \nCreation of refraction frame buffer and its texture\n\nWaterVertexShader\nWaterFragmentShader\nCreating and linking shaders into the water program\n\nRendering the scene to the reflection and refraction textures and applying those textures to a water quad\n\nAnd finally rendering the water quad"
@@ -166,6 +406,8 @@
             "line": 59,
             "itemtype": "method",
             "name": "get.quadrant",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the cameras current quadrant",
                 "type": "Int"
@@ -174,9 +416,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 67,
+            "line": 68,
             "itemtype": "method",
             "name": "get.position",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the cameras current position",
                 "type": "Vec3"
@@ -185,9 +429,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 75,
+            "line": 77,
             "itemtype": "method",
             "name": "get.x",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the cameras current x position",
                 "type": "Float"
@@ -196,9 +442,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 83,
+            "line": 86,
             "itemtype": "method",
             "name": "get.y",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the cameras current y position",
                 "type": "Float"
@@ -207,9 +455,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 91,
+            "line": 95,
             "itemtype": "method",
             "name": "get.z",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the cameras current z position",
                 "type": "Float"
@@ -218,9 +468,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 99,
+            "line": 104,
             "itemtype": "method",
             "name": "get.targetX",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the cameras current x viewing target",
                 "type": "Float"
@@ -229,9 +481,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 107,
+            "line": 113,
             "itemtype": "method",
             "name": "get.targetY",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the cameras current y viewing target",
                 "type": "Float"
@@ -240,9 +494,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 115,
+            "line": 122,
             "itemtype": "method",
             "name": "get.targetZ",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the cameras current z viewing target",
                 "type": "Float"
@@ -251,9 +507,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 123,
+            "line": 131,
             "itemtype": "method",
             "name": "get.cameraTarget",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the cameras current viewing target",
                 "type": "Vec3"
@@ -262,9 +520,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 131,
+            "line": 140,
             "itemtype": "method",
             "name": "get.movingForward",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "is the player moving forward? true/false",
                 "type": "Bool"
@@ -273,9 +533,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 139,
+            "line": 149,
             "itemtype": "method",
             "name": "get.movingBackward",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "is the player moving backward? true/false",
                 "type": "Bool"
@@ -284,9 +546,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 147,
+            "line": 158,
             "itemtype": "method",
             "name": "get.movingUp",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "is the player moving up? true/false",
                 "type": "Bool"
@@ -295,9 +559,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 155,
+            "line": 167,
             "itemtype": "method",
             "name": "get.movingDown",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "is the player moving down? true/false",
                 "type": "Bool"
@@ -306,9 +572,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 165,
+            "line": 178,
             "itemtype": "method",
             "name": "set.x",
+            "access": "public",
+            "tagname": "",
             "params": [
                 {
                     "name": "xParam",
@@ -320,9 +588,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 173,
+            "line": 187,
             "itemtype": "method",
             "name": "set.y",
+            "access": "public",
+            "tagname": "",
             "params": [
                 {
                     "name": "yParam",
@@ -334,9 +604,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 181,
+            "line": 196,
             "itemtype": "method",
             "name": "set.z",
+            "access": "public",
+            "tagname": "",
             "params": [
                 {
                     "name": "zParam",
@@ -348,9 +620,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 189,
+            "line": 205,
             "itemtype": "method",
             "name": "set.targetX",
+            "access": "public",
+            "tagname": "",
             "params": [
                 {
                     "name": "x",
@@ -362,9 +636,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 197,
+            "line": 214,
             "itemtype": "method",
             "name": "set.targetY",
+            "access": "public",
+            "tagname": "",
             "params": [
                 {
                     "name": "y",
@@ -376,9 +652,11 @@
         },
         {
             "file": "Camera.js",
-            "line": 205,
+            "line": 223,
             "itemtype": "method",
             "name": "set.targetZ",
+            "access": "public",
+            "tagname": "",
             "params": [
                 {
                     "name": "z",
@@ -390,40 +668,48 @@
         },
         {
             "file": "Camera.js",
-            "line": 214,
+            "line": 233,
             "is_constructor": 1,
             "class": "Camera"
         },
         {
             "file": "Camera.js",
-            "line": 220,
+            "line": 239,
             "description": "Adds mouse moved event listener, \nChanges cameraTarget based on user rotation",
             "itemtype": "method",
             "name": "setupMouseMove",
+            "access": "private",
+            "tagname": "",
             "class": "Camera"
         },
         {
             "file": "Camera.js",
-            "line": 262,
+            "line": 282,
             "description": "Adds event listeners for the user movement\nNot actually updating camera here, because jerky movement..",
             "itemtype": "method",
             "name": "setupUserMovement",
+            "access": "private",
+            "tagname": "",
             "class": "Camera"
         },
         {
             "file": "Camera.js",
-            "line": 303,
+            "line": 324,
             "description": "Updates the camera position and view direction, in the camera matrix",
             "itemtype": "method",
             "name": "updateCamera",
+            "access": "public",
+            "tagname": "",
             "class": "Camera"
         },
         {
             "file": "Camera.js",
-            "line": 343,
+            "line": 365,
             "description": "Work out what quadrant the user is in\nSo can process and render what's in view of the player",
             "itemtype": "method",
             "name": "assignCameraQuadrant",
+            "access": "public",
+            "tagname": "",
             "class": "Camera"
         },
         {
@@ -432,30 +718,38 @@
             "description": "Public\n\nCalled from render(), tests all collision",
             "itemtype": "method",
             "name": "testAllCollision",
+            "access": "public",
+            "tagname": "",
             "class": "CollisionTester"
         },
         {
             "file": "CollisionTester.js",
-            "line": 37,
+            "line": 38,
             "description": "Private\n\nMoves the camera when traversing over terrain.\n\nUses the camera current X and Z position to find what terrain vertex they're nearest to.\nThe camera height then gets assigned to the nearest terrain vertex.",
             "itemtype": "method",
             "name": "setCameraHeight",
+            "access": "private",
+            "tagname": "",
             "class": "CollisionTester"
         },
         {
             "file": "CollisionTester.js",
-            "line": 72,
-            "description": "Private\n\nPlayer coordinates are sometimes decimals, \nSo get floored so they don't mess up the array indexing,\nas array indexes must be a integer.",
+            "line": 74,
+            "description": "Player coordinates are sometimes decimals, \nSo get floored so they don't mess up the array indexing,\nas array indexes must be a integer.",
             "itemtype": "method",
             "name": "floorTemporaryPlayerCoordinates",
+            "access": "private",
+            "tagname": "",
             "class": "CollisionTester"
         },
         {
             "file": "CollisionTester.js",
-            "line": 95,
-            "description": "Private\n\nNeed to find what height to position the player at.\nSo need to find what terrain vertex they're nearest to.\n\nDo this by passing in the player X and Z coordinates into the heightMap,\nto return the corresponding terrain vertex height value.\n\nGet the nearest height from the heightMap, which is private,\nSo call the getter method",
+            "line": 96,
+            "description": "Need to find what height to position the player at.\nSo need to find what terrain vertex they're nearest to.\n\nDo this by passing in the player X and Z coordinates into the heightMap,\nto return the corresponding terrain vertex height value.\n\nGet the nearest height from the heightMap, which is private,\nSo call the getter method",
             "itemtype": "method",
             "name": "findNearestTerrainVertex",
+            "access": "private",
+            "tagname": "",
             "return": {
                 "description": "the height of the nearest vertex + 4, to position the camera at\n\t\tadding + 4 because otherwise the camera would be in the floor",
                 "type": "Int"
@@ -468,10 +762,12 @@
             "description": "Moves the player forwards/backwards depending on the direction they where moving when they collided\n\nIf direction === 1\n\tThen player has collided moving forwards, so move the player backwards\nIf direction === -1\n\tThen player has collided moving backward, so move the player forwards",
             "itemtype": "method",
             "name": "pushPlayer",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
-                    "name": "the",
-                    "description": "direction to push them, push backwards = 1, push forwards = -1",
+                    "name": "direction",
+                    "description": "the direction to push them, push backwards = 1, push forwards = -1",
                     "type": "Int"
                 }
             ],
@@ -479,34 +775,80 @@
         },
         {
             "file": "CollisionTester.js",
-            "line": 144,
+            "line": 145,
             "description": "Check if they're going forwards or backwards\nPush them different ways based on movement direction\n\nIf parameter is true, they collided with a rock, decrement player HP\nelse, they collided with edge of map, keep HP same",
             "itemtype": "method",
             "name": "movePlayerForwardOrBackward",
+            "access": "private",
+            "tagname": "",
             "class": "CollisionTester"
         },
         {
             "file": "CollisionTester.js",
-            "line": 163,
+            "line": 165,
             "description": "Tests if player is going out of map boundaries, moves them back if so",
             "itemtype": "method",
             "name": "testCameraMapBoundaries",
+            "access": "private",
+            "tagname": "",
             "class": "CollisionTester"
         },
         {
             "file": "CollisionTester.js",
-            "line": 214,
+            "line": 217,
             "description": "Test if camera is near a corner, and move them back if so",
             "itemtype": "method",
             "name": "testCameraCornerCollision",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
-                    "name": ",",
-                    "description": "the corner vector to test camera vector against",
+                    "name": "cornerVector",
+                    "description": ", the corner vector to test camera vector against",
                     "type": "Vec3"
                 }
             ],
             "class": "CollisionTester"
+        },
+        {
+            "file": "MarsScene.js",
+            "line": 47,
+            "description": "Starts the scene, by calling the render function\n\nWaits 2 seconds before starting the scene,\nThis allows textures to load, avoiding WebGL texture errors",
+            "itemtype": "method",
+            "name": "start",
+            "access": "public",
+            "tagname": "",
+            "class": "MarsScene",
+            "module": "Engine"
+        },
+        {
+            "file": "MarsScene.js",
+            "line": 65,
+            "description": "The main render loop\n\nPer loop iteration:\n\n\tWorks out the cameras quadrant, so we know what to render\n\t\n\tRenders scene to reflection frame buffer\n\tRenders scene to refraction frame buffer\n\t\n\tClears screen\n\tRenders the scene as usual\n\t\n\tRepeat",
+            "itemtype": "method",
+            "name": "render",
+            "access": "private",
+            "tagname": "",
+            "class": "MarsScene",
+            "module": "Engine"
+        },
+        {
+            "file": "MarsScene.js",
+            "line": 123,
+            "description": "Code taken from: https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.htm",
+            "itemtype": "method",
+            "name": "resize",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "canvas",
+                    "description": "the canvas to resize",
+                    "type": "Canvas"
+                }
+            ],
+            "class": "MarsScene",
+            "module": "Engine"
         },
         {
             "file": "Minimap.js",
@@ -514,125 +856,204 @@
             "description": "Private\nMaps the user position in the world, to the position on the canvas\nThen draws the user as a blue square",
             "itemtype": "method",
             "name": "renderUser",
-            "class": "Minimap"
+            "access": "private",
+            "tagname": "",
+            "class": "Minimap",
+            "module": "Engine"
         },
         {
             "file": "Minimap.js",
-            "line": 61,
+            "line": 62,
             "description": "Private\nThe below code draws the blue lines across the minimap",
             "itemtype": "method",
             "name": "renderGrid",
-            "class": "Minimap"
+            "access": "private",
+            "tagname": "",
+            "class": "Minimap",
+            "module": "Engine"
         },
         {
             "file": "Minimap.js",
-            "line": 115,
+            "line": 117,
             "description": "Calls methods ot render grid and user",
             "itemtype": "method",
             "name": "render",
-            "class": "Minimap"
+            "access": "public",
+            "tagname": "",
+            "class": "Minimap",
+            "module": "Engine"
         },
         {
             "file": "MyGUI.js",
-            "line": 26,
+            "line": 25,
             "itemtype": "method",
             "name": "get.ui_terrain_size",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the value for the terrain size, chosen through the UI",
                 "type": "Int"
             },
-            "class": "MyGUI"
+            "class": "MyGUI",
+            "module": "Engine"
         },
         {
             "file": "MyGUI.js",
             "line": 34,
             "itemtype": "method",
             "name": "get.ui_noise_scale",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the value for the terrain scale, chosen through the UI",
                 "type": "Int"
             },
-            "class": "MyGUI"
+            "class": "MyGUI",
+            "module": "Engine"
         },
         {
             "file": "MyGUI.js",
-            "line": 42,
+            "line": 43,
             "itemtype": "method",
             "name": "get.ui_noise_octaves",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the value for the terrain octaves, chosen through the UI",
                 "type": "Int"
             },
-            "class": "MyGUI"
+            "class": "MyGUI",
+            "module": "Engine"
         },
         {
             "file": "MyGUI.js",
-            "line": 50,
+            "line": 52,
             "itemtype": "method",
             "name": "get.ui_min_rocks",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the value for the minimum number of rocks, chosen through the UI",
                 "type": "Int"
             },
-            "class": "MyGUI"
+            "class": "MyGUI",
+            "module": "Engine"
         },
         {
             "file": "MyGUI.js",
-            "line": 58,
+            "line": 61,
             "itemtype": "method",
             "name": "get.ui_max_rocks",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the value for the maximum number of rocks, chosen through the UI",
                 "type": "Int"
             },
-            "class": "MyGUI"
+            "class": "MyGUI",
+            "module": "Engine"
         },
         {
             "file": "MyGUI.js",
-            "line": 66,
+            "line": 70,
             "itemtype": "method",
             "name": "get.ui_water_strength",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the value for the water strength, chosen through the UI",
                 "type": "Int"
             },
-            "class": "MyGUI"
-        },
-        {
-            "file": "MyGUI.js",
-            "line": 88,
-            "is_constructor": 1,
-            "class": "MyGUI"
+            "class": "MyGUI",
+            "module": "Engine"
         },
         {
             "file": "MyGUI.js",
             "line": 93,
+            "is_constructor": 1,
+            "class": "MyGUI",
+            "module": "Engine"
+        },
+        {
+            "file": "MyGUI.js",
+            "line": 98,
             "description": "Adds all of the options to the UI, so they can be changed",
             "itemtype": "method",
             "name": "setupSystemGUI",
-            "class": "MyGUI"
+            "access": "private",
+            "tagname": "",
+            "class": "MyGUI",
+            "module": "Engine"
         },
         {
             "file": "MyGUI.js",
-            "line": 178,
+            "line": 184,
             "description": "Displays message when use tries to go off map",
             "itemtype": "method",
             "name": "showMapCollision",
-            "class": "MyGUI"
+            "access": "public",
+            "tagname": "",
+            "class": "MyGUI",
+            "module": "Engine"
         },
         {
             "file": "MyGUI.js",
-            "line": 190,
+            "line": 197,
             "description": "Hides message when use tries to go off map",
             "itemtype": "method",
             "name": "hideMapCollision",
-            "class": "MyGUI"
+            "access": "public",
+            "tagname": "",
+            "class": "MyGUI",
+            "module": "Engine"
+        },
+        {
+            "file": "ParticleSystem.js",
+            "line": 78,
+            "description": "Builds the matrices to apply to the particle instances,\nAllowing them to be at different world positions.\n\nUses same idea as rock generation, need to build mat4 by using 4 vec4s.",
+            "itemtype": "method",
+            "name": "createParticles",
+            "access": "private",
+            "tagname": "",
+            "class": "ParticleSystem",
+            "module": "Engine"
+        },
+        {
+            "file": "ParticleSystem.js",
+            "line": 187,
+            "description": "Currently just creates new particles every time, rather than updating them like it should",
+            "itemtype": "method",
+            "name": "render",
+            "access": "public",
+            "tagname": "",
+            "class": "ParticleSystem",
+            "module": "Engine"
+        },
+        {
+            "file": "PointerLockControls.js",
+            "line": 14,
+            "description": "Constructor",
+            "is_constructor": 1,
+            "class": "PointerLockControls",
+            "module": "Engine"
+        },
+        {
+            "file": "PointerLockControls.js",
+            "line": 21,
+            "description": "Adds pointer lock to the canvas",
+            "itemtype": "method",
+            "name": "setupPointerLock",
+            "access": "private",
+            "tagname": "",
+            "class": "PointerLockControls",
+            "module": "Engine"
         },
         {
             "file": "RockGenerator.js",
             "line": 47,
             "is_constructor": 1,
-            "class": "RockGenerator"
+            "class": "RockGenerator",
+            "module": "Engine"
         },
         {
             "file": "RockGenerator.js",
@@ -640,14 +1061,19 @@
             "description": "For every terrain quadrant, generate a set of rocks for it",
             "itemtype": "method",
             "name": "buildAllRockData",
-            "class": "RockGenerator"
+            "access": "private",
+            "tagname": "",
+            "class": "RockGenerator",
+            "module": "Engine"
         },
         {
             "file": "RockGenerator.js",
-            "line": 65,
+            "line": 66,
             "description": "Sets up the data needed to render the rocks\n\nWouldn't want to render the quadrants rocks in the same place, \nNeed to apply different matrices per rock instance\n\nGenerates lots of translation matrices to apply to the quadrants rocks\nEach quadrant has a random number of rocks from 0->512\n\nIn the generateMatrices functions, rock size generation sizes:\n\tGenerate big rock (low chance)\n\tGenerate medium rock (mid chance)\n \t\tGenerate small rock (high chance)",
             "itemtype": "method",
             "name": "setupInstancedRockBuffers",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "x",
@@ -660,14 +1086,17 @@
                     "type": "Int"
                 }
             ],
-            "class": "RockGenerator"
+            "class": "RockGenerator",
+            "module": "Engine"
         },
         {
             "file": "RockGenerator.js",
-            "line": 147,
+            "line": 149,
             "description": "Read setupInstancedRockBuffers function comments first\nSets up the 1st column of the matrix translation",
             "itemtype": "method",
             "name": "generateMatricesForTransformRow1",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "xMin",
@@ -675,22 +1104,28 @@
                     "type": "Int"
                 }
             ],
-            "class": "RockGenerator"
+            "class": "RockGenerator",
+            "module": "Engine"
         },
         {
             "file": "RockGenerator.js",
-            "line": 191,
+            "line": 194,
             "description": "Read setupInstancedRockBuffers function comments first\nSets up the 2nd column of the matrix translation",
             "itemtype": "method",
             "name": "generateMatricesForTransformRow2",
-            "class": "RockGenerator"
+            "access": "private",
+            "tagname": "",
+            "class": "RockGenerator",
+            "module": "Engine"
         },
         {
             "file": "RockGenerator.js",
-            "line": 229,
+            "line": 233,
             "description": "Read setupInstancedRockBuffers function comments first\nSets up the 3rd column of the matrix translation",
             "itemtype": "method",
             "name": "generateMatricesForTransformRow3",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "zMin",
@@ -698,30 +1133,42 @@
                     "type": "Int"
                 }
             ],
-            "class": "RockGenerator"
+            "class": "RockGenerator",
+            "module": "Engine"
         },
         {
             "file": "RockGenerator.js",
-            "line": 264,
+            "line": 269,
             "description": "Read setupInstancedRockBuffers function comments first\nSets up the 4th column of the matrix translation",
             "itemtype": "method",
             "name": "generateMatricesForTransformRow4",
-            "class": "RockGenerator"
+            "access": "private",
+            "tagname": "",
+            "class": "RockGenerator",
+            "module": "Engine"
         },
         {
             "file": "RockGenerator.js",
-            "line": 288,
+            "line": 294,
             "description": "9 instanced draw calls\nUses the terrain render indices to determine what rocks should be processed, then rendered\n\nSee terrain.render for comments on terrain render indices",
             "itemtype": "method",
             "name": "renderInstancedRocks",
-            "class": "RockGenerator"
+            "access": "public",
+            "tagname": "",
+            "class": "RockGenerator",
+            "module": "Engine"
         },
         {
             "file": "RockGenerator.js",
-            "line": 397,
-            "description": "Test column 1 of matrix applied to the rock instance at a time, \nTest mesh.numInstances is correct length\nThe data array contains values for the one column only, at a time\n\nParameter: the column it was called for, to print correct error message\n\n(First time being called, uses this column)\n\n[0, x, x, x]\n\n 4, x, x, x]\n \n 8, x, x, x]\n \n 12 x, x, x]",
+            "line": 404,
+            "description": "Test column 1 of matrix applied to the rock instance at a time, \nTest mesh.numInstances is correct length\nThe data array contains values for the one column only, at a time",
+            "example": [
+                "\n\nParameter: the column it was called for, to print correct error message\n\n(First time being called, uses this column)\n\n[0, x, x, x]\n\n 4, x, x, x]\n \n 8, x, x, x]\n \n 12 x, x, x]"
+            ],
             "itemtype": "method",
             "name": "test_matricesForTransformRow",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "column",
@@ -729,68 +1176,147 @@
                     "type": "Int"
                 }
             ],
-            "class": "RockGenerator"
+            "class": "RockGenerator",
+            "module": "Engine"
+        },
+        {
+            "file": "Skybox.js",
+            "line": 19,
+            "itemtype": "method",
+            "name": "get.currentRotation",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "the cameras current rotation",
+                "type": "Float"
+            },
+            "class": "Skybox",
+            "module": "Engine"
+        },
+        {
+            "file": "Skybox.js",
+            "line": 27,
+            "itemtype": "method",
+            "name": "get.currentTime",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "the current time of the world (0000 -> 2400)",
+                "type": "Float"
+            },
+            "class": "Skybox",
+            "module": "Engine"
+        },
+        {
+            "file": "Skybox.js",
+            "line": 120,
+            "description": "This function:\n\tUpdates the time of day,\n\tUpdates the skybox from night to day etc\n\tChanges fog colour based on time of day\n\tSets the water reflectivity based on time of day (at night, no specular highlights)",
+            "itemtype": "method",
+            "name": "updateDay",
+            "access": "private",
+            "tagname": "",
+            "class": "Skybox",
+            "module": "Engine"
+        },
+        {
+            "file": "Skybox.js",
+            "line": 273,
+            "description": "This function loads the skybox variables into the shader\nIt also rotates the skybox",
+            "itemtype": "method",
+            "name": "updateSkyboxAttributesAndUniforms",
+            "access": "private",
+            "tagname": "",
+            "class": "Skybox",
+            "module": "Engine"
+        },
+        {
+            "file": "Skybox.js",
+            "line": 304,
+            "description": "Renders the skybox",
+            "itemtype": "method",
+            "name": "render",
+            "access": "public",
+            "tagname": "",
+            "class": "Skybox",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
             "line": 63,
             "itemtype": "method",
             "name": "get.getTerrainRows",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the width/height of the entire map",
                 "type": "Int"
             },
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 71,
+            "line": 72,
             "itemtype": "method",
             "name": "get.getNumberQuadrantRows",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the number of quadrant rows (default 8 rows)",
                 "type": "Int"
             },
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 79,
+            "line": 81,
             "itemtype": "method",
             "name": "get.getNumberQuadrantColumns",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the number of quadrant columns (default 8 columns)",
                 "type": "Int"
             },
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 87,
+            "line": 90,
             "itemtype": "method",
             "name": "get.getQuadrantRowSize",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "how many vertices per each quadrant row (always 128)",
                 "type": "Int"
             },
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 95,
+            "line": 99,
             "itemtype": "method",
             "name": "get.getRenderIndices",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the final set of terrain map indices to render",
                 "type": "Int[]"
             },
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 114,
+            "line": 119,
             "itemtype": "method",
             "name": "heightMapValueAtIndex.setTemporaryHeightMapX",
+            "access": "public",
+            "tagname": "",
             "params": [
                 {
                     "name": "value",
@@ -798,13 +1324,16 @@
                     "type": "Int"
                 }
             ],
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 122,
+            "line": 128,
             "itemtype": "method",
             "name": "heightMapValueAtIndex.setTemporaryHeightMapZ",
+            "access": "public",
+            "tagname": "",
             "params": [
                 {
                     "name": "value",
@@ -812,49 +1341,62 @@
                     "type": "Int"
                 }
             ],
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 130,
+            "line": 137,
             "description": "Use the previous 2 methods to set temporary heightMap indexes,\nThen use this method to get height value, at the given indexes",
             "itemtype": "method",
             "name": "heightMapValueAtIndex.getTemporaryHeightMapValue",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the height value retrieved from the 2D heightMap, used to set rocks position and player height",
                 "type": "Float"
             },
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 153,
+            "line": 161,
             "description": "Create, fill and edit heightMap data\nUse that heightMap data to create vertices",
             "is_constructor": 1,
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 171,
+            "line": 179,
             "description": "Loops over each quadrant\n\nFor each map quadrant, create its data, and a VAO, store that VAO in the terrainVAOs array.",
             "itemtype": "method",
             "name": "buildAllTerrainData",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 228,
+            "line": 237,
             "description": "Private\n\nCreate the 2D heightMap array:\n\theightMap[terrainRows][terrainColumns];",
             "itemtype": "method",
             "name": "createHeightMap",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 246,
+            "line": 256,
             "description": "Private\n\nTakes in a coordinate in 2D heightMap array, loops over specified number of octaves,\nadds noise octaves onto each other, returns final the height value for the vertex",
             "itemtype": "method",
             "name": "stackNoise",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "x",
@@ -876,22 +1418,28 @@
                 "description": "the perlin noise height value for a 3D point",
                 "type": "Float"
             },
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 275,
-            "description": "Private\n\nFills the 2D HeightMap with stacked perlin noise values,\nThese height values are then assigned to 3D vertices later on,\nThis in turn creates the smooth terrain",
+            "line": 286,
+            "description": "Fills the 2D HeightMap with stacked perlin noise values,\nThese height values are then assigned to 3D vertices later on,\nThis in turn creates the smooth terrain",
             "itemtype": "method",
             "name": "fillHeightMap",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 346,
-            "description": "Private\n\nI have a 2D heightMap\n\nNow create the terrain vertices having x, y, z values \nWhere y is the value from the heightMap we made.\n\nThis function creates data for one quadrant at a time",
+            "line": 356,
+            "description": "I have a 2D heightMap\n\nNow create the terrain vertices having x, y, z values \nWhere y is the value from the heightMap we made.\n\nThis function creates data for one quadrant at a time",
             "itemtype": "method",
             "name": "createQuadrantVertices",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "vaoXPosition",
@@ -904,139 +1452,191 @@
                     "type": "Int"
                 }
             ],
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 404,
-            "description": "Private\n\nCreates the quadrantIndices from the vertices\n\nCode from: http://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips\nAnswer with 11 upvotes",
+            "line": 413,
+            "description": "Creates the quadrantIndices from the vertices\n\nCode from: http://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips\nAnswer with 11 upvotes",
             "itemtype": "method",
             "name": "createQuadrantIndices",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 429,
-            "description": "Private\n\nCreates the quadrants UV coordinates",
+            "line": 437,
+            "description": "Creates the quadrants UV coordinates",
             "itemtype": "method",
             "name": "createQuadrantUvs",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 465,
-            "description": "Private\n\nSets all of the terrain normals to [1, 1, 1], this stops a bug with the lighting.\n\nDue to the terrain sections being split, there was a bug as the current point needed information\nfrom the previous row. But the previous row was in a different section, and therefore wasn't\navailable. This caused black lines on the terrain boundaries.\n\nSetting the normals to [1,1,1] fixes this.\nYou can't even notice the lighting on the terrain anyway,",
+            "line": 472,
+            "description": "Sets all of the terrain normals to [1, 1, 1], this stops a bug with the lighting.\n\nDue to the terrain sections being split, there was a bug as the current point needed information\nfrom the previous row. But the previous row was in a different section, and therefore wasn't\navailable. This caused black lines on the terrain boundaries.\n\nSetting the normals to [1,1,1] fixes this.\nYou can't even notice the lighting on the terrain anyway,",
             "itemtype": "method",
             "name": "createQuadrantNormals",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 509,
-            "description": "Private, called from setupTerrainBuffers",
+            "line": 515,
             "itemtype": "method",
             "name": "setupQuadrantVertexBuffer",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 521,
-            "description": "Private\n\nAdds the current quadrant indices to the quadrantIndices VBO",
+            "line": 526,
+            "description": "Adds the current quadrant indices to the quadrantIndices VBO",
             "itemtype": "method",
             "name": "setupQuadrantIndiciesBuffer",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 534,
-            "description": "Private, called from setupTerrainBuffers\n\nEvery texture goes from 0 -> 1, regardless of dimensions\n\nGL has 16/32 texture registers, we're using TEXTURE0\nBind the previously loaded texture to that register\nSet the sampler in the shader to use that texture",
+            "line": 538,
+            "description": "Every texture goes from 0 -> 1, regardless of dimensions\n\nGL has 16/32 texture registers, we're using TEXTURE0\nBind the previously loaded texture to that register\nSet the sampler in the shader to use that texture",
             "itemtype": "method",
             "name": "setupQuadrantUvBuffer",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 552,
-            "description": "Private, called from setupTerrainBuffers",
+            "line": 555,
             "itemtype": "method",
             "name": "setupQuadrantNormalBuffer",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 577,
-            "description": "Private\n\nFind out what indices the corner and edge quadrants are at\nAdd theses indices to cornerIndices and all edgeIndices arrays\n\t\nIf camera in corner we have 4 indices to process and render\nIf camera in edge we have 6 indices to process and render\nIf camera in regular cell we have 9 indices to process and render\n\nHow to calculate if on edge cell, corner cell or normal cell?\n\tBase it off numberQuadrantRows * numberQuadrantColumns\n\nTake 4x4 cells (0->15 index) for example:\n\n\t[0, 4,  8, 12]\n\t[1, 5,  9, 13]\n\t[2, 6, 10, 14]\n\t[3, 7, 11, 15]\n\n\tNeed to work out the corners\n\t\ttake (4-4) // 0 index of 1st corner\n\t\ttake (4x4) - 1 // 15 index of 2nd corner\n\t\ttake (4) - 1 // 3 index of 3rd corner\n\t\ttake (4) * 3 // 12 index of 4th corner\n\t\n\tFirst 2 Edges of map\n\t\tany multiple of 4 is an edge element // 0, 4, 8, 12\n\t\tany number up to 4 is an edge element // 0, 1, 2, 3\n\t\tadd these values to 'edges' array, IF it isn't in corners array, else its a corner\n\t\n\t2 opposite edges \n\t\ttake the last multiple of 4, and add (4-1) values onto it, they're all edges // 12, 13, 14, 15\n\t\ttake number up to (4-1), add the number (4) and then -1 from it. // 3, 7, 11, 15\n\t\tadd these values to 'edges' array, IF it isn't in corners array, else its a corner\n\t\n\tElse, they're in a centre cell, so render a 3x3 grid",
+            "line": 579,
+            "description": "Find out what indices the corner and edge quadrants are at\nAdd theses indices to cornerIndices and all edgeIndices arrays\n\t\nIf camera in corner we have 4 indices to process and render\nIf camera in edge we have 6 indices to process and render\nIf camera in regular cell we have 9 indices to process and render\n\nHow to calculate if on edge cell, corner cell or normal cell?\n\tBase it off numberQuadrantRows * numberQuadrantColumns",
+            "example": [
+                "\n\nTake 4x4 cells (0->15 index) for example:\n\n\t[0, 4,  8, 12]\n\t[1, 5,  9, 13]\n\t[2, 6, 10, 14]\n\t[3, 7, 11, 15]\n\n\tNeed to work out the corners\n\t\ttake (4-4) // 0 index of 1st corner\n\t\ttake (4x4) - 1 // 15 index of 2nd corner\n\t\ttake (4) - 1 // 3 index of 3rd corner\n\t\ttake (4) * 3 // 12 index of 4th corner\n\t\n\tFirst 2 Edges of map\n\t\tany multiple of 4 is an edge element // 0, 4, 8, 12\n\t\tany number up to 4 is an edge element // 0, 1, 2, 3\n\t\tadd these values to 'edges' array, IF it isn't in corners array, else its a corner\n\t\n\t2 opposite edges \n\t\ttake the last multiple of 4, and add (4-1) values onto it, they're all edges // 12, 13, 14, 15\n\t\ttake number up to (4-1), add the number (4) and then -1 from it. // 3, 7, 11, 15\n\t\tadd these values to 'edges' array, IF it isn't in corners array, else its a corner\n\t\n\tElse, they're in a centre cell, so render a 3x3 grid"
+            ],
             "itemtype": "method",
             "name": "setupVaoIndices",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 654,
+            "line": 657,
             "description": "Private\n\nCamera is in a corner, create indices appropriately\n\nNeed to check what corner they're in to calculate renderIndices properly\n4 different indices orders, depending on what corner they're in!",
             "itemtype": "method",
             "name": "setupIndicesCornerCells",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 698,
+            "line": 702,
             "description": "Camera is on the map edges (boundaries), render correct cells",
             "itemtype": "method",
             "name": "setupIndicesTopEdgeCells",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 712,
+            "line": 717,
             "itemtype": "method",
             "name": "setupIndicesBottomEdgeCells",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 724,
+            "line": 730,
             "itemtype": "method",
             "name": "setupIndicesLeftEdgeCells",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 737,
+            "line": 744,
             "itemtype": "method",
             "name": "setupIndicesRightEdgeCells",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 751,
-            "description": "Private\n\nCreate indices of the standard 3x3 pattern",
+            "line": 759,
+            "description": "Create indices of the standard 3x3 pattern",
             "itemtype": "method",
             "name": "setupIndices3x3Cells",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 777,
+            "line": 785,
             "description": "Public\n\nApply matrices, bind the terrain VAO, \nWork out what indices to process and render,\nThen draw the terrain.",
             "itemtype": "method",
             "name": "render",
-            "class": "Terrain"
+            "access": "public",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 874,
+            "line": 883,
             "description": "Builds the quads for the map boundaries",
             "itemtype": "method",
             "name": "setupMapBoundariesData",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 911,
+            "line": 921,
             "description": "If we're in day time, then render the transparent boundaries,\nIf we're in night time, render black squares, alpha didn't work in night :(",
             "itemtype": "method",
             "name": "actuallyRenderMapBoundaries",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "useAlpha",
@@ -1044,30 +1644,39 @@
                     "type": "Bool"
                 }
             ],
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 985,
+            "line": 996,
             "description": "Doesn't render the map boundaries, but calls a function which does\nCalculates which boundaries to render:\n\tTransparent boundaries for day,\n\tBlack boundaries for night",
             "itemtype": "method",
             "name": "renderMapBoundaries",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1006,
+            "line": 1018,
             "description": "Test 2D heightMap array is of correct size",
             "itemtype": "method",
             "name": "test_createHeightMap",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1023,
+            "line": 1036,
             "description": "Test if the current heightMap value is a number",
             "itemtype": "method",
             "name": "test_fillHeightMap",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "value",
@@ -1075,46 +1684,61 @@
                     "type": "Int"
                 }
             ],
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1042,
+            "line": 1056,
             "description": "Test the correct amount of quadrant vertices where created\n\tquadrantRowSize = number of vertices per row (128)\n\tquadrantColumnSize = number of vertices per column (128)\nTimes these by 3, because each vertex has x, y, z\n\t\nquadrantVertices.length = number of x, y, z values in current section",
             "itemtype": "method",
             "name": "test_createQuadrantVertices",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1058,
+            "line": 1073,
             "description": "Test the correct amount of quadrant indices where created\n\nEach quadrant should have double the number of indices to vertices\n\tDivide quadrantVertices by 3 to get the amount of vertices, not x, y, z values",
             "itemtype": "method",
             "name": "test_createQuadrantIndices",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1072,
+            "line": 1088,
             "description": "Test correct amount of UV coordinates\n\nFor each vertex, there should be 2 UV coordinates\n\tDivide quadrantVertices by 3 to get the amount of vertices, not x, y, z values",
             "itemtype": "method",
             "name": "test_createQuadrantUvs",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1086,
+            "line": 1103,
             "description": "Test correct amount of quadrant normals\nNormals should be equal to number of quadrantVertices",
             "itemtype": "method",
             "name": "test_createQuadrantNormals",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1098,
+            "line": 1116,
             "description": "Tests length of the quadrants (vertices/normals/UVs/indices)",
             "itemtype": "method",
             "name": "test_quadrantData",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "attribute",
@@ -1132,21 +1756,27 @@
                     "type": "Int"
                 }
             ],
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1118,
+            "line": 1137,
             "description": "Test the quadrant buffers if they're WebGL buffer objects (VBO)",
             "itemtype": "method",
             "name": "test_setupQuadrantBuffers",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1130,
+            "line": 1150,
             "itemtype": "method",
             "name": "test_isWebGLBuffer",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "bufferName",
@@ -1159,60 +1789,242 @@
                     "type": "Buffer"
                 }
             ],
-            "class": "Terrain"
+            "class": "Terrain",
+            "module": "Engine"
         },
         {
             "file": "Terrain.js",
-            "line": 1141,
+            "line": 1162,
             "description": "Make sure the terrainVAOs array was filled with WebGLVertexArrayObjectOES objects properly",
             "itemtype": "method",
             "name": "test_terrainVAOs",
-            "class": "Terrain"
+            "access": "private",
+            "tagname": "",
+            "class": "Terrain",
+            "module": "Engine"
+        },
+        {
+            "file": "Texture.js",
+            "line": 19,
+            "itemtype": "method",
+            "name": "get.texture",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "the texture",
+                "type": "WebGLTexture"
+            },
+            "class": "Texture",
+            "module": "Engine"
+        },
+        {
+            "file": "Texture.js",
+            "line": 28,
+            "itemtype": "method",
+            "name": "get.shineDamper",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "the textures shine damper value",
+                "type": "Float"
+            },
+            "class": "Texture",
+            "module": "Engine"
+        },
+        {
+            "file": "Texture.js",
+            "line": 37,
+            "itemtype": "method",
+            "name": "get.reflectivity",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "the textures reflectivity",
+                "type": "Float"
+            },
+            "class": "Texture",
+            "module": "Engine"
+        },
+        {
+            "file": "Texture.js",
+            "line": 56,
+            "description": "This gets run after image is done loading",
+            "itemtype": "method",
+            "name": "handleTextureLoaded",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "image",
+                    "description": "the JavaScript image object to use",
+                    "type": "Image"
+                },
+                {
+                    "name": "texture",
+                    "description": "the WebGLTexture to load",
+                    "type": "WebGLTexture"
+                }
+            ],
+            "class": "Texture",
+            "module": "Engine"
         },
         {
             "file": "TextureLoader.js",
-            "line": 78,
+            "line": 45,
+            "is_constructor": 1,
+            "class": "TextureLoader",
+            "module": "Engine"
+        },
+        {
+            "file": "TextureLoader.js",
+            "line": 50,
+            "description": "Loads all textures into their global variables",
+            "itemtype": "method",
+            "name": "loadTextures",
+            "access": "private",
+            "tagname": "",
+            "class": "TextureLoader",
+            "module": "Engine"
+        },
+        {
+            "file": "TextureLoader.js",
+            "line": 87,
+            "itemtype": "method",
+            "name": "loadCubeMap",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
-                    "name": "true/false,",
-                    "description": "if we should load the night skybox, or the day skybox"
+                    "name": "loadNightSkybox",
+                    "description": "if we should load the night skybox, or the day skybox, true/false",
+                    "type": "Bool"
                 }
             ],
-            "class": "WaterSystem"
+            "class": "TextureLoader",
+            "module": "Engine"
+        },
+        {
+            "file": "Utility.js",
+            "line": 10,
+            "itemtype": "method",
+            "name": "randomIntBetween",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "min",
+                    "description": "minimum number possible",
+                    "type": "Int"
+                },
+                {
+                    "name": "max",
+                    "description": "maximum number possible",
+                    "type": "Int"
+                }
+            ],
+            "class": "Utility",
+            "module": "Engine"
+        },
+        {
+            "file": "Utility.js",
+            "line": 25,
+            "itemtype": "method",
+            "name": "randomBetween",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "min",
+                    "description": "minimum number possible",
+                    "type": "Float"
+                },
+                {
+                    "name": "max",
+                    "description": "maximum number possible",
+                    "type": "Float"
+                }
+            ],
+            "class": "Utility",
+            "module": "Engine"
+        },
+        {
+            "file": "Utility.js",
+            "line": 35,
+            "description": "Used in camera class",
+            "itemtype": "method",
+            "name": "toRadians",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "the angle to convert to radians",
+                    "type": "Float"
+                }
+            ],
+            "class": "Utility",
+            "module": "Engine"
+        },
+        {
+            "file": "Utility.js",
+            "line": 46,
+            "description": "Retrieves the obj text from provided url",
+            "itemtype": "method",
+            "name": "httpGet",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "theUrl",
+                    "description": "path to the obj text file",
+                    "type": "String"
+                }
+            ],
+            "class": "Utility",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
             "line": 45,
             "is_constructor": 1,
-            "class": "WaterSystem"
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
             "line": 53,
             "itemtype": "method",
             "name": "get.waterReflectivity",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "the waters reflectivity",
                 "type": "Float"
             },
-            "class": "WaterSystem"
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 61,
+            "line": 62,
             "itemtype": "method",
             "name": "get.waterReflectivityIncrement",
+            "access": "public",
+            "tagname": "",
             "return": {
                 "description": "how fast the waterReflectivity changes from day/night",
                 "type": "Float"
             },
-            "class": "WaterSystem"
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 71,
+            "line": 73,
             "itemtype": "method",
             "name": "set.waterReflectivity",
+            "access": "public",
+            "tagname": "",
             "params": [
                 {
                     "name": "x",
@@ -1220,94 +2032,127 @@
                     "type": "Float"
                 }
             ],
-            "class": "WaterSystem"
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 80,
+            "line": 83,
             "description": "Sets up the reflectionFrameBuffer\nCreates the reflectionTexture\nCreates the reflectionDepthBuffer",
             "itemtype": "method",
             "name": "setupReflectionFrameBuffer",
-            "class": "WaterSystem"
+            "access": "private",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 114,
+            "line": 118,
             "description": "Sets up the refractionFrameBuffer.\nCreates the refractionTexture\nCreates the refractionDepthBuffer",
             "itemtype": "method",
             "name": "setupRefractionFrameBuffer",
-            "class": "WaterSystem"
+            "access": "private",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 303,
+            "line": 308,
             "description": "Renders everything under the water height to the refractionFrameBuffer",
             "itemtype": "method",
             "name": "renderToRefractionBuffer",
-            "class": "WaterSystem"
+            "access": "public",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 323,
+            "line": 329,
             "description": "Renders the scene to the reflectionFrameBuffer\n\nTo create illusion of reflection texture\nNeed to move camera under the water, before rendering the reflection texture\n\nThe camera should move down by:\n\tits original distance above the water * 2\nThe pitch of the camera also needs to be inverted\n\nWant to render scene to a texture (frame buffer), so bind it\nClear it\nRender to the texture (frame buffer)\nThen unbind it\n\t\nThen later on, we can render a square with that texture\n\t\nMake sure this gets rendered to something that the original scene doesn't render",
             "itemtype": "method",
             "name": "renderToReflectionBuffer",
-            "class": "WaterSystem"
+            "access": "public",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 375,
+            "line": 382,
             "description": "Builds the water quad",
             "itemtype": "method",
             "name": "setupWaterQuad",
-            "class": "WaterSystem"
+            "access": "private",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 402,
+            "line": 410,
             "description": "Loads in variables into the water shader:\n\tcameraPosition\n\tlightColour\n\tlightPosition\n\tmoveFactor\n\twaterReflectivity\n\twaterWaveStrength\n\tfullTransforms,\n\tview & projectionMatrix\n\t\nThis method also calculates and moves the sun position, to match the rotating skybox",
             "itemtype": "method",
             "name": "updateWaterAttributesAndUniforms",
-            "class": "WaterSystem"
+            "access": "private",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 485,
+            "line": 494,
             "description": "Renders the water quad with the textures sampled from the:\n\treflectionFrameBuffer, \n\trefractionFrameBuffer,\n\twaterDudvMap\n\twaterNormalMap",
             "itemtype": "method",
             "name": "render",
-            "class": "WaterSystem"
+            "access": "public",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 544,
+            "line": 554,
             "description": "Test the water reflection frame buffer is an WebGLFrameBuffer object",
             "itemtype": "method",
             "name": "test_setupReflectionFrameBuffer",
-            "class": "WaterSystem"
+            "access": "private",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 557,
+            "line": 568,
             "description": "Test the water refraction frame buffer is an WebGLFrameBuffer object",
             "itemtype": "method",
             "name": "test_setupRefractionFrameBuffer",
-            "class": "WaterSystem"
+            "access": "private",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 570,
+            "line": 582,
             "description": "Checks the location variables from the shaders are valid\nCheck the attribute locations are ints,\nAnd check the uniform locations are WebGLUniformLocation objects",
             "itemtype": "method",
             "name": "test_waterShaderLocationVariables",
-            "class": "WaterSystem"
+            "access": "private",
+            "tagname": "",
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 590,
+            "line": 603,
             "description": "Tests if passed in value is NaN",
             "itemtype": "method",
             "name": "test_isNaN",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "name",
@@ -1320,14 +2165,17 @@
                     "type": "Int"
                 }
             ],
-            "class": "WaterSystem"
+            "class": "WaterSystem",
+            "module": "Engine"
         },
         {
             "file": "WaterSystem.js",
-            "line": 603,
+            "line": 617,
             "description": "Tests if location is a WebGLUniformLocation",
             "itemtype": "method",
             "name": "test_isWebGLUniformLocation",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
                     "name": "name",
@@ -1340,17 +2188,22 @@
                     "type": "Buffer"
                 }
             ],
-            "class": "WaterSystem"
+            "class": "WaterSystem",
+            "module": "Engine"
         }
     ],
     "warnings": [
         {
             "message": "Missing item type",
-            "line": " Camera.js:214"
+            "line": " Camera.js:233"
         },
         {
             "message": "Missing item type",
-            "line": " MyGUI.js:88"
+            "line": " MyGUI.js:93"
+        },
+        {
+            "message": "Missing item type\nConstructor",
+            "line": " PointerLockControls.js:14"
         },
         {
             "message": "Missing item type",
@@ -1358,11 +2211,11 @@
         },
         {
             "message": "Missing item type\nCreate, fill and edit heightMap data\nUse that heightMap data to create vertices",
-            "line": " Terrain.js:153"
+            "line": " Terrain.js:161"
         },
         {
             "message": "Missing item type",
-            "line": " TextureLoader.js:78"
+            "line": " TextureLoader.js:45"
         },
         {
             "message": "Missing item type",

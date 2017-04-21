@@ -58,6 +58,7 @@ function Camera(){
 	this.get = {
 		/**
 		@method get.quadrant
+		@public
 		@return {int} the cameras current quadrant
 		*/
 		get quadrant(){
@@ -66,6 +67,7 @@ function Camera(){
 		
 		/**
 		@method get.position
+		@public
 		@return {vec3} the cameras current position
 		*/		
 		get position(){
@@ -74,6 +76,7 @@ function Camera(){
 		
 		/**
 		@method get.x
+		@public
 		@return {float} the cameras current x position
 		*/
 		get x(){
@@ -82,6 +85,7 @@ function Camera(){
 
 		/**
 		@method get.y
+		@public
 		@return {float} the cameras current y position
 		*/		
 		get y(){
@@ -90,6 +94,7 @@ function Camera(){
 		
 		/**
 		@method get.z
+		@public
 		@return {float} the cameras current z position
 		*/		
 		get z(){
@@ -98,6 +103,7 @@ function Camera(){
 		
 		/**
 		@method get.targetX
+		@public
 		@return {float} the cameras current x viewing target
 		*/
 		get targetX(){
@@ -106,6 +112,7 @@ function Camera(){
 		
 		/**
 		@method get.targetY
+		@public
 		@return {float} the cameras current y viewing target
 		*/
 		get targetY(){
@@ -114,6 +121,7 @@ function Camera(){
 		
 		/**
 		@method get.targetZ
+		@public
 		@return {float} the cameras current z viewing target
 		*/
 		get targetZ(){
@@ -122,6 +130,7 @@ function Camera(){
 		
 		/**
 		@method get.cameraTarget
+		@public
 		@return {vec3} the cameras current viewing target
 		*/
 		get cameraTarget(){
@@ -130,6 +139,7 @@ function Camera(){
 		
 		/**
 		@method get.movingForward
+		@public
 		@return {bool} is the player moving forward? true/false
 		*/
 		get movingForward(){
@@ -138,6 +148,7 @@ function Camera(){
 		
 		/**
 		@method get.movingBackward
+		@public
 		@return {bool} is the player moving backward? true/false
 		*/
 		get movingBackward(){
@@ -146,6 +157,7 @@ function Camera(){
 		
 		/**
 		@method get.movingUp
+		@public
 		@return {bool} is the player moving up? true/false
 		*/
 		get movingUp(){
@@ -154,6 +166,7 @@ function Camera(){
 		
 		/**
 		@method get.movingDown
+		@public
 		@return {bool} is the player moving down? true/false
 		*/
 		get movingDown(){
@@ -164,6 +177,7 @@ function Camera(){
 	this.set = {
 		/**
 		@method set.x
+		@public
 		@param xParam {float} the x position to set the camera at
 		*/
 		set x(xParam){
@@ -172,6 +186,7 @@ function Camera(){
 		
 		/**
 		@method set.y
+		@public
 		@param yParam {float} the y position to set the camera at
 		*/		
 		set y(yParam){
@@ -180,6 +195,7 @@ function Camera(){
 		
 		/**
 		@method set.z
+		@public
 		@param zParam {float} the z position to set the camera at
 		*/		
 		set z(zParam){
@@ -188,6 +204,7 @@ function Camera(){
 
 		/**
 		@method set.targetX
+		@public
 		@param x {float} the x position to set the camera target at
 		*/		
 		set targetX(x){
@@ -196,6 +213,7 @@ function Camera(){
 		
 		/**
 		@method set.targetY
+		@public
 		@param y {float} the y position to set the camera target at
 		*/		
 		set targetY(y){
@@ -204,6 +222,7 @@ function Camera(){
 		
 		/**
 		@method set.targetZ
+		@public
 		@param z {float} the z position to set the camera target at
 		*/		
 		set targetZ(z){
@@ -222,6 +241,7 @@ function Camera(){
 	Changes cameraTarget based on user rotation
 	
 	@method setupMouseMove
+	@private
 	*/
 	function setupMouseMove(){
 		canvas.addEventListener('mousemove', function(e){
@@ -264,6 +284,7 @@ function Camera(){
 	Not actually updating camera here, because jerky movement..
 	
 	@method setupUserMovement
+	@private
 	*/
 	function setupUserMovement(){
 		document.addEventListener('keydown', function(event){
@@ -304,6 +325,7 @@ function Camera(){
 	Updates the camera position and view direction, in the camera matrix
 	
 	@method updateCamera
+	@public
 	*/
 	this.updateCamera = function(){
 
@@ -345,6 +367,7 @@ function Camera(){
 	So can process and render what's in view of the player
 	
 	@method assignCameraQuadrant
+	@public
 	*/
 	this.assignCameraQuadrant = function(){
 	

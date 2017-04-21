@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Minimap</title>
+    <title>ParticleSystem</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -90,12 +90,12 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>Minimap Class</h1>
+<h1>ParticleSystem Class</h1>
 <div class="box meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/Minimap.js.html#l2"><code>Minimap.js:2</code></a>
+            Defined in: <a href="../files/ParticleSystem.js.html#l2"><code>ParticleSystem.js:2</code></a>
         </div>
 
             Module: <a href="../modules/Engine.html">Engine</a>
@@ -104,15 +104,10 @@
 
 
 <div class="box intro">
-    <p>Minimap in bottom right corner of screen,
-Displays terrain cells and camera position</p>
-<p>Uses a completely new 2D canvas, rendering over the WebGL one</p>
-<p>Current problems:
-The collision on the grid is calculated from cameras world position like usual
-But the user appears to go into the out of range cells, due to coordinates being calculated
-from the top left of the square.</p>
-<pre class="code prettyprint"><code>The user doesn't actually go outside of the allowed cells on the map, 
-it just looks like they do on the minimap.</code></pre>
+    <p>This file currently isn't being used as I didn't have time.</p>
+<p>The particle system uses instance rendering, so there is one square only,
+and then matrices are generated to move the particle instance to new positions.</p>
+<p>Currently no function exists to update the particles, they're just remade every loop</p>
 
 </div>
 
@@ -132,16 +127,12 @@ it just looks like they do on the minimap.</code></pre>
                     <h3>Methods</h3>
 
                     <ul class="index-list methods">
+                            <li class="index-item method private">
+                                <a href="#method_createParticles">createParticles</a>
+
+                            </li>
                             <li class="index-item method public">
                                 <a href="#method_render">render</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_renderGrid">renderGrid</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_renderUser">renderUser</a>
 
                             </li>
                     </ul>
@@ -154,6 +145,40 @@ it just looks like they do on the minimap.</code></pre>
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_createParticles" class="method item private">
+    <h3 class="name"><code>createParticles</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/ParticleSystem.js.html#l78"><code>ParticleSystem.js:78</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Builds the matrices to apply to the particle instances,
+Allowing them to be at different world positions.</p>
+<p>Uses same idea as rock generation, need to build mat4 by using 4 vec4s.</p>
+
+    </div>
+
+
+
+
+</div>
 <div id="method_render" class="method item public">
     <h3 class="name"><code>render</code></h3>
 
@@ -170,7 +195,7 @@ it just looks like they do on the minimap.</code></pre>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/Minimap.js.html#l117"><code>Minimap.js:117</code></a>
+        <a href="../files/ParticleSystem.js.html#l187"><code>ParticleSystem.js:187</code></a>
         </p>
 
 
@@ -178,74 +203,7 @@ it just looks like they do on the minimap.</code></pre>
     </div>
 
     <div class="description">
-        <p>Calls methods ot render grid and user</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_renderGrid" class="method item private">
-    <h3 class="name"><code>renderGrid</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l62"><code>Minimap.js:62</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Private
-The below code draws the blue lines across the minimap</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_renderUser" class="method item private">
-    <h3 class="name"><code>renderUser</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l43"><code>Minimap.js:43</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Private
-Maps the user position in the world, to the position on the canvas
-Then draws the user as a blue square</p>
+        <p>Currently just creates new particles every time, rather than updating them like it should</p>
 
     </div>
 

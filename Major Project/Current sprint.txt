@@ -22,10 +22,6 @@ Describe report in iterations?
 
 vertex/fragment/glseutp/program put into engine module
 
-Add MarsScene class, 
-	Then add comments on it
-	Cant add yuidoc on html file
-	
 
 Have brackets for return values, 
 not for parameters, but have a parameter name
@@ -35,8 +31,14 @@ Look at structure of final report for guidance
 @return {type} this is a return value
 @param zParam {float} the...
 
+yuidoc, property? used for variables?
+@type Number, @property, @default
 
+@example
 
+@method
+@private/public
+	check u can see private in docs
 
 Add yuidoc pages in appendices, but where to mention them
 

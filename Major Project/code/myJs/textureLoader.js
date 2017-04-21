@@ -51,6 +51,7 @@ function TextureLoader(){
 	Loads all textures into their global variables
 	
 	@method loadTextures
+	@private
 	*/
 	function loadTextures(){
 	
@@ -85,6 +86,7 @@ function TextureLoader(){
 	
 	/**
 	@method loadCubeMap
+	@private
 	@param loadNightSkybox {bool} if we should load the night skybox, or the day skybox, true/false
 	*/
 	function loadCubeMap(loadNightSkybox) {

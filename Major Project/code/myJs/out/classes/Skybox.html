@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Minimap</title>
+    <title>Skybox</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -90,12 +90,12 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>Minimap Class</h1>
+<h1>Skybox Class</h1>
 <div class="box meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/Minimap.js.html#l2"><code>Minimap.js:2</code></a>
+            Defined in: <a href="../files/Skybox.js.html#l2"><code>Skybox.js:2</code></a>
         </div>
 
             Module: <a href="../modules/Engine.html">Engine</a>
@@ -104,15 +104,8 @@
 
 
 <div class="box intro">
-    <p>Minimap in bottom right corner of screen,
-Displays terrain cells and camera position</p>
-<p>Uses a completely new 2D canvas, rendering over the WebGL one</p>
-<p>Current problems:
-The collision on the grid is calculated from cameras world position like usual
-But the user appears to go into the out of range cells, due to coordinates being calculated
-from the top left of the square.</p>
-<pre class="code prettyprint"><code>The user doesn't actually go outside of the allowed cells on the map, 
-it just looks like they do on the minimap.</code></pre>
+    <p>Has the skybox render method
+Alas this file creates the day/night cycle</p>
 
 </div>
 
@@ -133,15 +126,23 @@ it just looks like they do on the minimap.</code></pre>
 
                     <ul class="index-list methods">
                             <li class="index-item method public">
+                                <a href="#method_get.currentRotation">get.currentRotation</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.currentTime">get.currentTime</a>
+
+                            </li>
+                            <li class="index-item method public">
                                 <a href="#method_render">render</a>
 
                             </li>
                             <li class="index-item method private">
-                                <a href="#method_renderGrid">renderGrid</a>
+                                <a href="#method_updateDay">updateDay</a>
 
                             </li>
                             <li class="index-item method private">
-                                <a href="#method_renderUser">renderUser</a>
+                                <a href="#method_updateSkyboxAttributesAndUniforms">updateSkyboxAttributesAndUniforms</a>
 
                             </li>
                     </ul>
@@ -154,6 +155,92 @@ it just looks like they do on the minimap.</code></pre>
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_get.currentRotation" class="method item public">
+    <h3 class="name"><code>get.currentRotation</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Skybox.js.html#l19"><code>Skybox.js:19</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>the cameras current rotation</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.currentTime" class="method item public">
+    <h3 class="name"><code>get.currentTime</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Skybox.js.html#l27"><code>Skybox.js:27</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>the current time of the world (0000 -&gt; 2400)</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_render" class="method item public">
     <h3 class="name"><code>render</code></h3>
 
@@ -170,7 +257,7 @@ it just looks like they do on the minimap.</code></pre>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/Minimap.js.html#l117"><code>Minimap.js:117</code></a>
+        <a href="../files/Skybox.js.html#l304"><code>Skybox.js:304</code></a>
         </p>
 
 
@@ -178,7 +265,7 @@ it just looks like they do on the minimap.</code></pre>
     </div>
 
     <div class="description">
-        <p>Calls methods ot render grid and user</p>
+        <p>Renders the skybox</p>
 
     </div>
 
@@ -186,8 +273,8 @@ it just looks like they do on the minimap.</code></pre>
 
 
 </div>
-<div id="method_renderGrid" class="method item private">
-    <h3 class="name"><code>renderGrid</code></h3>
+<div id="method_updateDay" class="method item private">
+    <h3 class="name"><code>updateDay</code></h3>
 
         <span class="paren">()</span>
 
@@ -202,7 +289,7 @@ it just looks like they do on the minimap.</code></pre>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/Minimap.js.html#l62"><code>Minimap.js:62</code></a>
+        <a href="../files/Skybox.js.html#l120"><code>Skybox.js:120</code></a>
         </p>
 
 
@@ -210,8 +297,11 @@ it just looks like they do on the minimap.</code></pre>
     </div>
 
     <div class="description">
-        <p>Private
-The below code draws the blue lines across the minimap</p>
+        <p>This function:
+Updates the time of day,
+Updates the skybox from night to day etc
+Changes fog colour based on time of day
+Sets the water reflectivity based on time of day (at night, no specular highlights)</p>
 
     </div>
 
@@ -219,8 +309,8 @@ The below code draws the blue lines across the minimap</p>
 
 
 </div>
-<div id="method_renderUser" class="method item private">
-    <h3 class="name"><code>renderUser</code></h3>
+<div id="method_updateSkyboxAttributesAndUniforms" class="method item private">
+    <h3 class="name"><code>updateSkyboxAttributesAndUniforms</code></h3>
 
         <span class="paren">()</span>
 
@@ -235,7 +325,7 @@ The below code draws the blue lines across the minimap</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/Minimap.js.html#l43"><code>Minimap.js:43</code></a>
+        <a href="../files/Skybox.js.html#l273"><code>Skybox.js:273</code></a>
         </p>
 
 
@@ -243,9 +333,8 @@ The below code draws the blue lines across the minimap</p>
     </div>
 
     <div class="description">
-        <p>Private
-Maps the user position in the world, to the position on the canvas
-Then draws the user as a blue square</p>
+        <p>This function loads the skybox variables into the shader
+It also rotates the skybox</p>
 
     </div>
 

@@ -28,6 +28,7 @@ function CollisionTester(){
 	Called from render(), tests all collision
 	
 	@method testAllCollision
+	@public
 	*/
 	this.testAllCollision = function(){
 		setCameraHeight();
@@ -43,6 +44,7 @@ function CollisionTester(){
 	The camera height then gets assigned to the nearest terrain vertex.
 	
 	@method setCameraHeight
+	@private
 	*/
 	function setCameraHeight(){
 		
@@ -70,13 +72,12 @@ function CollisionTester(){
 	}
 
 	/**
-	Private
-	
 	Player coordinates are sometimes decimals, 
 	So get floored so they don't mess up the array indexing,
 	as array indexes must be a integer.
 	
 	@method floorTemporaryPlayerCoordinates
+	@private
 	*/
 	function floorTemporaryPlayerCoordinates(){
 		if(tempCameraX / terrain.scale < 0.5){
@@ -93,8 +94,6 @@ function CollisionTester(){
 	}
 
 	/**
-	Private
-	
 	Need to find what height to position the player at.
 	So need to find what terrain vertex they're nearest to.
 	
@@ -105,6 +104,7 @@ function CollisionTester(){
 	So call the getter method
 	
 	@method findNearestTerrainVertex
+	@private
 	@return {int} the height of the nearest vertex + 4, to position the camera at
 			adding + 4 because otherwise the camera would be in the floor
 	*/	
@@ -134,6 +134,7 @@ function CollisionTester(){
 		Then player has collided moving backward, so move the player forwards
 		
 	@method pushPlayer
+	@private
 	@param direction {int} the direction to push them, push backwards = 1, push forwards = -1
 	*/
 	function pushPlayer(direction){
@@ -149,6 +150,7 @@ function CollisionTester(){
 	else, they collided with edge of map, keep HP same
 	
 	@method movePlayerForwardOrBackward
+	@private
 	*/	
 	function movePlayerForwardOrBackward(){
 		// If they collided whilst moving forward, push them back etc
@@ -164,6 +166,7 @@ function CollisionTester(){
 	Tests if player is going out of map boundaries, moves them back if so
 	
 	@method testCameraMapBoundaries
+	@private
 	*/
 	function testCameraMapBoundaries(){
 
@@ -215,6 +218,7 @@ function CollisionTester(){
 	Test if camera is near a corner, and move them back if so
 		
 	@method testCameraCornerCollision
+	@private
 	@param cornerVector {vec3}, the corner vector to test camera vector against
 	*/
 	function testCameraCornerCollision(cornerVector){

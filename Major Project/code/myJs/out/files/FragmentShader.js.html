@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Minimap</title>
+    <title>FragmentShader.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -90,174 +90,112 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>Minimap Class</h1>
-<div class="box meta">
-
-
-        <div class="foundat">
-            Defined in: <a href="../files/Minimap.js.html#l2"><code>Minimap.js:2</code></a>
-        </div>
-
-            Module: <a href="../modules/Engine.html">Engine</a>
-
-</div>
-
-
-<div class="box intro">
-    <p>Minimap in bottom right corner of screen,
-Displays terrain cells and camera position</p>
-<p>Uses a completely new 2D canvas, rendering over the WebGL one</p>
-<p>Current problems:
-The collision on the grid is calculated from cameras world position like usual
-But the user appears to go into the out of range cells, due to coordinates being calculated
-from the top left of the square.</p>
-<pre class="code prettyprint"><code>The user doesn't actually go outside of the allowed cells on the map, 
-it just looks like they do on the minimap.</code></pre>
-
-</div>
-
-
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods">
-                            <li class="index-item method public">
-                                <a href="#method_render">render</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_renderGrid">renderGrid</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_renderUser">renderUser</a>
-
-                            </li>
-                    </ul>
-                </div>
-
-
-
-        </div>
-
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-<div id="method_render" class="method item public">
-    <h3 class="name"><code>render</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l117"><code>Minimap.js:117</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Calls methods ot render grid and user</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_renderGrid" class="method item private">
-    <h3 class="name"><code>renderGrid</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l62"><code>Minimap.js:62</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Private
-The below code draws the blue lines across the minimap</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_renderUser" class="method item private">
-    <h3 class="name"><code>renderUser</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/Minimap.js.html#l43"><code>Minimap.js:43</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Private
-Maps the user position in the world, to the position on the canvas
-Then draws the user as a blue square</p>
-
-    </div>
-
-
-
-
-</div>
-            </div>
-
-
-
-    </div>
+<h1 class="file-heading">File: FragmentShader.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * Fragment shader
+ * 
+ * @module Engine
+*/
+var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(fragmentShader, [
+	/*
+	Varying means &#x27;in&#x27; to the fragment shader
+	*/
+	&#x27;precision highp float;&#x27;,
+	
+	&#x27;varying highp vec2 vTextureCoord;&#x27;,
+	&#x27;uniform sampler2D uSampler;&#x27;,
+	
+	// Specular lighting, take in toCameraVector
+	&#x27;varying vec3 surfaceNormal;&#x27;,
+	&#x27;varying vec3 toCameraVector;&#x27;,
+	
+	&#x27;uniform vec3 lightColour;&#x27;,
+	&#x27;uniform float shineDamper;&#x27;,
+	&#x27;uniform float reflectivity;&#x27;,
+	
+	 // For directional
+	&#x27;uniform vec3 reverseLightDirection;&#x27;,
+	&#x27;uniform vec3 lightDirection;&#x27;,
+	
+	// Clip plane for water
+	&#x27;uniform vec4 clipPlane;&#x27;,
+	&#x27;varying vec4 fragPosition;&#x27;,
+	
+	// Fog
+	&#x27;varying float visibility;&#x27;,
+	&#x27;uniform vec4 skyColour;&#x27;,
+	&#x27;uniform bool useFog;&#x27;,
+	
+	// Blending for map boundary
+	&#x27;uniform float alpha;&#x27;,
+	&#x27;uniform bool useAlpha;&#x27;,
+	
+	&#x27;void main(){&#x27;,
+		// Normalize vectors to ensure size 1, so vector size doesn&#x27;t affect .product
+		// Directional
+		&#x27;vec3 unitNormal = normalize(surfaceNormal);&#x27;,
+		&#x27;float uncheckedBrightness = dot(unitNormal, reverseLightDirection);&#x27;,
+		&#x27;float brightness = max(uncheckedBrightness, 0.5);&#x27;, //gives ambient light and not below 0.5
+		&#x27;vec3 diffuse = brightness * lightColour ;&#x27;,
+		
+		// New specular, reverseLightDirection/unitLightVector might have to be re-reversed here
+		// so passed in lightDirection
+		&#x27;vec3 surfaceToLightDirection = normalize(lightDirection);&#x27;, //don&#x27;t need to normalize, its the direction not position
+		&#x27;vec3 surfaceToCameraDirection = toCameraVector;&#x27;,
+		&#x27;vec3 halfVector = normalize(surfaceToLightDirection + surfaceToCameraDirection);&#x27;,
+		&#x27;float light = dot(surfaceNormal, surfaceToLightDirection);&#x27;, //how close are they?
+		&#x27;float specular = dot(surfaceNormal, halfVector);&#x27;,
+		
+		// New code, from the old specular code, might break
+		// Adds ability to change specular parameters
+		// Now have the 2 vectors needed for dot product, to see how much of the reflected light is going into camera
+		// also make sure its greater than 0
+		&#x27;specular = max(specular, 0.0);&#x27;,
+		&#x27;float dampedFactor = pow(specular, shineDamper);&#x27;,
+		// Now to get final specular light value, multiply by specular light by the light colour
+		&#x27;vec3 finalSpecular = dampedFactor *  reflectivity * lightColour;&#x27;,
+		
+		/*
+		Clip plane equation test, discard fragment if fails
+		
+		Cant use lessThan passing in 2 floats,
+		Have to use vec2&#x27;s at least
+		
+		So just use the float returned from dot, and add a 0, to make vec2
+		*/
+		&#x27;vec2 temp = vec2(dot(fragPosition, clipPlane), 0);&#x27;,
+		&#x27;vec2 zero = vec2(0, 0);&#x27;,
+		&#x27;bvec2 result = bvec2(lessThan(temp, zero));&#x27;,
+		
+		// Don&#x27;t care about result 1, thats just comparing 0 to 0
+		&#x27;if( result[0] == true ){&#x27;,
+			&#x27;discard;&#x27;,
+		&#x27;}&#x27;,
+		
+		&#x27;gl_FragColor = vec4(diffuse, 1.0) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));&#x27;,
+		
+		// Add lighting 
+		&#x27;gl_FragColor.rgb *= light;&#x27;,
+		&#x27;gl_FragColor.rgb += finalSpecular;&#x27;,
+
+		// Fog, mix the skyColour and colour of the object
+		// mixing skyColour with gl_FragColor is that right?
+		&#x27;gl_FragColor = mix(skyColour, gl_FragColor, visibility);&#x27;,
+		
+		// Makes the terrain borders transparent
+		&#x27;if(useAlpha){&#x27;,
+			&#x27;gl_FragColor[3] = gl_FragColor[3] * alpha;&#x27;,
+		&#x27;}&#x27;,
+
+	&#x27;}&#x27;
+].join(&#x27;\n&#x27;));
+gl.compileShader(fragmentShader);
+console.log(&quot;Fragment shader compliation status: &quot; + gl.getShaderInfoLog(fragmentShader));
+    </pre>
 </div>
                     </div>
                 </div>

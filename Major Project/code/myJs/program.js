@@ -1,13 +1,15 @@
-/*
-This file currently handles:
-	Linking shaders into program
-	
-	Getting and enabling shader variables
-	
-	Global definition of matrices and camera matrix info
-	
-	The updateAttributesAndUniforms function to pull values from global matrices and values,
-	to update the shader values
+/**
+ * This file currently handles:
+ * 	Linking shaders into program
+ * 	
+ * 	Getting and enabling shader variables
+ * 	
+ * 	Global definition of matrices and camera matrix info
+ * 	
+ * 	The updateAttributesAndUniforms function to pull values from global matrices and values,
+ * 	to update the shader values
+ * 	
+ * 	@module Engine
 */
 
 /*

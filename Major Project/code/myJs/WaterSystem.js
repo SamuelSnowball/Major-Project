@@ -52,6 +52,7 @@ function WaterSystem(){
 	this.get = {
 		/**
 		@method get.waterReflectivity
+		@public
 		@return {float} the waters reflectivity
 		*/
 		get waterReflectivity(){
@@ -60,6 +61,7 @@ function WaterSystem(){
 		
 		/**
 		@method get.waterReflectivityIncrement
+		@public
 		@return {float} how fast the waterReflectivity changes from day/night
 		*/
 		get waterReflectivityIncrement(){
@@ -70,6 +72,7 @@ function WaterSystem(){
 	this.set = {
 		/**
 		@method set.waterReflectivity
+		@public
 		@param x {float} the reflectivity to set
 		*/
 		set waterReflectivity(x){
@@ -83,6 +86,7 @@ function WaterSystem(){
 	Creates the reflectionDepthBuffer
 	
 	@method setupReflectionFrameBuffer
+	@private
 	*/
 	function setupReflectionFrameBuffer(){
 		reflectionFrameBuffer = gl.createFramebuffer();
@@ -117,6 +121,7 @@ function WaterSystem(){
 	Creates the refractionDepthBuffer
 	
 	@method setupRefractionFrameBuffer
+	@private
 	*/
 	function setupRefractionFrameBuffer(){
 		refractionFrameBuffer = gl.createFramebuffer();
@@ -304,6 +309,7 @@ function WaterSystem(){
 	Renders everything under the water height to the refractionFrameBuffer
 	
 	@method renderToRefractionBuffer
+	@public
 	*/
 	this.renderToRefractionBuffer = function(){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, refractionFrameBuffer);
@@ -340,6 +346,7 @@ function WaterSystem(){
 	Make sure this gets rendered to something that the original scene doesn't render
 	
 	@method renderToReflectionBuffer
+	@public
 	*/
 	this.renderToReflectionBuffer = function(){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, reflectionFrameBuffer);
@@ -376,6 +383,7 @@ function WaterSystem(){
 	Builds the water quad
 	
 	@method setupWaterQuad
+	@private
 	*/
 	function setupWaterQuad(){
 		gl.useProgram(waterProgram);
@@ -413,6 +421,7 @@ function WaterSystem(){
 	This method also calculates and moves the sun position, to match the rotating skybox
 	
 	@method updateWaterAttributesAndUniforms
+	@private
 	*/
 	function updateWaterAttributesAndUniforms(){
 	
@@ -490,6 +499,7 @@ function WaterSystem(){
 		waterNormalMap
 		
 	@method render
+	@public
 	*/
 	this.render = function(){
 		gl.useProgram(waterProgram);
@@ -545,6 +555,7 @@ function WaterSystem(){
 	Test the water reflection frame buffer is an WebGLFrameBuffer object
 	
 	@method test_setupReflectionFrameBuffer
+	@private
 	*/
 	function test_setupReflectionFrameBuffer(){
 		if(gl.isFramebuffer(reflectionFrameBuffer)){
@@ -558,6 +569,7 @@ function WaterSystem(){
 	Test the water refraction frame buffer is an WebGLFrameBuffer object
 	
 	@method test_setupRefractionFrameBuffer
+	@private
 	*/
 	function test_setupRefractionFrameBuffer(){
 		if(gl.isFramebuffer(refractionFrameBuffer)){
@@ -573,6 +585,7 @@ function WaterSystem(){
 	And check the uniform locations are WebGLUniformLocation objects
 	
 	@method test_waterShaderLocationVariables
+	@private
 	*/
 	function test_waterShaderLocationVariables(){
 		test_isNaN("waterPositionAttribLocation", waterPositionAttribLocation);
@@ -591,6 +604,7 @@ function WaterSystem(){
 	Tests if passed in value is NaN
 	
 	@method test_isNaN
+	@private
 	@param name {string} the name of the attribute to test, so we can print an error
 	@param value {int} the value to test
 	*/
@@ -604,6 +618,7 @@ function WaterSystem(){
 	Tests if location is a WebGLUniformLocation
 	
 	@method test_isWebGLUniformLocation
+	@private
 	@param name {string} the name of the attribute to test, so we can print an error
 	@param location {buffer} the location value to test
 	*/

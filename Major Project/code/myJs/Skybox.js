@@ -1,4 +1,10 @@
 
+/**
+ * Has the skybox render method
+ * Also this file creates the day/night cycle
+ * 
+ * @class Skybox
+*/
 function Skybox(){
 	
 	var rotationSpeed = 1; // 1 degree per frame
@@ -12,6 +18,7 @@ function Skybox(){
 	this.get = {
 		/**
 		@method get.currentRotation
+		@public
 		@return {float} the cameras current rotation
 		*/
 		get currentRotation(){
@@ -19,6 +26,7 @@ function Skybox(){
 		},
 		/**
 		@method get.currentTime
+		@public
 		@return {float} the current time of the world (0000 -> 2400)
 		*/		
 		get currentTime(){
@@ -117,6 +125,7 @@ function Skybox(){
 		Sets the water reflectivity based on time of day (at night, no specular highlights)
 	
 	@method updateDay
+	@private
 	*/
 	function updateDay(){
 		
@@ -266,6 +275,7 @@ function Skybox(){
 	It also rotates the skybox
 	
 	@method updateSkyboxAttributesAndUniforms
+	@private
 	*/
 	function updateSkyboxAttributesAndUniforms( ){
 		// Remove the translation from the view matrix
@@ -295,6 +305,7 @@ function Skybox(){
 	Renders the skybox
 	
 	@method render
+	@public
 	*/
 	this.render = function(){
 		gl.useProgram(skyboxProgram);

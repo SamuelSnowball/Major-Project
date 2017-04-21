@@ -53,6 +53,7 @@ function RockGenerator(){
 	For every terrain quadrant, generate a set of rocks for it
 	
 	@method buildAllRockData
+	@private
 	*/
 	function buildAllRockData(){
 		for(var x=0; x<terrain.get.getNumberQuadrantRows; x++){
@@ -77,6 +78,7 @@ function RockGenerator(){
  		Generate small rock (high chance)
 		
 	@method setupInstancedRockBuffers
+	@private
 	@param x {int} The x index of the quadrant to generate the rocks in, 
 				   the actual position of the rock is calculated in this method
 	@param z {int} The z index of the quadrant to generate the rocks in
@@ -149,6 +151,7 @@ function RockGenerator(){
 	Sets up the 1st column of the matrix translation
 	
 	@method generateMatricesForTransformRow1
+	@private
 	@param xMin {int} the index to calculate where the minimum rock X spawn position should be
 	*/
 	function generateMatricesForTransformRow1(xMin){
@@ -193,6 +196,7 @@ function RockGenerator(){
 	Sets up the 2nd column of the matrix translation
 	
 	@method generateMatricesForTransformRow2
+	@private
 	*/
 	function generateMatricesForTransformRow2(){
 		/*
@@ -231,6 +235,7 @@ function RockGenerator(){
 	Sets up the 3rd column of the matrix translation
 	
 	@method generateMatricesForTransformRow3
+	@private
 	@param zMin {int} the index to calculate where the minimum rock Z spawn position should be
 	*/
 	function generateMatricesForTransformRow3(zMin){
@@ -266,6 +271,7 @@ function RockGenerator(){
 	Sets up the 4th column of the matrix translation
 	
 	@method generateMatricesForTransformRow4
+	@private
 	*/	
 	function generateMatricesForTransformRow4(){
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fullTransformsRow4);
@@ -292,6 +298,7 @@ function RockGenerator(){
 	See terrain.render for comments on terrain render indices
 	
 	@method renderInstancedRocks
+	@public
 	*/
 	this.renderInstancedRocks = function(){
 
@@ -399,6 +406,8 @@ function RockGenerator(){
 	Test mesh.numInstances is correct length
 	The data array contains values for the one column only, at a time
 	
+	@example
+	
 	Parameter: the column it was called for, to print correct error message
 	
 	(First time being called, uses this column)
@@ -412,6 +421,7 @@ function RockGenerator(){
 	 12 x, x, x]
 	 
 	@method test_matricesForTransformRow
+	@private
 	@param column {int} the matrix column to test
 	*/
 	function test_matricesForTransformRow(column){
