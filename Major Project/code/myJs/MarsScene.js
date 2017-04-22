@@ -5,6 +5,7 @@ it also contains the setup and render methods
 */
 
 var useTests = true; // change this to enable/disable testing
+var genericTestingObject = new GenericTestingClass();
 	
 /*
 Creates the main program object for rendering the scene (the vertex/fragment shaders combiend) 

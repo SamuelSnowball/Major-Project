@@ -430,52 +430,23 @@ function MainProgram(vertexShader, fragmentShader){
 	@private
 	*/
 	function test_allUniformLocations(){
-		test_isWebGLUniformLocation("modelLocation", modelLocation);
-		test_isWebGLUniformLocation("viewMatrixLocation", viewMatrixLocation);
-		test_isWebGLUniformLocation("inverseViewMatrixLocation", inverseViewMatrixLocation);
-		test_isWebGLUniformLocation("projectionLocation", projectionLocation);
-		test_isWebGLUniformLocation("lightPositionUniformLocation", lightPositionUniformLocation);
-		test_isWebGLUniformLocation("lightColourUniformLocation", lightColourUniformLocation);
-		test_isWebGLUniformLocation("shineDamperUniformLocation", shineDamperUniformLocation);
-		test_isWebGLUniformLocation("reflectivityUniformLocation", reflectivityUniformLocation);
-		test_isWebGLUniformLocation("reverseLightDirectionLocation", reverseLightDirectionLocation);
-		test_isWebGLUniformLocation("lightDirectionLocation", lightDirectionLocation);
-		test_isWebGLUniformLocation("skyColourLocation", skyColourLocation);
-		test_isWebGLUniformLocation("useFogLocation", useFogLocation);
-		test_isWebGLUniformLocation("useInstancingLocation", useInstancingLocation);
-		test_isWebGLUniformLocation("clipPlaneLocation", clipPlaneLocation);
-		test_isWebGLUniformLocation("alphaLocation", alphaLocation);
-		test_isWebGLUniformLocation("useAlphaLocation", useAlphaLocation);
+		genericTestingObject.test_isWebGLUniformLocation("modelLocation", modelLocation);
+		genericTestingObject.test_isWebGLUniformLocation("viewMatrixLocation", viewMatrixLocation);
+		genericTestingObject.test_isWebGLUniformLocation("inverseViewMatrixLocation", inverseViewMatrixLocation);
+		genericTestingObject.test_isWebGLUniformLocation("projectionLocation", projectionLocation);
+		genericTestingObject.test_isWebGLUniformLocation("lightPositionUniformLocation", lightPositionUniformLocation);
+		genericTestingObject.test_isWebGLUniformLocation("lightColourUniformLocation", lightColourUniformLocation);
+		genericTestingObject.test_isWebGLUniformLocation("shineDamperUniformLocation", shineDamperUniformLocation);
+		genericTestingObject.test_isWebGLUniformLocation("reflectivityUniformLocation", reflectivityUniformLocation);
+		genericTestingObject.test_isWebGLUniformLocation("reverseLightDirectionLocation", reverseLightDirectionLocation);
+		genericTestingObject.test_isWebGLUniformLocation("lightDirectionLocation", lightDirectionLocation);
+		genericTestingObject.test_isWebGLUniformLocation("skyColourLocation", skyColourLocation);
+		genericTestingObject.test_isWebGLUniformLocation("useFogLocation", useFogLocation);
+		genericTestingObject.test_isWebGLUniformLocation("useInstancingLocation", useInstancingLocation);
+		genericTestingObject.test_isWebGLUniformLocation("clipPlaneLocation", clipPlaneLocation);
+		genericTestingObject.test_isWebGLUniformLocation("alphaLocation", alphaLocation);
+		genericTestingObject.test_isWebGLUniformLocation("useAlphaLocation", useAlphaLocation);
 	}
-	
-	/**
-	Tests if location is a WebGLUniformLocation
-	
-	@method test_isWebGLUniformLocation
-	@private
-	@param name {string} the name of the attribute to test, so we can print an error
-	@param location {buffer} the location value to test
-	*/
-	function test_isWebGLUniformLocation(name, location){
-		if(!location instanceof WebGLUniformLocation){
-			console.error("In test_isWebGLUniformLocation: " + name + ", is not a WebGLUniformLocation");
-		}
-	}
-	
-	/**
-	Tests if location is a WebGLUniformLocation
-	
-	@method test_isWebGLUniformLocation
-	@private
-	@param name {string} the name of the attribute to test, so we can print an error
-	@param location {buffer} the location value to test
-	*/
-	function test_isWebGLUniformLocation(name, location){
-		if(!location instanceof WebGLUniformLocation){
-			console.error("In test_isWebGLUniformLocation: " + name + ", is not a WebGLUniformLocation");
-		}
-	}
-			
 		
 	/**
 	Tests all attrib locations to see if they're valid
@@ -483,29 +454,16 @@ function MainProgram(vertexShader, fragmentShader){
 	@method test_allAttribLocations
 	*/
 	function test_allAttribLocations(){
-		test_isNaN("positionAttribLocation", positionAttribLocation);
-		test_isNaN("textureCoordLocation", textureCoordLocation);
-		test_isNaN("normalAttribLocation", normalAttribLocation);
-		test_isNaN("instancingLocation0", instancingLocation0);
-		test_isNaN("instancingLocation1", instancingLocation1);
-		test_isNaN("instancingLocation2", instancingLocation2);
-		test_isNaN("instancingLocation3", instancingLocation3);
+		genericTestingObject.test_isNaN_orInt("positionAttribLocation", positionAttribLocation);
+		genericTestingObject.test_isNaN_orInt("textureCoordLocation", textureCoordLocation);
+		genericTestingObject.test_isNaN_orInt("normalAttribLocation", normalAttribLocation);
+		genericTestingObject.test_isNaN_orInt("instancingLocation0", instancingLocation0);
+		genericTestingObject.test_isNaN_orInt("instancingLocation1", instancingLocation1);
+		genericTestingObject.test_isNaN_orInt("instancingLocation2", instancingLocation2);
+		genericTestingObject.test_isNaN_orInt("instancingLocation3", instancingLocation3);
 	}
 	
-	
-	/**
-	Tests if passed in value is NaN
-	
-	@method test_isNaN
-	@private
-	@param name {string} the name of the attribute to test, so we can print an error
-	@param value {int} the value to test
-	*/
-	function test_isNaN(name, value){
-		if(isNaN(value)){
-			console.error("In test_waterShaderLocationVariables, " + name + " was NaN!");
-		}
-	}
+
 
 }
 
