@@ -9,9 +9,7 @@ The project is being developed using the SCRUM methodology.
 
 A release version is published at the end of every sprint.
 
-## Screenshots
-
-Current scene:
+## Current scene:
 ![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/current/4.png) <br>
 
 ## View the docs, located in code/myJs/out/index.html <br>
