@@ -131,8 +131,6 @@ function MyGUI(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
 			window.cancelAnimationFrame(animationFrameID);
 			requestId = undefined;
-
-			textureLoader = new TextureLoader();
 			
 			// Remake terrain
 			ui_terrain_size = systemOptions['Terrain_size'];

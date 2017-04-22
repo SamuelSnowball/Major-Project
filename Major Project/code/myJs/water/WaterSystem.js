@@ -14,6 +14,9 @@
 */
 function WaterSystem(){
 	
+	var WATER_DUDV_MAP_TEXTURE = new Texture('resources/water/waterDUDV.png', 10, 5);
+	var WATER_NORMAL_MAP_TEXTURE = new Texture('resources/water/waterNormalMap.png', 10, 5);
+		
 	var waterVertexPositionBuffer;
 	var waterVertices = [];
 	var moveFactor = 0;
@@ -127,7 +130,7 @@ function WaterSystem(){
 			var distance = 2 * (camera.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
 			camera.set.y = camera.get.y - distance;
 			camera.set.targetY = -camera.get.targetY;
-			currentTexture = mapTexture;
+			currentTexture = WATER_DUDV_MAP_TEXTURE;
 			camera.updateCamera();
 			
 			// Want to render everything above the waters surface, so normal as 0,1,0

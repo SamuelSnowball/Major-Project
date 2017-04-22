@@ -11,6 +11,8 @@
 */
 function ParticleSystem(){
 	
+	var myParticleTexture = new Texture("resources/particles/smoke.png", 10, 0);
+	
 	var particle_vertices = [];
 	var particle_uvs = [];
 	var particle_normals = [];
@@ -191,12 +193,11 @@ function ParticleSystem(){
 	@public
 	*/
 	this.render = function(){
-	
 		createParticles();
 
 		currentTexture = myParticleTexture;
 		gl.activeTexture(gl.TEXTURE0);
-		gl.uniform1i(gl.getUniformLocation(mainProgram, "uSampler"), 0);
+		gl.uniform1i(gl.getUniformLocation(mainProgram.get.program, "uSampler"), 0);
 		gl.bindTexture(gl.TEXTURE_2D, currentTexture.getTextureAttribute.texture);
 		
 		scale = m4.scaling(3, 3, 3);
@@ -210,7 +211,7 @@ function ParticleSystem(){
 		mainProgram.updateAttributesAndUniforms();
 			
 		useInstancing = true;
-		gl.uniform1i(useInstancingLocation, mainProgram.get.useInstancing);
+		gl.uniform1i(mainProgram.get.useInstancingLocation, useInstancing);
 		
 		gl.enableVertexAttribArray(mainProgram.get.instancingLocation0);
 		gl.enableVertexAttribArray(mainProgram.get.instancingLocation1);
@@ -254,7 +255,7 @@ function ParticleSystem(){
 		extension.drawArraysInstancedANGLE(gl.TRIANGLE_STRIP, 0, 4, particleCount);
 
 		useInstancing = false;
-		gl.uniform1i(useInstancingLocation, mainProgram.get.useInstancing);
+		gl.uniform1i(mainProgram.get.useInstancingLocation, useInstancing);
 		
 		gl.disableVertexAttribArray(mainProgram.get.instancingLocation0);
 		gl.disableVertexAttribArray(mainProgram.get.instancingLocation1);

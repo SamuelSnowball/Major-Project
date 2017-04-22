@@ -1,0 +1,19 @@
+/**
+ * This file loads the skybox into their global variables
+ * 
+ * Texture knowledge gained from:
+ * 	http://stackoverflow.com/questions/19722247/webgl-wait-for-texture-to-load/19748905#19748905
+ * 	https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+ * 	https://github.com/mdn/webgl-examples/blob/gh-pages/tutorial/sample6/webgl-demo.js
+ * 	
+ * Some rock resources from:
+ * 	http://www.textures.com/download/rocksarid0035/68071?&secure=login
+ * 	https://www.textures.com/download/rocksarid0048/42217?&secure=login
+ * 	https://www.textures.com/download/rocksarid0049/42220?&secure=login
+ * 	
+ * Sand:
+ * 	http://www.textures.com/download/soilbeach0131/106132
+ * 	
+ * 	@class TextureLoader
+ * 	
+*/

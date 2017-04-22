@@ -14,6 +14,12 @@
 */
 function Terrain(){
 	
+	// Textures for floor + map boundaries
+	var mapTexture = new Texture("resources/terrain/floor/sand.png", 10, 0);
+	var borderTexture = new Texture("", 10, 0);
+	gl.bindTexture(gl.TEXTURE_2D, borderTexture.getTextureAttribute.texture);		
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255]));
+	
 	// A 2D array storing stacked perlin noise height values, later assigned to quadrantVertices height coordinate.
 	var heightMap;
 	

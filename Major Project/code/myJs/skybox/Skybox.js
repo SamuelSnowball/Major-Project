@@ -7,6 +7,9 @@
 */
 function Skybox(){
 	
+	var skybox_texture = loadCubeMap(false);
+	var skybox_night_texture = loadCubeMap(true);
+		
 	var rotationSpeed = 1; // 1 degree per frame
 	var currentRotation = 0;
 	var blendFactor = 0; // for blending of the 2 skybox textures
@@ -127,6 +130,58 @@ function Skybox(){
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(skybox_vertices), gl.STATIC_DRAW);
 		gl.vertexAttribPointer(skyboxProgram.get.skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 		gl.useProgram(mainProgram.get.program); 
+	}
+
+	/**
+	@method loadCubeMap
+	@private
+	@param loadNightSkybox {bool} if we should load the night skybox, or the day skybox, true/false
+	*/
+	function loadCubeMap(loadNightSkybox) {
+		var texture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+		
+		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		
+		var faces = [];
+		
+		if(loadNightSkybox === false){
+			faces = [
+				["resources/skybox/right.png", gl.TEXTURE_CUBE_MAP_POSITIVE_X],
+				["resources/skybox/left.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_X],
+				["resources/skybox/top.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Y],
+				["resources/skybox/bottom.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Y],
+				["resources/skybox/back.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Z],
+				["resources/skybox/front.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Z]
+			];
+		}
+		else{
+			faces = [
+				["resources/skybox/nightRight.png", gl.TEXTURE_CUBE_MAP_POSITIVE_X],
+				["resources/skybox/nightLeft.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_X],
+				["resources/skybox/nightTop.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Y],
+				["resources/skybox/nightBottom.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Y],
+				["resources/skybox/nightBack.png", gl.TEXTURE_CUBE_MAP_POSITIVE_Z],
+				["resources/skybox/nightFront.png", gl.TEXTURE_CUBE_MAP_NEGATIVE_Z]
+			];			
+		}
+		
+		for (var i = 0; i < faces.length; i++) {
+			var face = faces[i][1];
+			var image = new Image();
+			image.onload = function(texture, face, image) {
+				return function() {
+					gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+					gl.texImage2D(face, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+				}
+			} (texture, face, image);
+			image.src = faces[i][0];
+		}
+
+		return texture;
 	}
 	
 	/**

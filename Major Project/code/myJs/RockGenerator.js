@@ -13,6 +13,16 @@
 */	
 function RockGenerator(){
 
+	// Rock textures
+	var rockTexture0 = new Texture('resources/rocks/0.png', 10, 0);
+	var rockTexture1 = new Texture('resources/rocks/1.png', 10, 0);
+	var rockTexture2 = new Texture('resources/rocks/2.png', 10, 0);
+	var rockTexture3 = new Texture('resources/rocks/3.png', 10, 0);
+	var rockTexture4 = new Texture('resources/rocks/4.png', 10, 0);
+	var rockTexture5 = new Texture('resources/rocks/5.png', 10, 0);
+	var rockTextures = []
+	rockTextures.push(rockTexture0, rockTexture1, rockTexture2, rockTexture3, rockTexture4, rockTexture5);
+		
 	// OBJ text file
 	var rockObjTextFile = utility.httpGet("resources/rocks/rockObjs/obj/21.txt");
 	

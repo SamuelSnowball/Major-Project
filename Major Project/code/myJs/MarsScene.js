@@ -6,6 +6,8 @@ it also contains the setup and render methods
 
 var useTests = true; // change this to enable/disable testing
 var genericTestingObject = new GenericTestingClass();
+
+var currentTexture; // the global texture set and used when rendering
 	
 /*
 Creates the main program object (the vertex/fragment shaders combined) for rendering the scene 
@@ -19,7 +21,7 @@ var mainProgram = new MainProgram(vertexShader, fragmentShader);
 var myGUI = new MyGUI();
 var utility = new Utility();
 var controls = new PointerLockControls();
-var textureLoader = new TextureLoader();
+//var textureLoader = new TextureLoader();
 var terrain = new Terrain();
 var camera = new Camera();
 var rockGenerator = new RockGenerator();
