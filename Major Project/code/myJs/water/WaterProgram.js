@@ -1,10 +1,25 @@
 
 /**
-
-
+ * The water program that gets used for rendering water, other programs include:
+ * 	Skybox program
+ *  main program
+ * 
+ *  This file currently handles:
+ * 		Linking water vertex/fragment shaders into program
+ * 	
+ * 		Getting and enabling shader variables
+ * 	
+ * 		The updateWaterAttributesAndUniforms function to pull values from global matrices and values,
+ * 		to update the shader values
+ *
+ * @class WaterProgram
+ * @constructor
+ * @param waterVertexShader {string} the string containing the waterVertexShader source
+ * @param waterFragmentShader {string} the string containing the waterFragmentShader source
 */
 function WaterProgram(waterVertexShader, waterFragmentShader){
 	
+	// Create program from shaders
 	var waterProgram = gl.createProgram();
 	gl.attachShader(waterProgram, waterVertexShader);
 	gl.attachShader(waterProgram, waterFragmentShader);
@@ -18,24 +33,14 @@ function WaterProgram(waterVertexShader, waterFragmentShader){
 	*/	
 	
 	var waterPositionAttribLocation = gl.getAttribLocation(waterProgram, 'waterPosition');
-	gl.enableVertexAttribArray(waterPositionAttribLocation);
-	
 	var waterCameraPositionLocation = gl.getUniformLocation(waterProgram, 'cameraPosition');
-	
 	var waterViewMatrixLocation = gl.getUniformLocation(waterProgram, 'viewMatrix');
-
 	var waterProjectionLocation = gl.getUniformLocation(waterProgram, 'projectionMatrix');
-
 	var waterModelLocation = gl.getUniformLocation(waterProgram, 'model');
-	
 	var lightPositionUniformLocation = gl.getUniformLocation(waterProgram, 'lightPosition');
-
 	var lightColourUniformLocation = gl.getUniformLocation(waterProgram, 'lightColour');
-	
 	var waterMoveFactorLocation = gl.getUniformLocation(waterProgram, 'moveFactor');
-	
 	var waterReflectivityLocation = gl.getUniformLocation(waterProgram, 'reflectivity');
-	
 	var waterWaveStrengthLocation = gl.getUniformLocation(waterProgram, 'waveStrength');
 	
 	// @Test

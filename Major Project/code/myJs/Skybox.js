@@ -1,7 +1,7 @@
 
 /**
  * Has the skybox render method
- * Also this file creates the day/night cycle
+ * Also creates the day/night cycle
  * 
  * @class Skybox
 */
@@ -12,18 +12,42 @@ function Skybox(){
 	var blendFactor = 0; // for blending of the 2 skybox textures
 	var time = 0; // time of day
 	var timeIncrement = 0.001;
-	
 	var skyColourIncrement = 0.001; // how quickly the fog increases/decreases based on time of day
+
+	var SIZE = 256; // How far skybox stays away from the player
+	var skybox_vertices_buffer;
+	var skybox_vertices;
+
+	this.set = {
+		/**
+		@method set.currentRotation
+		@public
+		@param x {float} the skyboxes current rotation
+		*/
+		set currentRotation(x){
+			currentRotation = x;
+		},		
+	};
 	
 	this.get = {
 		/**
 		@method get.currentRotation
 		@public
-		@return {float} the cameras current rotation
+		@return {float} the skyboxes current rotation
 		*/
 		get currentRotation(){
 			return currentRotation;
 		},
+
+		/**
+		@method get.rotationSpeed
+		@public
+		@return {float} the skyboxes rotation speed
+		*/
+		get rotationSpeed(){
+			return rotationSpeed;
+		},
+		
 		/**
 		@method get.currentTime
 		@public
@@ -31,91 +55,79 @@ function Skybox(){
 		*/		
 		get currentTime(){
 			return time;
-		}
+		},
+		
+		/**
+		@method get.blendFactor
+		@public
+		@return {float} the blendFactor of the 2 skyboxes
+		*/		
+		get blendFactor(){
+			return blendFactor;
+		}		
 	};
 	
-	var skyboxVertexShader = gl.createShader(gl.VERTEX_SHADER);
-	gl.shaderSource(skyboxVertexShader, [
-		'attribute vec3 skyboxPosition;',
-		'varying vec3 skyboxTextureCoords;',
-
-		'uniform mat4 projectionMatrix;',
-		'uniform mat4 viewMatrix;',
-		
-		// Don't want to apply translation to the skybox,
-		// Keep it at the max clip space coordinates
-		// But want to keep the rotation
-		'void main(void){',
-			'gl_Position = projectionMatrix * viewMatrix * vec4(skyboxPosition, 1.0); ',
-			'skyboxTextureCoords = skyboxPosition;',
-		'}'
-		
-	].join('\n'));
-	gl.compileShader(skyboxVertexShader);
-	console.log("Skybox vertex shader compliation status: " + gl.getShaderInfoLog(skyboxVertexShader));
-	
-	var skyboxFragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-	gl.shaderSource(skyboxFragmentShader, [
-		'precision highp float;',
-		
-		'varying vec3 skyboxTextureCoords;',
-
-		'uniform samplerCube cubeMap;',
-		'uniform samplerCube cubeMap2;', // for night
-		'uniform float blendFactor;', // how much of each skybox texture to render
-		// 0 = just render first texture, 1 = just second 
-
-		'vec3 texture(samplerCube sampler, vec3 c){',
-			'return textureCube(sampler, c).rgb;',
-		'}',
-		
-		// blends skybox with fog colour
-		'uniform vec4 skyColour;',
-		'float lowerLimit = 0.0;',
-		'float upperLimit = 20.0;',
-		
-		'void main(void){',
-			'vec3 sample = texture(cubeMap, skyboxTextureCoords);',
-			'vec3 sample2 = texture(cubeMap2, skyboxTextureCoords);',
-			'vec3 finalSkyboxMixColour = mix(sample, sample2, blendFactor);',
-			
-			'float factor = (skyboxTextureCoords.y - lowerLimit) / (upperLimit - lowerLimit);',
-			'factor = clamp(factor, 0.0, 1.0);',
-			
-			'gl_FragColor = mix(skyColour, vec4(finalSkyboxMixColour, 1.0), factor);',
-		'}'
-		
-	].join('\n'));
-	gl.compileShader(skyboxFragmentShader);
-	console.log("Skybox fragment shader compliation status: " + gl.getShaderInfoLog(skyboxFragmentShader));
-	
-	var skyboxProgram = gl.createProgram();
-	gl.attachShader(skyboxProgram, skyboxVertexShader);
-	gl.attachShader(skyboxProgram, skyboxFragmentShader);
-	gl.linkProgram(skyboxProgram);
-	console.log("skyboxProgram status: " + gl.getProgramInfoLog(skyboxProgram));
-	gl.useProgram(skyboxProgram); //allowed to be here? or at bottom
-
-	/*
-	Attribute locations in new shaders
+	/**
+	@constructor
 	*/
-	gl.useProgram(skyboxProgram);
-		var skyboxPositionAttribLocation = gl.getAttribLocation(skyboxProgram, 'skyboxPosition');
-		gl.enableVertexAttribArray(skyboxPositionAttribLocation);
-		
-		var skyboxViewMatrixLocation = gl.getUniformLocation(skyboxProgram, 'viewMatrix');
-		gl.uniformMatrix4fv(skyboxViewMatrixLocation, false, new Float32Array(viewMatrix));
-		
-		var skyboxProjectionLocation = gl.getUniformLocation(skyboxProgram, 'projectionMatrix');
-		gl.uniformMatrix4fv(skyboxProjectionLocation, false, new Float32Array(projectionMatrix));
-		
-		var skyboxFogColourLocation = gl.getUniformLocation(skyboxProgram, 'skyColour');
-		gl.enableVertexAttribArray(skyboxFogColourLocation);
-		
-		// Skybox blending uniforms
-		var skyboxBlendFactorLocation = gl.getUniformLocation(skyboxProgram, 'blendFactor');
-		
-	gl.useProgram(mainProgram.get.program);
+	createSkyboxVertices();
+	
+	/**
+	@method createSkyboxVertices
+	@private
+	*/
+	function createSkyboxVertices(){
+		gl.useProgram(skyboxProgram.get.program); 
+		skybox_vertices_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, skybox_vertices_buffer);
+
+		skybox_vertices = [        
+			-SIZE,  SIZE, -SIZE,
+			-SIZE, -SIZE, -SIZE,
+			SIZE, -SIZE, -SIZE,
+			 SIZE, -SIZE, -SIZE,
+			 SIZE,  SIZE, -SIZE,
+			-SIZE,  SIZE, -SIZE,
+
+			-SIZE, -SIZE,  SIZE,
+			-SIZE, -SIZE, -SIZE,
+			-SIZE,  SIZE, -SIZE,
+			-SIZE,  SIZE, -SIZE,
+			-SIZE,  SIZE,  SIZE,
+			-SIZE, -SIZE,  SIZE,
+
+			 SIZE, -SIZE, -SIZE,
+			 SIZE, -SIZE,  SIZE,
+			 SIZE,  SIZE,  SIZE,
+			 SIZE,  SIZE,  SIZE,
+			 SIZE,  SIZE, -SIZE,
+			 SIZE, -SIZE, -SIZE,
+
+			-SIZE, -SIZE,  SIZE,
+			-SIZE,  SIZE,  SIZE,
+			 SIZE,  SIZE,  SIZE,
+			 SIZE,  SIZE,  SIZE,
+			 SIZE, -SIZE,  SIZE,
+			-SIZE, -SIZE,  SIZE,
+
+			-SIZE,  SIZE, -SIZE,
+			 SIZE,  SIZE, -SIZE,
+			 SIZE,  SIZE,  SIZE,
+			 SIZE,  SIZE,  SIZE,
+			-SIZE,  SIZE,  SIZE,
+			-SIZE,  SIZE, -SIZE,
+
+			-SIZE, -SIZE, -SIZE,
+			-SIZE, -SIZE,  SIZE,
+			 SIZE, -SIZE, -SIZE,
+			 SIZE, -SIZE, -SIZE,
+			-SIZE, -SIZE,  SIZE,
+			 SIZE, -SIZE,  SIZE
+		];
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(skybox_vertices), gl.STATIC_DRAW);
+		gl.vertexAttribPointer(skyboxProgram.get.skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+		gl.useProgram(mainProgram.get.program); 
+	}
 	
 	/**
 	This function:
@@ -125,9 +137,9 @@ function Skybox(){
 		Sets the water reflectivity based on time of day (at night, no specular highlights)
 	
 	@method updateDay
-	@private
+	@public
 	*/
-	function updateDay(){
+	this.updateDay = function(){
 		
 		// 0.00000000000003 bit slow
 		// 0.0000000000003 bit fast
@@ -219,88 +231,6 @@ function Skybox(){
 		}
 	}
 	
-	gl.useProgram(skyboxProgram);
-	var SIZE = 256;
-	var skybox_vertices_buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, skybox_vertices_buffer);
-	var skybox_vertices = [        
-	    -SIZE,  SIZE, -SIZE,
-	    -SIZE, -SIZE, -SIZE,
-	    SIZE, -SIZE, -SIZE,
-	     SIZE, -SIZE, -SIZE,
-	     SIZE,  SIZE, -SIZE,
-	    -SIZE,  SIZE, -SIZE,
-
-	    -SIZE, -SIZE,  SIZE,
-	    -SIZE, -SIZE, -SIZE,
-	    -SIZE,  SIZE, -SIZE,
-	    -SIZE,  SIZE, -SIZE,
-	    -SIZE,  SIZE,  SIZE,
-	    -SIZE, -SIZE,  SIZE,
-
-	     SIZE, -SIZE, -SIZE,
-	     SIZE, -SIZE,  SIZE,
-	     SIZE,  SIZE,  SIZE,
-	     SIZE,  SIZE,  SIZE,
-	     SIZE,  SIZE, -SIZE,
-	     SIZE, -SIZE, -SIZE,
-
-	    -SIZE, -SIZE,  SIZE,
-	    -SIZE,  SIZE,  SIZE,
-	     SIZE,  SIZE,  SIZE,
-	     SIZE,  SIZE,  SIZE,
-	     SIZE, -SIZE,  SIZE,
-	    -SIZE, -SIZE,  SIZE,
-
-	    -SIZE,  SIZE, -SIZE,
-	     SIZE,  SIZE, -SIZE,
-	     SIZE,  SIZE,  SIZE,
-	     SIZE,  SIZE,  SIZE,
-	    -SIZE,  SIZE,  SIZE,
-	    -SIZE,  SIZE, -SIZE,
-
-	    -SIZE, -SIZE, -SIZE,
-	    -SIZE, -SIZE,  SIZE,
-	     SIZE, -SIZE, -SIZE,
-	     SIZE, -SIZE, -SIZE,
-	    -SIZE, -SIZE,  SIZE,
-	     SIZE, -SIZE,  SIZE
-	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(skybox_vertices), gl.STATIC_DRAW);
-	gl.vertexAttribPointer(skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);
-	gl.useProgram(mainProgram.get.program);
-	
-	/**
-	This function loads the skybox variables into the shader
-	It also rotates the skybox
-	
-	@method updateSkyboxAttributesAndUniforms
-	@private
-	*/
-	function updateSkyboxAttributesAndUniforms( ){
-		// Remove the translation from the view matrix
-		// So the skybox doesn't move in relation to the camera
-		// Stays at max clip space coordinates
-		viewMatrix[12] = 0;
-		viewMatrix[13] = 0;
-		viewMatrix[14] = 0;
-
-		// Increase skybox rotation
-		currentRotation += rotationSpeed * Date.now() * 0.00000000000000009;
-		
-		// Rotate viewMatrix by angle, and store in viewMatrix
-		m4.yRotate(viewMatrix, currentRotation, viewMatrix);
-		
-		// Load blend factor, waterReflectivity, skyColour
-		updateDay();
-		
-		gl.uniform1f(skyboxBlendFactorLocation, blendFactor);
-		
-		gl.uniform4fv(skyboxFogColourLocation, skyColour);
-		gl.uniformMatrix4fv(skyboxViewMatrixLocation, false, new Float32Array(viewMatrix));
-		gl.uniformMatrix4fv(skyboxProjectionLocation, false, new Float32Array(projectionMatrix));
-	}
-	
 	/**
 	Renders the skybox
 	
@@ -308,7 +238,8 @@ function Skybox(){
 	@public
 	*/
 	this.render = function(){
-		gl.useProgram(skyboxProgram);
+		var program = skyboxProgram.get.program;
+		gl.useProgram(program);
 		
 		// Reset matrices
 		scale = m4.scaling(1, 1, 1);
@@ -318,20 +249,20 @@ function Skybox(){
 		position = m4.translation(0, 0, 0);
 
 		// Times matrices together
-		updateSkyboxAttributesAndUniforms();
+		skyboxProgram.updateSkyboxAttributesAndUniforms();
 
 		// CubeMap1 Sample from unit 0
 		gl.activeTexture(gl.TEXTURE0);
-		gl.uniform1i(gl.getUniformLocation(skyboxProgram, "cubeMap"), 0);
+		gl.uniform1i(gl.getUniformLocation(program, "cubeMap"), 0);
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, skybox_texture);
 		
 		// CubeMap2 Sample from unit 1
 		gl.activeTexture(gl.TEXTURE1);
-		gl.uniform1i(gl.getUniformLocation(skyboxProgram, "cubeMap2"), 1);
+		gl.uniform1i(gl.getUniformLocation(program, "cubeMap2"), 1);
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, skybox_night_texture);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, skybox_vertices_buffer);
-		gl.vertexAttribPointer(skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(skyboxProgram.get.skyboxPositionAttribLocation, 3, gl.FLOAT, false, 0, 0);
 		
 		gl.drawArrays(gl.TRIANGLES, 0, skybox_vertices.length/3);
 		

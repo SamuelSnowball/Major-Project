@@ -30,7 +30,10 @@ var waterProgram = new WaterProgram(waterVertexShader, waterFragmentShader);
 var waterFramebuffers = new WaterFramebuffers();
 var waterSystem = new WaterSystem();
 
+// Skybox code
+var skyboxProgram = new SkyboxProgram(skyboxVertexShader, skyboxFragmentShader);
 var skybox = new Skybox();
+
 var minimap = new Minimap();
 var sound = new Sound();
 

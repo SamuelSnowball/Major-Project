@@ -69,7 +69,7 @@ var projectionMatrix = 	m4.perspective(
 */
 function MainProgram(vertexShader, fragmentShader){
 	
-	// The actual program object
+	// create program from shaders
 	var theProgram = gl.createProgram();
 	gl.attachShader(theProgram, vertexShader);
 	gl.attachShader(theProgram, fragmentShader);
