@@ -1,7 +1,7 @@
 
 /**
  * A class containing generic testing functions, that are used throughout the project.
- 
+ *
  * Specific testing functions are kept within their own class.
  * (otherwise horrible amounts of getters/setters are needed to test)
  * 

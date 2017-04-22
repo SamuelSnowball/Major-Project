@@ -54,7 +54,7 @@ function Camera(){
 	
 	var numberQuadrantRows = terrain.get.getNumberQuadrantRows;
 	var numberQuadrantColumns = terrain.get.getNumberQuadrantColumns;
-	
+
 	this.get = {
 		/**
 		@method get.quadrant
@@ -236,6 +236,9 @@ function Camera(){
 	setupMouseMove();
 	setupUserMovement();
 		
+	// @Test
+	if(useTests) test_assignPlayerQuadrant();
+		
 	/**
 	Adds mouse moved event listener, 
 	Changes cameraTarget based on user rotation
@@ -391,5 +394,38 @@ function Camera(){
 			}
 		}
 	}
+	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
+	
+	/**
+	Set the temporary position to 50, 50 
+	This should set the quadrant to 0
+	As the 0th quadrant spans from (0->127x, 0->128z)
+
+	@method test_assignPlayerQuadrant
+	@private
+	*/
+	function test_assignPlayerQuadrant(){
+		var z = 50;
+		var x = 50;
+		
+		var count = 0;
+		for(var r=0; r<numberQuadrantRows; r++){
+			for(var c=0; c<numberQuadrantColumns; c++){
+				if(z > (c * 128) && z < (c + 1) * 128 && 
+					x > (r * 128) && x < (r+1) * 128 ){
+					quadrant = count;
+				}			
+				count ++;
+			}
+		}
+		
+		if(quadrant !== 0){
+			console.error("Error in assignCameraQuadrant, didn't assign properly!");
+		}
+	}
+	
 	
 }

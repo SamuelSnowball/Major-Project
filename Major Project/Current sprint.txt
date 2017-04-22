@@ -25,8 +25,5 @@ Add yuidoc pages in appendices, but where to mention them
 	Minor tasks:
 
 		Water reflection doesn't look right when moving up/down
-
-		Ambient water audio
-			Need mute section?
 			
 		

@@ -125,7 +125,6 @@ function MyGUI(){
 			else{
 				soundPlayer.stop_water_sound();
 			}
-			
 		});
 		
 		systemGUI.add(systemOptions, "Terrain_size", 4, 12).step(2).onFinishChange(function(){
