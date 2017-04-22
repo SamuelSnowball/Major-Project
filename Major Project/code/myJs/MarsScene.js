@@ -8,7 +8,7 @@ var useTests = true; // change this to enable/disable testing
 var genericTestingObject = new GenericTestingClass();
 	
 /*
-Creates the main program object for rendering the scene (the vertex/fragment shaders combiend) 
+Creates the main program object (the vertex/fragment shaders combined) for rendering the scene 
 	Other programs include:
 		WaterProgram
 		SkyboxProgram
@@ -25,6 +25,8 @@ var camera = new Camera();
 var rockGenerator = new RockGenerator();
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
+var minimap = new Minimap();
+var soundPlayer = new SoundPlayer();
 
 // Water code
 var waterProgram = new WaterProgram(waterVertexShader, waterFragmentShader);
@@ -34,9 +36,6 @@ var waterSystem = new WaterSystem();
 // Skybox code
 var skyboxProgram = new SkyboxProgram(skyboxVertexShader, skyboxFragmentShader);
 var skybox = new Skybox();
-
-var minimap = new Minimap();
-var soundPlayer = new SoundPlayer();
 
 /*
 For FPS and memory, uses the library (MIT):
@@ -53,7 +52,7 @@ document.body.appendChild( fpsViewer.dom );
 var animationFrameID;
 	
 /**
- * The main class
+ * The main scene class
  *
  * Contains methods to start and render the scene
  * 

@@ -3,18 +3,17 @@ it will be moved into the product backlog once the sprint has ended.
 
 Sprint 9 (17th - 24th April)
 
-	Tackling tasks from product backlog:
-	
-		Update documentation, class diagram
-		Properly start report
+	Sprint retrospective:
+		Mainly documentation and testing
+		Report started
+		
+		Finish class diagram
 
 		Map/compass
-			Need to mark the unreachable cells
 			Fix lengths of barrier
 			Fix barrier coming in/out of view
 
-		Makse sun a spotlight for nice specular!
-
+		Make sun a spotlight for nice specular!
 
 Email neil
 Describe report in iterations?
