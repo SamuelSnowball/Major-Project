@@ -14,6 +14,7 @@ function MyGUI(){
 	/*
 	UI values
 	*/
+	var ui_sound_enabled = true;
 	var ui_terrain_size = 4;
 	var ui_noise_scale = 25;
 	var ui_noise_octaves = 8;
@@ -22,6 +23,15 @@ function MyGUI(){
 	var ui_water_strength = 0.01;
 	
 	this.get = {
+		/**
+		@method get.ui_sound_enabled
+		@public
+		@return {Bool} if sound is on or off, chosen through the UI
+		*/
+		get ui_sound_enabled(){
+			return ui_sound_enabled;
+		},	
+	
 		/**
 		@method get.ui_terrain_size
 		@public
@@ -82,6 +92,7 @@ function MyGUI(){
 	*/
 	var systemOptions = {
 		Title: "Mars Scene Interaction",
+		Sound: true,
 		Terrain_size: 4,
 		Terrain_noise_scale: 25,
 		Terrain_noise_octaves: 8,
@@ -105,6 +116,18 @@ function MyGUI(){
 	
 		// Add items on the left of the systemOptions
 		systemGUI.add(systemOptions, "Title");
+		systemGUI.add(systemOptions, "Sound").onFinishChange(function(){
+			ui_sound_enabled = systemOptions['Sound'];
+			
+			if(ui_sound_enabled === true){
+				soundPlayer.play_water_sound();
+			}
+			else{
+				soundPlayer.stop_water_sound();
+			}
+			
+		});
+		
 		systemGUI.add(systemOptions, "Terrain_size", 4, 12).step(2).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
 			window.cancelAnimationFrame(animationFrameID);

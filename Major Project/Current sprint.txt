@@ -13,39 +13,18 @@ Sprint 9 (17th - 24th April)
 			Fix lengths of barrier
 			Fix barrier coming in/out of view
 
+		Makse sun a spotlight for nice specular!
+
 
 Email neil
 Describe report in iterations?
 	Would make sense
 
-Have brackets for return values, 
-not for parameters, but have a parameter name
-
-Look at structure of final report for guidance
-
-@return {type} this is a return value
-@param zParam {float} the...
-
-@example
-
-@method
-@private/public
-	check u can see private in docs
-
 Add yuidoc pages in appendices, but where to mention them
-
-Midway through the project i also realized webgl has few advanced tutorials/docuemntation
-where should I mention this?
-
-
 
 	Minor tasks:
 
 		Water reflection doesn't look right when moving up/down
-
-		See whats taking up render time! 
-		Try set rock textures to 1, see differnece
-		Check render time
 
 		Ambient water audio
 			Need mute section?

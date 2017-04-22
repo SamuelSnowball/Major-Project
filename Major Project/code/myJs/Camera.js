@@ -26,7 +26,7 @@ function Camera(){
 	// the + 1 fixes a bug of only 1 quadrant rendering to begin with
 	var cameraPosition = [
 		(terrain.get.getTerrainRows / 2) + 1,
-		5,
+		15,
 		(terrain.get.getTerrainRows / 2) + 1
 	];
 

@@ -36,7 +36,7 @@ var skyboxProgram = new SkyboxProgram(skyboxVertexShader, skyboxFragmentShader);
 var skybox = new Skybox();
 
 var minimap = new Minimap();
-var sound = new Sound();
+var soundPlayer = new SoundPlayer();
 
 /*
 For FPS and memory, uses the library (MIT):
@@ -74,6 +74,7 @@ function MarsScene(){
 		setTimeout(
 			function(){
 				//gameRunning = true;	
+				soundPlayer.play_water_sound();
 				render();
 			}, 1000
 		);

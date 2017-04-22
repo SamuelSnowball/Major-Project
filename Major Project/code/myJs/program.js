@@ -81,76 +81,30 @@ function MainProgram(vertexShader, fragmentShader){
 	Get location of variables in shaders, so we can send data to shaders
 	Enable them if needed
 	*/
-
-	// Model, passing in fullTransforms
 	var modelLocation = gl.getUniformLocation(theProgram, 'model');
-	gl.uniformMatrix4fv(modelLocation, false, new Float32Array(fullTransforms));
-
-	// View matrix
 	var viewMatrixLocation = gl.getUniformLocation(theProgram, 'viewMatrix');
-	gl.uniformMatrix4fv(viewMatrixLocation, false, new Float32Array(viewMatrix));
-
-	// Inverse view matrix
 	var inverseViewMatrixLocation = gl.getUniformLocation(theProgram, 'inverseViewMatrix');
-	gl.uniformMatrix4fv(inverseViewMatrixLocation, false, new Float32Array(m4.inverse(viewMatrix)));
-
-	// Projection
 	var projectionLocation = gl.getUniformLocation(theProgram, 'projection');
-	gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(projectionMatrix));
-
-	// Vertices
 	var positionAttribLocation = gl.getAttribLocation(theProgram, 'position');
-	gl.enableVertexAttribArray(positionAttribLocation);
-
-	// Uvs
 	var textureCoordLocation = gl.getAttribLocation(theProgram, "aTextureCoord");
-	gl.enableVertexAttribArray(textureCoordLocation);
-
-	// Normals
 	var normalAttribLocation = gl.getAttribLocation(theProgram, 'normal');
-	gl.enableVertexAttribArray(normalAttribLocation);
-
-	// Light position
 	var lightPositionUniformLocation = gl.getUniformLocation(theProgram, 'lightPosition');
-
-	// Light color
 	var lightColourUniformLocation = gl.getUniformLocation(theProgram, 'lightColour');
-
-	// Specular lighting, for use on textures
 	var shineDamperUniformLocation = gl.getUniformLocation(theProgram, 'shineDamper');
-
 	var reflectivityUniformLocation = gl.getUniformLocation(theProgram, 'reflectivity');
-
-	// Directional lighting
 	var reverseLightDirectionLocation = gl.getUniformLocation(theProgram, 'reverseLightDirection');
-	gl.enableVertexAttribArray(reverseLightDirectionLocation);
-
-	// Lighting direction
 	var lightDirectionLocation = gl.getUniformLocation(theProgram, 'lightDirection');
-	gl.enableVertexAttribArray(lightDirectionLocation);
-
-	// Sky colour for fog
 	var skyColourLocation = gl.getUniformLocation(theProgram, 'skyColour');
-	gl.enableVertexAttribArray(skyColourLocation);
-
-	// Fog
 	var useFogLocation = gl.getUniformLocation(theProgram, 'useFog');
-	gl.enableVertexAttribArray(useFogLocation);
-
-	// Instancing location for rocks
 	var useInstancingLocation = gl.getUniformLocation(theProgram, 'useInstancing');
-	gl.enableVertexAttribArray(useInstancingLocation);	
-
+	
 	// The 4 vec4s which are combined in the shader to give a matrix4
 	var instancingLocation0 = gl.getAttribLocation(theProgram, "instanceMatrixRow0");
 	var instancingLocation1 = gl.getAttribLocation(theProgram, "instanceMatrixRow1");
 	var instancingLocation2 = gl.getAttribLocation(theProgram, "instanceMatrixRow2");
 	var instancingLocation3 = gl.getAttribLocation(theProgram, "instanceMatrixRow3");
-
 	// Clipping planes for water rendering
 	var clipPlaneLocation = gl.getUniformLocation(theProgram, 'clipPlane');
-	gl.enableVertexAttribArray(clipPlaneLocation);	
-
 	// For blending of the map boundaries
 	var alphaLocation = gl.getUniformLocation(theProgram, 'alpha');
 	var useAlphaLocation = gl.getUniformLocation(theProgram, 'useAlpha');
@@ -424,7 +378,7 @@ function MainProgram(vertexShader, fragmentShader){
 	*/
 	
 	/**
-	Tests all uniform locations to see if they're valid
+	Tests uniform locations to see if they're valid
 	
 	@method test_allUniformLocations
 	@private
@@ -449,9 +403,10 @@ function MainProgram(vertexShader, fragmentShader){
 	}
 		
 	/**
-	Tests all attrib locations to see if they're valid
+	Tests attribute locations to see if they're valid
 	
 	@method test_allAttribLocations
+	@private
 	*/
 	function test_allAttribLocations(){
 		genericTestingObject.test_isNaN_orInt("positionAttribLocation", positionAttribLocation);
@@ -463,9 +418,4 @@ function MainProgram(vertexShader, fragmentShader){
 		genericTestingObject.test_isNaN_orInt("instancingLocation3", instancingLocation3);
 	}
 	
-
-
 }
-
-
-
