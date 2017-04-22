@@ -18,7 +18,7 @@ function Terrain(){
 	var mapTexture = new Texture("resources/terrain/floor/sand.png", 10, 0);
 	var borderTexture = new Texture("", 10, 0);
 	gl.bindTexture(gl.TEXTURE_2D, borderTexture.getTextureAttribute.texture);		
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255]));
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
 	
 	// A 2D array storing stacked perlin noise height values, later assigned to quadrantVertices height coordinate.
 	var heightMap;
@@ -948,27 +948,27 @@ function Terrain(){
 				// Top boundary
 				spawnX = 0;
 				spawnZ = 128-4;
-				scale = m4.scaling(terrainRows, 10, 1);
+				scale = m4.scaling(terrainRows-256, 10, 1);
 			}
 			else if(i === 1){
 				// Bottom boundary
 				spawnX = 0;
 				spawnZ = terrainRows - 128+4;
-				scale = m4.scaling(terrainRows, 10, 1);
+				scale = m4.scaling(terrainRows-256, 10, 1);
 			}
 			else if(i === 2){
 				// Left boundary
 				spawnZ = 0;
 				spawnX = 128-4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows, 10, 1); 
+				scale = m4.scaling(terrainRows-256, 10, 1); 
 			}
 			else if(i === 3){
 				// Right boundary
 				spawnZ = 0;
 				spawnX = terrainRows - 128+4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows, 10, 1); 
+				scale = m4.scaling(terrainRows-256, 10, 1); 
 			}
 		
 			position = m4.translation(spawnX, 0, spawnZ);	
@@ -1186,5 +1186,46 @@ function Terrain(){
 	Don't have unit tests for terrain section rendering,
 	Because I took screen shots when building the algorithm, showing that it works
 	*/
+	
+	/**
+	Tests the setters and getters together, 
+	because to test a getter, it needs to first be set
+	
+	Passing the function without parameters to test_getter, so it doesn't get executed when calling.
+	
+	get.getTerrainRows
+	get.getNumberQuadrantRows
+	get.getNumberQuadrantColumns
+	get.getQuadrantRowSize
+	get.getRenderIndices	
+	
+	heightMapValueAtIndex.setTemporaryHeightMapX
+	heightMapValueAtIndex.setTemporaryHeightMapZ
+	heightMapValueAtIndex.getTemporaryHeightMapValue	
+	
+	@method test_setters_and_getters
+	@public 
+	*/
+	this.test_setters_and_getters = function(){
+		test_getter(this.get.getTerrainRows, numberQuadrantRows * quadrantRowSize);
+		
+	}
+	
+	/**
+	Executes the passed getter, checks against passed value
+	
+	@method test_getter
+	@private
+	@param getter {string} the string of the method name to test
+	@param expectedValue {int} the value the getter should return
+	*/
+	function test_getter(getter, expectedValue){
+		//if(getter() !== numberQuadrantRows * quadrantRowSize){
+			//console.error("this.get." + getter + " not getting properly, or set properly");
+		//}
+	}
+
+	// @Test
+	if(useTests) this.test_setters_and_getters();
 	
 }
