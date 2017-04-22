@@ -11,12 +11,13 @@ Current scene:
 
 ![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/current/4.png)
 
-Older versions:
+View the docs!
+Get an overview of the classes, and details of the methods
+The docs index:
+![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/yuidoc/index.png) <br>
 
-![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/current/3.png)
-
-![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/current/1.png)
-
+Example docs of Camera class:
+![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/yuidoc/camera.png) <br>
 
 This is what I'm <b>basing my scene off</b>: an artist's impression of how Mars may have looked four billion years ago.
 
