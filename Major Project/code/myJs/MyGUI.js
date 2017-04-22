@@ -114,11 +114,13 @@ function MyGUI(){
 	*/
 	function setupSystemGUI(){
 	
+		// Start water audio
+		soundPlayer.play_water_sound();
+	
 		// Add items on the left of the systemOptions
 		systemGUI.add(systemOptions, "Title");
 		systemGUI.add(systemOptions, "Sound").onFinishChange(function(){
 			ui_sound_enabled = systemOptions['Sound'];
-			
 			if(ui_sound_enabled === true){
 				soundPlayer.play_water_sound();
 			}

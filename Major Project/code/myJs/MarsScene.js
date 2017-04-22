@@ -18,6 +18,7 @@ Creates the main program object (the vertex/fragment shaders combined) for rende
 var mainProgram = new MainProgram(vertexShader, fragmentShader);	
 	
 // All scene files and classes
+var soundPlayer = new SoundPlayer();
 var myGUI = new MyGUI();
 var utility = new Utility();
 var controls = new PointerLockControls();
@@ -28,7 +29,6 @@ var rockGenerator = new RockGenerator();
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 var minimap = new Minimap();
-var soundPlayer = new SoundPlayer();
 
 // Water code
 var waterProgram = new WaterProgram(waterVertexShader, waterFragmentShader);
@@ -74,8 +74,6 @@ function MarsScene(){
 	this.start = function(){
 		setTimeout(
 			function(){
-				//gameRunning = true;	
-				soundPlayer.play_water_sound();
 				render();
 			}, 1000
 		);
