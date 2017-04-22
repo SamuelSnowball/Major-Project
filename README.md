@@ -22,9 +22,11 @@ This is what I'm <b>basing my scene off</b>: an artist's impression of how Mars 
 Image from the Mars wikipedia page, it is licensed under Creative Commons: https://en.wikipedia.org/wiki/Mars#/media/File:Eso1509a_-_Mars_planet.jpg
 
 ## View the docs, located in code/myJs/out/index.html <br>
-Get an overview of the classes, and details of the methods, the docs index: <br>
+Get an overview of the classes, and details of the methods <br>
 To see private methods as well, click the "Private" checkbox in the top right options panel. <br>
 The "index" tab isn't working properly, when you click a method it doesn't re-direct properly. So just go on the "Methods panel to view them"<br>
+
+The docs index: <br>
 ![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/yuidoc/index.png) 
 
 Example docs of Camera class: <br>
