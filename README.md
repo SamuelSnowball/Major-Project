@@ -21,9 +21,9 @@ This is what I'm <b>basing my scene off</b>: an artist's impression of how Mars 
 ![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/resources/inspiration/prehestoric_mars.jpg) <br>
 Image from the Mars wikipedia page, it is licensed under Creative Commons: https://en.wikipedia.org/wiki/Mars#/media/File:Eso1509a_-_Mars_planet.jpg
 
-## View the docs! <br>
+## View the docs, located in code/myJs/out/index.html <br>
 Get an overview of the classes, and details of the methods, the docs index: <br>
-![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/yuidoc/index.png) <br> <br>
+![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/yuidoc/index.png) 
 
 Example docs of Camera class: <br>
 ![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/yuidoc/camera.png) <br>
