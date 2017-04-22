@@ -1,0 +1,13 @@
+
+Extra report sections
+
+What happens on CPU vs GPU
+
+FF/Programmable
+In its early days OpenGL, with version 1.x and 2.x used something called the fixed function pipeline. 
+Fixed function means calculations for 3d rendering where built into the hardware, and you couldn’t change it. 
+How lighting/fog/texturing works. Not customizable. 
+Programmable, can replace parts of the pipeline with your own code, shaders. 
+Still cant change triangle rasterizer. Fixed function useful for a basic scene, easier as no writing shaders, 
+
+

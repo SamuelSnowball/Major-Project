@@ -3,52 +3,26 @@ it will be moved into the product backlog once the sprint has ended.
 
 Sprint 9 (17th - 24th April)
 
-	Tackling tasks from product backlog:
-	
-		Update documentation, class diagram
-		Properly start report
+	Sprint retrospective:
+		Mainly documentation and testing
+		Report started
+		
+		Finish class diagram
 
 		Map/compass
-			Need to mark the unreachable cells
 			Fix lengths of barrier
 			Fix barrier coming in/out of view
 
-Whats worrying you?
-	background reading/analysis
+		Make sun a spotlight for nice specular!
 
 Email neil
 Describe report in iterations?
 	Would make sense
 
-Fix param comment on:
-	Camera
-	WaterSystem
-	RockGenerator
-	MyGUI
-	Terrain
-	Minimap
-	CollisionTester
-
-Look at structure of final report for guidance
-
-
-
-
 Add yuidoc pages in appendices, but where to mention them
-
-Midway through the project i also realized webgl has few advanced tutorials/docuemntation
-where should I mention this?
-
-
 
 	Minor tasks:
 
 		Water reflection doesn't look right when moving up/down
-
-		See whats taking up render time! 
-		Try set rock textures to 1, see differnece
-		Check render time
-
-		Ambient water audio
-			Need mute section?
+			
 		

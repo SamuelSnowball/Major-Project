@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 
 <head>
-	<title>Mars Scene in WebGL</title>
+	<title>A Prehistoric Scene of Mars in WebGL</title>
 	<link rel="stylesheet" href="code/css/gui.css">
 	<link rel="stylesheet" href="libraries/jquery-ui-1.12.1.custom/jquery-ui.css">
 	
@@ -23,152 +23,48 @@
 <!-- GUI compass canvas -->
 <canvas id="GUIcanvas"></canvas>
 
+<!-- div to display when user is going out of bounds -->
 <div id="outOfBoundsID" style="visibility: hidden">ALERT - Terrain too dangerous!</div>
 
 <!-- WebGL setup files including main shaders and program -->
 <script src="code/myJs/GLSetup.js"></script>
-<script src="code/myJs/TextureLoader.js"></script>
 <script src="code/myJs/Texture.js"></script>
-<script src="code/myJs/VertexShader.js"></script>
-<script src="code/myJs/FragmentShader.js"></script>
-<script src="code/myJs/Program.js"></script>
+<script src="code/myJs/program/VertexShader.js"></script>
+<script src="code/myJs/program/FragmentShader.js"></script>
+<script src="code/myJs/program/Program.js"></script>
 
-<!-- Project files -->
+<!-- Water code -->
+<script src="code/myJs/water/WaterVertexShader.js"></script>
+<script src="code/myJs/water/WaterFragmentShader.js"></script>
+<script src="code/myJs/water/WaterProgram.js"></script>
+<script src="code/myJs/water/WaterFramebuffers.js"></script>
+<script src="code/myJs/water/WaterSystem.js"></script>
+
+<!-- Skybox code -->
+<script src="code/myJs/skybox/SkyboxVertexShader.js"></script>
+<script src="code/myJs/skybox/SkyboxFragmentShader.js"></script>
+<script src="code/myJs/skybox/SkyboxProgram.js"></script>
+<script src="code/myJs/skybox/Skybox.js"></script>
+
+<!-- Contains useful testing functions -->
+<script src="code/myJs/testing/GenericTestingClass.js"></script>
+
+<!-- Other project files -->
 <script src="code/myJs/CollisionTester.js"></script>
 <script src="code/myJs/Terrain.js"></script>
 <script src="code/myJs/RockGenerator.js"></script>
 <script src="code/myJs/PointerLockControls.js"></script>
 <script src="code/myJs/ParticleSystem.js"></script>
-<script src="code/myJs/WaterSystem.js"></script>
-<script src="code/myJs/Sound.js"></script>
+<script src="code/myJs/SoundPlayer.js"></script>
 <script src="code/myJs/Utility.js"></script>
-<script src="code/myJs/Skybox.js"></script>
 <script src="code/myJs/Camera.js"></script>
 <script src="code/myJs/MyGUI.js"></script>
 <script src="code/myJs/Minimap.js"></script>
+<script src="code/myJs/MarsScene.js"></script>
 
 <script>
-
-var useTests = true; // change this to enable/disable testing
-var gameRunning = false;
-
-var myGUI = new MyGUI();
-var utility = new Utility();
-var controls = new PointerLockControls();
-var textureLoader = new TextureLoader();
-var terrain = new Terrain();
-var camera = new Camera();
-var rockGenerator = new RockGenerator();
-var collisionTester = new CollisionTester();
-//var particleSystem = new ParticleSystem();
-var sound = new Sound();
-var waterSystem = new WaterSystem();
-var skybox = new Skybox();
-var minimap = new Minimap();
-
-/*
-For FPS and memory, uses the library (MIT):
-https://github.com/mrdoob/stats.js/
-
-You can click on the FPS counter to change its setting
-*/
-var fpsViewer = new Stats();
-fpsViewer.showPanel( 0 ); // 0: fps
-document.body.appendChild( fpsViewer.dom );
-
-// Needed to stop/start the scene rendering,
-// when the user changes terrain properties via UI
-var animationFrameID;
-
-/*
-Code from: https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
-*/
-function resize(canvas) {
-	// Lookup the size the browser is displaying the canvas.
-	var displayWidth  = canvas.clientWidth;
-	var displayHeight = canvas.clientHeight;
-
-	// Check if the canvas is not the same size.
-	if (canvas.width  != displayWidth ||
-		canvas.height != displayHeight) {
-		// Make the canvas the same size
-		canvas.width  = displayWidth;
-		canvas.height = displayHeight;
-	}
-}
-
-/**
- * Hi this should appear on a webpage!
- * 
- * 
-*/
-function render(){
-	resize(gl.canvas);
-	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-	
-	fpsViewer.begin();
-
-	// Work out what quadrant we're in, so we know what to render
-	camera.assignCameraQuadrant();
-	
-	// Render the scene to each the reflection and refraction textures
-	// (2x FULL scene render calls)
-	waterSystem.renderToReflectionBuffer();
-	waterSystem.renderToRefractionBuffer();
-	
-	// Now render the scene as usual
-	// We've already switched back to the default frame buffer
-	gl.clearColor(0.8, 0.8, 0.8, 0.7);
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	// Cant disable clipPlane on some drivers, just set to 0, for water
-	clipPlane = [0, 0, 0, 0];
-	
-	camera.updateCamera();
-	
-	/*
-	Don't change render order
-	Terrain render generates the renderIndices, 
-	that are needed for rock rendering
-	The skybox has to render last, or everything breaks
-	*/
-	terrain.render(); 
-	
-	rockGenerator.renderInstancedRocks();
-	
-	//particleSystem.render(); 
-	collisionTester.testAllCollision();
-	
-	waterSystem.render();
-
-	terrain.renderMapBoundaries();
-
-	skybox.render();
-	
-	minimap.render();
-	fpsViewer.end();
-	animationFrameID = requestAnimationFrame(render);
-}
-
-function setup(){
-	gameRunning = true;	
-
-	currentTexture = mapTexture;
-	updateAttributesAndUniforms();
-	camera.updateCamera();
-
-	render();
-}
-
-/*
-Waits x seconds before starting the scene,
-This allows textures to load, avoiding WebGL texture errors
-*/
-setTimeout(
-	function(){
-		setup();  
-	}, 2000
-);
-
+	var scene = new MarsScene();
+	scene.start();
 </script>
 
 </body>

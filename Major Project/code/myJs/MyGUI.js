@@ -5,7 +5,6 @@
  * 
  * @class MyGUI
 */
-
 function MyGUI(){
 
 	var systemGUI = new dat.GUI();
@@ -15,6 +14,7 @@ function MyGUI(){
 	/*
 	UI values
 	*/
+	var ui_sound_enabled = true;
 	var ui_terrain_size = 4;
 	var ui_noise_scale = 25;
 	var ui_noise_octaves = 8;
@@ -24,7 +24,17 @@ function MyGUI(){
 	
 	this.get = {
 		/**
+		@method get.ui_sound_enabled
+		@public
+		@return {Bool} if sound is on or off, chosen through the UI
+		*/
+		get ui_sound_enabled(){
+			return ui_sound_enabled;
+		},	
+	
+		/**
 		@method get.ui_terrain_size
+		@public
 		@return {int} the value for the terrain size, chosen through the UI
 		*/
 		get ui_terrain_size(){
@@ -33,6 +43,7 @@ function MyGUI(){
 		
 		/**
 		@method get.ui_noise_scale
+		@public
 		@return {int} the value for the terrain scale, chosen through the UI
 		*/
 		get ui_noise_scale(){
@@ -41,6 +52,7 @@ function MyGUI(){
 		
 		/**
 		@method get.ui_noise_octaves
+		@public
 		@return {int} the value for the terrain octaves, chosen through the UI
 		*/
 		get ui_noise_octaves(){
@@ -49,6 +61,7 @@ function MyGUI(){
 		
 		/**
 		@method get.ui_min_rocks
+		@public
 		@return {int} the value for the minimum number of rocks, chosen through the UI
 		*/
 		get ui_min_rocks(){
@@ -57,6 +70,7 @@ function MyGUI(){
 		
 		/**
 		@method get.ui_max_rocks
+		@public
 		@return {int} the value for the maximum number of rocks, chosen through the UI
 		*/
 		get ui_max_rocks(){
@@ -65,6 +79,7 @@ function MyGUI(){
 		
 		/**
 		@method get.ui_water_strength
+		@public
 		@return {int} the value for the water strength, chosen through the UI
 		*/
 		get ui_water_strength(){
@@ -77,6 +92,7 @@ function MyGUI(){
 	*/
 	var systemOptions = {
 		Title: "Mars Scene Interaction",
+		Sound: true,
 		Terrain_size: 4,
 		Terrain_noise_scale: 25,
 		Terrain_noise_octaves: 8,
@@ -94,17 +110,27 @@ function MyGUI(){
 	Adds all of the options to the UI, so they can be changed
 	
 	@method setupSystemGUI
+	@private
 	*/
 	function setupSystemGUI(){
 	
 		// Add items on the left of the systemOptions
 		systemGUI.add(systemOptions, "Title");
+		systemGUI.add(systemOptions, "Sound").onFinishChange(function(){
+			ui_sound_enabled = systemOptions['Sound'];
+			
+			if(ui_sound_enabled === true){
+				soundPlayer.play_water_sound();
+			}
+			else{
+				soundPlayer.stop_water_sound();
+			}
+		});
+		
 		systemGUI.add(systemOptions, "Terrain_size", 4, 12).step(2).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
 			window.cancelAnimationFrame(animationFrameID);
 			requestId = undefined;
-
-			textureLoader = new TextureLoader();
 			
 			// Remake terrain
 			ui_terrain_size = systemOptions['Terrain_size'];
@@ -120,7 +146,7 @@ function MyGUI(){
 			
 			collisionTester = new CollisionTester();
 
-			render();
+			scene.start();
 		});
 		systemGUI.add(systemOptions, "Terrain_noise_scale", 1, 50).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
@@ -132,7 +158,7 @@ function MyGUI(){
 			ui_min_rocks = systemOptions['Min_rocks_per_section'];
 			ui_max_rocks = systemOptions['Max_rocks_per_section'];
 			rockGenerator = new RockGenerator();
-			render();
+			scene.start();
 		});
 		systemGUI.add(systemOptions, "Terrain_noise_octaves", 4, 12).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
@@ -144,7 +170,7 @@ function MyGUI(){
 			ui_min_rocks = systemOptions['Min_rocks_per_section'];
 			ui_max_rocks = systemOptions['Max_rocks_per_section'];
 			rockGenerator = new RockGenerator();
-			render();
+			scene.start();
 		});
 		systemGUI.add(systemOptions, "Min_rocks_per_section", 0, 2048).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
@@ -152,7 +178,7 @@ function MyGUI(){
 			requestId = undefined;
 			ui_min_rocks = systemOptions['Min_rocks_per_section'];
 			rockGenerator = new RockGenerator();
-			render();
+			scene.start();
 		});
 		systemGUI.add(systemOptions, "Max_rocks_per_section", 0, 2048).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
@@ -160,7 +186,7 @@ function MyGUI(){
 			requestId = undefined;
 			ui_max_rocks = systemOptions['Max_rocks_per_section'];
 			rockGenerator = new RockGenerator();
-			render();
+			scene.start();
 		});
 		systemGUI.add(systemOptions, "Water_strength", 0.001, 0.5).onFinishChange(function(){
 			ui_water_strength = systemOptions['Water_strength'];
@@ -179,6 +205,7 @@ function MyGUI(){
 	Displays message when use tries to go off map
 	
 	@method showMapCollision
+	@public
 	*/
 	this.showMapCollision = function(){
 		document.getElementById("outOfBoundsID").style.visibility = "visible";	
@@ -191,6 +218,7 @@ function MyGUI(){
 	Hides message when use tries to go off map
 	
 	@method hideMapCollision
+	@public
 	*/
 	this.hideMapCollision = function(){
 		document.getElementById("outOfBoundsID").style.visibility = "hidden";		

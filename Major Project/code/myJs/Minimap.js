@@ -37,15 +37,15 @@ function Minimap(){
 	var canvas_boundary_mapped = (canvas_boundary_unmapped - 0) / (terrain.get.getTerrainRows - 0) * (gui_canvas_max - gui_canvas_min) + gui_canvas_min;
 
 	// Size of user on minimap
-	var user_width = 5;
-	var user_height = 5;
+	var user_width = 2.5;
+	var user_height = 2.5;
 
 	/**
-	Private
 	Maps the user position in the world, to the position on the canvas
 	Then draws the user as a blue square
 	
 	@method renderUser
+	@private
 	*/
 	function renderUser(){
 		// Do the mapping
@@ -53,19 +53,17 @@ function Minimap(){
 		var userZ = (camera.get.z - map_min) / (map_max - map_min) * (gui_canvas_max - gui_canvas_min) + gui_canvas_min;
 		
 		// Now draw
-		gui_context.clearRect(0, 0, canvas_width, canvas_height); // Clears background
-		gui_context.fillStyle = 'rgb(0,0,255)'; // Prepare to draw blue square
+		gui_context.fillStyle = 'rgb(255,255,255)'; // Prepare to draw blue square
 		gui_context.fillRect(userX, userZ, user_width, user_height); // Draws square
 	}
 
 	/**
-	Private
 	The below code draws the blue lines across the minimap
 	
 	@method renderGrid
+	@private
 	*/	
 	function renderGrid(){
-	
 		// For working out how many grid_rows to draw
 		// Since it can be updated via UI, needs to be checked
 		// Should update once via UI, getter/setter
@@ -111,15 +109,39 @@ function Minimap(){
 			grid_end_x += canvas_boundary_mapped;
 		}		
 	}
-
+	
 	/**
-	Calls methods ot render grid and user
+	Render 4 rectangles on the borders of the minimap,
+	marking the out of range cells.
+	
+	If render these first, can just use 4 rectangles, and the grid will properly render over it
+	
+	canvas_boundary_mapped is just the width of a cell
+	
+	@method renderOutOfRangeCells
+	@private
+	*/
+	function renderOutOfRangeCells(){
+		gui_context.fillStyle = 'rgb(25,25,112)'; // Prepare to draw black rectangle
+		
+		gui_context.fillRect(0, 0, canvas_boundary_mapped, canvas_height); // top left to bottom left rect
+		gui_context.fillRect(canvas_width - canvas_boundary_mapped, 0, canvas_boundary_mapped, canvas_height); // top right to bottom right rect
+		gui_context.fillRect(0, 0, canvas_width, canvas_boundary_mapped);  // top left to top right
+		gui_context.fillRect(0, canvas_height - canvas_boundary_mapped, canvas_width, canvas_boundary_mapped); // bottom left to bottom right
+	}
+	
+	/**
+	Calls methods to render grid and user
 	
 	@method render
+	@public
 	*/
 	this.render = function(){
-		renderUser();
+		gui_context.clearRect(0, 0, canvas_width, canvas_height); // Clears minimap for redrawing
+		
+		renderOutOfRangeCells();
 		renderGrid();
+		renderUser();
 	}
 	
 }
