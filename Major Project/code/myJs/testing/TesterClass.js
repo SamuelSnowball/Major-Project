@@ -65,48 +65,68 @@ function TesterClass(){
 	}
 	
 	/**
-	Public to call public methods
+	Tests if passed buffe is vaid WebGLBuffer
+	
+	@method is_buffer
+	@param name {string} the name of the buffer to test
+	@param buffer {WebGLBuffer} the buffer to test
+	*/
+	this.is_buffer = function(name, buffer){
+		if(!gl.isBuffer(buffer)){
+			console.error(name + ", was not a valid buffer object!");
+		}	
+	}
+	
+	
+	/**
+	Calls methods to test everything, that is testable
+	
+	Public, to call public methods
 	Otherwise private calling a public, have to change everything
 	
 	Some terrain tests are in the actual file, because data
 	is being created and reset, need to test inbetween.
 	
 	@method test_scene
-	@constructor
 	@public
 	*/
 	this.test_scene = function(){
 			
-		// Program @Test 
+		// Program @Tests
 		mainProgram.test_allUniformLocations_and_getters();
 		mainProgram.test_allAttribLocations_and_getters();
 		
-		// Terrain @Test
+		// Terrain @Tests
 		terrain.test_createHeightMap();
 		terrain.test_fillHeightMap();
 		terrain.test_setters_and_getters();
 		terrain.test_terrainVAOs();
 		
-		// RockGenerator @Test
+		// RockGenerator @Tests
 		rockGenerator.test_matricesForTransformRow(1);
 		rockGenerator.test_matricesForTransformRow(3);
 		rockGenerator.test_matricesForTransformRow(2);
 		rockGenerator.test_matricesForTransformRow(4);
 		
-		// SkyboxProgram @Test
+		// SkyboxProgram @Tests
 		skyboxProgram.test_allSkyboxAttributeLocationVariables();
 		skyboxProgram.test_allSkyboxUniformLocationVariables();
 	
-		// Skybox @Test
+		// Skybox @Tests
 		skybox.test_skybox_setters_and_getters();
 		
-		// WaterFramebuffers
+		// WaterFramebuffers @Tests
 		waterFramebuffers.test_setupReflectionFrameBuffer();
 		waterFramebuffers.test_setupRefractionFrameBuffer();		
 		waterFramebuffers.test_all_getters();
 		
-		// Water program
+		// Water program @Tests
 		waterProgram.test_waterShaderLocationVariables_and_getters();
+		
+		// Water system @Tests
+		waterSystem.test_water_variables();
+		waterSystem.test_water_buffers();
+		waterSystem.test_water_textures();
 		
 	}
 

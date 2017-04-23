@@ -21,7 +21,7 @@ function WaterSystem(){
 	var waterVertices = [];
 	var moveFactor = 0;
 	
-	var waterHeight = 0;
+	var WATER_HEIGHT = 0; // const
 	var waterReflectivity = 0.0;
 	var waterReflectivityIncrement = 0.001; // how fast to increment/decrement the waterReflectivity based on time of day
 	
@@ -89,7 +89,7 @@ function WaterSystem(){
 	this.renderToRefractionBuffer = function(){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, waterFramebuffers.get.refractionFrameBuffer);
 			// Want to render everything under the water, normal is pointing down
-			clipPlane = [0, -1, 0, -waterHeight]; // last param is water height
+			clipPlane = [0, -1, 0, -WATER_HEIGHT]; // last param is water height
 			gl.clearColor(0.8, 0.8, 0.8, 0.7);
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			gl.viewport(0, 0, 512, 512);
@@ -127,7 +127,7 @@ function WaterSystem(){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, waterFramebuffers.get.reflectionFrameBuffer);
 			// Calculate distance we want to move camera down by
 			// And invert pitch
-			var distance = 2 * (camera.get.y + waterHeight); // + ing, because water is negative, so --5 and breaks
+			var distance = 2 * (camera.get.y + WATER_HEIGHT); // + ing, because water is negative, so --5 and breaks
 			camera.set.y = camera.get.y - distance;
 			camera.set.targetY = -camera.get.targetY;
 			currentTexture = WATER_DUDV_MAP_TEXTURE;
@@ -135,7 +135,7 @@ function WaterSystem(){
 			
 			// Want to render everything above the waters surface, so normal as 0,1,0
 			// Horizontal plane, pointing upwards 
-			clipPlane = [0, 1, 0, -waterHeight]; // last param is water height
+			clipPlane = [0, 1, 0, -WATER_HEIGHT]; // last param is water height
 			gl.clearColor(0.8, 0.8, 0.8, 0.7);
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			gl.viewport(0, 0, 512, 512);
@@ -207,7 +207,7 @@ function WaterSystem(){
 		rotateX = m4.xRotation(0);
 		rotateY = m4.yRotation(0);
 		rotateZ = m4.zRotation(0);
-		position = m4.translation(xScale, waterHeight, zScale);
+		position = m4.translation(xScale, WATER_HEIGHT, zScale);
 		
 		waterProgram.updateWaterAttributesAndUniforms();
 		
@@ -236,6 +236,83 @@ function WaterSystem(){
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 6);
 
 		gl.useProgram(mainProgram.get.program);
+	}
+	
+	/*
+	TESTING FUNCTIONS BELOW
+	
+	getters,setters and variables
+	*/
+		
+	/**
+	Tests: (setters/getters as well)
+		waterVertices
+		moveFactor
+		waterHeight
+		waterReflectivity 
+		waterReflectivityIncrement
+	
+	@method test_water_variables
+	@public
+	*/
+	this.test_water_variables = function(){
+		// Water vertices
+		if(waterVertices.length < 0){
+			console.error("Water vertices wasn't created properly");
+		}
+		
+		// Move factor + setter/getter
+		// Save current move factor, set temporary move factor, test if it was set, restore original move factor
+		var savedFactor = this.get.waterMoveFactor;
+		this.set.waterMoveFactor = 5;
+		if(this.get.waterMoveFactor !== 5){
+			console.error("Error setting/getting waterMoveFactor");
+		}
+		// restore original
+		this.set.waterMoveFactor = savedFactor;
+		
+		// WaterHeight
+		if(WATER_HEIGHT !== 0){
+			console.error("Water height was not 0! It should be 0!");
+		}
+		
+		// Save current Reflectivity, set temporary Reflectivity, test if it was set, restore original Reflectivity
+		var savedReflectivity = this.get.waterReflectivity;
+		this.set.waterReflectivity = 5;
+		if(this.get.waterReflectivity !== 5){
+			console.error("WaterReflectivity was not 5! failed to set/get!");
+		}
+		// restore original
+		this.set.waterReflectivity = savedReflectivity;
+		
+		// WaterReflectivityIncrement
+		if(this.get.waterReflectivityIncrement < 0){
+			console.error("Failed to get waterReflectivityIncrement, returned less than 0!");
+		}
+	}
+	
+	/**
+	Tests:
+		waterVertexPositionBuffer
+	
+	@method test_water_buffers
+	@public
+	*/
+	this.test_water_buffers = function(){
+		testerObject.is_buffer("waterVertexPositionBuffer", waterVertexPositionBuffer);
+	}
+
+	/**
+	Tests:
+		WATER_DUDV_MAP_TEXTURE, 
+		WATER_NORMAL_MAP_TEXTURE
+	
+	@method test_water_textures
+	@public
+	*/
+	this.test_water_textures = function(){
+		testerObject.test_is_texture("WATER_DUDV_MAP_TEXTURE", WATER_DUDV_MAP_TEXTURE.getTextureAttribute.texture);
+		testerObject.test_is_texture("WATER_NORMAL_MAP_TEXTURE", WATER_NORMAL_MAP_TEXTURE.getTextureAttribute.texture);
 	}
 	
 }
