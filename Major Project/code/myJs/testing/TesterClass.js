@@ -95,6 +95,10 @@ function TesterClass(){
 			
 		// MyGUI @Tests
 		myGUI.test_getters();
+		
+		// Camera @Tests
+		camera.test_assignPlayerQuadrant();
+		camera.test_getters_and_setters();
 			
 		// Texture @Tests
 		// Creates a temporary texture object to test getters on
