@@ -21,6 +21,7 @@ To test properly
 	Copy the out bit over
 
 	COPY OVER SOURCE FILES EVERY TIME!
+	COULD SYMLINK ALL SOURCE FILES AND THE OUT FOLDER TO PROJECT DOCS
 
 Email neil
 Describe report in iterations?

@@ -1,7 +1,6 @@
 /**
  * Fragment shader
- * 
- * @module Engine
+ *
 */
 var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 gl.shaderSource(fragmentShader, [
