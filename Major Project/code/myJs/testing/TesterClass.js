@@ -93,6 +93,9 @@ function TesterClass(){
 	*/
 	this.test_scene = function(){
 			
+		// MyGUI @Tests
+		myGUI.test_getters();
+			
 		// Texture @Tests
 		// Creates a temporary texture object to test getters on
 		var tempTexture = new Texture('resources/rocks/0.png', 10, 0);		

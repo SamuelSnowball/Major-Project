@@ -150,7 +150,7 @@ function MyGUI(){
 
 			scene.start();
 		});
-		systemGUI.add(systemOptions, "Terrain_noise_scale", 1, 50).onFinishChange(function(){
+		systemGUI.add(systemOptions, "Terrain_noise_scale", 1, 50).step(1).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
 			window.cancelAnimationFrame(animationFrameID);
 			requestId = undefined;
@@ -162,7 +162,7 @@ function MyGUI(){
 			rockGenerator = new RockGenerator();
 			scene.start();
 		});
-		systemGUI.add(systemOptions, "Terrain_noise_octaves", 4, 12).onFinishChange(function(){
+		systemGUI.add(systemOptions, "Terrain_noise_octaves", 4, 12).step(1).onFinishChange(function(){
 			// on change stopAnimationFrame, terrain = new Terrain, start it again
 			window.cancelAnimationFrame(animationFrameID);
 			requestId = undefined;
@@ -224,6 +224,35 @@ function MyGUI(){
 	*/
 	this.hideMapCollision = function(){
 		document.getElementById("outOfBoundsID").style.visibility = "hidden";		
+	}
+	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
+	
+	/**
+	@method test_getters
+	@public
+	*/
+	this.test_getters = function(){
+		
+		if(this.get.ui_sound_enabled !== false && this.get.ui_sound_enabled !== true){
+			console.error("Failed to set ui_sound_enabled, it wasn't true/false");
+		}
+
+		testerObject.test_isNaN_orInt("ui_tetrain_size", this.get.ui_terrain_size);
+		testerObject.test_isNaN_orInt("ui_noise_scale", this.get.ui_noise_scale);
+		testerObject.test_isNaN_orInt("ui_noise_octaves", this.get.ui_noise_octaves);
+		testerObject.test_isNaN_orInt("ui_min_rocks", this.get.ui_min_rocks);
+		testerObject.test_isNaN_orInt("ui_max_rocks", this.get.ui_max_rocks);
+		
+		if(this.get.ui_water_strength > 0 && this.get.ui_water_strength <= 5){
+			// Valid
+		}
+		else{
+			console.error("UI water strength exceeded max/min values, or setter/getter failed!");
+		}
+		
 	}
 	
 }
