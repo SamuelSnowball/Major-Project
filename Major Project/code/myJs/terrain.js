@@ -210,7 +210,7 @@ function Terrain(){
 				createQuadrantUvs();
 				createQuadrantNormals();
 				
-				// @Test
+				// @Test, has to be here as data gets reset, so need to test them NOW!
 				if(useTests) test_createQuadrantVertices();
 				if(useTests) test_createQuadrantIndices();
 				if(useTests) test_createQuadrantUvs();
@@ -222,7 +222,7 @@ function Terrain(){
 				setupQuadrantUvBuffer();
 				setupQuadrantNormalBuffer();
 				
-				// @Test
+				// @Test, has to be here as data gets reset, so need to test them NOW!
 				if(useTests) test_setupQuadrantBuffers();
 				
 				// Add current VAO to terrainVAOs array, this saves our data in the VAO
@@ -230,8 +230,6 @@ function Terrain(){
 				vao_ext.bindVertexArrayOES(null); 
 			}
 		}
-		// @Test
-		if(useTests) test_terrainVAOs();
 	}
 
 	/*
@@ -241,8 +239,6 @@ function Terrain(){
 	*/
 	
 		/**
-		Private
-		
 		Create the 2D heightMap array:
 			heightMap[terrainRows][terrainColumns];
 			
@@ -254,14 +250,9 @@ function Terrain(){
 			for(var i=0; i<terrainRows; i++){
 				heightMap[i] = new Array(terrainColumns).fill(0);
 			}
-			
-			// @Test
-			if(useTests) test_createHeightMap();
 		}
 		
 		/**
-		Private
-		
 		Takes in a coordinate in 2D heightMap array, loops over specified number of octaves,
 		adds noise octaves onto each other, returns final the height value for the vertex
 		
@@ -333,9 +324,6 @@ function Terrain(){
 						var stacked = stackNoise(x, y ,8);
 						heightMap[x][y] = stacked * 50;						
 					}					
-					
-					// @Test
-					if(useTests) test_fillHeightMap(heightMap[x][y]);
 				}
 				xOff = 0;
 				yOff += offsetIncrement;
@@ -1025,9 +1013,9 @@ function Terrain(){
 	Test 2D heightMap array is of correct size
 	
 	@method test_createHeightMap
-	@private
+	@public
 	*/
-	function test_createHeightMap(){
+	this.test_createHeightMap = function(){
 		if(heightMap.length === quadrantRowSize * numberQuadrantRows && 
 			heightMap[0].length === quadrantColumnSize * numberQuadrantColumns){
 			// It's correct size
@@ -1044,10 +1032,9 @@ function Terrain(){
 	
 	@method test_fillHeightMap
 	@private
-	@param value {int} the value to check 
 	*/
-	function test_fillHeightMap(value){
-		if(isNaN(value)){
+	this.test_fillHeightMap = function(){
+		if(isNaN(heightMap[50][50])){
 			console.error("In fillHeightMap function: One or more of the heightMap values wasn't a number");
 		}
 		else{
@@ -1169,9 +1156,9 @@ function Terrain(){
 	Make sure the terrainVAOs array was filled with WebGLVertexArrayObjectOES objects properly
 	
 	@method test_terrainVAOs
-	@private
+	@public
 	*/
-	function test_terrainVAOs(){
+	this.test_terrainVAOs = function(){
 		for(var i=0; i<numberQuadrantRows * numberQuadrantColumns; i++){
 			if(vao_ext.isVertexArrayOES(terrainVAOs[i])){
 				// Its ok
@@ -1243,7 +1230,6 @@ function Terrain(){
 			
 	}
 	
-	// @Test
-	if(useTests) this.test_setters_and_getters();
+
 	
 }

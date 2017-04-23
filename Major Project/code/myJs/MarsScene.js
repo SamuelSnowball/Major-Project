@@ -4,9 +4,6 @@ This file contains all of the scene objects,
 it also contains the setup and render methods
 */
 
-var useTests = true; // change this to enable/disable testing
-var genericTestingObject = new GenericTestingClass();
-
 var currentTexture; // the global texture set and used when rendering
 	
 /*
@@ -38,6 +35,11 @@ var waterSystem = new WaterSystem();
 // Skybox code
 var skyboxProgram = new SkyboxProgram(skyboxVertexShader, skyboxFragmentShader);
 var skybox = new Skybox();
+
+// Code to enable/disable testing, and call the testing functions
+var useTests = true; // change this to enable/disable testing
+var testerObject = new TesterClass();
+if(useTests) testerObject.test_scene();
 
 /*
 For FPS and memory, uses the library (MIT):

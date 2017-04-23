@@ -108,11 +108,7 @@ function MainProgram(vertexShader, fragmentShader){
 	// For blending of the map boundaries
 	var alphaLocation = gl.getUniformLocation(theProgram, 'alpha');
 	var useAlphaLocation = gl.getUniformLocation(theProgram, 'useAlpha');
-	
-	// @Test
-	if(useTests) test_allUniformLocations();
-	if(useTests) test_allAttribLocations();
-	
+
 	/*
 	Getters
 	*/
@@ -379,43 +375,46 @@ function MainProgram(vertexShader, fragmentShader){
 	
 	/**
 	Tests uniform locations to see if they're valid
+	This method is public to test the public getters
 	
 	@method test_allUniformLocations
-	@private
+	@public
 	*/
-	function test_allUniformLocations(){
-		genericTestingObject.test_isWebGLUniformLocation("modelLocation", modelLocation);
-		genericTestingObject.test_isWebGLUniformLocation("viewMatrixLocation", viewMatrixLocation);
-		genericTestingObject.test_isWebGLUniformLocation("inverseViewMatrixLocation", inverseViewMatrixLocation);
-		genericTestingObject.test_isWebGLUniformLocation("projectionLocation", projectionLocation);
-		genericTestingObject.test_isWebGLUniformLocation("lightPositionUniformLocation", lightPositionUniformLocation);
-		genericTestingObject.test_isWebGLUniformLocation("lightColourUniformLocation", lightColourUniformLocation);
-		genericTestingObject.test_isWebGLUniformLocation("shineDamperUniformLocation", shineDamperUniformLocation);
-		genericTestingObject.test_isWebGLUniformLocation("reflectivityUniformLocation", reflectivityUniformLocation);
-		genericTestingObject.test_isWebGLUniformLocation("reverseLightDirectionLocation", reverseLightDirectionLocation);
-		genericTestingObject.test_isWebGLUniformLocation("lightDirectionLocation", lightDirectionLocation);
-		genericTestingObject.test_isWebGLUniformLocation("skyColourLocation", skyColourLocation);
-		genericTestingObject.test_isWebGLUniformLocation("useFogLocation", useFogLocation);
-		genericTestingObject.test_isWebGLUniformLocation("useInstancingLocation", useInstancingLocation);
-		genericTestingObject.test_isWebGLUniformLocation("clipPlaneLocation", clipPlaneLocation);
-		genericTestingObject.test_isWebGLUniformLocation("alphaLocation", alphaLocation);
-		genericTestingObject.test_isWebGLUniformLocation("useAlphaLocation", useAlphaLocation);
+	this.test_allUniformLocations_and_getters = function(){
+		testerObject.test_isWebGLUniformLocation("modelLocation", this.get.modelLocation);
+		testerObject.test_isWebGLUniformLocation("viewMatrixLocation", this.get.viewMatrixLocation);
+		testerObject.test_isWebGLUniformLocation("inverseViewMatrixLocation", this.get.inverseViewMatrixLocation);
+		testerObject.test_isWebGLUniformLocation("projectionLocation", this.get.projectionLocation);
+		testerObject.test_isWebGLUniformLocation("lightPositionUniformLocation", this.get.lightPositionUniformLocation);
+		testerObject.test_isWebGLUniformLocation("lightColourUniformLocation", this.get.lightColourUniformLocation);
+		testerObject.test_isWebGLUniformLocation("shineDamperUniformLocation", this.get.shineDamperUniformLocation);
+		testerObject.test_isWebGLUniformLocation("reflectivityUniformLocation", this.get.reflectivityUniformLocation);
+		testerObject.test_isWebGLUniformLocation("reverseLightDirectionLocation", this.get.reverseLightDirectionLocation);
+		testerObject.test_isWebGLUniformLocation("lightDirectionLocation", this.get.lightDirectionLocation);
+		testerObject.test_isWebGLUniformLocation("skyColourLocation", this.get.skyColourLocation);
+		testerObject.test_isWebGLUniformLocation("useFogLocation", this.get.useFogLocation);
+		testerObject.test_isWebGLUniformLocation("useInstancingLocation", this.get.useInstancingLocation);
+		testerObject.test_isWebGLUniformLocation("clipPlaneLocation", this.get.clipPlaneLocation);
+		testerObject.test_isWebGLUniformLocation("alphaLocation", this.get.alphaLocation);
+		testerObject.test_isWebGLUniformLocation("useAlphaLocation", this.get.useAlphaLocation);
 	}
 		
 	/**
 	Tests attribute locations to see if they're valid
+	Tests getters as well
+	This method is public to test the public getters
 	
 	@method test_allAttribLocations
-	@private
+	@public
 	*/
-	function test_allAttribLocations(){
-		genericTestingObject.test_isNaN_orInt("positionAttribLocation", positionAttribLocation);
-		genericTestingObject.test_isNaN_orInt("textureCoordLocation", textureCoordLocation);
-		genericTestingObject.test_isNaN_orInt("normalAttribLocation", normalAttribLocation);
-		genericTestingObject.test_isNaN_orInt("instancingLocation0", instancingLocation0);
-		genericTestingObject.test_isNaN_orInt("instancingLocation1", instancingLocation1);
-		genericTestingObject.test_isNaN_orInt("instancingLocation2", instancingLocation2);
-		genericTestingObject.test_isNaN_orInt("instancingLocation3", instancingLocation3);
+	this.test_allAttribLocations_and_getters = function(){
+		testerObject.test_isNaN_orInt("positionAttribLocation", this.get.positionAttribLocation);
+		testerObject.test_isNaN_orInt("textureCoordLocation", this.get.textureCoordLocation);
+		testerObject.test_isNaN_orInt("normalAttribLocation", this.get.normalAttribLocation);
+		testerObject.test_isNaN_orInt("instancingLocation0", this.get.instancingLocation0);
+		testerObject.test_isNaN_orInt("instancingLocation1", this.get.instancingLocation1);
+		testerObject.test_isNaN_orInt("instancingLocation2", this.get.instancingLocation2);
+		testerObject.test_isNaN_orInt("instancingLocation3", this.get.instancingLocation3);
 	}
 	
 }

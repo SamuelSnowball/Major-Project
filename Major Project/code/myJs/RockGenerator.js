@@ -1,3 +1,4 @@
+
 /**
  * All rocks use the same OBJ model
  * This file generates translations to apply to the singular rock vertex set
@@ -135,20 +136,9 @@ function RockGenerator(){
 		Keep this order! Need to generate X and Z first, to set Y height
 		*/		
 		generateMatricesForTransformRow1(xMin);
-		// @Test
-		if(useTests) test_matricesForTransformRow(1);
-		
 		generateMatricesForTransformRow3(zMin);
-		// @Test
-		if(useTests) test_matricesForTransformRow(3);
-		
 		generateMatricesForTransformRow2();
-		// @Test
-		if(useTests) test_matricesForTransformRow(2);
-		
 		generateMatricesForTransformRow4();
-		// @Test
-		if(useTests) test_matricesForTransformRow(4);
 		
 		// The full matrix translations for the rock are now built
 		// Push to buffersArray
@@ -431,10 +421,10 @@ function RockGenerator(){
 	 12 x, x, x]
 	 
 	@method test_matricesForTransformRow
-	@private
+	@public
 	@param column {int} the matrix column to test
 	*/
-	function test_matricesForTransformRow(column){
+	this.test_matricesForTransformRow = function(column){
 		var error = false;
 		
 		if(mesh.numInstances !== data.length/4){

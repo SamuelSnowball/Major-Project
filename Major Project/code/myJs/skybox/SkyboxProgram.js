@@ -36,10 +36,6 @@ function SkyboxProgram(skyboxVertexShader, skyboxFragmentShader){
 	var skyboxFogColourLocation = gl.getUniformLocation(skyboxProgram, 'skyColour');
 	var skyboxBlendFactorLocation = gl.getUniformLocation(skyboxProgram, 'blendFactor');	
 	
-	// @Test
-	if(useTests) test_allSkyboxAttributeLocationVariables();
-	if(useTests) test_allSkyboxUniformLocationVariables();
-	
 	this.get = {
 		/**
 		@method get.program
@@ -129,23 +125,23 @@ function SkyboxProgram(skyboxVertexShader, skyboxFragmentShader){
 	Makes sure attribute locations are valid
 	
 	@method test_allSkyboxAttributeLocationVariables
-	@private
+	@public
 	*/
-	function test_allSkyboxAttributeLocationVariables(){
-		genericTestingObject.test_isNaN_orInt("skyboxPositionAttribLocation", skyboxPositionAttribLocation);
+	this.test_allSkyboxAttributeLocationVariables = function(){
+		testerObject.test_isNaN_orInt("skyboxPositionAttribLocation", skyboxPositionAttribLocation);
 	}
 	
 	/**
 	Makes sure all uniform locations are valid
 	
 	@method test_allSkyboxUniformLocationVariables
-	@private
+	@public
 	*/
-	function test_allSkyboxUniformLocationVariables(){
-		genericTestingObject.test_isWebGLUniformLocation(skyboxViewMatrixLocation);
-		genericTestingObject.test_isWebGLUniformLocation(skyboxProjectionLocation);
-		genericTestingObject.test_isWebGLUniformLocation(skyboxFogColourLocation);
-		genericTestingObject.test_isWebGLUniformLocation(skyboxBlendFactorLocation);
+	this.test_allSkyboxUniformLocationVariables = function(){
+		testerObject.test_isWebGLUniformLocation(skyboxViewMatrixLocation);
+		testerObject.test_isWebGLUniformLocation(skyboxProjectionLocation);
+		testerObject.test_isWebGLUniformLocation(skyboxFogColourLocation);
+		testerObject.test_isWebGLUniformLocation(skyboxBlendFactorLocation);
 	}
 	
 }
