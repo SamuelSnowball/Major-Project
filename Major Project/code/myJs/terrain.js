@@ -948,27 +948,27 @@ function Terrain(){
 				// Top boundary
 				spawnX = 0;
 				spawnZ = 128-4;
-				scale = m4.scaling(terrainRows-256, 10, 1);
+				scale = m4.scaling(terrainRows*10, 10, 1);
 			}
 			else if(i === 1){
 				// Bottom boundary
 				spawnX = 0;
 				spawnZ = terrainRows - 128+4;
-				scale = m4.scaling(terrainRows-256, 10, 1);
+				scale = m4.scaling(terrainRows*10, 10, 1);
 			}
 			else if(i === 2){
 				// Left boundary
 				spawnZ = 0;
 				spawnX = 128-4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows-256, 10, 1); 
+				scale = m4.scaling(terrainRows*10, 10, 1); 
 			}
 			else if(i === 3){
 				// Right boundary
 				spawnZ = 0;
 				spawnX = terrainRows - 128+4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows-256, 10, 1); 
+				scale = m4.scaling(terrainRows*10, 10, 1); 
 			}
 		
 			position = m4.translation(spawnX, 0, spawnZ);	
@@ -1207,24 +1207,42 @@ function Terrain(){
 	@public 
 	*/
 	this.test_setters_and_getters = function(){
-		test_getter(this.get.getTerrainRows, numberQuadrantRows * quadrantRowSize);
-		
-	}
-	
-	/**
-	Executes the passed getter, checks against passed value
-	
-	@method test_getter
-	@private
-	@param getter {string} the string of the method name to test
-	@param expectedValue {int} the value the getter should return
-	*/
-	function test_getter(getter, expectedValue){
-		//if(getter() !== numberQuadrantRows * quadrantRowSize){
-			//console.error("this.get." + getter + " not getting properly, or set properly");
-		//}
-	}
+		if(this.get.getTerrainRows !== numberQuadrantRows * quadrantRowSize){
+			console.error("getTerrainRows not working or set incorrect value");
+		}
+		// Check if int and matches columns
+		if(!parseInt(this.get.getNumberQuadrantRows, 10) && this.get.getNumberQuadrantRows !== numberQuadrantColumns){
+			console.error("getNumberQuadrantRows not working or set incorrect value");
+		}		
+		if(!parseInt(this.get.getNumberQuadrantColumns, 10) && this.get.getNumberQuadrantColumns !== getNumberQuadrantRows){
+			console.error("getNumberQuadrantColumns not working or set incorrect value");
+		}		
+		if(this.get.getQuadrantRowSize < 0){
+			console.error("getQuadrantRowSize not working or set incorrect value");
+		}
+		// Check render indices are not less than 0, can't have negative quadrant index
+		var currentRenderIndices = this.get.renderIndices;
+		for(var i=0; i<currentRenderIndices; i++){
+			if(currentRenderIndices[i] < 0){
+				console.error("getRenderIndices not working or set incorrect value");
+			}
+		}
 
+		// Now test heightMap setting and getting
+		// Choose a an index for the 2D array, save the value, check against it
+		var xIndex = 5, zIndex = 5;
+		var height = heightMap[xIndex][zIndex];
+		
+		this.heightMapValueAtIndex.setTemporaryHeightMapX = zIndex; // reversed
+		this.heightMapValueAtIndex.setTemporaryHeightMapZ = xIndex; // reversed
+		var nearestHeight = this.heightMapValueAtIndex.getTemporaryHeightMapValue;
+		
+		if(height !== nearestHeight){
+			console.error("Failed to set/get temporary heightMap value");
+		}
+			
+	}
+	
 	// @Test
 	if(useTests) this.test_setters_and_getters();
 	
