@@ -47,7 +47,7 @@ function SkyboxProgram(skyboxVertexShader, skyboxFragmentShader){
 		
 		/**
 		@method get.skyboxPositionAttribLocation
-		@return {WebGLProgram} the skyboxPositionAttribLocation
+		@return {int} the skyboxPositionAttribLocation
 		*/
 		get skyboxPositionAttribLocation(){
 			return skyboxPositionAttribLocation;
@@ -55,7 +55,7 @@ function SkyboxProgram(skyboxVertexShader, skyboxFragmentShader){
 
 		/**
 		@method get.skyboxViewMatrixLocation
-		@return {WebGLProgram} the skyboxViewMatrixLocation
+		@return {WebGLUniformLocation} the skyboxViewMatrixLocation
 		*/
 		get skyboxViewMatrixLocation(){
 			return skyboxViewMatrixLocation;
@@ -63,7 +63,7 @@ function SkyboxProgram(skyboxVertexShader, skyboxFragmentShader){
 
 		/**
 		@method get.skyboxProjectionLocation
-		@return {WebGLProgram} the skyboxProjectionLocation
+		@return {WebGLUniformLocation} the skyboxProjectionLocation
 		*/
 		get skyboxProjectionLocation(){
 			return skyboxProjectionLocation;
@@ -71,7 +71,7 @@ function SkyboxProgram(skyboxVertexShader, skyboxFragmentShader){
 
 		/**
 		@method get.skyboxFogColourLocation
-		@return {WebGLProgram} the skyboxFogColourLocation
+		@return {WebGLUniformLocation} the skyboxFogColourLocation
 		*/
 		get skyboxFogColourLocation(){
 			return skyboxFogColourLocation;
@@ -79,7 +79,7 @@ function SkyboxProgram(skyboxVertexShader, skyboxFragmentShader){
 
 		/**
 		@method get.skyboxBlendFactorLocation
-		@return {WebGLProgram} the skyboxBlendFactorLocation
+		@return {WebGLUniformLocation} the skyboxBlendFactorLocation
 		*/
 		get skyboxBlendFactorLocation(){
 			return skyboxBlendFactorLocation;

@@ -36,7 +36,6 @@ function ParticleSystem(){
 	x = 1;
 	y = 1;
 	z = 1;
-	this.velocity = Math.random() * 5;
 	
 	// 2D square, then texture coordinate are easy!
 	// Remember to bind these buffers in render method
