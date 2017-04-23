@@ -15,6 +15,8 @@ Sprint 9 (17th - 24th April)
 
 		Make sun a spotlight for nice specular!
 
+
+
 To test properly
 	Move all files into one folder
 	Generate the yuidoc
@@ -22,6 +24,20 @@ To test properly
 
 	COPY OVER SOURCE FILES EVERY TIME!
 	COULD SYMLINK ALL SOURCE FILES AND THE OUT FOLDER TO PROJECT DOCS
+
+MAKE A USER MANUAL WITH SCREENSHOTS, CONTROLS, LOADING TIMES ETC
+
+
+Class diagram
+	Skybox
+	Testing
+	Water
+
+	add coloured constructers even if empty
+	Add varyings to fragment shaders, and explain
+	contain program + main shader, into box
+		contain skybox/water into other boxes
+
 
 Email neil
 Describe report in iterations?

@@ -10,8 +10,6 @@ function SoundPlayer(){
 	// The water mp3
 	var water_audio = new Audio('resources/sound/new_water.mp3');
 	
-	var alreadyPlayed = false;
-	
 	/**
 	@method play_water_sound
 	@public
