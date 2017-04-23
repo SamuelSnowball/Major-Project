@@ -127,8 +127,8 @@ function SkyboxProgram(skyboxVertexShader, skyboxFragmentShader){
 	@method test_allSkyboxAttributeLocationVariables
 	@public
 	*/
-	this.test_allSkyboxAttributeLocationVariables = function(){
-		testerObject.test_isNaN_orInt("skyboxPositionAttribLocation", skyboxPositionAttribLocation);
+	this.test_allSkyboxAttributeLocationVariables_and_getters = function(){
+		testerObject.test_isNaN_orInt("skyboxPositionAttribLocation", this.get.skyboxPositionAttribLocation);
 	}
 	
 	/**
@@ -137,11 +137,11 @@ function SkyboxProgram(skyboxVertexShader, skyboxFragmentShader){
 	@method test_allSkyboxUniformLocationVariables
 	@public
 	*/
-	this.test_allSkyboxUniformLocationVariables = function(){
-		testerObject.test_isWebGLUniformLocation(skyboxViewMatrixLocation);
-		testerObject.test_isWebGLUniformLocation(skyboxProjectionLocation);
-		testerObject.test_isWebGLUniformLocation(skyboxFogColourLocation);
-		testerObject.test_isWebGLUniformLocation(skyboxBlendFactorLocation);
+	this.test_allSkyboxUniformLocationVariables_and_getters = function(){
+		testerObject.test_isWebGLUniformLocation(this.get.skyboxViewMatrixLocation);
+		testerObject.test_isWebGLUniformLocation(this.get.skyboxProjectionLocation);
+		testerObject.test_isWebGLUniformLocation(this.get.skyboxFogColourLocation);
+		testerObject.test_isWebGLUniformLocation(this.get.skyboxBlendFactorLocation);
 	}
 	
 }

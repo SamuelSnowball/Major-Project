@@ -83,4 +83,26 @@ function Texture(path, shineDamperParam, reflectivityParam){
 		
 	}
 	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
+	
+	/**
+	@method test_getters
+	@public
+	*/
+	this.test_getters = function(textureParam){
+		if(testerObject.test_is_texture("tempTexture", textureParam.getTextureAttribute.texture)){
+			console.error("Failed to get texture in texture class!");
+		}
+		
+		if(textureParam.getTextureAttribute.shineDamper !== 10){
+			console.error("Failed to set/get shineDamper in texture class!");
+		}
+
+		if(textureParam.getTextureAttribute.reflectivity !== 00){
+			console.error("Failed to set/get reflectivity in texture class!");
+		}
+	}
+	
 }

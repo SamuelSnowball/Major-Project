@@ -1,6 +1,7 @@
 
 /**
- * A class containing generic testing functions, that are used throughout the project.
+ * A class containing generic testing functions, that are needed throughout the project files.
+ * This class calls nearly all of the testing methods, some are called within their own class (for good reason)
  *
  * Specific testing functions are kept within their own class.
  * (otherwise horrible amounts of getters/setters are needed to test)
@@ -92,6 +93,11 @@ function TesterClass(){
 	*/
 	this.test_scene = function(){
 			
+		// Texture @Tests
+		// Creates a temporary texture object to test getters on
+		var tempTexture = new Texture('resources/rocks/0.png', 10, 0);		
+		tempTexture.test_getters(tempTexture);
+		
 		// Program @Tests
 		mainProgram.test_allUniformLocations_and_getters();
 		mainProgram.test_allAttribLocations_and_getters();
@@ -109,11 +115,11 @@ function TesterClass(){
 		rockGenerator.test_matricesForTransformRow(4);
 		
 		// SkyboxProgram @Tests
-		skyboxProgram.test_allSkyboxAttributeLocationVariables();
-		skyboxProgram.test_allSkyboxUniformLocationVariables();
+		skyboxProgram.test_allSkyboxAttributeLocationVariables_and_getters();
+		skyboxProgram.test_allSkyboxUniformLocationVariables_and_getters();
 	
 		// Skybox @Tests
-		skybox.test_skybox_setters_and_getters();
+		skybox.test_skybox_variables_setters_and_getters();
 		
 		// WaterFramebuffers @Tests
 		waterFramebuffers.test_setupReflectionFrameBuffer();
