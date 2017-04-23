@@ -14,7 +14,7 @@ A release version is published at the end of every sprint.
 
 ![](https://github.com/SamuelSnowball/Major-Project/blob/master/Major%20Project/screenshots/evolution%20of%20the%20project/14.png) <br>
 
-## View the docs, located in code/myJs/out/index.html <br>
+## View the docs, located in documentation/docs/out/index.html <br>
 Get an overview of the classes, and details of the methods <br>
 To see private methods as well, click the "Private" checkbox in the top right options panel. <br>
 The "index" tab isn't working properly, when you click a method it doesn't re-direct properly. So just go on the "Methods panel to view them"<br>
