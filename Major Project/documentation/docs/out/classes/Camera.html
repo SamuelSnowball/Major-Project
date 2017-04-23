@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Camera</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/Camera.html">Camera</a></li>
+                                <li><a href="../classes/CollisionTester.html">CollisionTester</a></li>
+                                <li><a href="../classes/MainProgram.html">MainProgram</a></li>
+                                <li><a href="../classes/MarsScene.html">MarsScene</a></li>
+                                <li><a href="../classes/Minimap.html">Minimap</a></li>
+                                <li><a href="../classes/MyGUI.html">MyGUI</a></li>
+                                <li><a href="../classes/ParticleSystem.html">ParticleSystem</a></li>
+                                <li><a href="../classes/PointerLockControls.html">PointerLockControls</a></li>
+                                <li><a href="../classes/RockGenerator.html">RockGenerator</a></li>
+                                <li><a href="../classes/Skybox.html">Skybox</a></li>
+                                <li><a href="../classes/SkyboxProgram.html">SkyboxProgram</a></li>
+                                <li><a href="../classes/Sound.html">Sound</a></li>
+                                <li><a href="../classes/Terrain.html">Terrain</a></li>
+                                <li><a href="../classes/TesterClass.html">TesterClass</a></li>
+                                <li><a href="../classes/Texture.html">Texture</a></li>
+                                <li><a href="../classes/Utility.html">Utility</a></li>
+                                <li><a href="../classes/WaterFramebuffers.html">WaterFramebuffers</a></li>
+                                <li><a href="../classes/WaterProgram.html">WaterProgram</a></li>
+                                <li><a href="../classes/WaterSystem.html">WaterSystem</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/Engine.html">Engine</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>Camera Class</h1>
+<div class="box meta">
+
+
+        <div class="foundat">
+            Defined in: <a href="../files/Camera.js.html#l2"><code>Camera.js:2</code></a>
+        </div>
+
+            Module: <a href="../modules/Engine.html">Engine</a>
+
+</div>
+
+
+<div class="box intro">
+    <p>Handles user input and changes the 4 movement variables</p>
+<p>W Key:
+Moves camera up
+S Key:
+Moves camera down</p>
+<p>R Key:
+Moves camera up
+F Key:
+Moves camera down</p>
+
+</div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method public">
+                                <a href="#method_assignCameraQuadrant">assignCameraQuadrant</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.cameraTarget">get.cameraTarget</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.movingBackward">get.movingBackward</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.movingDown">get.movingDown</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.movingForward">get.movingForward</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.movingUp">get.movingUp</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.position">get.position</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.quadrant">get.quadrant</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.targetX">get.targetX</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.targetY">get.targetY</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.targetZ">get.targetZ</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.x">get.x</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.y">get.y</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_get.z">get.z</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_set.targetX">set.targetX</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_set.targetY">set.targetY</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_set.targetZ">set.targetZ</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_set.x">set.x</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_set.y">set.y</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_set.z">set.z</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_setupMouseMove">setupMouseMove</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_setupUserMovement">setupUserMovement</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_test_assignPlayerQuadrant">test_assignPlayerQuadrant</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_test_getters">test_getters</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_updateCamera">updateCamera</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_assignCameraQuadrant" class="method item public">
+    <h3 class="name"><code>assignCameraQuadrant</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l365"><code>Camera.js:365</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Work out what quadrant the user is in
+So can process and render what's in view of the player</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_get.cameraTarget" class="method item public">
+    <h3 class="name"><code>get.cameraTarget</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Vec3</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l131"><code>Camera.js:131</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Vec3</span>:
+                    <p>the cameras current viewing target</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.movingBackward" class="method item public">
+    <h3 class="name"><code>get.movingBackward</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Bool</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l149"><code>Camera.js:149</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Bool</span>:
+                    <p>is the player moving backward? true/false</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.movingDown" class="method item public">
+    <h3 class="name"><code>get.movingDown</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Bool</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l167"><code>Camera.js:167</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Bool</span>:
+                    <p>is the player moving down? true/false</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.movingForward" class="method item public">
+    <h3 class="name"><code>get.movingForward</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Bool</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l140"><code>Camera.js:140</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Bool</span>:
+                    <p>is the player moving forward? true/false</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.movingUp" class="method item public">
+    <h3 class="name"><code>get.movingUp</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Bool</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l158"><code>Camera.js:158</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Bool</span>:
+                    <p>is the player moving up? true/false</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.position" class="method item public">
+    <h3 class="name"><code>get.position</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Vec3</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l68"><code>Camera.js:68</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Vec3</span>:
+                    <p>the cameras current position</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.quadrant" class="method item public">
+    <h3 class="name"><code>get.quadrant</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Int</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l59"><code>Camera.js:59</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Int</span>:
+                    <p>the cameras current quadrant</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.targetX" class="method item public">
+    <h3 class="name"><code>get.targetX</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l104"><code>Camera.js:104</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>the cameras current x viewing target</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.targetY" class="method item public">
+    <h3 class="name"><code>get.targetY</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l113"><code>Camera.js:113</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>the cameras current y viewing target</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.targetZ" class="method item public">
+    <h3 class="name"><code>get.targetZ</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l122"><code>Camera.js:122</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>the cameras current z viewing target</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.x" class="method item public">
+    <h3 class="name"><code>get.x</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l77"><code>Camera.js:77</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>the cameras current x position</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.y" class="method item public">
+    <h3 class="name"><code>get.y</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l86"><code>Camera.js:86</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>the cameras current y position</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_get.z" class="method item public">
+    <h3 class="name"><code>get.z</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l95"><code>Camera.js:95</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>the cameras current z position</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_set.targetX" class="method item public">
+    <h3 class="name"><code>set.targetX</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>x</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l205"><code>Camera.js:205</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">x</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>the x position to set the camera target at</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_set.targetY" class="method item public">
+    <h3 class="name"><code>set.targetY</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>y</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l214"><code>Camera.js:214</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">y</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>the y position to set the camera target at</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_set.targetZ" class="method item public">
+    <h3 class="name"><code>set.targetZ</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>z</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l223"><code>Camera.js:223</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">z</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>the z position to set the camera target at</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_set.x" class="method item public">
+    <h3 class="name"><code>set.x</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>xParam</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l178"><code>Camera.js:178</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">xParam</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>the x position to set the camera at</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_set.y" class="method item public">
+    <h3 class="name"><code>set.y</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>yParam</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l187"><code>Camera.js:187</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">yParam</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>the y position to set the camera at</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_set.z" class="method item public">
+    <h3 class="name"><code>set.z</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>zParam</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l196"><code>Camera.js:196</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">zParam</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>the z position to set the camera at</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_setupMouseMove" class="method item private">
+    <h3 class="name"><code>setupMouseMove</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l239"><code>Camera.js:239</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adds mouse moved event listener,
+Changes cameraTarget based on user rotation</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_setupUserMovement" class="method item private">
+    <h3 class="name"><code>setupUserMovement</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l282"><code>Camera.js:282</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adds event listeners for the user movement
+Not actually updating camera here, because jerky movement..</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_test_assignPlayerQuadrant" class="method item public">
+    <h3 class="name"><code>test_assignPlayerQuadrant</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l399"><code>Camera.js:399</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Set the temporary position to 50, 50
+This should set the quadrant to 0
+As the 0th quadrant spans from (0-&gt;127x, 0-&gt;128z)</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_test_getters" class="method item public">
+    <h3 class="name"><code>test_getters</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l427"><code>Camera.js:427</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Tests:</p>
+<p>get + set.x
+get + set.y
+get + set.z
+get + set.targetX
+get + set.targetY
+get + set.targetZ</p>
+<p>get.quadrant
+get.position
+get.cameraTarget
+get.movingForward
+get.movingBackward
+get.movingUp
+get.movingDown</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_updateCamera" class="method item public">
+    <h3 class="name"><code>updateCamera</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/Camera.js.html#l324"><code>Camera.js:324</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Updates the camera position and view direction, in the camera matrix</p>
+
+    </div>
+
+
+
+
+</div>
+            </div>
+
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

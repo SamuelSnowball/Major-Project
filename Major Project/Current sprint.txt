@@ -15,6 +15,13 @@ Sprint 9 (17th - 24th April)
 
 		Make sun a spotlight for nice specular!
 
+To test properly
+	Move all files into one folder
+	Generate the yuidoc
+	Copy the out bit over
+
+	COPY OVER SOURCE FILES EVERY TIME!
+
 Email neil
 Describe report in iterations?
 	Would make sense
