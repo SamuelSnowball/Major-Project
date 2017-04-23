@@ -235,7 +235,6 @@ function MyGUI(){
 	@public
 	*/
 	this.test_getters = function(){
-		
 		if(this.get.ui_sound_enabled !== false && this.get.ui_sound_enabled !== true){
 			console.error("Failed to set ui_sound_enabled, it wasn't true/false");
 		}
@@ -246,13 +245,12 @@ function MyGUI(){
 		testerObject.test_isNaN_orInt("ui_min_rocks", this.get.ui_min_rocks);
 		testerObject.test_isNaN_orInt("ui_max_rocks", this.get.ui_max_rocks);
 		
-		if(this.get.ui_water_strength > 0 && this.get.ui_water_strength <= 5){
+		if(this.get.ui_water_strength > 0 && this.get.ui_water_strength <= 0.5){
 			// Valid
 		}
 		else{
 			console.error("UI water strength exceeded max/min values, or setter/getter failed!");
 		}
-		
 	}
 	
 }
