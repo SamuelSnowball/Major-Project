@@ -39,6 +39,32 @@ function TesterClass(){
 	}
 	
 	/**
+	Tests if the parameter is a valid WebGLTexture object
+	
+	@method test_is_texture
+	@param name {string} the name of the texture to test
+	@param texture {WebGLTexture} the texture object to test
+	*/
+	this.test_is_texture = function(name, texture){
+		if(!isTexture(texture)){
+			console.error(name + ", was not a valid WebGLTexture object!");
+		}
+	}
+	
+	/**
+	Tests if the parameter is a valid Framebuffer object
+	
+	@method test_is_frameBufferObject
+	@param name {string} the name of the buffer that's being tested
+	@param buffer {WebGLFramebuffer} the object to test if is a frame buffer 
+	*/
+	this.test_is_frameBufferObject = function(name, buffer){
+		if(!isFramebuffer(buffer)){
+			console.error(name + ", was not a valid Framebuffer object!");
+		}
+	}
+	
+	/**
 	Public to call public methods
 	Otherwise private calling a public, have to change everything
 	
@@ -73,6 +99,11 @@ function TesterClass(){
 	
 		// Skybox @Test
 		skybox.test_skybox_setters_and_getters();
+		
+		// WaterFramebuffers
+		waterFramebuffers.test_setupReflectionFrameBuffer();
+		waterFramebuffers.test_setupRefractionFrameBuffer();		
+		waterFramebuffers.test_all_getters();
 		
 		// Water program
 		waterProgram.test_waterShaderLocationVariables_and_getters();

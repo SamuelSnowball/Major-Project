@@ -27,28 +27,32 @@ function WaterFramebuffers(){
 
 	this.get = {
 		/**
-		
+		@method get.reflectionTexture
+		@return reflectionTexture {WebGLTexture} the waters reflection texture 
 		*/
 		get reflectionTexture(){
 			return reflectionTexture;
 		},
 
 		/**
-		
+		@method get.refractionTexture
+		@return refractionTexture {WebGLTexture} the waters refractionTexture texture 		
 		*/		
 		get refractionTexture(){
 			return refractionTexture;
 		},
 		
 		/**
-		
+		@method get.reflectionFrameBuffer
+		@return reflectionFrameBuffer {WebGLFramebuffer} water reflection frame buffer, the reflected scene rendered to a texture
 		*/		
 		get reflectionFrameBuffer(){
 			return reflectionFrameBuffer;
 		},
 		
 		/**
-		
+		@method get.refractionFrameBuffer
+		@return refractionFrameBuffer {WebGLFramebuffer}  water refraction frame buffer, the refracted scene rendered to a texture
 		*/		
 		get refractionFrameBuffer(){
 			return refractionFrameBuffer;
@@ -91,9 +95,6 @@ function WaterFramebuffers(){
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
-		
-		// @Test
-		if(useTests) test_setupReflectionFrameBuffer();
 	}
 
 	/**
@@ -125,9 +126,6 @@ function WaterFramebuffers(){
 		
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 		gl.viewport(0, 0, window.innerWidth, window.innerHeight);
-		
-		// @Test
-		if(useTests) test_setupRefractionFrameBuffer();		
 	}
 		
 	/*
@@ -138,9 +136,9 @@ function WaterFramebuffers(){
 	Test the water reflection frame buffer is an WebGLFrameBuffer object
 	
 	@method test_setupReflectionFrameBuffer
-	@private
+	@public
 	*/
-	function test_setupReflectionFrameBuffer(){
+	this.test_setupReflectionFrameBuffer = function(){
 		if(gl.isFramebuffer(reflectionFrameBuffer)){
 			 // It's a valid frame buffer object
 		}else{
@@ -152,9 +150,9 @@ function WaterFramebuffers(){
 	Test the water refraction frame buffer is an WebGLFrameBuffer object
 	
 	@method test_setupRefractionFrameBuffer
-	@private
+	@public
 	*/
-	function test_setupRefractionFrameBuffer(){
+	this.test_setupRefractionFrameBuffer = function(){
 		if(gl.isFramebuffer(refractionFrameBuffer)){
 			 // It's a valid frame buffer object
 		}else{
@@ -162,4 +160,12 @@ function WaterFramebuffers(){
 		}
 	}	
 	
+	/**
+	@method test_all_getters
+	@return 
+	*/
+	this.test_all_getters = function(){
+		testerObject.test_is_texture("reflectionTexture", this.get.reflectionTexture);
+		testerObject.test_is_texture("refractionTexture", this.get.refractionTexture);
+	}
 }
