@@ -46,7 +46,7 @@ function TesterClass(){
 	@param texture {WebGLTexture} the texture object to test
 	*/
 	this.test_is_texture = function(name, texture){
-		if(!isTexture(texture)){
+		if(!gl.isTexture(texture)){
 			console.error(name + ", was not a valid WebGLTexture object!");
 		}
 	}
@@ -59,7 +59,7 @@ function TesterClass(){
 	@param buffer {WebGLFramebuffer} the object to test if is a frame buffer 
 	*/
 	this.test_is_frameBufferObject = function(name, buffer){
-		if(!isFramebuffer(buffer)){
+		if(!gl.isFramebuffer(buffer)){
 			console.error(name + ", was not a valid Framebuffer object!");
 		}
 	}

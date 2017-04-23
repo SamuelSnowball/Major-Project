@@ -161,11 +161,15 @@ function WaterFramebuffers(){
 	}	
 	
 	/**
+	Tests getters, also tests if textures and frame buffers are valid
+	
 	@method test_all_getters
-	@return 
+	@public 
 	*/
 	this.test_all_getters = function(){
 		testerObject.test_is_texture("reflectionTexture", this.get.reflectionTexture);
 		testerObject.test_is_texture("refractionTexture", this.get.refractionTexture);
+		testerObject.test_is_frameBufferObject("reflectionFrameBuffer", this.get.reflectionFrameBuffer);
+		testerObject.test_is_frameBufferObject("refractionFrameBuffer", this.get.refractionFrameBuffer);
 	}
 }
