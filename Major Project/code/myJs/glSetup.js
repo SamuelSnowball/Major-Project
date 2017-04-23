@@ -4,7 +4,6 @@
  * 
  * Also loads in extension libraries for WebGL
  * 
- * @module Engine
 */
 var canvas = document.getElementById('canvas');
 canvas.width = window.innerWidth;
