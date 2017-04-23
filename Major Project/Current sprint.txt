@@ -27,7 +27,7 @@ To test properly
 
 MAKE A USER MANUAL WITH SCREENSHOTS, CONTROLS, LOADING TIMES ETC
 
-
+ s
 Class diagram
 	Skybox
 	Testing
