@@ -400,7 +400,20 @@ function RockGenerator(){
 	/*
 	TESTING FUNCTIONS BELOW
 	*/
-		
+	
+	/**
+	Test rockGenerator textures
+	
+	@method test_rock_generator_textures
+	@public
+	*/
+	this.test_rock_generator_textures = function(){
+		for(var i=0; i<rockTextures.length; i++){
+			testerObject.test_is_texture("rockTexture" + i, rockTextures[i].getTextureAttribute.texture);
+		}
+	}
+
+	
 	/**
 	Test column 1 of matrix applied to the rock instance at a time, 
 	Test mesh.numInstances is correct length

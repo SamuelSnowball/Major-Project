@@ -22,7 +22,7 @@ var gui_context = gui_canvas.getContext('2d');
 Load extension libraries, not in WebGL version 1 by default
 */
 
-//Needed for large amount of terrain vertices
+// Needed for large amount of terrain vertices
 var ext = gl.getExtension('OES_element_index_uint');
 if (!ext) {
   console.error ("ERROR: Your browser does not support WebGL UINT extension");

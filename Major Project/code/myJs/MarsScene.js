@@ -8,9 +8,10 @@ var currentTexture; // the global texture set and used when rendering
 	
 /*
 Creates the main program object (the vertex/fragment shaders combined) for rendering the scene 
-	Other programs include:
-		WaterProgram
-		SkyboxProgram
+
+Other programs include:
+	WaterProgram
+	SkyboxProgram
 */
 var mainProgram = new MainProgram(vertexShader, fragmentShader);	
 	

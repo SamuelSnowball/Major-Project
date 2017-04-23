@@ -109,6 +109,7 @@ function TesterClass(){
 		terrain.test_terrainVAOs();
 		
 		// RockGenerator @Tests
+		rockGenerator.test_rock_generator_textures();
 		rockGenerator.test_matricesForTransformRow(1);
 		rockGenerator.test_matricesForTransformRow(3);
 		rockGenerator.test_matricesForTransformRow(2);

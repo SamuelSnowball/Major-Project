@@ -2,7 +2,6 @@
 /**
  * Contains useful functions
  * 
- * 
  * @class Utility
 */
 function Utility(){
