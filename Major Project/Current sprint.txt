@@ -15,6 +15,8 @@ Sprint 9 (17th - 24th April)
 
 		Make sun a spotlight for nice specular!
 
+Report:
+	I or we
 
 
 To test properly
@@ -26,17 +28,6 @@ To test properly
 	COULD SYMLINK ALL SOURCE FILES AND THE OUT FOLDER TO PROJECT DOCS
 
 MAKE A USER MANUAL WITH SCREENSHOTS, CONTROLS, LOADING TIMES ETC
-
- s
-Class diagram
-	Skybox
-	Testing
-	Water
-
-	add coloured constructers even if empty
-	Add varyings to fragment shaders, and explain
-	contain program + main shader, into box
-		contain skybox/water into other boxes
 
 
 Email neil
