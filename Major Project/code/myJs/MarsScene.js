@@ -20,7 +20,6 @@ var soundPlayer = new SoundPlayer();
 var myGUI = new MyGUI();
 var utility = new Utility();
 var controls = new PointerLockControls();
-//var textureLoader = new TextureLoader();
 var terrain = new Terrain();
 var camera = new Camera();
 var rockGenerator = new RockGenerator();
