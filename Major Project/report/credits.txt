@@ -1,0 +1,16 @@
+
+
+pipelien
+https://www.khronos.org/opengles/2_X/
+
+
+matrix4 times vector
+https://gamedev.stackexchange.com/questions/68522/what-does-a-matrix-represent
+
+
+coord systems
+https://learnopengl.com/#!Getting-started/Coordinate-Systems
+
+
+frustum
+http://encyclopedia2.thefreedictionary.com/Viewing+frustum+culling

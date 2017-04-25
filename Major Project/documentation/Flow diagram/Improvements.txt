@@ -1,5 +1,6 @@
 Flow diagram improvements
 
+update MATRICES, spell it correctly.
 Add in loading screen, user presses play
 Sending in vertices, normals, texture coordiantes to shaders
 More testing steps, ones like depth

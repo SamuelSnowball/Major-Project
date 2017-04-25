@@ -18,6 +18,8 @@ Sprint 9 (17th - 24th April)
 Report:
 	I or we
 
+Overview of design section, explain topics
+
 
 To test properly
 	Move all files into one folder
