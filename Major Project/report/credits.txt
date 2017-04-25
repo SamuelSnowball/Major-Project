@@ -14,3 +14,8 @@ https://learnopengl.com/#!Getting-started/Coordinate-Systems
 
 frustum
 http://encyclopedia2.thefreedictionary.com/Viewing+frustum+culling
+
+
+coloured triangle
+http://web.eecs.umich.edu/~sugih/courses/eecs487/pa1.html
+
