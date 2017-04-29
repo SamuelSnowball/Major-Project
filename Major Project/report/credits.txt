@@ -1,4 +1,9 @@
+clipping
+https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/projection-matrix-GPU-rendering-pipeline-clipping
 
+
+coord system within another
+https://msdn.microsoft.com/en-us/library/windows/desktop/bb206365(v=vs.85).aspx
 
 pipelien
 https://www.khronos.org/opengles/2_X/

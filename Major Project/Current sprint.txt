@@ -15,6 +15,14 @@ Sprint 9 (17th - 24th April)
 
 		Make sun a spotlight for nice specular!
 
+Need to make a user manual
+	Say how to build/run the project
+	Host the final version on ur dcs.aber.ac.uk
+	Say where all documentation is, including the actual docs
+	Explain controls how to play
+
+If you remove map boundaries, make sure no collision on out of bounds stuff, let free fly
+
 Report:
 
 	Are the map boundaries/minimap even worth it? looks awful
