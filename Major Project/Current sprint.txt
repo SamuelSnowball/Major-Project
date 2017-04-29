@@ -16,9 +16,9 @@ Sprint 9 (17th - 24th April)
 		Make sun a spotlight for nice specular!
 
 Report:
-	I or we
 
-Overview of design section, explain topics
+	Are the map boundaries/minimap even worth it? looks awful
+	In report heavy use of I in the intro section, can I avoid this?
 
 
 To test properly
