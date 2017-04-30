@@ -7,13 +7,16 @@ Sprint 9 (17th - 24th April)
 		Mainly documentation and testing
 		Report started
 		
-		Finish class diagram
-
-		Map/compass
-			Fix lengths of barrier
-			Fix barrier coming in/out of view
-
 		Make sun a spotlight for nice specular!
+
+A Prehistoric Mars Scene in WebGL
+A Prehistoric Scene of Mars in WebGL
+
+RECREATE DOCUMENTATION WHEN CODE DONE
+
+In analysis section you talk about the main tasks,
+Should this only describe the main tasks at the start of the project?
+Or in this section should it show the project evolving?
 
 Need to make a user manual
 	Say how to build/run the project
