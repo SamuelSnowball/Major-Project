@@ -11,6 +11,8 @@ Copy from the notepad files on techincal information about lighting and water
 
 Smaller heading titles for subsections like in the testing section
 
+Change default terrain size to 8
+
 Reference product and indivdual sprint backlogs
 	-Separate them into files?
 Add references
