@@ -6,19 +6,37 @@ Sprint 9 (17th - 24th April)
 	Sprint retrospective:
 		Mainly documentation and testing
 		Report started
-		
-		Make sun a spotlight for nice specular!
+
+Copy from the notepad files on techincal information about lighting and water
+
+Smaller heading titles for subsections like in the testing section
+
+Reference product and indivdual sprint backlogs
+	-Separate them into files?
+Add references
+Reference images as well
+Refernece water sound
+reference old perlin noise thing code, that gnnerated the images
 
 How to format code in report, code samples?
 	In the pipeline explanation
 
-A Prehistoric Mars Scene in WebGL
-A Prehistoric Scene of Mars in WebGL
+Remove unncessacry resources
+
+Add vector explanation to scene
+
+Do I need sprint 0-9 design decision diagrams/explanations?
+
+Explain perlin noise in analysis section, quite lengthy
+or in background reading
 
 Change numbers on report, like 1.4.4. whatever
 Also change the index at the start to match these
 
 Make sure U mention the docs in the report!
+
+How on earth to describe the class diagram?
+	Just split into lots of images? or images aren't needed
 
 RECREATE DOCUMENTATION WHEN CODE DONE
 
@@ -32,14 +50,14 @@ Need to make a user manual
 	Host the final version on ur dcs.aber.ac.uk
 	Say where all documentation is, including the actual docs
 	Explain controls how to play
+	MAKE A USER MANUAL WITH SCREENSHOTS, CONTROLS, LOADING TIMES ET
 
 If you remove map boundaries, make sure no collision on out of bounds stuff, let free fly
 
 Report:
 
 	Are the map boundaries/minimap even worth it? looks awful
-	In report heavy use of I in the intro section, can I avoid this?
-
+	Could remove collision, the collision ui and minimap as well
 
 To test properly
 	Move all files into one folder
@@ -49,17 +67,5 @@ To test properly
 	COPY OVER SOURCE FILES EVERY TIME!
 	COULD SYMLINK ALL SOURCE FILES AND THE OUT FOLDER TO PROJECT DOCS
 
-MAKE A USER MANUAL WITH SCREENSHOTS, CONTROLS, LOADING TIMES ETC
-
-
-Email neil
-Describe report in iterations?
-	Would make sense
-
 Add yuidoc pages in appendices, but where to mention them
-
-	Minor tasks:
-
-		Water reflection doesn't look right when moving up/down
-			
 		
