@@ -9,6 +9,8 @@ Sprint 9 (17th - 24th April)
 		
 		Make sun a spotlight for nice specular!
 
+How to format code in report, code samples?
+
 A Prehistoric Mars Scene in WebGL
 A Prehistoric Scene of Mars in WebGL
 
@@ -24,6 +26,7 @@ Should this only describe the main tasks at the start of the project?
 Or in this section should it show the project evolving?
 
 Need to make a user manual
+	Link github 
 	Say how to build/run the project
 	Host the final version on ur dcs.aber.ac.uk
 	Say where all documentation is, including the actual docs
