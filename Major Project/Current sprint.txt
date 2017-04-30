@@ -10,6 +10,7 @@ Sprint 9 (17th - 24th April)
 		Make sun a spotlight for nice specular!
 
 How to format code in report, code samples?
+	In the pipeline explanation
 
 A Prehistoric Mars Scene in WebGL
 A Prehistoric Scene of Mars in WebGL
