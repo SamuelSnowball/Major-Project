@@ -12,6 +12,11 @@ Sprint 9 (17th - 24th April)
 A Prehistoric Mars Scene in WebGL
 A Prehistoric Scene of Mars in WebGL
 
+Change numbers on report, like 1.4.4. whatever
+Also change the index at the start to match these
+
+Make sure U mention the docs in the report!
+
 RECREATE DOCUMENTATION WHEN CODE DONE
 
 In analysis section you talk about the main tasks,
