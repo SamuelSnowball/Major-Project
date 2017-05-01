@@ -5,6 +5,20 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
+		Explain about Shader locations in the background reading section
+
+		Explain VBOs in the background reading section
+		Show the thinmatrix layout of things!
+
+		Discuss lighting in the background reading section
+		and refernece it in implementation, for water especially
+
+		Most of the terrain rendering code is useless, because the user
+		can't even go in the corners/edges anymore. Can remove this from
+		the project :(
+
+		Talk about terrain stacked noise vs regular
+
 		Copy from the notepad files on techincal information about lighting and water
 
 		Smaller heading titles for subsections like in the testing section
