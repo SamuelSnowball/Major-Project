@@ -15,8 +15,15 @@ function SoundPlayer(){
 	@public
 	*/
 	this.play_water_sound = function(){
-		water_audio.play();
-		console.log("play called");
+		if(water_audio.paused === true){
+			// Then it isnt playing, play it
+			water_audio.play();
+		}
+		else{
+			// Already playing
+		}
+		
+		alreadyPlayed = true;
 	}
 	
 	/**

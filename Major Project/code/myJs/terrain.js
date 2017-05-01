@@ -210,7 +210,7 @@ function Terrain(){
 				createQuadrantUvs();
 				createQuadrantNormals();
 				
-				// @Test
+				// @Test, has to be here as data gets reset, so need to test them NOW!
 				if(useTests) test_createQuadrantVertices();
 				if(useTests) test_createQuadrantIndices();
 				if(useTests) test_createQuadrantUvs();
@@ -222,7 +222,7 @@ function Terrain(){
 				setupQuadrantUvBuffer();
 				setupQuadrantNormalBuffer();
 				
-				// @Test
+				// @Test, has to be here as data gets reset, so need to test them NOW!
 				if(useTests) test_setupQuadrantBuffers();
 				
 				// Add current VAO to terrainVAOs array, this saves our data in the VAO
@@ -230,8 +230,6 @@ function Terrain(){
 				vao_ext.bindVertexArrayOES(null); 
 			}
 		}
-		// @Test
-		if(useTests) test_terrainVAOs();
 	}
 
 	/*
@@ -241,8 +239,6 @@ function Terrain(){
 	*/
 	
 		/**
-		Private
-		
 		Create the 2D heightMap array:
 			heightMap[terrainRows][terrainColumns];
 			
@@ -254,14 +250,9 @@ function Terrain(){
 			for(var i=0; i<terrainRows; i++){
 				heightMap[i] = new Array(terrainColumns).fill(0);
 			}
-			
-			// @Test
-			if(useTests) test_createHeightMap();
 		}
 		
 		/**
-		Private
-		
 		Takes in a coordinate in 2D heightMap array, loops over specified number of octaves,
 		adds noise octaves onto each other, returns final the height value for the vertex
 		
@@ -333,9 +324,6 @@ function Terrain(){
 						var stacked = stackNoise(x, y ,8);
 						heightMap[x][y] = stacked * 50;						
 					}					
-					
-					// @Test
-					if(useTests) test_fillHeightMap(heightMap[x][y]);
 				}
 				xOff = 0;
 				yOff += offsetIncrement;
@@ -948,27 +936,27 @@ function Terrain(){
 				// Top boundary
 				spawnX = 0;
 				spawnZ = 128-4;
-				scale = m4.scaling(terrainRows-256, 10, 1);
+				scale = m4.scaling(terrainRows*10, 10, 1);
 			}
 			else if(i === 1){
 				// Bottom boundary
 				spawnX = 0;
 				spawnZ = terrainRows - 128+4;
-				scale = m4.scaling(terrainRows-256, 10, 1);
+				scale = m4.scaling(terrainRows*10, 10, 1);
 			}
 			else if(i === 2){
 				// Left boundary
 				spawnZ = 0;
 				spawnX = 128-4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows-256, 10, 1); 
+				scale = m4.scaling(terrainRows*10, 10, 1); 
 			}
 			else if(i === 3){
 				// Right boundary
 				spawnZ = 0;
 				spawnX = terrainRows - 128+4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows-256, 10, 1); 
+				scale = m4.scaling(terrainRows*10, 10, 1); 
 			}
 		
 			position = m4.translation(spawnX, 0, spawnZ);	
@@ -1025,9 +1013,9 @@ function Terrain(){
 	Test 2D heightMap array is of correct size
 	
 	@method test_createHeightMap
-	@private
+	@public
 	*/
-	function test_createHeightMap(){
+	this.test_createHeightMap = function(){
 		if(heightMap.length === quadrantRowSize * numberQuadrantRows && 
 			heightMap[0].length === quadrantColumnSize * numberQuadrantColumns){
 			// It's correct size
@@ -1040,14 +1028,13 @@ function Terrain(){
 	}
 	
 	/**
-	Test if the current heightMap value is a number
+	Test if the heightMap value at [50][50] is a number
 	
 	@method test_fillHeightMap
 	@private
-	@param value {int} the value to check 
 	*/
-	function test_fillHeightMap(value){
-		if(isNaN(value)){
+	this.test_fillHeightMap = function(){
+		if(isNaN(heightMap[50][50])){
 			console.error("In fillHeightMap function: One or more of the heightMap values wasn't a number");
 		}
 		else{
@@ -1169,14 +1156,11 @@ function Terrain(){
 	Make sure the terrainVAOs array was filled with WebGLVertexArrayObjectOES objects properly
 	
 	@method test_terrainVAOs
-	@private
+	@public
 	*/
-	function test_terrainVAOs(){
+	this.test_terrainVAOs = function(){
 		for(var i=0; i<numberQuadrantRows * numberQuadrantColumns; i++){
-			if(vao_ext.isVertexArrayOES(terrainVAOs[i])){
-				// Its ok
-			}
-			else{
+			if(!vao_ext.isVertexArrayOES(terrainVAOs[i])){
 				console.error("In buildAllTerrainData: terrainVAOs not created properly");
 			}
 		}		
@@ -1207,25 +1191,39 @@ function Terrain(){
 	@public 
 	*/
 	this.test_setters_and_getters = function(){
-		test_getter(this.get.getTerrainRows, numberQuadrantRows * quadrantRowSize);
+		if(this.get.getTerrainRows !== numberQuadrantRows * quadrantRowSize){
+			console.error("getTerrainRows not working or set incorrect value");
+		}
+		// Check if int and matches columns
+		if(!parseInt(this.get.getNumberQuadrantRows, 10) && this.get.getNumberQuadrantRows !== numberQuadrantColumns){
+			console.error("getNumberQuadrantRows not working or set incorrect value");
+		}		
+		if(!parseInt(this.get.getNumberQuadrantColumns, 10) && this.get.getNumberQuadrantColumns !== getNumberQuadrantRows){
+			console.error("getNumberQuadrantColumns not working or set incorrect value");
+		}		
+		if(this.get.getQuadrantRowSize < 0){
+			console.error("getQuadrantRowSize not working or set incorrect value");
+		}
+		// Check render indices are not less than 0, can't have negative quadrant index
+		var currentRenderIndices = this.get.renderIndices;
+		for(var i=0; i<currentRenderIndices; i++){
+			if(currentRenderIndices[i] < 0){
+				console.error("getRenderIndices not working or set incorrect value");
+			}
+		}
+
+		// Now test heightMap setting and getting
+		// Choose a an index for the 2D array, save the value, check against it
+		var xIndex = 5, zIndex = 5;
+		var height = heightMap[xIndex][zIndex];
 		
-	}
-	
-	/**
-	Executes the passed getter, checks against passed value
-	
-	@method test_getter
-	@private
-	@param getter {string} the string of the method name to test
-	@param expectedValue {int} the value the getter should return
-	*/
-	function test_getter(getter, expectedValue){
-		//if(getter() !== numberQuadrantRows * quadrantRowSize){
-			//console.error("this.get." + getter + " not getting properly, or set properly");
-		//}
+		this.heightMapValueAtIndex.setTemporaryHeightMapX = zIndex; // reversed
+		this.heightMapValueAtIndex.setTemporaryHeightMapZ = xIndex; // reversed
+		var nearestHeight = this.heightMapValueAtIndex.getTemporaryHeightMapValue;
+		
+		if(height !== nearestHeight){
+			console.error("Failed to set/get temporary heightMap value");
+		}
 	}
 
-	// @Test
-	if(useTests) this.test_setters_and_getters();
-	
 }

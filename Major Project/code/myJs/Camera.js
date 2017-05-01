@@ -236,9 +236,6 @@ function Camera(){
 	setupMouseMove();
 	setupUserMovement();
 		
-	// @Test
-	if(useTests) test_assignPlayerQuadrant();
-		
 	/**
 	Adds mouse moved event listener, 
 	Changes cameraTarget based on user rotation
@@ -405,9 +402,9 @@ function Camera(){
 	As the 0th quadrant spans from (0->127x, 0->128z)
 
 	@method test_assignPlayerQuadrant
-	@private
+	@public
 	*/
-	function test_assignPlayerQuadrant(){
+	this.test_assignPlayerQuadrant = function(){
 		var z = 50;
 		var x = 50;
 		
@@ -427,5 +424,105 @@ function Camera(){
 		}
 	}
 	
+	/**
+	Tests:
+	
+	get + set.x
+	get + set.y
+	get + set.z
+	get + set.targetX
+	get + set.targetY
+	get + set.targetZ
+	
+	get.quadrant
+	get.position
+	get.cameraTarget
+	get.movingForward
+	get.movingBackward
+	get.movingUp
+	get.movingDown
+	
+	@method test_getters
+	@public 
+	*/
+	this.test_getters_and_setters = function(){
+		
+		// Save current x, set temporary x, get x, check if matches, restore x
+		var savedX = this.get.x;
+		this.set.x = 10;
+		if(this.get.x !== 10){
+			console.error("Failed to set/get camera x position!");
+		}
+		this.set.x = savedX;
+		
+		// Save current y, set temporary y, get y, check if matches, restore y
+		var savedY = this.get.y;
+		this.set.y = 10;
+		if(this.get.y !== 10){
+			console.error("Failed to set/get camera y position!");
+		}
+		this.set.y = savedY;		
+		
+		// Save current z, set temporary z, get z, check if matches, restore z
+		var savedZ = this.get.z;
+		this.set.z = 10;
+		if(this.get.z !== 10){
+			console.error("Failed to set/get camera z position!");
+		}
+		this.set.z = savedZ;		
+
+		// Save current targetX, set temporary targetX, get targetX, check if matches, restore targetX		
+		var savedTargetX = this.get.targetX;
+		this.set.targetX = 10;
+		if(this.get.targetX !== 10){
+			console.error("Failed to set/get camera target x position!");
+		}
+		this.set.targetX = savedTargetX;			
+		
+		// Save current targetY, set temporary targetY, get targetY, check if matches, restore targetY
+		var savedTargetY = this.get.targetY;
+		this.set.targetY = 10;
+		if(this.get.targetY !== 10){
+			console.error("Failed to set/get camera target y position!");
+		}
+		this.set.targetY = savedTargetY;			
+		
+		// Save current targetZ, set temporary targetZ, get targetZ, check if matches, restore targetZ
+		var savedTargetZ = this.get.targetZ;
+		this.set.targetZ = 10;
+		if(this.get.targetZ !== 10){
+			console.error("Failed to set/get camera target z position!");
+		}
+		this.set.targetZ = savedTargetZ;		
+	
+	
+		// Now test just the getters that don't have setters
+		testerObject.test_isNaN_orInt("quadrant", this.get.quadrant);
+		
+		if(this.get.position.length !== 3){
+			console.error("Camera/position length incorrect!");
+		}
+		
+		if(this.get.cameraTarget.length !== 3){
+			console.error("CameraTarget length incorrect!");
+		}	
+		
+		if(this.get.movingForward !== true && this.get.movingForward !== false){
+			console.error("movingForward isn't set correctly");
+		}
+		
+		if(this.get.movingBackward !== true && this.get.movingBackward !== false){
+			console.error("movingBackward isn't set correctly");
+		}
+		
+		if(this.get.movingUp !== true && this.get.movingUp !== false){
+			console.error("movingUp isn't set correctly");
+		}
+		
+		if(this.get.movingDown !== true && this.get.movingDown !== false){
+			console.error("movingDown isn't set correctly");
+		}
+		
+	}
 	
 }

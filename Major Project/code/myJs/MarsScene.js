@@ -4,31 +4,28 @@ This file contains all of the scene objects,
 it also contains the setup and render methods
 */
 
-var useTests = true; // change this to enable/disable testing
-var genericTestingObject = new GenericTestingClass();
-
 var currentTexture; // the global texture set and used when rendering
 	
 /*
 Creates the main program object (the vertex/fragment shaders combined) for rendering the scene 
-	Other programs include:
-		WaterProgram
-		SkyboxProgram
+
+Other programs include:
+	WaterProgram
+	SkyboxProgram
 */
 var mainProgram = new MainProgram(vertexShader, fragmentShader);	
 	
 // All scene files and classes
+var soundPlayer = new SoundPlayer();
 var myGUI = new MyGUI();
 var utility = new Utility();
 var controls = new PointerLockControls();
-//var textureLoader = new TextureLoader();
 var terrain = new Terrain();
 var camera = new Camera();
 var rockGenerator = new RockGenerator();
 var collisionTester = new CollisionTester();
 var particleSystem = new ParticleSystem();
 var minimap = new Minimap();
-var soundPlayer = new SoundPlayer();
 
 // Water code
 var waterProgram = new WaterProgram(waterVertexShader, waterFragmentShader);
@@ -38,6 +35,11 @@ var waterSystem = new WaterSystem();
 // Skybox code
 var skyboxProgram = new SkyboxProgram(skyboxVertexShader, skyboxFragmentShader);
 var skybox = new Skybox();
+
+// Code to enable/disable testing, and call the testing functions
+var useTests = true; // change this to enable/disable testing
+var testerObject = new TesterClass();
+if(useTests) testerObject.test_scene();
 
 /*
 For FPS and memory, uses the library (MIT):
@@ -74,8 +76,6 @@ function MarsScene(){
 	this.start = function(){
 		setTimeout(
 			function(){
-				//gameRunning = true;	
-				soundPlayer.play_water_sound();
 				render();
 			}, 1000
 		);

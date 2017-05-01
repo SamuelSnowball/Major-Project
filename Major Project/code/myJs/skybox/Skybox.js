@@ -324,4 +324,49 @@ function Skybox(){
 		gl.useProgram(mainProgram.get.program);
 	}
 	
+	/*
+	TESTING FUNCTIONS BELOW
+	*/
+	
+	/**
+	Tests:
+	
+		setCurrentRotation
+		
+		getCurrentRotation
+		rotationSpeed
+		currentTime
+		blendFactor
+		SIZE
+		
+	Public to access getters	
+	
+	@method test_skybox_setters_and_getters
+	@public 
+	*/
+	this.test_skybox_variables_setters_and_getters = function(){
+		// Save the current value, set to temporary value, check against temporary value, restore original
+		var savedRotation = this.get.currentRotation;
+		this.set.currentRotation = 5;
+		if(this.get.currentRotation !== 5){
+			console.error("Error setting or getting the skybox currentRotation!");
+		}
+		
+		if(this.get.rotationSpeed < 0){
+			console.error("Error setting or getting the skybox rotationSpeed!");
+		}
+		
+		if(this.get.currentTime < 0){
+			console.error("Error setting or getting the skybox currentTime!");
+		}		
+		
+		if(this.get.blendFactor < 0){
+			console.error("Error setting or getting the skybox blendFactor!");
+		}		
+		
+		if(SIZE !== 256){
+			console.error("Skybox size wasn't 256!");
+		}
+	}
+	
 }

@@ -43,9 +43,6 @@ function WaterProgram(waterVertexShader, waterFragmentShader){
 	var waterReflectivityLocation = gl.getUniformLocation(waterProgram, 'reflectivity');
 	var waterWaveStrengthLocation = gl.getUniformLocation(waterProgram, 'waveStrength');
 	
-	// @Test
-	if(useTests) test_waterShaderLocationVariables();
-	
 	this.get = {
 		/**
 		@method get.program
@@ -236,51 +233,24 @@ function WaterProgram(waterVertexShader, waterFragmentShader){
 	
 	/**
 	Checks the location variables from the shaders are valid
+	Tests getters as well
 	Check the attribute locations are ints,
 	And check the uniform locations are WebGLUniformLocation objects
 	
 	@method test_waterShaderLocationVariables
-	@private
+	@public
 	*/
-	function test_waterShaderLocationVariables(){
-		test_isNaN("waterPositionAttribLocation", waterPositionAttribLocation);
-		test_isWebGLUniformLocation("waterCameraPositionLocation", waterCameraPositionLocation);
-		test_isWebGLUniformLocation("waterViewMatrixLocation", waterViewMatrixLocation);
-		test_isWebGLUniformLocation("waterProjectionLocation", waterProjectionLocation);
-		test_isWebGLUniformLocation("waterModelLocation", waterModelLocation);
-		test_isWebGLUniformLocation("lightPositionUniformLocation", lightPositionUniformLocation);
-		test_isWebGLUniformLocation("lightColourUniformLocation", lightColourUniformLocation);
-		test_isWebGLUniformLocation("waterMoveFactorLocation", waterMoveFactorLocation);
-		test_isWebGLUniformLocation("waterReflectivityLocation", waterReflectivityLocation);
-		test_isWebGLUniformLocation("waterWaveStrengthLocation", waterWaveStrengthLocation);
+	this.test_waterShaderLocationVariables_and_getters = function(){
+		testerObject.test_isNaN_orInt("waterPositionAttribLocation", this.get.waterPositionAttribLocation);
+		testerObject.test_isWebGLUniformLocation("waterCameraPositionLocation", this.get.waterCameraPositionLocation);
+		testerObject.test_isWebGLUniformLocation("waterViewMatrixLocation", this.get.waterViewMatrixLocation);
+		testerObject.test_isWebGLUniformLocation("waterProjectionLocation", this.get.waterProjectionLocation);
+		testerObject.test_isWebGLUniformLocation("waterModelLocation", this.get.waterModelLocation);
+		testerObject.test_isWebGLUniformLocation("lightPositionUniformLocation", this.get.lightPositionUniformLocation);
+		testerObject.test_isWebGLUniformLocation("lightColourUniformLocation", this.get.lightColourUniformLocation);
+		testerObject.test_isWebGLUniformLocation("waterMoveFactorLocation", this.get.waterMoveFactorLocation);
+		testerObject.test_isWebGLUniformLocation("waterReflectivityLocation", this.get.waterReflectivityLocation);
+		testerObject.test_isWebGLUniformLocation("waterWaveStrengthLocation", this.get.waterWaveStrengthLocation);
 	}
-	
-	/**
-	Tests if passed in value is NaN
-	
-	@method test_isNaN
-	@private
-	@param name {string} the name of the attribute to test, so we can print an error
-	@param value {int} the value to test
-	*/
-	function test_isNaN(name, value){
-		if(isNaN(value)){
-			console.error("In test_waterShaderLocationVariables, " + name + " was NaN!");
-		}
-	}
-	
-	/**
-	Tests if location is a WebGLUniformLocation
-	
-	@method test_isWebGLUniformLocation
-	@private
-	@param name {string} the name of the attribute to test, so we can print an error
-	@param location {buffer} the location value to test
-	*/
-	function test_isWebGLUniformLocation(name, location){
-		if(!location instanceof WebGLUniformLocation){
-			console.error("In test_isWebGLUniformLocation: " + name + ", is not a WebGLUniformLocation");
-		}
-	}	
 	
 }
