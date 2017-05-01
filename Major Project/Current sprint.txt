@@ -13,6 +13,8 @@ Smaller heading titles for subsections like in the testing section
 
 Change default terrain size to 8
 
+Water sound doesn't restart when it finishes
+
 Reference product and indivdual sprint backlogs
 	-Separate them into files?
 Add references

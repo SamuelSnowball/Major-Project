@@ -1028,7 +1028,7 @@ function Terrain(){
 	}
 	
 	/**
-	Test if the current heightMap value is a number
+	Test if the heightMap value at [50][50] is a number
 	
 	@method test_fillHeightMap
 	@private
@@ -1160,10 +1160,7 @@ function Terrain(){
 	*/
 	this.test_terrainVAOs = function(){
 		for(var i=0; i<numberQuadrantRows * numberQuadrantColumns; i++){
-			if(vao_ext.isVertexArrayOES(terrainVAOs[i])){
-				// Its ok
-			}
-			else{
+			if(!vao_ext.isVertexArrayOES(terrainVAOs[i])){
 				console.error("In buildAllTerrainData: terrainVAOs not created properly");
 			}
 		}		
@@ -1227,9 +1224,6 @@ function Terrain(){
 		if(height !== nearestHeight){
 			console.error("Failed to set/get temporary heightMap value");
 		}
-			
 	}
-	
 
-	
 }
