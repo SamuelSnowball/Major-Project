@@ -5,10 +5,25 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
+		Talk about shader location variables in background reading
+			reference in engine section
+
+		Replace player with user, cntrl f replace if exists,
+
+		Where does the 3D to 2D happen? it isnt projection,
+			its perspective divide? but where?
+
+		You used triangle strip stackoverflow 11 upvote code twice,
+			where is the other location?
+
+		Does the projection matrix actually convert to 2D?
+			Or it leaves some depth right
+
 		Explain about Shader locations in the background reading section
 
 		Explain VBOs in the background reading section
 		Show the thinmatrix layout of things!
+		perhaps draw.io for VAO containing VBOs, and those VBOs pointing to the data.
 
 		Discuss lighting in the background reading section
 		and refernece it in implementation, for water especially

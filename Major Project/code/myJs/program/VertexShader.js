@@ -52,6 +52,7 @@ gl.shaderSource(vertexShader, [
 			'fullInstanceTransform = mat4(instanceMatrixRow0, instanceMatrixRow1, instanceMatrixRow2, instanceMatrixRow3);',
 		'}',
 		'else{',
+			// Just form an identity matrix
 			'fullInstanceTransform = mat4(  1,0,0,0 , 0,1,0,0, 0,0,1,0, 0,0,0,1);',
 		'}',
 	
