@@ -128,7 +128,7 @@ function MarsScene(){
 		*/
 		terrain.render(); 
 		rockGenerator.renderInstancedRocks();
-		//particleSystem.render(); 
+		//particleSystem.render(); // not used
 		collisionTester.testAllCollision();
 		waterSystem.render();
 		terrain.renderMapBoundaries();

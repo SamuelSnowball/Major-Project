@@ -1,11 +1,7 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Sprint 9 (17th - 24th April)
-
-	Sprint retrospective:
-		Mainly documentation and testing
-		Report started
+Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
