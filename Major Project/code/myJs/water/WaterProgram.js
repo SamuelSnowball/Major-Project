@@ -165,46 +165,10 @@ function WaterProgram(waterVertexShader, waterFragmentShader){
 		gl.uniform3fv(waterCameraPositionLocation, camera.get.position);
 		
 		// Pass in lighting colour
-		gl.uniform3fv(lightColourUniformLocation, lightColour);
-		
-		// The rotation matrix to apply to the suns position
-		var rotationMatrix = [];
-		m4.yRotation(-skybox.get.currentRotation + (-Math.PI /4 - Math.PI / 4), rotationMatrix);
-		
-		// The original position of the sun
-		var lightPosition = [
-			camera.get.x + 512, 
-			camera.get.y + 25, 
-			camera.get.z + 512,
-			0
-		];
-		
-		var finalSunPosition = [0, 0, 0, 0];
-		
-		// Times the lightPosition vector by rotation matrix,
-		// to reposition the sun as the skybox rotates
-		finalSunPosition[0] = rotationMatrix[0] * lightPosition[0] +
-							  rotationMatrix[1] * lightPosition[1] + 
-							  rotationMatrix[2] * lightPosition[2] +
-							  rotationMatrix[3] * lightPosition[3];
-						
-		finalSunPosition[1] = rotationMatrix[4] * lightPosition[0] +
-							  rotationMatrix[5] * lightPosition[1] + 
-							  rotationMatrix[6] * lightPosition[2] + 
-							  rotationMatrix[7] * lightPosition[3];
-
-		finalSunPosition[2] = rotationMatrix[8] * lightPosition[0] +
-							  rotationMatrix[9] * lightPosition[1] + 
-							  rotationMatrix[10] * lightPosition[2] +	
-							  rotationMatrix[11] * lightPosition[3];
-
-		finalSunPosition[3] = rotationMatrix[12] * lightPosition[0] +
-							  rotationMatrix[13] * lightPosition[1] + 
-							  rotationMatrix[14] * lightPosition[2] +	
-							  rotationMatrix[15] * lightPosition[3];						
+		gl.uniform3fv(lightColourUniformLocation, lightColour);			
 		
 		// Pass in the final sun position
-		gl.uniform3fv(lightPositionUniformLocation, [finalSunPosition[0], finalSunPosition[1], finalSunPosition[2]] );
+		gl.uniform3fv(lightPositionUniformLocation, [skybox.get.finalSunPositionX, skybox.get.finalSunPositionY, skybox.get.finalSunPositionZ] );
 	
 		// Pass in how much the water should move
 		waterSystem.set.waterMoveFactor = waterSystem.get.waterMoveFactor + Date.now() * 0.0000000000000009; // dont ask....

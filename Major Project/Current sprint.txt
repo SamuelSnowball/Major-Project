@@ -1,13 +1,52 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
-Sprint 9 (17th - 24th April)
-
-	Sprint retrospective:
-		Mainly documentation and testing
-		Report started
+Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
+
+		At top of implementation sections have:
+			Uses files skybox, skybox shader, etc
+			Perhaps have important methods as well
+		Same for documentation files as well?
+		Priority, how long things took to implement?
+
+		Add lighting notes to background reading
+
+		Add what sprints everything was added in, in the report/implementation
+		
+		Talk about shader location variables in background reading
+			reference in engine section
+		Explain shader varying/attribute variables, compared to in/out
+			that ull see in tutorials
+		vertex/fragment shader in/outs must have exactly the same name
+		Explain how program is combination of shaders
+	
+		Replace player with user, cntrl f replace if exists,
+
+		Where does the 3D to 2D happen? it isnt projection,
+			its perspective divide? but where?
+
+		You used triangle strip stackoverflow 11 upvote code twice,
+			where is the other location?
+
+		Does the projection matrix actually convert to 2D?
+			Or it leaves some depth right
+
+		Explain about Shader locations in the background reading section
+
+		Explain VBOs in the background reading section
+		Show the thinmatrix layout of things!
+		perhaps draw.io for VAO containing VBOs, and those VBOs pointing to the data.
+
+		Discuss lighting in the background reading section
+		and refernece it in implementation, for water especially
+
+		Most of the terrain rendering code is useless, because the user
+		can't even go in the corners/edges anymore. Can remove this from
+		the project :(
+
+		Talk about terrain stacked noise vs regular
 
 		Copy from the notepad files on techincal information about lighting and water
 

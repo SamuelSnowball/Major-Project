@@ -16,6 +16,7 @@ function Skybox(){
 	var time = 0; // time of day
 	var timeIncrement = 0.001;
 	var skyColourIncrement = 0.001; // how quickly the fog increases/decreases based on time of day
+	var finalSunPosition = [];
 
 	var SIZE = 256; // How far skybox stays away from the player
 	var skybox_vertices_buffer;
@@ -67,6 +68,33 @@ function Skybox(){
 		*/		
 		get blendFactor(){
 			return blendFactor;
+		},
+		
+		/**
+		@method skybox.get.finalSunPositionX
+		@public
+		@return {float} the x position of the sun
+		*/
+		get finalSunPositionX(){
+			return finalSunPosition[0];
+		},
+		
+		/**
+		@method skybox.get.finalSunPositionY
+		@public
+		@return {float} the y position of the sun
+		*/
+		get finalSunPositionY(){
+			return finalSunPosition[1];
+		},
+
+		/**
+		@method skybox.get.finalSunPositionZ
+		@public
+		@return {float} the z position of the sun
+		*/
+		get finalSunPositionZ(){
+			return finalSunPosition[2];
 		}		
 	};
 	
@@ -195,6 +223,43 @@ function Skybox(){
 	@public
 	*/
 	this.updateDay = function(){
+		
+		// The rotation matrix to apply to the suns position
+		var rotationMatrix = [];
+		m4.yRotation(-currentRotation + (-Math.PI /4 - Math.PI / 4), rotationMatrix);
+		
+		// The original position of the sun
+		var lightPosition = [
+			camera.get.x + 512, 
+			camera.get.y + 25, 
+			camera.get.z + 512,
+			0
+		];
+		
+		finalSunPosition = [0, 0, 0, 0];
+		
+		// Times the lightPosition vector by rotation matrix,
+		// to reposition the sun as the skybox rotates
+		finalSunPosition[0] = rotationMatrix[0] * lightPosition[0] +
+							  rotationMatrix[1] * lightPosition[1] + 
+							  rotationMatrix[2] * lightPosition[2] +
+							  rotationMatrix[3] * lightPosition[3];
+						
+		finalSunPosition[1] = rotationMatrix[4] * lightPosition[0] +
+							  rotationMatrix[5] * lightPosition[1] + 
+							  rotationMatrix[6] * lightPosition[2] + 
+							  rotationMatrix[7] * lightPosition[3];
+
+		finalSunPosition[2] = rotationMatrix[8] * lightPosition[0] +
+							  rotationMatrix[9] * lightPosition[1] + 
+							  rotationMatrix[10] * lightPosition[2] +	
+							  rotationMatrix[11] * lightPosition[3];
+
+		finalSunPosition[3] = rotationMatrix[12] * lightPosition[0] +
+							  rotationMatrix[13] * lightPosition[1] + 
+							  rotationMatrix[14] * lightPosition[2] +	
+							  rotationMatrix[15] * lightPosition[3];	
+		
 		
 		// 0.00000000000003 bit slow
 		// 0.0000000000003 bit fast
