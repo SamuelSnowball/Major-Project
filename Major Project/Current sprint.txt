@@ -5,15 +5,8 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
-		Z DEPTH IS USED TO SORT FOR THE VIEWPORT TRANSFORMATION
-
-		Ask helen to open this in her version of chrome:
-			http://webglreport.com/?v=2
-			Hopefully it should fail, then its ok.
-			Therefore it was chromes fault not mine
-
-		Where u have //refernce www.youtubecom/ etc.. have a link to appendices
-		and have the full link there
+		Code formatting:
+			https://gamedev.stackexchange.com/questions/ask
 
 		Write about camera pitch yaw roll in background reading, say its important
 		in the water section!
