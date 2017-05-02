@@ -5,11 +5,20 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
+		Write about camera pitch yaw roll in background reading, say its important
+		in the water section!
+
+		In background section in shader bit explain about sampler 2ds
+		In background section explain sampling textures from different units
+			say how its useful in water + skybox when using multiple textures
+
 		At top of implementation sections have:
 			Uses files skybox, skybox shader, etc
 			Perhaps have important methods as well
 		Same for documentation files as well?
 		Priority, how long things took to implement?
+
+		Explain water FBO class
 
 		Add lighting notes to background reading
 
@@ -29,9 +38,6 @@ Sprint FINAL (1st - 8th May)
 
 		You used triangle strip stackoverflow 11 upvote code twice,
 			where is the other location?
-
-		Does the projection matrix actually convert to 2D?
-			Or it leaves some depth right
 
 		Explain about Shader locations in the background reading section
 
@@ -67,8 +73,6 @@ Sprint FINAL (1st - 8th May)
 		In the pipeline explanation
 
 		Remove unncessacry resources
-
-		Add vector explanation to scene
 	
 		Do I need sprint 0-9 design decision diagrams/explanations?
 
