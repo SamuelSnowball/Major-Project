@@ -936,27 +936,27 @@ function Terrain(){
 				// Top boundary
 				spawnX = 0;
 				spawnZ = 128-4;
-				scale = m4.scaling(terrainRows*10, 10, 1);
+				scale = m4.scaling(2000, 10, 1);
 			}
 			else if(i === 1){
 				// Bottom boundary
 				spawnX = 0;
 				spawnZ = terrainRows - 128+4;
-				scale = m4.scaling(terrainRows*10, 10, 1);
+				scale = m4.scaling(2000, 10, 1);
 			}
 			else if(i === 2){
 				// Left boundary
 				spawnZ = 0;
 				spawnX = 128-4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows*10, 10, 1); 
+				scale = m4.scaling(2000, 10, 1); 
 			}
 			else if(i === 3){
 				// Right boundary
 				spawnZ = 0;
 				spawnX = terrainRows - 128+4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows*10, 10, 1); 
+				scale = m4.scaling(2000, 10, 1); 
 			}
 		
 			position = m4.translation(spawnX, 0, spawnZ);	

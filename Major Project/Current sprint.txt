@@ -5,38 +5,19 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
-		Replace point with vertex
-	
-		reference outine project spec		
-
-		have a terms section, explaining rendering etc
-
-		reference old perlin noise thing code, that gnnerated the images
+		General stuff:
+			Replace point with vertex
+			Spacing on titles
+			Change numbers on report, like 1.4.4. whatever
+			reference outine project spec	
+			Replace player with user, cntrl f replace if exists,	
+			Remove unncessacry resources
 
 		Code formatting:
 			https://gamedev.stackexchange.com/questions/ask
 
-		Write about camera pitch yaw roll in background reading, say its important
-		in the water section!
-
-		At top of implementation sections have:
-			Uses files skybox, skybox shader, etc
-			Perhaps have important methods as well
-		Same for documentation files as well?
-		Priority, how long things took to implement?
-
-		Explain water FBO class
-
 		Add lighting notes to background reading
 		and normals
-	
-		Replace player with user, cntrl f replace if exists,
-
-		You used triangle strip stackoverflow 11 upvote code twice,
-			where is the other location?
-
-		perhaps draw.io for VAO containing VBOs, and those VBOs pointing to the data.
-			Show the thinmatrix layout of things!
 
 		Discuss lighting in the background reading section
 		and refernece it in implementation, for water especially
@@ -47,55 +28,26 @@ Sprint FINAL (1st - 8th May)
 
 		Copy from the notepad files on techincal information about lighting and water
 
-		Smaller heading titles for subsections like in the testing section
-
-		Change default terrain size to 8
-
 		Water sound doesn't restart when it finishes
 
-		Reference product and indivdual sprint backlogs
-
 		Refernece water sound
+		Reference other resources, rock OBJs etc
 
-		How to format code in report, code samples?
-		In the pipeline explanation
+		Major tasks:
 
-		Remove unncessacry resources
-	
-		Do I need sprint 0-9 design decision diagrams/explanations?
+			Make sure U mention the docs in the report!
 
-		Explain perlin noise in analysis section, quite lengthy
-		or in background reading
+			RECREATE DOCUMENTATION WHEN CODE DONE
 
-		Change numbers on report, like 1.4.4. whatever
-		Also change the index at the start to match these
-
-		Make sure U mention the docs in the report!
-
-		How on earth to describe the class diagram?
-			Just split into lots of images? or images aren't needed
-
-		RECREATE DOCUMENTATION WHEN CODE DONE
-
-		In analysis section you talk about the main tasks,
-		Should this only describe the main tasks at the start of the project?
-		Or in this section should it show the project evolving?
-
-		Need to make a user manual
-			Add this near start of report, in abstract maybe
-			Link github 
-			Say how to build/run the project
-			Host the final version on ur dcs.aber.ac.uk
-			Say where all documentation is, including the actual docs
-			Explain controls how to play
-			MAKE A USER MANUAL WITH SCREENSHOTS, CONTROLS, LOADING TIMES ET
-
-		If you remove map boundaries, make sure no collision on out of bounds stuff, let free fly
-
-		Report:
-
-			Are the map boundaries/minimap even worth it? looks awful
-			Could remove collision, the collision ui and minimap as well
+			Need to make a user manual
+				Add this near start of report, in abstract maybe
+				Link github 
+				Say how to build/run the project
+				Host the final version on ur dcs.aber.ac.uk
+				Say where all documentation is, including the actual docs
+				Explain controls how to play
+				MAKE A USER MANUAL WITH SCREENSHOTS, CONTROLS, LOADING TIMES ET
+				Say to press escape to exit pointerlock
 
 		To test properly
 			Move all files into one folder
@@ -104,6 +56,3 @@ Sprint FINAL (1st - 8th May)
 
 			COPY OVER SOURCE FILES EVERY TIME!
 			COULD SYMLINK ALL SOURCE FILES AND THE OUT FOLDER TO PROJECT DOCS
-
-		Add yuidoc pages in appendices, but where to mention them
-		
