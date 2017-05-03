@@ -28,6 +28,7 @@ function WaterFramebuffers(){
 	this.get = {
 		/**
 		@method get.reflectionTexture
+		@public
 		@return reflectionTexture {WebGLTexture} the waters reflection texture 
 		*/
 		get reflectionTexture(){
@@ -36,6 +37,7 @@ function WaterFramebuffers(){
 
 		/**
 		@method get.refractionTexture
+		@public
 		@return refractionTexture {WebGLTexture} the waters refractionTexture texture 		
 		*/		
 		get refractionTexture(){
@@ -44,6 +46,7 @@ function WaterFramebuffers(){
 		
 		/**
 		@method get.reflectionFrameBuffer
+		@public
 		@return reflectionFrameBuffer {WebGLFramebuffer} water reflection frame buffer, the reflected scene rendered to a texture
 		*/		
 		get reflectionFrameBuffer(){
@@ -52,6 +55,7 @@ function WaterFramebuffers(){
 		
 		/**
 		@method get.refractionFrameBuffer
+		@public
 		@return refractionFrameBuffer {WebGLFramebuffer}  water refraction frame buffer, the refracted scene rendered to a texture
 		*/		
 		get refractionFrameBuffer(){

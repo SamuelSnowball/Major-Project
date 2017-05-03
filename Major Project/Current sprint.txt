@@ -16,15 +16,9 @@ Sprint FINAL (1st - 8th May)
 		Code formatting:
 			https://gamedev.stackexchange.com/questions/ask
 
-		Add lighting notes to background reading
-		and normals
-
-		Discuss lighting in the background reading section
-		and refernece it in implementation, for water especially
-
-		Most of the terrain rendering code is useless, because the user
-		can't even go in the corners/edges anymore. Can remove this from
-		the project :(
+		Explain main render loop and map design, 128*128 for example
+		It was built with that in mind so limited 'view distance',
+		Mention evolution of the project screenshots
 
 		Copy from the notepad files on techincal information about lighting and water
 
@@ -32,6 +26,17 @@ Sprint FINAL (1st - 8th May)
 
 		Refernece water sound
 		Reference other resources, rock OBJs etc
+
+		Change this project requires WebGL2.0 everywhere to 1.0 with extensions
+			Aside from aspects of the scene not working, you will also notice 
+			errors in the console if any extension library is not supported
+
+		In testing, add images of WebGL v1.0 report on other machines
+			need ANGLE hopefully
+
+"Consequently, it is important to include an initial bibliography as part of your progress
+report and your full bibliography at the end of the main project report section of your
+dissertation"
 
 		Major tasks:
 
