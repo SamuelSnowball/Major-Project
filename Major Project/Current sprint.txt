@@ -5,20 +5,18 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
+		DO REFERENCES
+		Send helen to flick through, make sure to dumb errors
+
 		General stuff:
-			Replace point with vertex
 			Spacing on titles
 			Change numbers on report, like 1.4.4. whatever
-			reference outine project spec	
-			Replace player with user, cntrl f replace if exists,	
-			Remove unncessacry resources
 
 		Code formatting:
 			https://gamedev.stackexchange.com/questions/ask
 
 		Explain main render loop and map design, 128*128 for example
 		It was built with that in mind so limited 'view distance',
-		Mention evolution of the project screenshots
 
 		Copy from the notepad files on techincal information about lighting and water
 
@@ -38,6 +36,7 @@ Sprint FINAL (1st - 8th May)
 report and your full bibliography at the end of the main project report section of your
 dissertation"
 
+
 		Major tasks:
 
 			Make sure U mention the docs in the report!
@@ -45,6 +44,7 @@ dissertation"
 			RECREATE DOCUMENTATION WHEN CODE DONE
 
 			Need to make a user manual
+				Mention evolution of the project screenshots in user manual
 				Add this near start of report, in abstract maybe
 				Link github 
 				Say how to build/run the project
