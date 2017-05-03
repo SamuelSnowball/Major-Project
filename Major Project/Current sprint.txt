@@ -5,7 +5,11 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
+		Replace point with vertex
+	
 		reference outine project spec		
+
+		have a terms section, explaining rendering etc
 
 		reference old perlin noise thing code, that gnnerated the images
 
@@ -24,6 +28,7 @@ Sprint FINAL (1st - 8th May)
 		Explain water FBO class
 
 		Add lighting notes to background reading
+		and normals
 	
 		Replace player with user, cntrl f replace if exists,
 
