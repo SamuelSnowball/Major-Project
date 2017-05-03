@@ -82,6 +82,7 @@ Sprint FINAL (1st - 8th May)
 		Or in this section should it show the project evolving?
 
 		Need to make a user manual
+			Add this near start of report, in abstract maybe
 			Link github 
 			Say how to build/run the project
 			Host the final version on ur dcs.aber.ac.uk
