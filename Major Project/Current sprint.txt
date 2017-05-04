@@ -8,6 +8,10 @@ Sprint FINAL (1st - 8th May)
 		DO REFERENCES
 		Send helen to flick through, make sure to dumb errors
 
+		Write a compatability section in testing? or somehwere near start
+
+		DO CONTENTS SECTION
+
 		General stuff:
 			Spacing on titles
 			Change numbers on report, like 1.4.4. whatever
