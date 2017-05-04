@@ -8,34 +8,30 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
-		Change documents to PDF, and in references
-
-		Explain main render loop and map design, 128*128 for example
-		It was built with that in mind so limited 'view distance',
-
+		Add specular hightlights explanation to water , near the end
 		Copy from the notepad files on techincal information about lighting and water
+
 
 "Consequently, it is important to include an initial bibliography as part of your progress
 report and your full bibliography at the end of the main project report section of your
 dissertation"
 
+		
 
 		Major tasks:
 	
+			Avoid you, use we instead
+				Control find "you"
+
 			Spacing on titles
 			Change numbers on report, like 1.4.4. whatever
 
-			Delete random notes, test commit testtttttttt	
+			Delete random notes, 
 
 			Change draft to final before upload
 
-			RECREATE DOCUMENTATION WHEN CODE DONE
-				Copy in
-
 			DO CONTENTS SECTION
 			DO REFERENCES
-
-			Send helen to flick through, make sure to dumb errors
 
 			PDF REPORT AND ZIP/RAR CORRECT SOURCE FORMAT
 
