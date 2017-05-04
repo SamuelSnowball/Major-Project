@@ -61,7 +61,6 @@
                 
                 
                             <ul id="api-modules" class="apis modules">
-                                <li><a href="../modules/Engine.html">Engine</a></li>
                             </ul>
                         </div>
                     </div>
@@ -121,7 +120,6 @@ var soundPlayer = new SoundPlayer();
 var myGUI = new MyGUI();
 var utility = new Utility();
 var controls = new PointerLockControls();
-//var textureLoader = new TextureLoader();
 var terrain = new Terrain();
 var camera = new Camera();
 var rockGenerator = new RockGenerator();
@@ -230,7 +228,7 @@ function MarsScene(){
 		*/
 		terrain.render(); 
 		rockGenerator.renderInstancedRocks();
-		//particleSystem.render(); 
+		//particleSystem.render(); // not used
 		collisionTester.testAllCollision();
 		waterSystem.render();
 		terrain.renderMapBoundaries();

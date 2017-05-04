@@ -1,95 +1,53 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
+Code formatting:
+	https://gamedev.stackexchange.com/questions/ask
+
 Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
-		reference outine project spec		
+		Change documents to PDF, and in references
 
-		reference old perlin noise thing code, that gnnerated the images
+		Write a compatability section in testing? or somehwere near start
 
-		Code formatting:
-			https://gamedev.stackexchange.com/questions/ask
+		General stuff:
+			Spacing on titles
+			Change numbers on report, like 1.4.4. whatever
 
-		Write about camera pitch yaw roll in background reading, say its important
-		in the water section!
 
-		At top of implementation sections have:
-			Uses files skybox, skybox shader, etc
-			Perhaps have important methods as well
-		Same for documentation files as well?
-		Priority, how long things took to implement?
-
-		Explain water FBO class
-
-		Add lighting notes to background reading
-	
-		Replace player with user, cntrl f replace if exists,
-
-		You used triangle strip stackoverflow 11 upvote code twice,
-			where is the other location?
-
-		perhaps draw.io for VAO containing VBOs, and those VBOs pointing to the data.
-			Show the thinmatrix layout of things!
-
-		Discuss lighting in the background reading section
-		and refernece it in implementation, for water especially
-
-		Most of the terrain rendering code is useless, because the user
-		can't even go in the corners/edges anymore. Can remove this from
-		the project :(
+		Explain main render loop and map design, 128*128 for example
+		It was built with that in mind so limited 'view distance',
 
 		Copy from the notepad files on techincal information about lighting and water
 
-		Smaller heading titles for subsections like in the testing section
-
-		Change default terrain size to 8
-
-		Water sound doesn't restart when it finishes
-
-		Reference product and indivdual sprint backlogs
-
 		Refernece water sound
+		Reference other resources, rock OBJs etc
 
-		How to format code in report, code samples?
-		In the pipeline explanation
 
-		Remove unncessacry resources
+"Consequently, it is important to include an initial bibliography as part of your progress
+report and your full bibliography at the end of the main project report section of your
+dissertation"
+
+
+		Major tasks:
 	
-		Do I need sprint 0-9 design decision diagrams/explanations?
+			Delete random notes 	
 
-		Explain perlin noise in analysis section, quite lengthy
-		or in background reading
+			Change draft to final before upload
 
-		Change numbers on report, like 1.4.4. whatever
-		Also change the index at the start to match these
+			RECREATE DOCUMENTATION WHEN CODE DONE
+				Copy in
 
-		Make sure U mention the docs in the report!
+			DO CONTENTS SECTION
+			DO REFERENCES
 
-		How on earth to describe the class diagram?
-			Just split into lots of images? or images aren't needed
+			Send helen to flick through, make sure to dumb errors
 
-		RECREATE DOCUMENTATION WHEN CODE DONE
+			PDF REPORT AND ZIP/RAR CORRECT SOURCE FORMAT
 
-		In analysis section you talk about the main tasks,
-		Should this only describe the main tasks at the start of the project?
-		Or in this section should it show the project evolving?
-
-		Need to make a user manual
-			Link github 
-			Say how to build/run the project
-			Host the final version on ur dcs.aber.ac.uk
-			Say where all documentation is, including the actual docs
-			Explain controls how to play
-			MAKE A USER MANUAL WITH SCREENSHOTS, CONTROLS, LOADING TIMES ET
-
-		If you remove map boundaries, make sure no collision on out of bounds stuff, let free fly
-
-		Report:
-
-			Are the map boundaries/minimap even worth it? looks awful
-			Could remove collision, the collision ui and minimap as well
+			
 
 		To test properly
 			Move all files into one folder
@@ -97,7 +55,3 @@ Sprint FINAL (1st - 8th May)
 			Copy the out bit over
 
 			COPY OVER SOURCE FILES EVERY TIME!
-			COULD SYMLINK ALL SOURCE FILES AND THE OUT FOLDER TO PROJECT DOCS
-
-		Add yuidoc pages in appendices, but where to mention them
-		

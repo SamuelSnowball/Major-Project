@@ -1,0 +1,119 @@
+
+<!--
+
+This file generates the perlin noise texture that was previously used in the game
+
+-->
+
+<html>
+<body>
+
+<canvas id="textureCanvas" width="512" height="512" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script src="perlin.js"></script>
+
+<script>
+
+var loader = new TextureLoader();
+var pixels;
+
+function TextureLoader(){
+
+	loadProceduralTextures();
+	
+	/*
+	Stacking noise, and multiplying to get a colour value
+	*/
+	function loadProceduralTextures(){
+		
+		// https://github.com/josephg/noisejs
+		noise.seed(Math.random());
+		
+		var mapSize = 512;
+		var textureSize = mapSize * mapSize; //512 rows and columns
+		pixels = new Uint8Array(4 * textureSize);
+		
+		//new	
+		var c = document.getElementById("textureCanvas");
+		var ctx = c.getContext("2d");
+
+		var imgData = ctx.createImageData(512, 512);
+		
+		for(var y=0; y<mapSize; y++){ 
+			for(var x=0; x<mapSize; x++){
+				var index = (x + y * mapSize) * 4;
+				var r = stackNoise(x, y, 8);
+				//Value returned between 0 and 1 or something
+				//Times it to get color, 255 is ok, 512 more intense
+				r *= 512; 
+
+				//sometimes r is negative here, make it positive
+				if(r < 0){
+					r *= -1;
+				}
+		
+				pixels[index+0] = r;
+				pixels[index+1] = 0;
+				pixels[index+2] = 0;
+				pixels[index+3] = 255;		
+
+				imgData.data[index+0] = r;
+				imgData.data[index+1] = 0;
+				imgData.data[index+2] = 0;
+				imgData.data[index+3] = 255;
+			}
+		}
+		
+		ctx.putImageData(imgData, 0, 0);
+		window.location = c.toDataURL("image/png");
+
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, mapSize, mapSize, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels); 
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.generateMipmap(gl.TEXTURE_2D);
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+
+	/*
+	Max value (amplitude) decreases every iteration
+	Also the numbers get chosen more frequently (frequency)
+
+	1st iteration (octave)
+		Max value = 100,
+		Pick values every 10.
+
+	2nd iteration
+		Max value = 50
+		Pick values every 5
+		
+	Half the time that passes before picking a value (frequency)
+	And half the amplitude, max value
+
+	Then add values together (Add graphs together)
+
+	Returns noise value between 0 and 1, for a single pixel
+	
+	SEED NOISE
+	*/
+	function stackNoise(x, y, numOctaves){
+		var v = 0;
+		var amplitude = 1;
+		var frequency = 1;
+		var noiseTotal = 0;
+		
+		for(var i=0; i<numOctaves; i++){
+			v += noise.perlin2(x * amplitude, y * amplitude, x * amplitude) * frequency;
+			noiseTotal += frequency;
+			amplitude *= 0.5;
+			frequency *= 2.0;
+		}
+		
+		return v / noiseTotal;
+	}
+}
+
+</script>
+
+</body>
+</html>
