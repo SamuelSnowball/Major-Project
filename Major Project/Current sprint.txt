@@ -1,40 +1,30 @@
 This file contains the current sprint information, 
 it will be moved into the product backlog once the sprint has ended.
 
+Code formatting:
+	https://gamedev.stackexchange.com/questions/ask
+
 Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
-		DO REFERENCES
-		Send helen to flick through, make sure to dumb errors
+		Change documents to PDF, and in references
 
 		Write a compatability section in testing? or somehwere near start
-
-		DO CONTENTS SECTION
 
 		General stuff:
 			Spacing on titles
 			Change numbers on report, like 1.4.4. whatever
 
-		Code formatting:
-			https://gamedev.stackexchange.com/questions/ask
 
 		Explain main render loop and map design, 128*128 for example
 		It was built with that in mind so limited 'view distance',
 
 		Copy from the notepad files on techincal information about lighting and water
 
-		Water sound doesn't restart when it finishes
-
 		Refernece water sound
 		Reference other resources, rock OBJs etc
 
-		Change this project requires WebGL2.0 everywhere to 1.0 with extensions
-			Aside from aspects of the scene not working, you will also notice 
-			errors in the console if any extension library is not supported
-
-		In testing, add images of WebGL v1.0 report on other machines
-			need ANGLE hopefully
 
 "Consequently, it is important to include an initial bibliography as part of your progress
 report and your full bibliography at the end of the main project report section of your
@@ -42,21 +32,22 @@ dissertation"
 
 
 		Major tasks:
+	
+			Delete random notes 	
 
-			Make sure U mention the docs in the report!
+			Change draft to final before upload
 
 			RECREATE DOCUMENTATION WHEN CODE DONE
+				Copy in
 
-			Need to make a user manual
-				Mention evolution of the project screenshots in user manual
-				Add this near start of report, in abstract maybe
-				Link github 
-				Say how to build/run the project
-				Host the final version on ur dcs.aber.ac.uk
-				Say where all documentation is, including the actual docs
-				Explain controls how to play
-				MAKE A USER MANUAL WITH SCREENSHOTS, CONTROLS, LOADING TIMES ET
-				Say to press escape to exit pointerlock
+			DO CONTENTS SECTION
+			DO REFERENCES
+
+			Send helen to flick through, make sure to dumb errors
+
+			PDF REPORT AND ZIP/RAR CORRECT SOURCE FORMAT
+
+			
 
 		To test properly
 			Move all files into one folder
@@ -64,4 +55,3 @@ dissertation"
 			Copy the out bit over
 
 			COPY OVER SOURCE FILES EVERY TIME!
-			COULD SYMLINK ALL SOURCE FILES AND THE OUT FOLDER TO PROJECT DOCS

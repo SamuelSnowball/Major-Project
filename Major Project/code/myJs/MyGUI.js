@@ -20,7 +20,7 @@ function MyGUI(){
 	var ui_noise_octaves = 8;
 	var ui_min_rocks = 512;
 	var ui_max_rocks = 1024;
-	var ui_water_strength = 0.01;
+	var ui_water_strength = 0.088;
 	
 	this.get = {
 		/**
@@ -98,7 +98,7 @@ function MyGUI(){
 		Terrain_noise_octaves: 8,
 		Min_rocks_per_section: 512,
 		Max_rocks_per_section: 1024,
-		Water_strength: 0.01,
+		Water_strength: 0.088,
 	};
 	
 	/**

@@ -61,7 +61,6 @@
                 
                 
                             <ul id="api-modules" class="apis modules">
-                                <li><a href="../modules/Engine.html">Engine</a></li>
                             </ul>
                         </div>
                     </div>
@@ -111,7 +110,11 @@ function SoundPlayer(){
 	// The water mp3
 	var water_audio = new Audio(&#x27;resources/sound/new_water.mp3&#x27;);
 	
-	var alreadyPlayed = false;
+	// Loop when finished
+	water_audio.addEventListener(&#x27;ended&#x27;, function() {
+		this.currentTime = 0;
+		this.play();
+	}, false);
 	
 	/**
 	@method play_water_sound

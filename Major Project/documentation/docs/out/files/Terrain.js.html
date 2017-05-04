@@ -61,7 +61,6 @@
                 
                 
                             <ul id="api-modules" class="apis modules">
-                                <li><a href="../modules/Engine.html">Engine</a></li>
                             </ul>
                         </div>
                     </div>
@@ -1037,27 +1036,27 @@ function Terrain(){
 				// Top boundary
 				spawnX = 0;
 				spawnZ = 128-4;
-				scale = m4.scaling(terrainRows*10, 10, 1);
+				scale = m4.scaling(2000, 10, 1);
 			}
 			else if(i === 1){
 				// Bottom boundary
 				spawnX = 0;
 				spawnZ = terrainRows - 128+4;
-				scale = m4.scaling(terrainRows*10, 10, 1);
+				scale = m4.scaling(2000, 10, 1);
 			}
 			else if(i === 2){
 				// Left boundary
 				spawnZ = 0;
 				spawnX = 128-4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows*10, 10, 1); 
+				scale = m4.scaling(2000, 10, 1); 
 			}
 			else if(i === 3){
 				// Right boundary
 				spawnZ = 0;
 				spawnX = terrainRows - 128+4;
 				rotateY = m4.yRotation(Math.PI / 2);
-				scale = m4.scaling(terrainRows*10, 10, 1); 
+				scale = m4.scaling(2000, 10, 1); 
 			}
 		
 			position = m4.translation(spawnX, 0, spawnZ);	
@@ -1129,7 +1128,7 @@ function Terrain(){
 	}
 	
 	/**
-	Test if the current heightMap value is a number
+	Test if the heightMap value at [50][50] is a number
 	
 	@method test_fillHeightMap
 	@private
@@ -1261,10 +1260,7 @@ function Terrain(){
 	*/
 	this.test_terrainVAOs = function(){
 		for(var i=0; i&lt;numberQuadrantRows * numberQuadrantColumns; i++){
-			if(vao_ext.isVertexArrayOES(terrainVAOs[i])){
-				// Its ok
-			}
-			else{
+			if(!vao_ext.isVertexArrayOES(terrainVAOs[i])){
 				console.error(&quot;In buildAllTerrainData: terrainVAOs not created properly&quot;);
 			}
 		}		
@@ -1328,11 +1324,8 @@ function Terrain(){
 		if(height !== nearestHeight){
 			console.error(&quot;Failed to set/get temporary heightMap value&quot;);
 		}
-			
 	}
-	
 
-	
 }
     </pre>
 </div>

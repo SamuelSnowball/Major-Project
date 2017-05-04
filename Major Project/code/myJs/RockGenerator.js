@@ -25,7 +25,7 @@ function RockGenerator(){
 	rockTextures.push(rockTexture0, rockTexture1, rockTexture2, rockTexture3, rockTexture4, rockTexture5);
 		
 	// OBJ text file
-	var rockObjTextFile = utility.httpGet("resources/rocks/rockObjs/obj/21.txt");
+	var rockObjTextFile = utility.httpGet("resources/rocks/rockObjs/OBJ/21.txt");
 	
 	// Translations
 	var translations = [];

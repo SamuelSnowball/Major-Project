@@ -21,16 +21,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "WaterProgram",
         "WaterSystem"
     ],
-    "modules": [
-        "Engine"
-    ],
-    "allModules": [
-        {
-            "displayName": "Engine",
-            "name": "Engine",
-            "description": "Fragment shader"
-        }
-    ],
+    "modules": [],
+    "allModules": [],
     "elements": []
 } };
 });
