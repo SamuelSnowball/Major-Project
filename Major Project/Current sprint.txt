@@ -33,7 +33,7 @@ dissertation"
 
 		Major tasks:
 	
-			Delete random notes 	
+			Delete random notes, test commit	
 
 			Change draft to final before upload
 
