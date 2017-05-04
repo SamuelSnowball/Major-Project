@@ -6,12 +6,6 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 
 	Features left to implement:
 		
-		Compass to see map boundaries + current position(time: 05h) (priority: 5)
-
-		Add ambient audio, water audio near water	(time: 01h) (priority: 1)
-
-		None other that are important. Focusing on testing & documentation.
-
 	Extra features:
 
 		Small 'sandstorms'/ dust devils			(time: 10h) (priority: 4)
@@ -37,13 +31,6 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 
 		Extra texture effects, bump mapping etc		(time: 40h) (priority: 1)
 
-	Documentation to write:
-		Overall design	
-		Technical stuff
-		Class diagram
-		Test table
-		Efficiency tests?
-
 	Current features: (features and hours are not up to date..)
 		3D Scene + movement/rotation mechanics		(time: 30h) (priority: 10)
 		Terrain + rendering efficiency			(time: 30h) (priority: 10)
@@ -54,6 +41,8 @@ Things left to add to the project: (Estimation time in hours, 10 priority is hig
 		Fog						(time: 06h) (priority: 4)
 		Day/night cycles				(time: 05h) (priority: 1)
 		Add user interaction, 				(time: 06h) (priority: 5)
+		Map boundaries + current position		(time: 05h) (priority: 5)
+		Add ambient audio, water audio near water	(time: 01h) (priority: 1)
 
 
 Terrain notes:
