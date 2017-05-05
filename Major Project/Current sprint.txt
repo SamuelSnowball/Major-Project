@@ -21,10 +21,23 @@ Sprint FINAL (1st - 8th May)
 			Avoid you, use we instead
 				Control find "you"
 
+			Control find 
+				don't
+				it's
+				won't
+				hasn't
+				can't = cannot
+				that's
+				wouldn't = would not
+				Replace them
+
+
 			Spacing on titles
+			Capitalization on titles + spelling/format
 			Change numbers on report, like 1.4.4. whatever
 
 			Delete random notes, 
+				Lighting etc
 
 			Change draft to final before upload
 
