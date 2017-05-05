@@ -8,22 +8,16 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
-		change links to users.aber.ac.uk/sds10 to the major proect v2
-		
 		Some writing is spaced to the left, some is centered
 
 		Add specular hightlights explanation to water , near the end
 		Copy from the notepad files on techincal information about lighting and water
-
-
-"Consequently, it is important to include an initial bibliography as part of your progress
-report and your full bibliography at the end of the main project report section of your
-dissertation"
-
 		
-
 		Major tasks:
 	
+			Careful about word count!
+
+			Remove abbreviated words
 			Avoid you, use we instead
 				Control find "you"
 
