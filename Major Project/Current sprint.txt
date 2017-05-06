@@ -8,6 +8,8 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
+		CUT WORD COUNT, appendices maybe!
+	
 		Format the pages, making sure everything fits
 		Add page numbers to contents
 		
@@ -15,10 +17,6 @@ Sprint FINAL (1st - 8th May)
 
 			Remove report folder from the upload
 			The PDF report is uploaded seperately
-	
-			Careful about word count!
-
-			
 
 			DO CONTENTS SECTION
 				left page numbers
@@ -29,5 +27,7 @@ Sprint FINAL (1st - 8th May)
 				Order references before adding in the brackets/numbers
 				
 
-			PDF REPORT AND ZIP/RAR CORRECT SOURCE FORMAT
+			PDF REPORT 
+			AND
+			ZIP/RAR CORRECT SOURCE FORMAT
 
