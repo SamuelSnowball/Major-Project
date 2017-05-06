@@ -1,0 +1,75 @@
+Lighting - Technical Notes
+
+Uniform light over draw call
+-position
+-colour
+-intensity added as vec3 in fragmentShader
+
+Eventually load the light to the shader every frame
+So can change its position
+
+Need access to light position and color in shader
+	Additions to vertex shader:
+		uniform vec3 lightPosition
+		attribute vec3 normal //in
+		varying vec3 surfaceNormal //out to frag
+			cant set the output normal to normal passed in, because
+			model gets rotated, so surfaceNormal also has to rotate
+		varying vec3 toLightVector //out to frag
+
+
+	Additions to fragment shader:
+		uniform vec3 lightColour
+		varying surfaceNormal //in from vertex
+		varying toLightVector //in from vertex
+
+Need uniform location variables to hold light and colour shader variables
+	Get the location of uniforms, assign to variable
+
+How to calculate brightess of point?
+	The more the surface faces the light, the brighter it is
+	So need to know which way parts of the model face (normals)
+		Normal = perpendicular to face
+
+	Have normals as [0,1,0], not worked out properly for now
+	Send them to openGL via bufferData
+	
+	When rendering, enable normals to pass through data
+
+Have a vector from point on object, to the light source
+
+Now have:
+	directionToLight vector
+	normal vector
+
+The more a point is facing towards light, the closer the vectors are to eachother
+
+Determine brightess by the difference between the 2 vectors
+
+Dot/scalar product between 2 vectors gives us differnce, must be unit vectors
+Therefore can determine brightness based on this differnce
+
+toLightVector = lightPosition - position; //difference between
+//BUT position could've been rotated/translated
+//So first, multiply position by transformation matrix
+//Also, replace the * model * vec4(position, 1.0) with this variable
+//because might as well
+
+
+Now in fragment shader, need to do dot product of the 2 vectors
+Have to normalize the 2 vectors first, so size is 1, and doesnt affect dot product result
+Use normalize function for both
+
+float pixelBrightness = dot(surfaceNormal, toLightVector)
+
+//Make sure its between 0 and 1, dont care about that for color, use max function
+//max, takes the highest result between (result and 0)
+
+Multiply brightness factor by the light colour, to get final pixel light colour
+Then times it by texture colour
+
+
+
+
+
+How to calculate normals for triangle strip?

@@ -1,0 +1,24 @@
+Directional light, with specular
+
+We have light direction and colour, from directional lighting
+
+Need direction of our model to the light, but our light can be anywhere...
+surfaceToLightDirection is worked out by normalizing the surfaceToLightDistance
+	-so just ignore the distance as it doesn't make sense
+	-and set surfaceToLightDirection as the uniform direction, always the same
+
+Also need direction from surface to camera
+
+Add the 2 vectors and normalize them, gives us halfVector, sits halfway between them
+
+If halfVector and surfaceNormal match, then we're at perfect reflection angle
+How to tell if match? dot product
+
+1st
+	Pass in camera position, work out, surface to camera position vector
+
+2nd
+	Compute halfVector between: surfaceToCamera, and surfaceToLight
+
+3rd 
+	dot product, and take normal to find out if reflecting into camera
