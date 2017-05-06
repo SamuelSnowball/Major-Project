@@ -9,6 +9,7 @@ function SoundPlayer(){
 	
 	// The water mp3
 	var water_audio = new Audio('resources/sound/new_water.mp3');
+	water_audio.volume = 0.2;
 	
 	// Loop when finished
 	water_audio.addEventListener('ended', function() {

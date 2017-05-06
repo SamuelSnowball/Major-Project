@@ -8,8 +8,7 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
-		CUT WORD COUNT, appendices maybe!
-	
+
 		Format the pages, making sure everything fits
 		Add page numbers to contents
 		
@@ -30,4 +29,5 @@ Sprint FINAL (1st - 8th May)
 			PDF REPORT 
 			AND
 			ZIP/RAR CORRECT SOURCE FORMAT
+
 
