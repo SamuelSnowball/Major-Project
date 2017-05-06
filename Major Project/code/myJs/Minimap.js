@@ -37,8 +37,8 @@ function Minimap(){
 	var canvas_boundary_mapped = (canvas_boundary_unmapped - 0) / (terrain.get.getTerrainRows - 0) * (gui_canvas_max - gui_canvas_min) + gui_canvas_min;
 
 	// Size of user on minimap
-	var user_width = 2.5;
-	var user_height = 2.5;
+	var user_width = 4;
+	var user_height = 4;
 
 	/**
 	Maps the user position in the world, to the position on the canvas
@@ -53,7 +53,7 @@ function Minimap(){
 		var userZ = (camera.get.z - map_min) / (map_max - map_min) * (gui_canvas_max - gui_canvas_min) + gui_canvas_min;
 		
 		// Now draw
-		gui_context.fillStyle = 'rgb(255,255,255)'; // Prepare to draw blue square
+		gui_context.fillStyle = 'rgb(255,0,0)'; // Prepare to draw blue square
 		gui_context.fillRect(userX, userZ, user_width, user_height); // Draws square
 	}
 
