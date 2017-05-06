@@ -28,6 +28,7 @@ Sprint FINAL (1st - 8th May)
 				isn't
 				aren't
 				shouldn't
+				weren't
 				Replace them
 
 			Order references before adding in the numbers
