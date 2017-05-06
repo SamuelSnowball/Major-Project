@@ -11,6 +11,9 @@ Sprint FINAL (1st - 8th May)
 		Some writing is spaced to the left, some is centered
 		
 		Major tasks:
+
+			Remove report folder from the upload
+			The PDF report is uploaded seperately
 	
 			Careful about word count!
 
