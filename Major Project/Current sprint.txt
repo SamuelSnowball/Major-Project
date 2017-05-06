@@ -9,35 +9,33 @@ Sprint FINAL (1st - 8th May)
 	Notes/tasks left to do:
 
 		Some writing is spaced to the left, some is centered
-
-		Add specular hightlights explanation to water , near the end
-		Copy from the notepad files on techincal information about lighting and water
 		
 		Major tasks:
 	
 			Careful about word count!
 
-			Remove abbreviated words
-			Avoid you, use we instead
-				Control find "you"
-
 			Control find 
+				you
 				don't
+				didn't
 				it's
 				won't
 				hasn't
 				can't = cannot
 				that's
 				wouldn't = would not
+				they're
+				isn't
+				aren't
+				shouldn't
+				weren't
 				Replace them
 
+			Order references before adding in the numbers
 
 			Spacing on titles
 			Capitalization on titles + spelling/format
 			Change numbers on report, like 1.4.4. whatever
-
-			Delete random notes, 
-				Lighting etc
 
 			Change draft to final before upload
 
