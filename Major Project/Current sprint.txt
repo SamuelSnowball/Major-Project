@@ -36,14 +36,14 @@ Sprint FINAL (1st - 8th May)
 
 			Order references before adding in the numbers
 
-			Spacing on titles
-			Capitalization on titles + spelling/format
-			Change numbers on report, like 1.4.4. whatever
-
-			Change draft to final before upload
-
 			DO CONTENTS SECTION
+				left page numbers
+				PAGE NUMBERS ON CONTENTS SECTION
+				fix stupid sections in middle of pages!
+
 			DO REFERENCES
+				check order first
+				
 
 			PDF REPORT AND ZIP/RAR CORRECT SOURCE FORMAT
 
