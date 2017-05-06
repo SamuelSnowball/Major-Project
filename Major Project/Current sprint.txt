@@ -8,7 +8,8 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 
-		Some writing is spaced to the left, some is centered
+		Format the pages, making sure everything fits
+		Add page numbers to contents
 		
 		Major tasks:
 
@@ -17,24 +18,7 @@ Sprint FINAL (1st - 8th May)
 	
 			Careful about word count!
 
-			Control find 
-				you
-				don't
-				didn't
-				it's
-				won't
-				hasn't
-				can't = cannot
-				that's
-				wouldn't = would not
-				they're
-				isn't
-				aren't
-				shouldn't
-				weren't
-				Replace them
-
-			Order references before adding in the numbers
+			
 
 			DO CONTENTS SECTION
 				left page numbers
@@ -42,7 +26,7 @@ Sprint FINAL (1st - 8th May)
 				fix stupid sections in middle of pages!
 
 			DO REFERENCES
-				check order first
+				Order references before adding in the brackets/numbers
 				
 
 			PDF REPORT AND ZIP/RAR CORRECT SOURCE FORMAT
