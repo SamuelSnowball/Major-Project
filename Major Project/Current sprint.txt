@@ -5,15 +5,3 @@ Sprint FINAL (1st - 8th May)
 
 	Notes/tasks left to do:
 		
-		Major tasks:
-
-			Remove report folder from the upload
-			The PDF report is uploaded seperately
-
-			TEST THE PROJECT FIRST!!!!!!!!!!!!!!!!!!
-
-			PDF REPORT 
-			AND
-			ZIP/RAR CORRECT SOURCE FORMAT
-
-
